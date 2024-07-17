@@ -1,17 +1,15 @@
 #pragma once
 #include <string>
 
+#include "mamba/types.hpp"
+
 namespace mamba {
 
-class String {
+class String final
+    : public internal::ValueType<std::string,
+                                 internal::GetValueReturnType::kReference> {
  public:
-  String(std::string v = "") : v_(std::move(v)) {}
-
-  const std::string& GetValue() const { return v_; }
-  void SetValue(std::string v) { v_ = std::move(v); }
-
- private:
-  std::string v_;
+  String(std::string v = "") : internal::ValueType<std::string>(std::move(v)) {}
 };
 
 }  // namespace mamba

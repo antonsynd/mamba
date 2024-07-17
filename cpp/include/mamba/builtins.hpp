@@ -1,12 +1,7 @@
 #pragma once
-#include <iostream>
 
+#include "mamba/integer.hpp"
+#include "mamba/io.hpp"
+#include "mamba/list.hpp"
 #include "mamba/string.hpp"
-
-namespace mamba {
-
-void print(String s) {
-  std::cout << s.GetValue() << std::endl;
-}
-
-}  // namespace mamba
+#include "mamba/tuple.hpp"

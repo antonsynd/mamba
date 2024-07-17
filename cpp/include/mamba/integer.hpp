@@ -1,24 +1,23 @@
 #pragma once
 #include <type_traits>
 
+#include "mamba/types.hpp"
+
 namespace mamba {
 
 namespace {
+
 template <typename T>
-using IntegerOrBoolean = std::disjunction_t<std::is_same<T, bool>::value,
-                                            std::is_same<T, int>::value>;
+using IntegerOrBoolean =
+    std::enable_if_t<std::disjunction_v<std::is_same<T, bool>::value,
+                                        std::is_same<T, int>::value>>;
+
 }  // anonymous namespace
 
 template <typename T = int, typename = IntegerOrBoolean<T>>
-class Integer {
+class Integer : internal::ValueType<T> {
  public:
-  Integer(T v) : v_(v) {}
-
-  T GetValue() const { return static_cast<T>(v_); }
-  void SetValue(T v) { v_ = v; }
-
- private:
-  T v_;
+  Integer(T v) : internal::ValueType<T>(v) {}
 };
 
 class Boolean final : public Integer<bool> {
