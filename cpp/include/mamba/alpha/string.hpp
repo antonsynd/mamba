@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-#include "mamba/types.hpp"
+#include "mamba/alpha/types.hpp"
 
 namespace mamba {
 
