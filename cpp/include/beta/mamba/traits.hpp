@@ -3,9 +3,35 @@
 #include <type_traits>
 
 #include "mamba/bool.hpp"
+#include "mamba/float.hpp"
+#include "mamba/int.hpp"
+#include "mamba/none.hpp"
 #include "mamba/str.hpp"
 
 namespace mamba::builtins::traits {
+
+template <typename T>
+struct is_value_type {
+  static constexpr auto value = std::disjunction_v<std::is_same<T, int_t>,
+                                                   std::is_same<T, float_t>,
+                                                   std::is_same<T, bool_t>,
+                                                   std::is_same<T, str_t>,
+                                                   std::is_same<T, none_t>>;
+};
+
+template <typename T>
+constexpr auto is_value_type_v = is_value_type<T>::value;
+
+template <typename Iterable, typename Element>
+struct is_iterable {
+  /// @todo Also consider subclasses of list_t, and classes that implement
+  /// Element& Iterable::iterator()
+  static constexpr auto value =
+      std::is_same_v<Iterable<Element>, list_t<Element>>;
+};
+
+template <typename Iterable, typename Element>
+constexpr auto is_iterable_v = is_iterable<Iterable, Element>::value;
 
 template <typename T>
 struct implements_as_bool {
