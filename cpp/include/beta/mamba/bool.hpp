@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mamba/beta/int.hpp"
+#include "mamba/int.hpp"
 
 namespace mamba::builtins {
 

@@ -3,11 +3,11 @@
 #include <type_traits>
 #include <utility>
 
-#include "mamba/beta/bool.hpp"
-#include "mamba/beta/float.hpp"
-#include "mamba/beta/int.hpp"
-#include "mamba/beta/str.hpp"
-#include "mamba/beta/traits.hpp"
+#include "mamba/bool.hpp"
+#include "mamba/float.hpp"
+#include "mamba/int.hpp"
+#include "mamba/str.hpp"
+#include "mamba/traits.hpp"
 
 namespace mamba::builtins {
 
@@ -30,6 +30,18 @@ bool_t as_bool(str_t s) {
 template <typename T, std::enable_if_t<traits::implements_as_bool_v<T>>>
 bool_t as_bool(const T& t) {
   return T.as_bool();
+}
+
+str_t as_str(int_t i) {
+  return std::to_string(i);
+}
+
+str_t as_str(float_t f) {
+  return std::to_string(f);
+}
+
+str_t as_str(bool_t f) {
+  return std::to_string(f);
 }
 
 /// @note The return value is expected to be a new copy of @p s. Returning an

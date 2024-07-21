@@ -2,7 +2,12 @@ import ast
 import io
 import sys
 
-from typing import Optional
+from typing import Sequence
+from mamba.scope import Scope, RootScope
+
+
+class EmptyScopePopException(Exception):
+    pass
 
 
 def transpile(module: ast.Module) -> str:
@@ -14,48 +19,21 @@ def transpile(module: ast.Module) -> str:
     return buffer.getvalue()
 
 
-class SymbolAlreadyDefinedException(Exception):
-    pass
-
-
-class EmptyScopePopException(Exception):
-    pass
-
-
-class Scope:
-    def __init__(self, parent: "Optional[Scope]" = None) -> None:
-        self._symbols: "set[str]" = set()
-        self._parent: Optional[Scope] = parent
-
-    def define_symbol(self, name: str) -> None:
-        if self.has_symbol(name=name):
-            raise SymbolAlreadyDefinedException(f"Symbol {name} already defined.")
-
-    def has_symbol(self, name: str) -> bool:
-        if name in self._symbols:
-            return True
-
-        if self._parent:
-            return self._parent.has_symbol(name=name)
-
-        return False
-
-
 class Transpiler:
     mamba_type_to_cpp: "dict[str, str]" = {
-        "bool": "mamba::Boolean",
-        "float": "mamba::Double",
-        "int": "mamba::Integer",
-        "str": "mamba::String",
-        "list": "mamba::List",
-        "tuple": "mamba::Tuple",
+        "bool": "mamba::bool_t",
+        "float": "mamba::float_t",
+        "int": "mamba::int_t",
+        "str": "mamba::str_t",
+        "list": "mamba::list_t",
+        "tuple": "mamba::tuple_t",
     }
 
     def __init__(self, buffer: io.StringIO, module: ast.Module) -> None:
         self._module: ast.Module = module
         self._buffer: io.StringIO = buffer
-        self._root_scope: Scope = Scope()
-        self._non_root_scopes: "list[Scope]" = []
+        self._root_scope: RootScope = RootScope
+        self._non_root_scopes: Sequence[Scope] = []
 
     def transpile(self) -> None:
         self.emit_header()

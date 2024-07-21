@@ -2,8 +2,8 @@
 
 #include <type_traits>
 
-#include "mamba/beta/bool.hpp"
-#include "mamba/beta/str.hpp"
+#include "mamba/bool.hpp"
+#include "mamba/str.hpp"
 
 namespace mamba::builtins::traits {
 
