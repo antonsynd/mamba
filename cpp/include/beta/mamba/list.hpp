@@ -50,7 +50,7 @@ class List {
   }
 
   /// @brief Target of `x in y`
-  bool Contains(T elem) const {
+  bool In(T elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.end();
   }
 
@@ -71,7 +71,7 @@ class List {
   void operator+=(const List<T>& other) { this->extend(other); }
 
   /// @brief Target of `x + y`
-  List<T> operator+(const List<T>& other) {
+  List<T> operator+(const List<T>& other) const {
     List<T> res = *this;
 
     res.extend(other);
@@ -80,7 +80,7 @@ class List {
   }
 
   /// @brief Target of `x * n`
-  List<T> operator*(int_t i) {
+  List<T> operator*(int_t i) const {
     List<T> res;
     res.v_.reserve(v_.size() * i);
 
@@ -91,6 +91,7 @@ class List {
     return res;
   }
 
+  /// @brief Target of `x *= n`
   void operator*=(int_t i) {
     if (i == 1) {
       return;
@@ -106,10 +107,10 @@ class List {
   }
 
   /// @brief Target of `x[i] = j`
-  reference_t operator[](int_t idx) { return v_.at[NormalizeIndex(idx)]; }
+  reference_t operator[](int_t idx) { return v_.at[GetNormalizedIndex(idx)]; }
 
   /// @brief Target of `x[i]`
-  value_t operator[](int_t idx) const { return v_[NormalizeIndex(idx)]; }
+  value_t operator[](int_t idx) const { return v_[GetNormalizedIndex(idx)]; }
 
   /// @brief Target of `len(x)`
   int_t Len() const { return v_.size(); }
@@ -139,8 +140,8 @@ class List {
       return res;
     }
 
-    start = NormalizeIndex(start);
-    end = NormalizeIndex(end);
+    start = GetNormalizedIndex(start);
+    end = GetNormalizedIndex(end);
 
     const auto start_it = GetNormalizedIterator(start);
     const auto end_it = GetNormalizedIterator(start);
@@ -168,6 +169,13 @@ class List {
     return res;
   }
 
+#if __cplusplus >= 202302L
+  /// @brief Target `list[i:j(:k)]`
+  List<T> operator[](int_t start, int_t end, int_t step = 1) const {
+    return Slice(start, end, step);
+  }
+#endif  // __cplusplus >= 202302L
+
   /// @todo
   /// Use a proxy to accept the incoming slice
   void ReplaceSlice(const List<T>& other,
@@ -175,41 +183,103 @@ class List {
                     int_t end,
                     int_t step = 1) {}
 
-  /// @brief Target of `x.index(i, (j, (k)))`
-  /// @todo
-  int_t Index(T elem, int_t start = 0) const { return 0; }
-  int_t Index(T elem, int_t start = 0, int_t end) const { return 0; }
+  /// @brief Target of `x.index(i, (j))`
+  int_t Index(T elem, int_t start = 0) const {
+    if (IsIndexOutOfBounds(start)) {
+      // TODO: format string
+      throw ValueError("{elem} is not in list");
+    }
 
+    const auto& it = std::find(GetNormalizedIterator(start), v_.end(), elem);
+
+    if (it == v_.end()) {
+      // TODO: format string
+      throw ValueError("{elem} is not in list");
+    }
+
+    // Base case
+    if (it == v_.begin()) {
+      return 0;
+    }
+
+    return static_cast<int_t>(std::distance(v_.begin(), it));
+  }
+
+  /// @brief Target of `x.index(i, j, k)`
+  int_t Index(T elem, int_t start, int_t end) const {
+    if (IsIndexOutOfBounds(start) || IsIndexOutOfBounds(end)) {
+      // TODO: format string
+      throw ValueError("{elem} is not in list");
+    }
+
+    const auto& it = std::find(GetNormalizedIterator(start),
+                               GetNormalizedIterator(end), elem);
+
+    if (it == v_.end()) {
+      // TODO: format string
+      throw ValueError("{elem} is not in list");
+    }
+
+    // Base case
+    if (it == v_.begin()) {
+      return 0;
+    }
+
+    return static_cast<int_t>(std::distance(v_.begin(), it));
+  }
+
+  /// @brief Target of `list.insert()`
+  /// @todo
   void Insert(int_t idx, T elem) {}
-  void Pop(int_t i) {}
+
+  /// @brief Target of `list.pop()`
+  /// @todo
+  void Pop(int_t i = -1) {}
+
+  /// @brief Target of `list.remove()`
+  /// @todo
   void Remove(T elem) {}
 
   /// @brief Target of `reverse(x)`
   void Reverse() { std::reverse(v_.begin(), v_.end()); }
 
  private:
-  int_t NormalizeIndex(int_t i) const {
-    if (i < 0) {
-      return v_.size() + i;
+  int_t GetNormalizedIndex(int_t idx) const {
+    if (idx < 0) {
+      return v_.size() + idx;
     }
 
-    return i;
+    return idx;
   }
 
-  iterator_t GetNormalizedIterator(int_i i) {
-    if (i < 0) {
-      return v_.end() + i;
-    }
+  bool_t IsIndexOutOfBounds(int_t idx) const {
+    idx = GetNormalizedIndex(idx);
 
-    return v_.start() + i;
+    return idx < 0 || idx >= v_.size();
   }
 
-  const_iterator_t NormalizedIterator(int_i i) const {
-    if (i < 0) {
-      return v_.end() + i;
+  iterator_t GetNormalizedIterator(int_i idx) {
+    if (GetNormalizedIndex(idx) != idx) {
+      throw std::logic_error("idx must be normalized");
     }
 
-    return v_.start() + i;
+    if (idx < 0) {
+      return v_.end() + idx;
+    }
+
+    return v_.start() + idx;
+  }
+
+  const_iterator_t GetNormalizedIterator(int_i idx) const {
+    if (GetNormalizedIndex(idx) != idx) {
+      throw std::logic_error("idx must be normalized");
+    }
+
+    if (idx < 0) {
+      return v_.end() + idx;
+    }
+
+    return v_.start() + idx;
   }
 
   std::vector<T> v_;
