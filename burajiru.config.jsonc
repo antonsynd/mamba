@@ -1,0 +1,20 @@
+{
+  "build": {
+    "description": "",
+    "commands": [
+      "cmake -S . -B build",
+      "cmake --build build"
+    ]
+  },
+  "test": {
+    "description": "",
+    "commands": [
+      "cd build",
+      "ctest"
+    ]
+  },
+  "clean": {
+    "description": "",
+    "commands": []
+  }
+}

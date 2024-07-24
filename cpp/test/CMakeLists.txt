@@ -1,26 +1,21 @@
-# Add test files
 file(GLOB_RECURSE TEST_SOURCES *.cpp)
 
-# Download and unpack googletest at configure time
-configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
-
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download)
-
-# Prevent overriding the parent project's compiler/linker settings on Windows
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
-# Add googletest directly to our build. This defines
-# the gtest and gtest_main targets.
-add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
-                 ${CMAKE_BINARY_DIR}/googletest-build
-                 EXCLUDE_FROM_ALL)
+enable_testing()
 
-# Now simply link against gtest or gtest_main as needed. Eg
 add_executable(mamba-unit-tests ${TEST_SOURCES})
-target_link_libraries(mamba-unit-tests libmamba gtest_main)
 
-# Add a test case
-add_test(NAME unit-tests COMMAND mamba-unit-tests)
+target_link_libraries(mamba-unit-tests
+  libMamba
+  GTest::gtest_main)
+
+include(GoogleTest)
+gtest_discover_tests(mamba-unit-tests)
