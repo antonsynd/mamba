@@ -1,5 +1,7 @@
-cpp/build/
+# C++/CMake stuff
+**/build/
 **/CMakeCache.txt
+**/CMakeFiles/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
