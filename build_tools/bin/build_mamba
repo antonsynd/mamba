@@ -1,16 +1,96 @@
 #!/usr/bin/env python3
 import argparse
+import subprocess
+import sys
+
 from pathlib import Path
+from typing import Sequence
+
+CPP_DIR: Path = Path(__file__).parent.parent.parent / "cpp"
+CPP_BUILD_DIR: Path = CPP_DIR / "build"
 
 
 def main() -> None:
-    args = parse_args()
+    parser: argparse.ArgumentParser = create_parser()
+    args, rest = parser.parse_known_args()
+
+    command: str = args.command
+
+    if command == "build":
+        build(args=args, rest=rest)
+    elif command == "clean":
+        clean(args=args, rest=rest)
+    elif command == "install":
+        install(args=args, rest=rest)
+    elif command == "release":
+        build(args=args, rest=rest)
+        test(args=args, rest=rest)
+        memcheck(args=args, rest=rest)
+        install(args=args, rest=rest)
+    elif command == "test":
+        test(args=args, rest=rest)
+    elif command == "memcheck":
+        memcheck(args=args, rest=rest)
+    elif command == "help":
+        parser.print_help()
+    else:
+        print(f'Unknown command "{command}"', file=sys.stderr)
 
 
-def parse_args() -> argparse.Namespace:
+def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="")
+    subparsers = parser.add_subparsers(dest="command")
 
-    return parser.parse_args()
+    build_parser = subparsers.add_parser("build")
+    clean_parser = subparsers.add_parser("clean")
+    install_parser = subparsers.add_parser("install")
+    release_parser = subparsers.add_parser("release")
+    test_parser = subparsers.add_parser("test")
+    memcheck_parser = subparsers.add_parser("memcheck")
+    help_parser = subparsers.add_parser("help")
+
+    return parser
+
+
+def build(args: argparse.Namespace, rest: Sequence[str]) -> None:
+    CPP_BUILD_DIR.mkdir(exist_ok=True)
+
+    try:
+        subprocess.run(
+            args=["cmake", "-S", str(CPP_DIR), "-B", str(CPP_BUILD_DIR)],
+            check=True,
+        )
+
+        subprocess.run(args=["cmake", "--build", str(CPP_BUILD_DIR)], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Encountered error {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+def clean(args: argparse.Namespace, rest: Sequence[str]) -> None:
+    subprocess.run(args=["rm", "-rf", str(CPP_BUILD_DIR)])
+
+
+def install(args: argparse.Namespace, rest: Sequence[str]) -> None:
+    pass
+
+
+def memcheck(args: argparse.Namespace, rest: Sequence[str]) -> None:
+    pass
+
+
+def test(args: argparse.Namespace, rest: Sequence[str]) -> None:
+    build_test_dir: Path = CPP_BUILD_DIR / "test"
+
+    if not build_test_dir.exists():
+        print(f"Tests were not built yet.", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        subprocess.run(args=["ctest", *rest], cwd=build_test_dir)
+    except subprocess.CalledProcessError as e:
+        print(f"Encountered error {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
