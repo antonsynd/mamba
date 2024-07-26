@@ -85,6 +85,11 @@ class List {
   /// @brief Target of `x * n`
   List<T> operator*(Int i) const {
     List<T> res;
+
+    if (i <= 0) {
+      return res;
+    }
+
     res.v_.reserve(v_.size() * i);
 
     for (; i > 0; --i) {
@@ -98,14 +103,18 @@ class List {
   void operator*=(Int i) {
     if (i == 1) {
       return;
-    } else if (i == 0) {
-      v_.Clear();
+    } else if (i < 1) {
+      v_.clear();
+      return;
     }
 
-    v_.reserve(v_.length() * i);
+    v_.reserve(v_.size() * i);
+    const auto end_index = Len();
 
     for (; i > 1; --i) {
-      this->Extend(*this);
+      for (size_t j = 0; j < end_index; ++j) {
+        v_.emplace_back(v_[j]);
+      }
     }
   }
 
@@ -246,6 +255,9 @@ class List {
   /// @brief Target of `list.__iter__()`
   Iterator<T> Iter() { return {}; }
 
+  /// @brief Traget of `bool(list)`
+  Bool AsBool() const { return Len() > 0; }
+
  private:
   Int GetNormalizedIndex(Int idx) const {
     if (idx < 0) {
@@ -287,6 +299,7 @@ class List {
 
   std::vector<T> v_;
 
+  friend Bool AsBool(const List<T>& l) { return l.AsBool(); }
   friend Bool In(const List<T>& l, T v) { return l.In(v); }
   friend Int Len(const List<T>& l) { return l.Len(); }
 };

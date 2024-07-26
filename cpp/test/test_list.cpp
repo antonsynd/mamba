@@ -236,4 +236,104 @@ TEST(List, AdditionOperator) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, MultiplicationOperatorNegative) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When
+  const auto product = l * -1;
+
+  // Then
+  EXPECT_EQ(Len(product), 0);
+}
+
+TEST(List, MultiplicationOperatorZero) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When
+  const auto product = l * 0;
+
+  // Then
+  EXPECT_EQ(Len(product), 0);
+}
+
+TEST(List, MultiplicationOperatorOne) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When
+  const auto product = l * 1;
+
+  // Then
+  const auto actual = as_vector(product);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, MultiplicationOperatorMoreThanOne) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When
+  const auto product = l * 3;
+
+  // Then
+  const auto actual = as_vector(product);
+  const std::vector<Int> expected = {1, 3, 5, 7, 1, 3, 5, 7, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, MultiplicationAssignmentOperatorNegative) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l *= -1;
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, MultiplicationAssignmentOperatorZero) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l *= 0;
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, MultiplicationAssignmentOperatorOne) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l *= 1;
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, MultiplicationAssignmentOperatorMoreThanOne) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l *= 3;
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 7, 1, 3, 5, 7, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
 }  // namespace mamba::builtins::test
