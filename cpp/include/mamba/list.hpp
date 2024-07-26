@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <concepts>
+#include <initializer_list>
 #include <iterator>
 #include <vector>
 
@@ -36,14 +37,18 @@ class List {
     Append(rest...);
   }
 
+  List(std::initializer_list<T> elements) {
+    std::copy(elements.begin(), elements.end(), std::back_inserter(v_));
+  }
+
   void Append(T elem) { v_.emplace_back(elem); }
 
   template <typename... Args>
   void Append(T elem, Args... rest) {
     static_assert((std::is_same<T, Args>::value && ...),
                   "All elements must be of the same type.");
-    append(elem);
-    append(rest...);
+    Append(elem);
+    Append(rest...);
   }
 
   /// @brief Target of `x in y`
@@ -104,7 +109,7 @@ class List {
   }
 
   /// @brief Target of `x[i] = j`
-  reference_t operator[](Int idx) { return v_.at[GetNormalizedIndex(idx)]; }
+  reference_t operator[](Int idx) { return v_[GetNormalizedIndex(idx)]; }
 
   /// @brief Target of `x[i]`
   value_t operator[](Int idx) const { return v_[GetNormalizedIndex(idx)]; }
@@ -278,7 +283,7 @@ class List {
 
   std::vector<T> v_;
 
-  friend Int Len(const List<T>& l) { return l.v_.size(); }
+  friend Int Len(const List<T>& l) { return l.Len(); }
 };
 
 }  // namespace mamba::builtins
