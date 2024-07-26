@@ -11,7 +11,7 @@ using Str = std::string;
 
 namespace str {
 
-int_t Len(const str_t& s) {
+Int Len(const Str& s) {
   return s.size();
 }
 

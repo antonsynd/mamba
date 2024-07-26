@@ -4,6 +4,6 @@
 
 namespace mamba::builtins {
 
-using bool_t = int_t;
+using Bool = Int;
 
 }  // namespace mamba::builtins

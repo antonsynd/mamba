@@ -10,7 +10,7 @@
 
 namespace mamba::builtins {
 
-template <Value T>
+template <concepts::Value T>
 class List {
  private:
   using iterator_t = std::vector<T>::iterator;
@@ -25,22 +25,20 @@ class List {
   List() = default;
 
   /// @brief Target is `list(Iterable)`
-  template <Iterable T>
-  List(const Iterable<T>& it) {}
+  template <typename I>
+    requires concepts::Iterable<I, T>
+  List(const I& it) {}
 
   /// @brief Target is `list(...)`
-  template <typename T, typename... Args>
+  template <typename... Args>
   List(T elem, Args... rest) {
     Append(elem);
     Append(rest...);
   }
 
-  template <typename T>
-  void Append(T elem) {
-    v_.emplace_back(elem);
-  }
+  void Append(T elem) { v_.emplace_back(elem); }
 
-  template <typename T, typename... Args>
+  template <typename... Args>
   void Append(T elem, Args... rest) {
     static_assert((std::is_same<T, Args>::value && ...),
                   "All elements must be of the same type.");
@@ -61,8 +59,9 @@ class List {
 
   /// @brief Target of `list.extend(Iterable)`
   /// @todo Fix to not assume list_t
-  template <Iterable T>
-  void Extend(const Iterable<T>& other) {
+  template <typename I>
+    requires concepts::Iterable<I, T>
+  void Extend(const I& other) {
     std::copy(other.cbegin(), other.cend(), std::back_inserter(v_));
   }
 
@@ -94,7 +93,7 @@ class List {
     if (i == 1) {
       return;
     } else if (i == 0) {
-      clear();
+      v_.clear();
     }
 
     v_.reserve(v_.length() * i);
@@ -122,7 +121,7 @@ class List {
   /// @brief Target of `list.count(x)`
   Int Count(T elem) const {
     return std::count_if(v_.cbegin(), v_.cend(),
-                         [](T val) { return val == elem; });
+                         [elem](T val) { return val == elem; });
   }
 
   /// @brief Target of `x[i:j(:k)]`
@@ -253,7 +252,7 @@ class List {
     return idx < 0 || idx >= v_.size();
   }
 
-  iterator_t GetNormalizedIterator(int_i idx) {
+  iterator_t GetNormalizedIterator(Int idx) {
     if (GetNormalizedIndex(idx) != idx) {
       throw std::logic_error("idx must be normalized");
     }
@@ -265,7 +264,7 @@ class List {
     return v_.start() + idx;
   }
 
-  const_iterator_t GetNormalizedIterator(int_i idx) const {
+  const_iterator_t GetNormalizedIterator(Int idx) const {
     if (GetNormalizedIndex(idx) != idx) {
       throw std::logic_error("idx must be normalized");
     }

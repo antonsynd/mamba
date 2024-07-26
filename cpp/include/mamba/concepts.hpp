@@ -22,12 +22,15 @@ concept StrConvertible = requires(const T t) {
   { t.as_str() } -> std::same_as<Str>;
 };
 
+// TODO: Fix Tuple<...>
 template <typename T>
-concept Value =
-    std::same_as<T, Int> || std::same_as<T, Float> || std::same_as<T, Bool> ||
-    std::same_as<T, Tuple> || std::same_as<T, None>;
+concept Value = std::same_as<T, Int> || std::same_as<T, Float> ||
+                std::same_as<T, Bool> || std::same_as<T, None>;
 
+// TODO: Fix Tuple<...>
 template <typename T, typename E>
-concept Iterable = std::same_as<T<E>, List<E>> || std::same_as<T<E>, Tuple<E>>;
+concept Iterable = requires(T t) {
+  { t.operator[](0) } -> std::same_as<E>;
+};
 
 }  // namespace mamba::builtins::concepts
