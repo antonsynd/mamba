@@ -1,22 +1,3 @@
 {
-  "build_system": "build_mamba",
-  "build": {
-    "description": "",
-    "commands": [
-      "mkdir -p build",
-      "cmake -S . -B build",
-      "cmake --build build"
-    ]
-  },
-  "test": {
-    "description": "",
-    "commands": [
-      "cd build",
-      "ctest"
-    ]
-  },
-  "clean": {
-    "description": "",
-    "commands": []
-  }
+  "build_system": "build_mamba"
 }
