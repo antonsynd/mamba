@@ -92,7 +92,7 @@ TEST(List, InEmpty) {
   const List<Int> l;
 
   // When/then
-  EXPECT_FALSE(l.In(1));
+  EXPECT_FALSE(In(l, 1));
 }
 
 TEST(List, InNotActuallyIn) {
@@ -100,7 +100,7 @@ TEST(List, InNotActuallyIn) {
   const List<Int> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_FALSE(l.In(4));
+  EXPECT_FALSE(In(l, 4));
 }
 
 TEST(List, InActuallyIn) {
@@ -108,7 +108,132 @@ TEST(List, InActuallyIn) {
   const List<Int> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_TRUE(l.In(5));
+  EXPECT_TRUE(In(l, 5));
+}
+
+TEST(List, ClearEmpty) {
+  // If
+  List<Int> l;
+
+  // When
+  l.Clear();
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, ClearNonEmpty) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.Clear();
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, CopyEmpty) {
+  // If
+  const List<Int> l;
+
+  // When
+  auto copy = l.Copy();
+  copy.Append(5);
+
+  // Then
+  EXPECT_NE(&l, &copy);
+  EXPECT_NE(Len(l), Len(copy));
+}
+
+TEST(List, CopyNonEmpty) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When
+  auto copy = l.Copy();
+  copy.Append(9);
+
+  // Then
+  const auto actual_l_items = as_vector(l);
+  const std::vector<Int> expected_l_items = {1, 3, 5, 7};
+  EXPECT_EQ(actual_l_items, expected_l_items);
+
+  const auto actual_copy_items = as_vector(copy);
+  const std::vector<Int> expected_copy_items = {1, 3, 5, 7, 9};
+  EXPECT_EQ(actual_copy_items, expected_copy_items);
+}
+
+TEST(List, ExtendEmptyAndEmptyOther) {
+  // If
+  List<Int> l;
+  const List<Int> other;
+
+  // When
+  l.Extend(other);
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, ExtendEmptyAndNonEmptyOther) {
+  // If
+  List<Int> l;
+  const List<Int> other = {1, 3, 5, 7};
+
+  // When
+  l.Extend(other);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ExtendNonEmptyAndNonEmptyOther) {
+  // If
+  List<Int> l = {9, 11, 13};
+  const List<Int> other = {1, 3, 5, 7};
+
+  // When
+  l.Extend(other);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {9, 11, 13, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, AdditionAssignmentOperator) {
+  // If
+  List<Int> l = {9, 11, 13};
+  const List<Int> other = {1, 3, 5, 7};
+
+  // When
+  l += other;
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {9, 11, 13, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, AdditionOperator) {
+  // If
+  const List<Int> l = {9, 11, 13};
+  const List<Int> other = {1, 3, 5, 7};
+
+  // When
+  const auto sum = l + other;
+
+  // Then
+  const auto actual = as_vector(sum);
+  const std::vector<Int> expected = {9, 11, 13, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
 }
 
 }  // namespace mamba::builtins::test

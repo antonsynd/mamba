@@ -8,6 +8,7 @@
 
 #include "mamba/concepts.hpp"
 #include "mamba/error.hpp"
+#include "mamba/iterator.hpp"
 
 namespace mamba::builtins {
 
@@ -67,16 +68,16 @@ class List {
   template <typename I>
     requires concepts::Iterable<I, T>
   void Extend(const I& other) {
-    std::copy(other.cbegin(), other.cend(), std::back_inserter(v_));
+    std::copy(other.v_.cbegin(), other.v_.cend(), std::back_inserter(v_));
   }
 
-  void operator+=(const List<T>& other) { this->extend(other); }
+  void operator+=(const List<T>& other) { this->Extend(other); }
 
   /// @brief Target of `x + y`
   List<T> operator+(const List<T>& other) const {
     List<T> res = *this;
 
-    res.extend(other);
+    res.Extend(other);
 
     return res;
   }
@@ -87,7 +88,7 @@ class List {
     res.v_.reserve(v_.size() * i);
 
     for (; i > 0; --i) {
-      res.extend(*this);
+      res.Extend(*this);
     }
 
     return res;
@@ -98,13 +99,13 @@ class List {
     if (i == 1) {
       return;
     } else if (i == 0) {
-      v_.clear();
+      v_.Clear();
     }
 
     v_.reserve(v_.length() * i);
 
     for (; i > 1; --i) {
-      this->extend(*this);
+      this->Extend(*this);
     }
   }
 
@@ -242,6 +243,9 @@ class List {
   /// @brief Target of `reverse(x)`
   void Reverse() { std::reverse(v_.begin(), v_.end()); }
 
+  /// @brief Target of `list.__iter__()`
+  Iterator<T> Iter() { return {}; }
+
  private:
   Int GetNormalizedIndex(Int idx) const {
     if (idx < 0) {
@@ -283,6 +287,7 @@ class List {
 
   std::vector<T> v_;
 
+  friend Bool In(const List<T>& l, T v) { return l.In(v); }
   friend Int Len(const List<T>& l) { return l.Len(); }
 };
 

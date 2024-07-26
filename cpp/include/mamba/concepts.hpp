@@ -5,6 +5,7 @@
 #include "mamba/bool.hpp"
 #include "mamba/float.hpp"
 #include "mamba/int.hpp"
+#include "mamba/iterator.hpp"
 #include "mamba/list.hpp"
 #include "mamba/none.hpp"
 #include "mamba/str.hpp"
@@ -14,12 +15,12 @@ namespace mamba::builtins::concepts {
 
 template <typename T>
 concept BoolConvertible = requires(const T t) {
-  { t.as_bool() } -> std::same_as<Bool>;
+  { t.AsBool() } -> std::same_as<Bool>;
 };
 
 template <typename T>
 concept StrConvertible = requires(const T t) {
-  { t.as_str() } -> std::same_as<Str>;
+  { t.AsStr() } -> std::same_as<Str>;
 };
 
 // TODO: Fix Tuple<...>
@@ -30,7 +31,7 @@ concept Value = std::same_as<T, Int> || std::same_as<T, Float> ||
 // TODO: Fix Tuple<...>
 template <typename T, typename E>
 concept Iterable = requires(T t) {
-  { t.operator[](0) } -> std::same_as<E>;
+  { t.Iter() } -> std::same_as<Iterator<E>>;
 };
 
 }  // namespace mamba::builtins::concepts

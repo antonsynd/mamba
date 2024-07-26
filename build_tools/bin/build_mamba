@@ -4,6 +4,7 @@ import subprocess
 import sys
 
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import Sequence
 
 CPP_DIR: Path = Path(__file__).parent.parent.parent / "cpp"
@@ -22,7 +23,10 @@ def main() -> None:
         clean(args=args, rest=rest)
     elif command == "install":
         install(args=args, rest=rest)
+    elif command == "format":
+        format(args=args, rest=rest)
     elif command == "release":
+        format(args=args, rest=rest)
         build(args=args, rest=rest)
         test(args=args, rest=rest)
         memcheck(args=args, rest=rest)
@@ -44,6 +48,7 @@ def create_parser() -> argparse.ArgumentParser:
     build_parser = subparsers.add_parser("build")
     clean_parser = subparsers.add_parser("clean")
     install_parser = subparsers.add_parser("install")
+    format_parser = subparsers.add_parser("format")
     release_parser = subparsers.add_parser("release")
     test_parser = subparsers.add_parser("test")
     memcheck_parser = subparsers.add_parser("memcheck")
@@ -77,6 +82,43 @@ def install(args: argparse.Namespace, rest: Sequence[str]) -> None:
 
 def memcheck(args: argparse.Namespace, rest: Sequence[str]) -> None:
     pass
+
+
+def format(args: argparse.Namespace, rest: Sequence[str]) -> None:
+    with NamedTemporaryFile(mode="w", encoding="utf-8") as temp_file:
+        for cpp_file_path in generate_cpp_files_for_formatting():
+            temp_file.write(f"{cpp_file_path}\n")
+
+        temp_file.flush()
+
+        try:
+            subprocess.run(
+                args=[
+                    "clang-format",
+                    "-i",
+                    "--style=Chromium",
+                    f"--files={temp_file.name}",
+                ],
+                check=True,
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Encountered error {e}", file=sys.stderr)
+            sys.exit(1)
+
+
+def generate_cpp_files_for_formatting():
+    paths_to_search: Sequence[Path] = [
+        CPP_DIR / "src",
+        CPP_DIR / "test",
+        CPP_DIR / "include",
+    ]
+
+    for search_dir in paths_to_search:
+        for cpp_file_path in search_dir.glob("**/*.*pp"):
+            if cpp_file_path.suffix not in {".cpp", ".hpp"}:
+                continue
+
+            yield cpp_file_path
 
 
 def test(args: argparse.Namespace, rest: Sequence[str]) -> None:
