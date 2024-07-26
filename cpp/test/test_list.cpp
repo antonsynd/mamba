@@ -6,8 +6,11 @@
 namespace mamba::builtins::test {
 
 TEST(List, EmptyConstructor) {
-  // If/when/then
+  // If/when
   List<Int> l;
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
 }
 
 }  // namespace mamba::builtins::test

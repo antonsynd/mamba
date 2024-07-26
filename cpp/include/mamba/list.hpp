@@ -277,6 +277,8 @@ class List {
   }
 
   std::vector<T> v_;
+
+  friend Int Len(const List<T>& l) { return l.v_.size(); }
 };
 
 }  // namespace mamba::builtins
