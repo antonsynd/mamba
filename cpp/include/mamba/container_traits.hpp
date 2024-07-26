@@ -1,14 +1,15 @@
 #pragma once
 
+#include <concepts>
 #include <memory>
+#include <type_traits>
 
-#include "mamba/traits.hpp"
+#include "mamba/concepts.hpp"
 
 namespace mamba::builtins::container {
 
 template <typename T>
-using value_t =
-    std::conditional_t<traits::is_value_type_v<T>, T, std::shared_ptr<T>>;
+using value_t = std::conditional_t<Value<T>, T, std::shared_ptr<T>>;
 
 template <typename T>
 using reference_t = value_t<T>&;

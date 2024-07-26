@@ -9,7 +9,7 @@ namespace mamba::builtins {
 
 class ValueError : public std::runtime_error {
  public:
-  explicit ValueError(str_t message) : std::runtime_error(std::move(message)) {}
+  explicit ValueError(Str message) : std::runtime_error(std::move(message)) {}
 };
 
 }  // namespace mamba::builtins

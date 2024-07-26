@@ -1,58 +1,59 @@
 #pragma once
 
+#include <concepts>
 #include <type_traits>
 #include <utility>
 
 #include "mamba/bool.hpp"
+#include "mamba/concepts.hpp"
 #include "mamba/float.hpp"
 #include "mamba/int.hpp"
 #include "mamba/str.hpp"
-#include "mamba/traits.hpp"
 
 namespace mamba::builtins {
 
-bool_t as_bool(bool_t b) {
+Bool as_bool(Bool b) {
   return b;
 }
 
-bool_t as_bool(int_t i) {
+Bool as_bool(Int i) {
   return i != 0;
 }
 
-bool_t as_bool(float_t f) {
+Bool as_bool(Float f) {
   return f != 0;
 }
 
-bool_t as_bool(str_t s) {
+Bool as_bool(Str s) {
   return !s.empty();
 }
 
-template <typename T, std::enable_if_t<traits::implements_as_bool_v<T>>>
-bool_t as_bool(const T& t) {
-  return T.as_bool();
+template <BoolConvertible T>
+Bool as_bool(const T& t) {
+  return t.as_bool();
 }
 
-str_t as_str(int_t i) {
+Str as_str(Int i) {
   return std::to_string(i);
 }
 
-str_t as_str(float_t f) {
+Str as_str(Float f) {
   return std::to_string(f);
 }
 
-str_t as_str(bool_t f) {
+Str as_str(Bool f) {
   return std::to_string(f);
 }
 
 /// @note The return value is expected to be a new copy of @p s. Returning an
 /// lvalue ref is not expected here. However, we can move a temporary if it
 /// was passed in, hence the use of a forwarding reference.
-str_t as_str(str_t&& s) {
-  return std::forward<str_t>(s);
+Str as_str(Str&& s) {
+  return std::forward<Str>(s);
 }
 
-template <typename T, std::enable_if_t<traits::implements_as_str_v<T>>>
-bool_t as_str(const T& t) {
+template <concepts::StrConvertible T>
+Bool as_str(const T& t) {
   return T.as_str();
 }
 

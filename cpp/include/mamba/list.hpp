@@ -1,16 +1,16 @@
 #pragma once
 
 #include <algorithm>
+#include <concepts>
 #include <iterator>
-#include <type_traits>
 #include <vector>
 
+#include "mamba/concepts.hpp"
 #include "mamba/error.hpp"
-#include "mamba/traits.hpp"
 
 namespace mamba::builtins {
 
-template <typename T, std::enable_if_t<traits::is_value_type_v<T>>>
+template <Value T>
 class List {
  private:
   using iterator_t = std::vector<T>::iterator;
@@ -25,8 +25,7 @@ class List {
   List() = default;
 
   /// @brief Target is `list(Iterable)`
-  template <typename Iterable,
-            std::enable_if_t<traits::is_iterable_v<Iterable, T>>>
+  template <Iterable T>
   List(const Iterable<T>& it) {}
 
   /// @brief Target is `list(...)`
@@ -62,8 +61,7 @@ class List {
 
   /// @brief Target of `list.extend(Iterable)`
   /// @todo Fix to not assume list_t
-  template <typename Iterable,
-            std::enable_if_t<traits::is_iterable_v<Iterable, T>>>
+  template <Iterable T>
   void Extend(const Iterable<T>& other) {
     std::copy(other.cbegin(), other.cend(), std::back_inserter(v_));
   }
@@ -80,7 +78,7 @@ class List {
   }
 
   /// @brief Target of `x * n`
-  List<T> operator*(int_t i) const {
+  List<T> operator*(Int i) const {
     List<T> res;
     res.v_.reserve(v_.size() * i);
 
@@ -92,7 +90,7 @@ class List {
   }
 
   /// @brief Target of `x *= n`
-  void operator*=(int_t i) {
+  void operator*=(Int i) {
     if (i == 1) {
       return;
     } else if (i == 0) {
@@ -107,13 +105,13 @@ class List {
   }
 
   /// @brief Target of `x[i] = j`
-  reference_t operator[](int_t idx) { return v_.at[GetNormalizedIndex(idx)]; }
+  reference_t operator[](Int idx) { return v_.at[GetNormalizedIndex(idx)]; }
 
   /// @brief Target of `x[i]`
-  value_t operator[](int_t idx) const { return v_[GetNormalizedIndex(idx)]; }
+  value_t operator[](Int idx) const { return v_[GetNormalizedIndex(idx)]; }
 
   /// @brief Target of `len(x)`
-  int_t Len() const { return v_.size(); }
+  Int Len() const { return v_.size(); }
 
   /// @brief Target of `list.min()`
   value_t Min() const { return *std::min_element(v_.begin(), v_.end()); }
@@ -122,13 +120,13 @@ class List {
   value_t Max() const { return *std::max_element(v_.begin(), v_.end()); }
 
   /// @brief Target of `list.count(x)`
-  int_t Count(T elem) const {
+  Int Count(T elem) const {
     return std::count_if(v_.cbegin(), v_.cend(),
                          [](T val) { return val == elem; });
   }
 
   /// @brief Target of `x[i:j(:k)]`
-  List<T> Slice(int_t start, int_t end, int_t step = 1) const {
+  List<T> Slice(Int start, Int end, Int step = 1) const {
     List<T> res;
 
     if (step == 0) {
@@ -156,10 +154,10 @@ class List {
 
     // Stepped range copy
     // Efficient ceil division (from ChatGPT)
-    const int_t length = end - start;
+    const Int length = end - start;
     res.v_.reserve((length + step - 1) / step);
 
-    for (int_t i = 0; i < length; i += step) {
+    for (Int i = 0; i < length; i += step) {
       // Note: this expression is a no-op on the first iteration
       start_it += i;
 
@@ -171,20 +169,17 @@ class List {
 
 #if __cplusplus >= 202302L
   /// @brief Target `list[i:j(:k)]`
-  List<T> operator[](int_t start, int_t end, int_t step = 1) const {
+  List<T> operator[](Int start, Int end, Int step = 1) const {
     return Slice(start, end, step);
   }
 #endif  // __cplusplus >= 202302L
 
   /// @todo
   /// Use a proxy to accept the incoming slice
-  void ReplaceSlice(const List<T>& other,
-                    int_t start,
-                    int_t end,
-                    int_t step = 1) {}
+  void ReplaceSlice(const List<T>& other, Int start, Int end, Int step = 1) {}
 
   /// @brief Target of `x.index(i, (j))`
-  int_t Index(T elem, int_t start = 0) const {
+  Int Index(T elem, Int start = 0) const {
     if (IsIndexOutOfBounds(start)) {
       // TODO: format string
       throw ValueError("{elem} is not in list");
@@ -202,11 +197,11 @@ class List {
       return 0;
     }
 
-    return static_cast<int_t>(std::distance(v_.begin(), it));
+    return static_cast<Int>(std::distance(v_.begin(), it));
   }
 
   /// @brief Target of `x.index(i, j, k)`
-  int_t Index(T elem, int_t start, int_t end) const {
+  Int Index(T elem, Int start, Int end) const {
     if (IsIndexOutOfBounds(start) || IsIndexOutOfBounds(end)) {
       // TODO: format string
       throw ValueError("{elem} is not in list");
@@ -225,16 +220,16 @@ class List {
       return 0;
     }
 
-    return static_cast<int_t>(std::distance(v_.begin(), it));
+    return static_cast<Int>(std::distance(v_.begin(), it));
   }
 
   /// @brief Target of `list.insert()`
   /// @todo
-  void Insert(int_t idx, T elem) {}
+  void Insert(Int idx, T elem) {}
 
   /// @brief Target of `list.pop()`
   /// @todo
-  void Pop(int_t i = -1) {}
+  void Pop(Int i = -1) {}
 
   /// @brief Target of `list.remove()`
   /// @todo
@@ -244,7 +239,7 @@ class List {
   void Reverse() { std::reverse(v_.begin(), v_.end()); }
 
  private:
-  int_t GetNormalizedIndex(int_t idx) const {
+  Int GetNormalizedIndex(Int idx) const {
     if (idx < 0) {
       return v_.size() + idx;
     }
@@ -252,7 +247,7 @@ class List {
     return idx;
   }
 
-  bool_t IsIndexOutOfBounds(int_t idx) const {
+  Bool IsIndexOutOfBounds(Int idx) const {
     idx = GetNormalizedIndex(idx);
 
     return idx < 0 || idx >= v_.size();
@@ -284,8 +279,5 @@ class List {
 
   std::vector<T> v_;
 };
-
-template <typename T>
-using list_t = List<T>;
 
 }  // namespace mamba::builtins

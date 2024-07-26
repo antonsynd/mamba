@@ -4,6 +4,6 @@
 
 namespace mamba::builtins {
 
-using none_t = std::nullptr_t;
+using None = std::nullptr_t;
 
 }  // namespace mamba::builtins

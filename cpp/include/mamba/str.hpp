@@ -7,7 +7,7 @@
 namespace mamba::builtins {
 
 // TODO: Make it Unicode friendly
-using str_t = std::string;
+using Str = std::string;
 
 namespace str {
 
