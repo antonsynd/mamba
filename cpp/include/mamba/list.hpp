@@ -4,6 +4,7 @@
 #include <concepts>
 #include <initializer_list>
 #include <iterator>
+#include <optional>
 #include <vector>
 
 #include "mamba/concepts.hpp"
@@ -119,10 +120,26 @@ class List {
   }
 
   /// @brief Target of `x[i] = j`
-  reference_t operator[](Int idx) { return v_[GetNormalizedIndex(idx)]; }
+  reference_t operator[](Int idx) {
+    const auto idx_opt = TryGetNormalizedIndex(idx);
+
+    if (!idx_opt) {
+      throw IndexError("list index out of range");
+    }
+
+    return v_[*idx_opt];
+  }
 
   /// @brief Target of `x[i]`
-  value_t operator[](Int idx) const { return v_[GetNormalizedIndex(idx)]; }
+  value_t operator[](Int idx) const {
+    const auto idx_opt = TryGetNormalizedIndex(idx);
+
+    if (!idx_opt) {
+      throw IndexError("list index out of range");
+    }
+
+    return v_[*idx_opt];
+  }
 
   /// @brief Target of `len(x)`
   Int Len() const { return v_.size(); }
@@ -243,7 +260,7 @@ class List {
 
   /// @brief Target of `list.pop()`
   /// @todo
-  void Pop(Int i = -1) {}
+  void Pop(Int idx = -1) {}
 
   /// @brief Target of `list.remove()`
   /// @todo
@@ -262,6 +279,18 @@ class List {
   Int GetNormalizedIndex(Int idx) const {
     if (idx < 0) {
       return v_.size() + idx;
+    }
+
+    return idx;
+  }
+
+  std::optional<Int> TryGetNormalizedIndex(Int idx) const {
+    if (idx < 0) {
+      idx += v_.size();
+    }
+
+    if (idx < 0 || idx >= v_.size()) {
+      return std::nullopt;
     }
 
     return idx;

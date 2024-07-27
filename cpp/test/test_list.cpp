@@ -336,4 +336,35 @@ TEST(List, MultiplicationAssignmentOperatorMoreThanOne) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, GetByPositiveIndex) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_EQ(l[0], 1);
+  EXPECT_EQ(l[1], 3);
+  EXPECT_EQ(l[2], 5);
+  EXPECT_EQ(l[3], 7);
+}
+
+TEST(List, GetByNegativeIndex) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_EQ(l[-1], 7);
+  EXPECT_EQ(l[-2], 5);
+  EXPECT_EQ(l[-3], 3);
+  EXPECT_EQ(l[-4], 1);
+}
+
+TEST(List, GetByOutOfBounds) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_THROW(l[-5], IndexError);
+  EXPECT_THROW(l[4], IndexError);
+}
+
 }  // namespace mamba::builtins::test
