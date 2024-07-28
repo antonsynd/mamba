@@ -7,9 +7,9 @@
 namespace mamba::builtins::concepts {
 
 // TODO: Fix Tuple<...>
-template <typename T, typename E>
+template <typename T>
 concept Iterable = requires(T t) {
-  { t.Iter() } -> std::same_as<Iterator<E>>;
+  { t.Iter() } -> std::same_as<Iterator<T>>;
 };
 
 }  // namespace mamba::builtins::concepts

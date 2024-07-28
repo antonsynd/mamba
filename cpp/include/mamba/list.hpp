@@ -31,7 +31,7 @@ class List {
 
   /// @brief Target is `list(Iterable)`
   template <typename I>
-    requires concepts::Iterable<I, T>
+    requires concepts::Iterable<I>
   List(const I& it) {}
 
   /// @brief Target is `list(...)`
@@ -69,7 +69,7 @@ class List {
   /// @brief Target of `list.extend(Iterable)`
   /// @todo Fix to not assume list_t
   template <typename I>
-    requires concepts::Iterable<I, T>
+    requires concepts::Iterable<I>
   void Extend(const I& other) {
     std::copy(other.v_.cbegin(), other.v_.cend(), std::back_inserter(v_));
   }
@@ -282,7 +282,7 @@ class List {
   void Reverse() { std::reverse(v_.begin(), v_.end()); }
 
   /// @brief Target of `list.__iter__()`
-  Iterator<T> Iter() { return {}; }
+  Iterator<List<T>> Iter() { return {}; }
 
   /// @brief Traget of `bool(list)`
   Bool AsBool() const { return Len() > 0; }
