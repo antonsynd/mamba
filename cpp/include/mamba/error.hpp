@@ -17,4 +17,10 @@ class IndexError : public std::runtime_error {
   explicit IndexError(Str message) : std::runtime_error(std::move(message)) {}
 };
 
+class AttributeError : public std::runtime_error {
+ public:
+  explicit AttributeError(Str message)
+      : std::runtime_error(std::move(message)) {}
+};
+
 }  // namespace mamba::builtins

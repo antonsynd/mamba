@@ -144,11 +144,23 @@ class List {
   /// @brief Target of `len(x)`
   Int Len() const { return v_.size(); }
 
-  /// @brief Target of `list.min()`
-  value_t Min() const { return *std::min_element(v_.begin(), v_.end()); }
+  /// @brief Target of `min(list)`
+  value_t Min() const {
+    if (v_.empty()) {
+      throw ValueError("Min() arg is an empty sequence");
+    }
 
-  /// @brief Target of `list.max()`
-  value_t Max() const { return *std::max_element(v_.begin(), v_.end()); }
+    return *std::min_element(v_.begin(), v_.end());
+  }
+
+  /// @brief Target of `max(list)`
+  value_t Max() const {
+    if (v_.empty()) {
+      throw ValueError("Max() arg is an empty sequence");
+    }
+
+    return *std::max_element(v_.begin(), v_.end());
+  }
 
   /// @brief Target of `list.count(x)`
   Int Count(T elem) const {
@@ -169,11 +181,11 @@ class List {
       return res;
     }
 
-    start = GetNormalizedIndex(start);
-    end = GetNormalizedIndex(end);
+    start = TryGetNormalizedIndex(start).value_or(0);
+    end = TryGetNormalizedIndex(end).value_or(v_.size());
 
-    const auto start_it = GetNormalizedIterator(start);
-    const auto end_it = GetNormalizedIterator(start);
+    auto start_it = GetIterator(start);
+    const auto end_it = GetIterator(end);
 
     // Simple range copy
     if (step == 1) {
@@ -189,10 +201,9 @@ class List {
     res.v_.reserve((length + step - 1) / step);
 
     for (Int i = 0; i < length; i += step) {
-      // Note: this expression is a no-op on the first iteration
-      start_it += i;
-
       res.v_.push_back(*start_it);
+
+      start_it += step;
     }
 
     return res;
@@ -216,7 +227,7 @@ class List {
       throw ValueError("{elem} is not in list");
     }
 
-    const auto& it = std::find(GetNormalizedIterator(start), v_.end(), elem);
+    const auto& it = std::find(GetIterator(start), v_.end(), elem);
 
     if (it == v_.end()) {
       // TODO: format string
@@ -238,8 +249,7 @@ class List {
       throw ValueError("{elem} is not in list");
     }
 
-    const auto& it = std::find(GetNormalizedIterator(start),
-                               GetNormalizedIterator(end), elem);
+    const auto& it = std::find(GetIterator(start), GetIterator(end), elem);
 
     if (it == v_.end()) {
       // TODO: format string
@@ -275,15 +285,17 @@ class List {
   /// @brief Traget of `bool(list)`
   Bool AsBool() const { return Len() > 0; }
 
- private:
-  Int GetNormalizedIndex(Int idx) const {
-    if (idx < 0) {
-      return v_.size() + idx;
-    }
-
-    return idx;
+  template <typename U>
+  Bool Eq(const U&) const {
+    return false;
   }
 
+  template <>
+  Bool Eq(const List<T>& other) const {
+    return v_ == other.v_;
+  }
+
+ private:
   std::optional<Int> TryGetNormalizedIndex(Int idx) const {
     if (idx < 0) {
       idx += v_.size();
@@ -297,37 +309,35 @@ class List {
   }
 
   Bool IsIndexOutOfBounds(Int idx) const {
-    idx = GetNormalizedIndex(idx);
-
-    return idx < 0 || idx >= v_.size();
+    return !!TryGetNormalizedIndex(idx);
   }
 
-  iterator_t GetNormalizedIterator(Int idx) {
-    if (GetNormalizedIndex(idx) != idx) {
-      throw std::logic_error("idx must be normalized");
-    }
-
+  iterator_t GetIterator(Int idx) {
     if (idx < 0) {
       return v_.end() + idx;
     }
 
-    return v_.start() + idx;
+    return v_.begin() + idx;
   }
 
-  const_iterator_t GetNormalizedIterator(Int idx) const {
-    if (GetNormalizedIndex(idx) != idx) {
-      throw std::logic_error("idx must be normalized");
-    }
-
+  const_iterator_t GetIterator(Int idx) const {
     if (idx < 0) {
-      return v_.end() + idx;
+      return v_.cend() + idx;
     }
 
-    return v_.start() + idx;
+    return v_.cbegin() + idx;
   }
 
   std::vector<T> v_;
 
+  // TODO: Move these out into generic header
+  template <typename U>
+  friend Bool Eq(const List<T>& lhs, const U& rhs) {
+    return lhs.Eq(rhs);
+  }
+
+  friend value_t Min(const List<T>& l) { return l.Min(); }
+  friend value_t Max(const List<T>& l) { return l.Max(); }
   friend Bool AsBool(const List<T>& l) { return l.AsBool(); }
   friend Bool In(const List<T>& l, T v) { return l.In(v); }
   friend Int Len(const List<T>& l) { return l.Len(); }

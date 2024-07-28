@@ -367,4 +367,176 @@ TEST(List, GetByOutOfBounds) {
   EXPECT_THROW(l[4], IndexError);
 }
 
+TEST(List, LenZero) {
+  // If
+  const List<Int> l;
+
+  // When/then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, LenNonZero) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_EQ(Len(l), 4);
+}
+
+TEST(List, MinEmpty) {
+  // If
+  const List<Int> l;
+
+  // When/then
+  EXPECT_THROW(Min(l), ValueError);
+}
+
+TEST(List, MinNonEmpty) {
+  // If
+  const List<Int> l = {5, 7, 3, 1};
+
+  // When/then
+  EXPECT_EQ(Min(l), 1);
+}
+
+TEST(List, MaxEmpty) {
+  // If
+  const List<Int> l;
+
+  // When/then
+  EXPECT_THROW(Max(l), ValueError);
+}
+
+TEST(List, MaxNonEmpty) {
+  // If
+  const List<Int> l = {5, 7, 3, 1};
+
+  // When/then
+  EXPECT_EQ(Max(l), 7);
+}
+
+TEST(List, CountEmpty) {
+  // If
+  const List<Int> l;
+
+  // When/then
+  EXPECT_EQ(l.Count(1), 0);
+}
+
+TEST(List, CountZero) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_EQ(l.Count(9), 0);
+}
+
+TEST(List, CountNonZero) {
+  // If
+  const List<Int> l = {1, 3, 5, 1, 7};
+
+  // When/then
+  EXPECT_EQ(l.Count(1), 2);
+}
+
+TEST(List, SliceZeroStep) {
+  // If
+  const List<Int> l = {1, 3, 5, 1, 7};
+
+  // When/then
+  EXPECT_THROW(l.Slice(0, 0, 0), ValueError);
+}
+
+TEST(List, SliceNegativeStep) {
+  // If
+  const List<Int> l = {1, 3, 5, 1, 7};
+
+  // When
+  const auto actual = l.Slice(0, 1, -1);
+
+  // Then
+  EXPECT_EQ(Len(actual), 0);
+}
+
+TEST(List, SliceSameStartAndEnd) {
+  // If
+  const List<Int> l = {1, 3, 5, 1, 7};
+
+  // When
+  const auto actual = l.Slice(1, 1);
+
+  // Then
+  EXPECT_EQ(Len(actual), 0);
+}
+
+TEST(List, SliceSingleStep) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When
+  const auto res = l.Slice(1, 3);
+
+  // Then
+  const auto actual = as_vector(res);
+  const std::vector<Int> expected = {3, 5};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, SliceNotSingleStepNotEnough) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When
+  const auto res = l.Slice(1, 3, 4);
+
+  // Then
+  const auto actual = as_vector(res);
+  const std::vector<Int> expected = {3};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, SliceNotSingleStepEnough) {
+  // If
+  const List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  const auto res = l.Slice(1, 5, 2);
+
+  // Then
+  const auto actual = as_vector(res);
+  const std::vector<Int> expected = {3, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, SliceOutOfBoundsLeft) {
+  // If
+  const List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  const auto res = l.Slice(-9, 4, 2);
+
+  // Then
+  const auto actual = as_vector(res);
+  const std::vector<Int> expected = {1, 5};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, SliceOutOfBoundsRight) {
+  // If
+  const List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  const auto res = l.Slice(0, 9, 2);
+
+  // Then
+  const auto actual = as_vector(res);
+  const std::vector<Int> expected = {1, 5, 9};
+
+  EXPECT_EQ(actual, expected);
+}
+
 }  // namespace mamba::builtins::test

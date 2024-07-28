@@ -129,7 +129,7 @@ def test(args: argparse.Namespace, rest: Sequence[str]) -> None:
         sys.exit(1)
 
     try:
-        subprocess.run(args=["ctest", *rest], cwd=build_test_dir)
+        subprocess.run(args=["ctest", "--output-on-failure", *rest], cwd=build_test_dir)
     except subprocess.CalledProcessError as e:
         print(f"Encountered error {e}", file=sys.stderr)
         sys.exit(1)
