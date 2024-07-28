@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 #include "mamba/sequence.hpp"
 
 namespace mamba::builtins {
@@ -8,8 +10,14 @@ namespace mamba::builtins {
 template <types::Sequence T>
 class Iterator {
  public:
-  Iterator<T> Iter() const { return *this; }
-  T::value_t Next() { return {}; }
+  virtual Iterator<T> Iter() const = 0;
+  virtual T::value_t Next() = 0;
 };
+
+template <typename T>
+  requires types::Sequence<T> || std::is_same_v<T, Iterator<T>>
+Iterator<T> Iter(const T& sequence) {
+  return sequence.Iter();
+}
 
 }  // namespace mamba::builtins

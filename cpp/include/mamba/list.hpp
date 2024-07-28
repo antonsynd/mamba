@@ -11,9 +11,17 @@
 #include "mamba/error.hpp"
 #include "mamba/iterable.hpp"
 #include "mamba/iterator.hpp"
+#include "mamba/not_null.hpp"
 #include "mamba/value.hpp"
 
 namespace mamba::builtins::types {
+namespace details {
+
+// Forward declaration
+template <typename T>
+class ListIterator;
+
+}  // namespace details
 
 template <concepts::Value T>
 class List {
@@ -282,7 +290,7 @@ class List {
   void Reverse() { std::reverse(v_.begin(), v_.end()); }
 
   /// @brief Target of `list.__iter__()`
-  Iterator<List<T>> Iter() { return {}; }
+  Iterator<List<T>> Iter() { return details::ListIterator(*this); }
 
   /// @brief Traget of `bool(list)`
   Bool AsBool() const { return Len() > 0; }
@@ -332,5 +340,21 @@ class List {
 
   std::vector<T> v_;
 };
+
+namespace details {
+
+template <typename T>
+class ListIterator : public Iterator<List<T>> {
+ public:
+  ListIterator(List<T>& l) : l_(&l) {}
+
+  Iterator<T> Iter() const override { return *this; }
+  T Next() {}
+
+ private:
+  not_null<List<T>> l_;
+};
+
+}  // namespace details
 
 }  // namespace mamba::builtins::types
