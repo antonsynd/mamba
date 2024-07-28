@@ -2,8 +2,13 @@
 
 #include "mamba/int.hpp"
 
-namespace mamba::builtins {
+namespace mamba::builtins::types {
 
 using Bool = Int;
 
-}  // namespace mamba::builtins
+// enum class Bool : Int {
+//   kFalse = 0,
+//   kTrue = 1,
+// }
+
+}  // namespace mamba::builtins::types

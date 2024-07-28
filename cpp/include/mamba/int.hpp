@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-namespace mamba::builtins {
+namespace mamba::builtins::types {
 
 using Int = std::int_least32_t;
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::types

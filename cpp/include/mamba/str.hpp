@@ -4,7 +4,7 @@
 
 #include "mamba/int.hpp"
 
-namespace mamba::builtins {
+namespace mamba::builtins::types {
 
 // TODO: Make it Unicode friendly
 using Str = std::string;
@@ -17,4 +17,4 @@ Int Len(const Str& s) {
 
 }  // namespace str
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::types

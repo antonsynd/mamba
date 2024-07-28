@@ -2,10 +2,12 @@
 
 #include <vector>
 
+#include "mamba/conversion.hpp"
 #include "mamba/int.hpp"
 #include "mamba/list.hpp"
+#include "mamba/sequence.hpp"
 
-namespace mamba::builtins::test {
+namespace mamba::builtins::types::test {
 namespace {
 
 template <typename T>
@@ -539,4 +541,61 @@ TEST(List, SliceOutOfBoundsRight) {
   EXPECT_EQ(actual, expected);
 }
 
-}  // namespace mamba::builtins::test
+#if __cplusplus >= 202302L
+TEST(List, SliceOperator) {
+  // If
+  const List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  const auto res = l[1, 5, 2];
+
+  // Then
+  const auto actual = as_vector(res);
+  const std::vector<Int> expected = {3, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+#endif  // __cplusplus >= 202302L
+
+TEST(List, ReverseEmpty) {
+  // If
+  List<Int> l;
+
+  // When
+  l.Reverse();
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, ReverseNonEmpty) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.Reverse();
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {7, 5, 3, 1};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, BoolEmpty) {
+  // If
+  const List<Int> l;
+
+  // When/then
+  EXPECT_FALSE(conversion::Bool(l));
+}
+
+TEST(List, BoolNonEmpty) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_TRUE(conversion::Bool(l));
+}
+
+}  // namespace mamba::builtins::types::test

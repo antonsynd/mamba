@@ -9,17 +9,19 @@ namespace mamba::builtins {
 
 class ValueError : public std::runtime_error {
  public:
-  explicit ValueError(Str message) : std::runtime_error(std::move(message)) {}
+  explicit ValueError(types::Str message)
+      : std::runtime_error(std::move(message)) {}
 };
 
 class IndexError : public std::runtime_error {
  public:
-  explicit IndexError(Str message) : std::runtime_error(std::move(message)) {}
+  explicit IndexError(types::Str message)
+      : std::runtime_error(std::move(message)) {}
 };
 
 class AttributeError : public std::runtime_error {
  public:
-  explicit AttributeError(Str message)
+  explicit AttributeError(types::Str message)
       : std::runtime_error(std::move(message)) {}
 };
 

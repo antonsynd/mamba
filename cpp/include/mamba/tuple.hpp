@@ -2,9 +2,9 @@
 
 #include <tuple>
 
-namespace mamba::builtins {
+namespace mamba::builtins::types {
 
 template <typename... Args>
 using Tuple = std::tuple<Args...>;
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::types

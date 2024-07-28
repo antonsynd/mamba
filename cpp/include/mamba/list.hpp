@@ -9,9 +9,11 @@
 
 #include "mamba/concepts.hpp"
 #include "mamba/error.hpp"
+#include "mamba/iterable.hpp"
 #include "mamba/iterator.hpp"
+#include "mamba/value.hpp"
 
-namespace mamba::builtins {
+namespace mamba::builtins::types {
 
 template <concepts::Value T>
 class List {
@@ -329,18 +331,6 @@ class List {
   }
 
   std::vector<T> v_;
-
-  // TODO: Move these out into generic header
-  template <typename U>
-  friend Bool Eq(const List<T>& lhs, const U& rhs) {
-    return lhs.Eq(rhs);
-  }
-
-  friend value_t Min(const List<T>& l) { return l.Min(); }
-  friend value_t Max(const List<T>& l) { return l.Max(); }
-  friend Bool AsBool(const List<T>& l) { return l.AsBool(); }
-  friend Bool In(const List<T>& l, T v) { return l.In(v); }
-  friend Int Len(const List<T>& l) { return l.Len(); }
 };
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::types

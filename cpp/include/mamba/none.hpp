@@ -2,8 +2,8 @@
 
 #include <cstddef>
 
-namespace mamba::builtins {
+namespace mamba::builtins::types {
 
 using None = std::nullptr_t;
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::types

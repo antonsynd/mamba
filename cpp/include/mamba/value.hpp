@@ -5,22 +5,15 @@
 #include "mamba/bool.hpp"
 #include "mamba/float.hpp"
 #include "mamba/int.hpp"
-#include "mamba/iterator.hpp"
-#include "mamba/list.hpp"
 #include "mamba/none.hpp"
 #include "mamba/str.hpp"
 #include "mamba/tuple.hpp"
 
 namespace mamba::builtins::concepts {
 
+// TODO: Fix Tuple<...>
 template <typename T>
-concept BoolConvertible = requires(const T t) {
-  { t.AsBool() } -> std::same_as<types::Bool>;
-};
-
-template <typename T>
-concept StrConvertible = requires(const T t) {
-  { t.AsStr() } -> std::same_as<types::Str>;
-};
+concept Value = std::same_as<T, types::Int> || std::same_as<T, types::Float> ||
+                std::same_as<T, types::Bool> || std::same_as<T, types::None>;
 
 }  // namespace mamba::builtins::concepts

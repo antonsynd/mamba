@@ -10,51 +10,45 @@
 #include "mamba/int.hpp"
 #include "mamba/str.hpp"
 
-namespace mamba::builtins {
+namespace mamba::builtins::conversion {
 
-Bool as_bool(Bool b) {
-  return b;
-}
-
-Bool as_bool(Int i) {
+// TODO: Add overload for Bool if necessary
+types::Bool Bool(types::Int i) {
   return i != 0;
 }
 
-Bool as_bool(Float f) {
+types::Bool Bool(types::Float f) {
   return f != 0;
 }
 
-Bool as_bool(Str s) {
+types::Bool Bool(types::Str s) {
   return !s.empty();
 }
 
-template <BoolConvertible T>
-Bool as_bool(const T& t) {
-  return t.as_bool();
+template <concepts::BoolConvertible T>
+types::Bool Bool(const T& t) {
+  return t.AsBool();
 }
 
-Str as_str(Int i) {
+// TODO: Add overload for Bool if necessary
+types::Str Str(types::Int i) {
   return std::to_string(i);
 }
 
-Str as_str(Float f) {
-  return std::to_string(f);
-}
-
-Str as_str(Bool f) {
+types::Str Str(types::Float f) {
   return std::to_string(f);
 }
 
 /// @note The return value is expected to be a new copy of @p s. Returning an
 /// lvalue ref is not expected here. However, we can move a temporary if it
 /// was passed in, hence the use of a forwarding reference.
-Str as_str(Str&& s) {
-  return std::forward<Str>(s);
+types::Str Str(types::Str&& s) {
+  return std::forward<types::Str>(s);
 }
 
 template <concepts::StrConvertible T>
-Bool as_str(const T& t) {
-  return T.as_str();
+types::Bool Str(const T& t) {
+  return t.AsStr();
 }
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::conversion
