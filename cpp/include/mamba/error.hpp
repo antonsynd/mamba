@@ -25,4 +25,10 @@ class AttributeError : public std::runtime_error {
       : std::runtime_error(std::move(message)) {}
 };
 
+class StopIteration : public std::runtime_error {
+ public:
+  explicit StopIteration(types::Str message)
+      : std::runtime_error(std::move(message)) {}
+};
+
 }  // namespace mamba::builtins

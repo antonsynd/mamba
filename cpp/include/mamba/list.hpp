@@ -290,7 +290,9 @@ class List {
   void Reverse() { std::reverse(v_.begin(), v_.end()); }
 
   /// @brief Target of `list.__iter__()`
-  Iterator<List<T>> Iter() { return details::ListIterator(*this); }
+  Iterator<List<T>> Iter() {
+    return details::ListIterator(v_.start(), v_.end());
+  }
 
   /// @brief Traget of `bool(list)`
   Bool AsBool() const { return Len() > 0; }
@@ -346,13 +348,22 @@ namespace details {
 template <typename T>
 class ListIterator : public Iterator<List<T>> {
  public:
-  ListIterator(List<T>& l) : l_(&l) {}
+  ListIterator(std::vector<T>::iterator it, std::vector<T>::iterator end)
+      : it_(std::move(it)), end_(std::move(end)) {}
 
   Iterator<T> Iter() const override { return *this; }
-  T Next() {}
+
+  T Next() override {
+    if (it_ == end_) {
+      throw StopIteration("end of iterator");
+    }
+
+    return *it_++;
+  }
 
  private:
-  not_null<List<T>> l_;
+  std::vector<T>::iterator it_;
+  std::vector<T>::iterator end_;
 };
 
 }  // namespace details
