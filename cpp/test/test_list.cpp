@@ -598,4 +598,20 @@ TEST(List, BoolNonEmpty) {
   EXPECT_TRUE(conversion::Bool(l));
 }
 
+TEST(List, IndexEmpty) {
+  // If
+  const List<Int> l;
+
+  // When/then
+  EXPECT_THROW(l.Index(5), ValueError);
+}
+
+TEST(List, IndexNonEmpty) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_EQ(l.Index(5), 2);
+}
+
 }  // namespace mamba::builtins::types::test

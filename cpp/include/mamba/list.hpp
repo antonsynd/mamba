@@ -231,47 +231,19 @@ class List {
   void ReplaceSlice(const List<T>& other, Int start, Int end, Int step = 1) {}
 
   /// @brief Target of `x.index(i, (j))`
-  Int Index(T elem, Int start = 0) const {
-    if (IsIndexOutOfBounds(start)) {
-      // TODO: format string
-      throw ValueError("{elem} is not in list");
-    }
-
-    const auto& it = std::find(GetIterator(start), v_.cend(), elem);
-
-    if (it == v_.cend()) {
-      // TODO: format string
-      throw ValueError("{elem} is not in list");
-    }
-
-    // Base case
-    if (it == v_.cbegin()) {
-      return 0;
-    }
-
-    return static_cast<Int>(std::distance(v_.cbegin(), it));
-  }
+  Int Index(T elem, Int start = 0) const { return Index(elem, start, Len()); }
 
   /// @brief Target of `x.index(i, j, k)`
   Int Index(T elem, Int start, Int end) const {
-    if (IsIndexOutOfBounds(start) || IsIndexOutOfBounds(end)) {
-      // TODO: format string
-      throw ValueError("{elem} is not in list");
+    end = ClampIndex(end);
+
+    for (Int idx = ClampIndex(start); idx < end; ++idx) {
+      if (v_[idx] == elem) {
+        return idx;
+      }
     }
 
-    const auto& it = std::find(GetIterator(start), GetIterator(end), elem);
-
-    if (it == v_.cend()) {
-      // TODO: format string
-      throw ValueError("{elem} is not in list");
-    }
-
-    // Base case
-    if (it == v_.cbegin()) {
-      return 0;
-    }
-
-    return static_cast<Int>(std::distance(v_.cbegin(), it));
+    throw ValueError("{elem} is not in list");
   }
 
   /// @brief Target of `list.insert()`
@@ -308,6 +280,16 @@ class List {
   }
 
  private:
+  Int ClampIndex(Int idx) const {
+    if (idx < 0) {
+      return 0;
+    } else if (idx > Len()) {
+      return Len();
+    }
+
+    return idx;
+  }
+
   std::optional<Int> TryGetNormalizedIndex(Int idx) const {
     if (idx < 0) {
       idx += v_.size();
