@@ -34,27 +34,37 @@ class List {
   using reference = value&;
   using const_reference = const value&;
 
-  /// @brief Target is `list()`
+  /// @brief Creates an empty list.
+  /// @code list()
   List() = default;
 
-  /// @brief Target is `list(Iterable)`
+  /// @brief Creates a list with the same elements as @p it. Value types
+  /// are copied.
+  /// @code list(Iterable)
   template <typename I>
     requires concepts::Iterable<I>
   List(const I& it) {}
 
-  /// @brief Target is `list(...)`
+  /// @brief Creates a list with the provided variadic arguments.
+  /// @code list(...)
   template <typename... Args>
   List(T elem, Args... rest) {
     Append(elem);
     Append(rest...);
   }
 
+  /// @brief Creates a list from an initializer list (list literal).
+  /// @code [...]
   List(std::initializer_list<T> elements) {
     std::copy(elements.begin(), elements.end(), std::back_inserter(v_));
   }
 
+  /// @brief Appends @p elem to the end of the list.
+  /// @code list.append(elem)
   void Append(T elem) { v_.emplace_back(elem); }
 
+  /// @brief Appends @p elem and @p rest to the end of the list.
+  /// @code list.append(...)
   template <typename... Args>
   void Append(T elem, Args... rest) {
     static_assert((std::is_same<T, Args>::value && ...),
@@ -63,28 +73,35 @@ class List {
     Append(rest...);
   }
 
-  /// @brief Target of `x in y`
+  /// @brief Returns whether @p elem is in the list. O(n).
+  /// @code elem in list
   bool In(T elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 
-  /// @brief Target of `list.clear()`
+  /// @brief Clears the elements of the list.
+  /// @code list.clear()
   void Clear() { v_.clear(); }
 
-  /// @brief Target of `list.copy()`
+  /// @brief Creates a shallow copy of the list.
+  /// @code list.copy()
   List<T> Copy() const { return *this; }
 
-  /// @brief Target of `list.extend(Iterable)`
+  /// @brief Extends this list with the elements of @p other.
   /// @todo Fix to not assume list
+  /// @code list.extend(Iterable)
   template <typename I>
     requires concepts::Iterable<I>
   void Extend(const I& other) {
     std::copy(other.v_.cbegin(), other.v_.cend(), std::back_inserter(v_));
   }
 
+  /// @brief Extends this list with the elements of @p other.
+  /// @code list += other
   void operator+=(const List<T>& other) { this->Extend(other); }
 
-  /// @brief Target of `x + y`
+  /// @brief Concatenates this list with @p other.
+  /// @code list + other
   List<T> operator+(const List<T>& other) const {
     List<T> res = *this;
 
@@ -93,7 +110,8 @@ class List {
     return res;
   }
 
-  /// @brief Target of `x * n`
+  /// @brief Returns a copy of this list with its elements repeated @p i times.
+  /// @code list * i
   List<T> operator*(Int i) const {
     List<T> res;
 
@@ -110,7 +128,8 @@ class List {
     return res;
   }
 
-  /// @brief Target of `x *= n`
+  /// @brief Repeats this list's elements @p i - 1 times.
+  /// @code list *= i
   void operator*=(Int i) {
     if (i == 1) {
       return;
@@ -129,7 +148,7 @@ class List {
     }
   }
 
-  /// @brief Target of `x[i] = j`
+  /// @code list[idx] = elem
   reference operator[](Int idx) {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
@@ -140,7 +159,10 @@ class List {
     return v_[*idx_opt];
   }
 
-  /// @brief Target of `x[i]`
+  /// @brief Returns the element at index @p idx. If the index is out of range,
+  /// throws IndexError. @p idx supports negative indices counting from the
+  /// last elements.
+  /// @code list[idx]
   value operator[](Int idx) const {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
@@ -151,10 +173,11 @@ class List {
     return v_[*idx_opt];
   }
 
-  /// @brief Target of `len(x)`
+  /// @brief Returns the number of elements in the list.
+  /// @code len(list)
   Int Len() const { return v_.size(); }
 
-  /// @brief Target of `min(list)`
+  /// @code min(list)
   value Min() const {
     if (v_.empty()) {
       throw ValueError("Min() arg is an empty sequence");
@@ -163,7 +186,7 @@ class List {
     return *std::min_element(v_.cbegin(), v_.cend());
   }
 
-  /// @brief Target of `max(list)`
+  /// @code max(list)
   value Max() const {
     if (v_.empty()) {
       throw ValueError("Max() arg is an empty sequence");
@@ -178,7 +201,7 @@ class List {
                          [elem](T val) { return val == elem; });
   }
 
-  /// @brief Target of `x[i:j(:k)]`
+  /// @code list[i:j(:k)]
   List<T> Slice(Int start, Int end, Int step = 1) const {
     List<T> res;
 
@@ -220,20 +243,20 @@ class List {
   }
 
 #if __cplusplus >= 202302L
-  /// @brief Target `list[i:j(:k)]`
+  /// @code list[i:j(:k)]
   List<T> operator[](Int start, Int end, Int step = 1) const {
     return Slice(start, end, step);
   }
 #endif  // __cplusplus >= 202302L
 
-  /// @todo
   /// Use a proxy to accept the incoming slice
+  /// @todo
   void ReplaceSlice(const List<T>& other, Int start, Int end, Int step = 1) {}
 
-  /// @brief Target of `x.index(i, (j))`
+  /// @code list.index(i, (j))
   Int Index(T elem, Int start = 0) const { return Index(elem, start, Len()); }
 
-  /// @brief Target of `x.index(i, j, k)`
+  /// @code list.index(i, j, k)
   Int Index(T elem, Int start, Int end) const {
     end = ClampIndex(end);
 
@@ -246,34 +269,38 @@ class List {
     throw ValueError("{elem} is not in list");
   }
 
-  /// @brief Target of `list.insert()`
   /// @todo
+  /// @code list.insert()
   void Insert(Int idx, T elem) {}
 
-  /// @brief Target of `list.pop()`
   /// @todo
+  /// @code list.pop()
   void Pop(Int idx = -1) {}
 
-  /// @brief Target of `list.remove()`
   /// @todo
+  /// @code list.remove()
   void Remove(T elem) {}
 
-  /// @brief Target of `reverse(x)`
+  /// @code reverse(list)
   void Reverse() { std::reverse(v_.begin(), v_.end()); }
 
-  /// @brief Target of `list.__iter__()`
+  /// @code list.__iter__()
   Iterator<List<T>> Iter() {
     return details::ListIterator(v_.cbegin(), v_.cend());
   }
 
-  /// @brief Traget of `bool(list)`
+  /// @code bool(list)
   Bool AsBool() const { return Len() > 0; }
 
+  /// @brief
+  /// @code list == other
   template <typename U>
   Bool Eq(const U&) const {
     return false;
   }
 
+  /// @brief
+  /// @code list === other
   template <>
   Bool Eq(const List<T>& other) const {
     return v_ == other.v_;
