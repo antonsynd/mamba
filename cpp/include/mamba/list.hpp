@@ -65,7 +65,7 @@ class List {
 
   /// @brief Target of `x in y`
   bool In(T elem) const {
-    return std::find(v_.cbegin(), v_.cend(), elem) != v_.end();
+    return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 
   /// @brief Target of `list.clear()`
@@ -160,7 +160,7 @@ class List {
       throw ValueError("Min() arg is an empty sequence");
     }
 
-    return *std::min_element(v_.begin(), v_.end());
+    return *std::min_element(v_.cbegin(), v_.cend());
   }
 
   /// @brief Target of `max(list)`
@@ -169,7 +169,7 @@ class List {
       throw ValueError("Max() arg is an empty sequence");
     }
 
-    return *std::max_element(v_.begin(), v_.end());
+    return *std::max_element(v_.cbegin(), v_.cend());
   }
 
   /// @brief Target of `list.count(x)`
@@ -237,19 +237,19 @@ class List {
       throw ValueError("{elem} is not in list");
     }
 
-    const auto& it = std::find(GetIterator(start), v_.end(), elem);
+    const auto& it = std::find(GetIterator(start), v_.cend(), elem);
 
-    if (it == v_.end()) {
+    if (it == v_.cend()) {
       // TODO: format string
       throw ValueError("{elem} is not in list");
     }
 
     // Base case
-    if (it == v_.begin()) {
+    if (it == v_.cbegin()) {
       return 0;
     }
 
-    return static_cast<Int>(std::distance(v_.begin(), it));
+    return static_cast<Int>(std::distance(v_.cbegin(), it));
   }
 
   /// @brief Target of `x.index(i, j, k)`
@@ -261,17 +261,17 @@ class List {
 
     const auto& it = std::find(GetIterator(start), GetIterator(end), elem);
 
-    if (it == v_.end()) {
+    if (it == v_.cend()) {
       // TODO: format string
       throw ValueError("{elem} is not in list");
     }
 
     // Base case
-    if (it == v_.begin()) {
+    if (it == v_.cbegin()) {
       return 0;
     }
 
-    return static_cast<Int>(std::distance(v_.begin(), it));
+    return static_cast<Int>(std::distance(v_.cbegin(), it));
   }
 
   /// @brief Target of `list.insert()`
@@ -291,7 +291,7 @@ class List {
 
   /// @brief Target of `list.__iter__()`
   Iterator<List<T>> Iter() {
-    return details::ListIterator(v_.start(), v_.end());
+    return details::ListIterator(v_.cbegin(), v_.cend());
   }
 
   /// @brief Traget of `bool(list)`
