@@ -5,15 +5,15 @@
 namespace mamba::builtins::types {
 
 template <typename T>
-concept Sequence = requires { typename T::value_t; };
+concept Sequence = requires { typename T::value; };
 
 template <Sequence T>
-T::value_t Min(const T& sequence) {
+T::value Min(const T& sequence) {
   return sequence.Min();
 }
 
 template <Sequence T>
-T::value_t Max(const T& sequence) {
+T::value Max(const T& sequence) {
   return sequence.Max();
 }
 

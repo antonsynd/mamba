@@ -23,7 +23,7 @@ template <types::Sequence T>
 class Iterator {
  public:
   virtual Iterator<T> Iter() const = 0;
-  virtual T::value_t Next() = 0;
+  virtual T::value Next() = 0;
 
   // virtual iterator_t<T::value_t> begin() = 0;
   // virtual iterator_t<T::value_t> end() = 0;

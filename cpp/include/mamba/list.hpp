@@ -26,13 +26,13 @@ class ListIterator;
 template <concepts::Value T>
 class List {
  private:
-  using iterator_t = std::vector<T>::iterator;
-  using const_iterator_t = std::vector<T>::const_iterator;
+  using iterator = std::vector<T>::iterator;
+  using const_iterator = std::vector<T>::const_iterator;
 
  public:
-  using value_t = T;
-  using reference_t = value_t&;
-  using const_reference_t = const value_t&;
+  using value = T;
+  using reference = value&;
+  using const_reference = const value&;
 
   /// @brief Target is `list()`
   List() = default;
@@ -75,7 +75,7 @@ class List {
   List<T> Copy() const { return *this; }
 
   /// @brief Target of `list.extend(Iterable)`
-  /// @todo Fix to not assume list_t
+  /// @todo Fix to not assume list
   template <typename I>
     requires concepts::Iterable<I>
   void Extend(const I& other) {
@@ -130,7 +130,7 @@ class List {
   }
 
   /// @brief Target of `x[i] = j`
-  reference_t operator[](Int idx) {
+  reference operator[](Int idx) {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -141,7 +141,7 @@ class List {
   }
 
   /// @brief Target of `x[i]`
-  value_t operator[](Int idx) const {
+  value operator[](Int idx) const {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -155,7 +155,7 @@ class List {
   Int Len() const { return v_.size(); }
 
   /// @brief Target of `min(list)`
-  value_t Min() const {
+  value Min() const {
     if (v_.empty()) {
       throw ValueError("Min() arg is an empty sequence");
     }
@@ -164,7 +164,7 @@ class List {
   }
 
   /// @brief Target of `max(list)`
-  value_t Max() const {
+  value Max() const {
     if (v_.empty()) {
       throw ValueError("Max() arg is an empty sequence");
     }
@@ -324,7 +324,7 @@ class List {
     return !!TryGetNormalizedIndex(idx);
   }
 
-  iterator_t GetIterator(Int idx) {
+  iterator GetIterator(Int idx) {
     if (idx < 0) {
       return v_.end() + idx;
     }
@@ -332,7 +332,7 @@ class List {
     return v_.begin() + idx;
   }
 
-  const_iterator_t GetIterator(Int idx) const {
+  const_iterator GetIterator(Int idx) const {
     if (idx < 0) {
       return v_.cend() + idx;
     }
