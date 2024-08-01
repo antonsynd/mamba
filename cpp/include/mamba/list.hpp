@@ -262,13 +262,24 @@ class List {
   }
 #endif  // __cplusplus >= 202302L
 
-  /// Use a proxy to accept the incoming slice
-  /// @todo
-  void ReplaceSlice(const List<T>& other, Int start, Int end, Int step = 1) {}
+  /// @code list[i:j(:k)] = other
+  void SliceReplace(const List<T>& other, Int start, Int end, Int step = 1) {
+    //
+  }
 
+  /// @brief Returns the index of @p elem in the list, starting the search from
+  /// @p start. If @p elem does not exist in the list, then throws ValueError.
+  /// If @p start is negative, it is clamped to 0. If @p start is greater than
+  /// the last index in the list, then it throws ValueError.
   /// @code list.index(i, (j))
   Int Index(T elem, Int start = 0) const { return Index(elem, start, Len()); }
 
+  /// @brief Returns the index of @p elem in the list, starting the search from
+  /// @p start and ending at @p end. If @p elem does not exist in the list,
+  /// then throws ValueError. If @p start or @p end are negative, they are
+  /// clamped to 0. If @p start is greater than the last index in the list,
+  /// then it throws ValueError. If @p end is greater than the last index in
+  /// the list, it is clamped to the length of the list.
   /// @code list.index(i, j, k)
   Int Index(T elem, Int start, Int end) const {
     end = ClampIndex(end);
@@ -296,6 +307,10 @@ class List {
 
   /// @code reverse(list)
   void Reverse() { std::reverse(v_.begin(), v_.end()); }
+
+  /// @todo
+  /// @code sort(list, key, reverse)
+  void Sort(void key, Bool reverse = false) {}
 
   /// @code list.__iter__()
   Iterator<List<T>> Iter() {
