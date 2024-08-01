@@ -310,7 +310,7 @@ class List {
 
   /// @todo
   /// @code sort(list, key, reverse)
-  void Sort(void key, Bool reverse = false) {}
+  void Sort(void* key, Bool reverse = false) {}
 
   /// @code list.__iter__()
   Iterator<List<T>> Iter() {
