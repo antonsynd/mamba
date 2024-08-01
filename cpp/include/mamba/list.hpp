@@ -56,6 +56,8 @@ class List {
   /// @brief Creates a list from an initializer list (list literal).
   /// @code [...]
   List(std::initializer_list<T> elements) {
+    v_.reserve(elements.size());
+
     std::copy(elements.begin(), elements.end(), std::back_inserter(v_));
   }
 
@@ -93,6 +95,8 @@ class List {
   template <typename I>
     requires concepts::Iterable<I>
   void Extend(const I& other) {
+    v_.reserve(v_.size() + other.v_.size());
+
     std::copy(other.v_.cbegin(), other.v_.cend(), std::back_inserter(v_));
   }
 
@@ -139,7 +143,7 @@ class List {
     }
 
     v_.reserve(v_.size() * i);
-    const auto end_index = Len();
+    const auto end_index = v_.size();
 
     for (; i > 1; --i) {
       for (size_t j = 0; j < end_index; ++j) {
@@ -272,7 +276,9 @@ class List {
   /// If @p start is negative, it is clamped to 0. If @p start is greater than
   /// the last index in the list, then it throws ValueError.
   /// @code list.index(i, (j))
-  Int Index(T elem, Int start = 0) const { return Index(elem, start, Len()); }
+  Int Index(T elem, Int start = 0) const {
+    return Index(elem, start, v_.size());
+  }
 
   /// @brief Returns the index of @p elem in the list, starting the search from
   /// @p start and ending at @p end. If @p elem does not exist in the list,
@@ -299,14 +305,35 @@ class List {
 
   /// @todo
   /// @code list.pop()
-  void Pop(Int idx = -1) {}
+  value Pop(Int idx = -1) {}
 
-  /// @todo
-  /// @code list.remove()
-  void Remove(T elem) {}
+  /// @brief Removes the first occurrence of @p elem from the list. Elements
+  /// are shifted to make the list contiguous. If the list is empty or
+  /// @p elem does not occur in the list, throws ValueError.
+  /// @code list.remove(elem)
+  void Remove(const T& elem) {
+    if (v_.empty()) {
+      throw ValueError("List.Remove(x): x not in list");
+    }
 
+    auto it = std::find(v_.begin(), v_.end(), elem);
+
+    if (it == v_.end()) {
+      throw ValueError("List.Remove(x): x not in list");
+    }
+
+    v_.erase(it);
+  }
+
+  /// @brief Reverse the list in place.
   /// @code reverse(list)
-  void Reverse() { std::reverse(v_.begin(), v_.end()); }
+  void Reverse() {
+    if (v_.empty()) {
+      return;
+    }
+
+    std::reverse(v_.begin(), v_.end());
+  }
 
   /// @todo
   /// @code sort(list, key, reverse)
@@ -318,7 +345,7 @@ class List {
   }
 
   /// @code bool(list)
-  Bool AsBool() const { return Len() > 0; }
+  Bool AsBool() const { return !v_.empty(); }
 
   /// @brief
   /// @code list == other
@@ -338,8 +365,8 @@ class List {
   Int ClampIndex(Int idx) const {
     if (idx < 0) {
       return 0;
-    } else if (idx > Len()) {
-      return Len();
+    } else if (idx > v_.size()) {
+      return v_.size();
     }
 
     return idx;

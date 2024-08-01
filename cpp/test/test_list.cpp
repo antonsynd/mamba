@@ -651,4 +651,62 @@ TEST(List, IndexNonEmpty) {
   EXPECT_EQ(l.Index(5), 2);
 }
 
+TEST(List, RemoveEmpty) {
+  // If
+  List<Int> l;
+
+  // When/then
+  EXPECT_THROW(l.Remove(3), ValueError);
+}
+
+TEST(List, RemoveNotPresent) {
+  // If
+  List<Int> l = {1, 5, 7};
+
+  // When/then
+  EXPECT_THROW(l.Remove(3), ValueError);
+}
+
+TEST(List, RemovePresentOnce) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.Remove(3);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, RemovePresentMoreThanOnce) {
+  // If
+  List<Int> l = {1, 3, 5, 7, 3};
+
+  // When
+  l.Remove(3);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 5, 7, 3};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, RemoveAtEnd) {
+  // If
+  List<Int> l = {1, 5, 7, 3};
+
+  // When
+  l.Remove(3);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
 }  // namespace mamba::builtins::types::test
