@@ -176,6 +176,8 @@ class List {
   /// @code len(list)
   Int Len() const { return v_.size(); }
 
+  /// @brief Returns the smallest element in the list. If the list is empty,
+  /// throws ValueError.
   /// @code min(list)
   value Min() const {
     if (v_.empty()) {
@@ -185,6 +187,8 @@ class List {
     return *std::min_element(v_.cbegin(), v_.cend());
   }
 
+  /// @brief Returns the biggest element in the list. If the list is empty,
+  /// throws ValueError.
   /// @code max(list)
   value Max() const {
     if (v_.empty()) {
@@ -194,12 +198,18 @@ class List {
     return *std::max_element(v_.cbegin(), v_.cend());
   }
 
-  /// @brief Target of `list.count(x)`
+  /// @brief Returns the number of times @p elem is present in the list.
+  /// @code list.count(x)
   Int Count(T elem) const {
     return std::count_if(v_.cbegin(), v_.cend(),
                          [elem](T val) { return val == elem; });
   }
 
+  /// @brief Returns the elements in the list such that the elements' indices
+  /// satify @p start <= idx < @p end, with @p step indices between the
+  /// elements. If @p start >= @p end, then the returned list is empty.
+  /// If @p step is negative, then the returned list is empty. If @p step is
+  /// 0, then this throws ValueError.
   /// @code list[i:j(:k)]
   List<T> Slice(Int start, Int end, Int step = 1) const {
     List<T> res;
@@ -208,13 +218,18 @@ class List {
       throw ValueError("slice step cannot be zero");
     }
 
-    // 0 length case, and negative step
-    if (end == start || step < 0) {
+    // Negative step is empty list
+    if (step < 0) {
       return res;
     }
 
     start = TryGetNormalizedIndex(start).value_or(0);
     end = TryGetNormalizedIndex(end).value_or(v_.size());
+
+    // Empty list
+    if (start >= end) {
+      return res;
+    }
 
     auto start_it = GetIterator(start);
     const auto end_it = GetIterator(end);
@@ -242,7 +257,6 @@ class List {
   }
 
 #if __cplusplus >= 202302L
-  /// @code list[i:j(:k)]
   List<T> operator[](Int start, Int end, Int step = 1) const {
     return Slice(start, end, step);
   }
