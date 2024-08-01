@@ -148,7 +148,10 @@ class List {
     }
   }
 
-  /// @code list[idx] = elem
+  /// @brief Returns the element at index @p idx. If the index is out of range,
+  /// throws IndexError. @p idx supports negative indices counting from the
+  /// last elements.
+  /// @code list[idx] (= elem)
   reference operator[](Int idx) {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
@@ -159,11 +162,7 @@ class List {
     return v_[*idx_opt];
   }
 
-  /// @brief Returns the element at index @p idx. If the index is out of range,
-  /// throws IndexError. @p idx supports negative indices counting from the
-  /// last elements.
-  /// @code list[idx]
-  value operator[](Int idx) const {
+  const_reference operator[](Int idx) const {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {

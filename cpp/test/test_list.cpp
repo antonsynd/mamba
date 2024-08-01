@@ -369,6 +369,43 @@ TEST(List, GetByOutOfBounds) {
   EXPECT_THROW(l[4], IndexError);
 }
 
+TEST(List, SetByPositiveIndex) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l[2] = 6;
+
+  // Then
+  EXPECT_EQ(l[0], 1);
+  EXPECT_EQ(l[1], 3);
+  EXPECT_EQ(l[2], 6);
+  EXPECT_EQ(l[3], 7);
+}
+
+TEST(List, SetByNegativeIndex) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l[-3] = 4;
+
+  // Then
+  EXPECT_EQ(l[-1], 7);
+  EXPECT_EQ(l[-2], 5);
+  EXPECT_EQ(l[-3], 4);
+  EXPECT_EQ(l[-4], 1);
+}
+
+TEST(List, SetByOutOfBounds) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_THROW({ l[-5] = 9; }, IndexError);
+  EXPECT_THROW({ l[4] = 11; }, IndexError);
+}
+
 TEST(List, LenZero) {
   // If
   const List<Int> l;
