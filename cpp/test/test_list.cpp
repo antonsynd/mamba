@@ -578,6 +578,20 @@ TEST(List, SliceOutOfBoundsRight) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, SliceNoArgsIsCopy) {
+  // If
+  const List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  const auto res = l.Slice();
+
+  // Then
+  const auto actual = as_vector(res);
+  const std::vector<Int> expected = {1, 3, 5, 7, 9};
+
+  EXPECT_EQ(actual, expected);
+}
+
 #if __cplusplus >= 202302L
 TEST(List, SliceOperator) {
   // If
@@ -589,6 +603,20 @@ TEST(List, SliceOperator) {
   // Then
   const auto actual = as_vector(res);
   const std::vector<Int> expected = {3, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, SliceOperatorWithNoArgsIsCopy) {
+  // If
+  const List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  const auto res = l[];
+
+  // Then
+  const auto actual = as_vector(res);
+  const std::vector<Int> expected = {1, 3, 5, 7, 9};
 
   EXPECT_EQ(actual, expected);
 }

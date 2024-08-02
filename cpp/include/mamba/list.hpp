@@ -4,6 +4,7 @@
 #include <concepts>
 #include <initializer_list>
 #include <iterator>
+#include <limits>
 #include <optional>
 #include <vector>
 
@@ -33,6 +34,8 @@ class List {
   using value = T;
   using reference = value&;
   using const_reference = const value&;
+
+  static constexpr auto kEndIndex = std::numeric_limits<Int>::min();
 
   /// @brief Creates an empty list.
   /// @code list()
@@ -215,15 +218,15 @@ class List {
   /// If @p step is negative, then the returned list is empty. If @p step is
   /// 0, then this throws ValueError.
   /// @code list[i:j:k]
-  List<T> Slice(Int start = 0, Int end = -1, Int step = 1) const {
-    List<T> res;
-
+  List<T> Slice(Int start = 0, Int end = kEndIndex, Int step = 1) const {
     if (step == 0) {
       throw ValueError("slice step cannot be zero");
     }
 
+    List<T> res;
+
     // Negative step is empty list
-    if (step < 0) {
+    if (step < 0 && step != kEndIndex) {
       return res;
     }
 
@@ -260,20 +263,20 @@ class List {
     return res;
   }
 
-  /// @brief
-  /// @code del list[i:j(:k)]
-  void DeleteSlice(Int start = 0, Int end = -1, Int step = 1) {}
-
 #if __cplusplus >= 202302L
-  List<T> operator[](Int start = 0, Int end = -1, Int step = 1) const {
+  List<T> operator[](Int start = 0, Int end = kEndIndex, Int step = 1) const {
     return Slice(start, end, step);
   }
 #endif  // __cplusplus >= 202302L
 
+  /// @brief
+  /// @code del list[i:j(:k)]
+  void DeleteSlice(Int start = 0, Int end = kEndIndex, Int step = 1) {}
+
   /// @code list[i:j:k] = other
-  void SliceReplace(const List<T>& other,
+  void ReplaceSlice(const List<T>& other,
                     Int start = 0,
-                    Int end = -1,
+                    Int end = kEndIndex,
                     Int step = 1) {}
 
   /// @brief Returns the index of @p elem in the list, starting the search from
