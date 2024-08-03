@@ -854,4 +854,127 @@ TEST(List, DeleteSliceNoArgsIsClear) {
   EXPECT_EQ(Len(l), 0);
 }
 
+TEST(List, ReplaceSliceZeroStep) {
+  // If
+  List<Int> l = {1, 3, 5, 1, 7};
+  const List<Int> other = {2, 4, 6};
+
+  // When/then
+  EXPECT_THROW(l.ReplaceSlice(other, 0, 0, 0), ValueError);
+}
+
+TEST(List, ReplaceSliceNegativeStep) {
+  // If
+  List<Int> l = {1, 3, 5, 1, 7};
+  const List<Int> other = {2, 4, 6};
+
+  // When
+  l.ReplaceSlice(other, 0, 1, -1);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 1, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ReplaceSliceSameStartAndEnd) {
+  // If
+  List<Int> l = {1, 3, 5, 1, 7};
+  const List<Int> other = {2, 4, 6};
+
+  // When
+  l.ReplaceSlice(other, 1, 1);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 1, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ReplaceSliceSingleStepMoreNewElems) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+  const List<Int> other = {2, 4, 6};
+
+  // When
+  l.ReplaceSlice(other, 1, 3);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 2, 4, 6, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ReplaceSliceSingleStepLessNewElems) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+  const List<Int> other = {2};
+
+  // When
+  l.ReplaceSlice(other, 1, 3);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 2, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ReplaceSliceSingleStepSameNewElems) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+  const List<Int> other = {2, 4};
+
+  // When
+  l.ReplaceSlice(other, 1, 3);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 2, 4, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ReplaceSliceNotSingleStepNotSameNumElems) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+  const List<Int> other = {2, 4, 6};
+
+  // When/then
+  EXPECT_THROW(l.ReplaceSlice(other, 1, 3, 4), ValueError);
+}
+
+TEST(List, ReplaceSliceNotSingleStepSameNumElems) {
+  // If
+  List<Int> l = {1, 3, 5, 7, 9};
+  const List<Int> other = {2, 4};
+
+  // When
+  l.ReplaceSlice(other, 1, 4, 2);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 2, 5, 4, 9};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ReplaceSliceNoArgsIsCompleteReplacement) {
+  // If
+  List<Int> l = {1, 3, 5, 7, 9};
+  const List<Int> other = {2, 4, 6};
+
+  // When
+  l.ReplaceSlice(other);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {2, 4, 6};
+
+  EXPECT_EQ(actual, expected);
+}
+
 }  // namespace mamba::builtins::types::test

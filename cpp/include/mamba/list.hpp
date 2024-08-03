@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <concepts>
 #include <initializer_list>
+#include <iostream>
 #include <iterator>
 #include <limits>
 #include <optional>
@@ -240,9 +241,7 @@ class List {
     }
 
     // Stepped range copy
-    // Efficient ceil division (from ChatGPT)
-    const Int length = end - start;
-    res.v_.reserve((length + step - 1) / step);
+    res.v_.reserve(GetNumberOfElementsInSlice(start, end, step));
 
     Int i = 0;
 
@@ -258,7 +257,8 @@ class List {
   }
 #endif  // __cplusplus >= 202302L
 
-  /// @brief
+  /// @brief Deletes the elements in the given slice. See Slice() for the
+  /// behavior of the parameters.
   /// @code del list[i:j(:k)]
   void DeleteSlice(Int start = 0, Int end = kEndIndex, Int step = 1) {
     auto slice_params_opt = EvaluateSliceValidity(start, end, step);
@@ -282,6 +282,9 @@ class List {
              v_.end());
   }
 
+  /// @brief Replaces the given slice with the elements of @p other. If @p step
+  /// is not 1, then the length of @p other must be equal to the length of the
+  /// slice, otherwise a ValueError will be thrown.
   /// @code list[i:j:k] = other
   void ReplaceSlice(const List<T>& other,
                     Int start = 0,
@@ -295,6 +298,33 @@ class List {
 
     auto [start_it, end_it] =
         ReadSliceParams(*std::move(slice_params_opt), start, end);
+
+    const auto num_old_elems = GetNumberOfElementsInSlice(start, end, step);
+
+    // Single step case, replace all in the range
+    if (step == 1) {
+      const auto num_old_elems_size = static_cast<size_t>(num_old_elems);
+      const auto num_new_elems = other.v_.size();
+
+      if (num_old_elems_size < num_new_elems) {
+        ReplaceSliceSingleStepExpanding(start, num_old_elems_size,
+                                        num_new_elems, other);
+      } else if (num_old_elems_size > num_new_elems) {
+        ReplaceSliceSingleStepReducing(start_it, num_old_elems_size,
+                                       num_new_elems, other);
+      } else {
+        // Trivial case, replace 1-to-1
+        std::copy(other.v_.begin(), other.v_.end(), start_it);
+      }
+
+      return;
+    }
+
+    if (other.v_.size() != num_old_elems) {
+      throw ValueError(
+          "ValueError: attempt to assign sequence of size {} to extended slice "
+          "of size {}");
+    }
 
     (void)start_it;
     (void)end_it;
@@ -399,6 +429,12 @@ class List {
     }
 
     return idx;
+  }
+
+  Int GetNumberOfElementsInSlice(Int start, Int end, Int step) const {
+    // Efficient ceil division (from ChatGPT)
+    const Int length = end - start;
+    return (length + step - 1) / step;
   }
 
   std::optional<Int> TryGetNormalizedIndex(Int idx) const {
@@ -512,6 +548,53 @@ class List {
     end = params.end;
 
     return std::make_pair(std::move(params.start_it), std::move(params.end_it));
+  }
+
+  void ReplaceSliceSingleStepExpanding(Int start,
+                                       size_t num_old_elems,
+                                       size_t num_new_elems,
+                                       const List<T>& other) {
+    const auto num_extra_elems = num_new_elems - num_old_elems;
+    v_.resize(v_.size() + num_extra_elems);
+
+    // Recalculate the start iterator in case the resize() call
+    // invalidated it
+    const auto start_it = v_.begin() + start;
+
+    // Shift elements from the starting position to make room for the
+    // incoming ones
+    std::shift_right(start_it, v_.end(), num_extra_elems);
+
+    // Copy into the desired range
+    std::copy(other.v_.begin(), other.v_.end(), start_it);
+  }
+
+  void ReplaceSliceSingleStepReducing(iterator start_it,
+                                      size_t num_old_elems,
+                                      size_t num_new_elems,
+                                      const List<T>& other) {
+    const auto num_elems_to_remove = num_old_elems - num_new_elems;
+
+    // Copy into desired range
+    start_it = std::copy(other.v_.begin(), other.v_.end(), start_it);
+    auto end_it = start_it + num_elems_to_remove;
+
+    // Erase leftover elements
+    v_.erase(start_it, end_it);
+  }
+
+  void Print() const {
+    std::cout << "[ ";
+
+    if (!v_.empty()) {
+      auto last = v_.size() - 1;
+      for (size_t i = 0; i < last; ++i) {
+        std::cout << v_[i] << ", ";
+      }
+
+      std::cout << v_[last];
+    }
+    std::cout << " ]" << std::endl;
   }
 
   std::vector<T> v_;
