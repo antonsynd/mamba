@@ -284,7 +284,19 @@ class List {
   void ReplaceSlice(const List<T>& other,
                     Int start = 0,
                     Int end = kEndIndex,
-                    Int step = 1) {}
+                    Int step = 1) {
+    auto slice_params_opt = EvaluateSliceValidity(start, end, step);
+
+    if (!slice_params_opt) {
+      return;
+    }
+
+    auto [start_it, end_it] =
+        ReadSliceParams(*std::move(slice_params_opt), start, end);
+
+    (void)start_it;
+    (void)end_it;
+  }
 
   /// @brief Returns the index of @p elem in the list, starting the search from
   /// @p start. If @p elem does not exist in the list, then throws ValueError.
@@ -455,7 +467,6 @@ class List {
     const auto indices_opt = TryGetNormalizedSliceIndices(start, end, step);
 
     if (!indices_opt) {
-      std::cout << "no normalization" << std::endl;
       return std::nullopt;
     }
 
