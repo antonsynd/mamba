@@ -6,6 +6,7 @@
 #include <iterator>
 #include <limits>
 #include <optional>
+#include <utility>
 #include <vector>
 
 #include "mamba/concepts.hpp"
@@ -219,27 +220,16 @@ class List {
   /// 0, then this throws ValueError.
   /// @code list[i:j:k]
   List<T> Slice(Int start = 0, Int end = kEndIndex, Int step = 1) const {
-    if (step == 0) {
-      throw ValueError("slice step cannot be zero");
-    }
-
     List<T> res;
 
-    // Negative step is empty list
-    if (step < 0 && step != kEndIndex) {
+    auto slice_params_opt = EvaluateSliceValidity(start, end, step);
+
+    if (!slice_params_opt) {
       return res;
     }
 
-    start = TryGetNormalizedIndex(start).value_or(0);
-    end = TryGetNormalizedIndex(end).value_or(v_.size());
-
-    // Empty list
-    if (start >= end) {
-      return res;
-    }
-
-    auto start_it = GetIterator(start);
-    const auto end_it = GetIterator(end);
+    auto [start_it, end_it] =
+        ReadSliceParams(*std::move(slice_params_opt), start, end);
 
     // Simple range copy
     if (step == 1) {
@@ -254,11 +244,11 @@ class List {
     const Int length = end - start;
     res.v_.reserve((length + step - 1) / step);
 
-    for (Int i = 0; i < length; i += step) {
-      res.v_.push_back(*start_it);
+    Int idx = 0;
 
-      start_it += step;
-    }
+    std::copy_if(
+        start_it, end_it, std::back_inserter(res.v_),
+        [&idx, step](const auto) -> bool { return idx++ % step == 0; });
 
     return res;
   }
@@ -271,7 +261,24 @@ class List {
 
   /// @brief
   /// @code del list[i:j(:k)]
-  void DeleteSlice(Int start = 0, Int end = kEndIndex, Int step = 1) {}
+  void DeleteSlice(Int start = 0, Int end = kEndIndex, Int step = 1) {
+    auto slice_params_opt = EvaluateSliceValidity(start, end, step);
+
+    if (!slice_params_opt) {
+      return;
+    }
+
+    auto [start_it, end_it] =
+        ReadSliceParams(*std::move(slice_params_opt), start, end);
+
+    Int idx = 0;
+
+    v_.erase(std::remove_if(start_it, end_it,
+                            [&idx, step](const auto) -> bool {
+                              return idx++ % step == 0;
+                            }),
+             v_.end());
+  }
 
   /// @code list[i:j:k] = other
   void ReplaceSlice(const List<T>& other,
@@ -410,6 +417,88 @@ class List {
     }
 
     return v_.cbegin() + idx;
+  }
+
+  std::optional<std::pair<Int, Int>>
+  TryGetNormalizedSliceIndices(Int start, Int end, Int step) const {
+    // Zero step is invalid
+    if (step == 0) {
+      throw ValueError("slice step cannot be zero");
+    }
+
+    // Negative step is no-op
+    if (step < 0 && step != kEndIndex) {
+      return std::nullopt;
+    }
+
+    start = TryGetNormalizedIndex(start).value_or(0);
+    end = TryGetNormalizedIndex(end).value_or(v_.size());
+
+    // Start beyond end is no-op
+    if (start >= end) {
+      return std::nullopt;
+    }
+
+    return std::make_pair(start, end);
+  }
+
+  template <typename It>
+  struct SliceParams {
+    Int start;
+    Int end;
+    It start_it;
+    It end_it;
+  };
+
+  std::optional<SliceParams<const_iterator>>
+  EvaluateSliceValidity(Int start, Int end, Int step) const {
+    const auto indices_opt = TryGetNormalizedSliceIndices(start, end, step);
+
+    if (!indices_opt) {
+      std::cout << "no normalization" << std::endl;
+      return std::nullopt;
+    }
+
+    start = indices_opt->first;
+    end = indices_opt->second;
+
+    return SliceParams<const_iterator>{start, end, GetIterator(start),
+                                       GetIterator(end)};
+  }
+
+  std::optional<SliceParams<iterator>> EvaluateSliceValidity(Int start,
+                                                             Int end,
+                                                             Int step) {
+    const auto indices_opt = TryGetNormalizedSliceIndices(start, end, step);
+
+    if (!indices_opt) {
+      return std::nullopt;
+    }
+
+    start = indices_opt->first;
+    end = indices_opt->second;
+
+    return SliceParams<iterator>{start, end, GetIterator(start),
+                                 GetIterator(end)};
+  }
+
+  std::pair<const_iterator, const_iterator> ReadSliceParams(
+      SliceParams<const_iterator> params,
+      Int& start,
+      Int& end) const {
+    start = params.start;
+    end = params.end;
+
+    return std::make_pair(std::move(params.start_it), std::move(params.end_it));
+  }
+
+  std::pair<iterator, iterator> ReadSliceParams(SliceParams<iterator> params,
+                                                Int& start,
+                                                Int& end) {
+    start = params.start;
+    end = params.end;
+
+    return std::make_pair(std::move(params.start_it), std::move(params.end_it));
   }
 
   std::vector<T> v_;
