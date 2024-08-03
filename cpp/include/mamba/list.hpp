@@ -244,11 +244,10 @@ class List {
     const Int length = end - start;
     res.v_.reserve((length + step - 1) / step);
 
-    Int idx = 0;
+    Int i = 0;
 
-    std::copy_if(
-        start_it, end_it, std::back_inserter(res.v_),
-        [&idx, step](const auto) -> bool { return idx++ % step == 0; });
+    std::copy_if(start_it, end_it, std::back_inserter(res.v_),
+                 [&i, step](const auto) -> bool { return i++ % step == 0; });
 
     return res;
   }
@@ -268,14 +267,17 @@ class List {
       return;
     }
 
-    auto [start_it, end_it] =
+    auto [start_it, _] =
         ReadSliceParams(*std::move(slice_params_opt), start, end);
 
-    Int idx = 0;
+    Int i = 0;
 
-    v_.erase(std::remove_if(start_it, end_it,
-                            [&idx, step](const auto) -> bool {
-                              return idx++ % step == 0;
+    v_.erase(std::remove_if(start_it, v_.end(),
+                            [&i, start, step, end](const auto) -> bool {
+                              const auto keep =
+                                  i + start < end && i % step == 0;
+                              ++i;
+                              return keep;
                             }),
              v_.end());
   }

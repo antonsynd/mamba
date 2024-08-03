@@ -737,4 +737,121 @@ TEST(List, RemoveAtEnd) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, DeleteSliceZeroStep) {
+  // If
+  List<Int> l = {1, 3, 5, 1, 7};
+
+  // When/then
+  EXPECT_THROW(l.DeleteSlice(0, 0, 0), ValueError);
+}
+
+TEST(List, DeleteSliceNegativeStep) {
+  // If
+  List<Int> l = {1, 3, 5, 1, 7};
+
+  // When
+  l.DeleteSlice(0, 1, -1);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 1, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, DeleteSliceSameStartAndEnd) {
+  // If
+  List<Int> l = {1, 3, 5, 1, 7};
+
+  // When
+  l.DeleteSlice(1, 1);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 1, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, DeleteSliceSingleStep) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.DeleteSlice(1, 3);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, DeleteSliceNotSingleStepNotEnough) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.DeleteSlice(1, 3, 4);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, DeleteSliceNotSingleStepEnough) {
+  // If
+  List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  l.DeleteSlice(1, 5, 2);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 5, 9};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, DeleteSliceOutOfBoundsLeft) {
+  // If
+  List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  l.DeleteSlice(-9, 4, 2);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {3, 7, 9};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, DeleteSliceOutOfBoundsRight) {
+  // If
+  List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  l.DeleteSlice(0, 9, 2);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {3, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, DeleteSliceNoArgsIsClear) {
+  // If
+  List<Int> l = {1, 3, 5, 7, 9};
+
+  // When
+  l.DeleteSlice();
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
 }  // namespace mamba::builtins::types::test
