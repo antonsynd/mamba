@@ -287,16 +287,16 @@ class List {
 
     size_t i = 0;
 
-    v_.erase(
-        std::remove_if(
-            start_it, v_.end(),
-            [&i, size_t_start, size_t_end, size_t_step](const auto) -> bool {
-              const auto remove =
-                  i + size_t_start < size_t_end && i % size_t_step == 0;
-              ++i;
-              return remove;
-            }),
-        v_.end());
+    const auto erase_from_it = std::remove_if(
+        start_it, v_.end(),
+        [&i, size_t_start, size_t_end, size_t_step](const auto) -> bool {
+          const auto remove =
+              i + size_t_start < size_t_end && i % size_t_step == 0;
+          ++i;
+          return remove;
+        });
+
+    v_.erase(erase_from_it, v_.end());
   }
 
   /// @brief Replaces the given slice with the elements of @p other. If @p step
