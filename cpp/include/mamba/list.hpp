@@ -282,27 +282,21 @@ class List {
       return;
     }
 
-    Print();
-
     const auto [size_t_start, size_t_end, size_t_step, start_it, _] =
         *std::move(slice_params_opt);
 
-    Print();
-
     size_t i = 0;
 
-    v_.erase(std::remove_if(start_it, v_.end(),
-                            [&i, this, size_t_start, size_t_end,
-                             size_t_step](const auto) -> bool {
-                              const auto remove =
-                                  i + size_t_start < size_t_end &&
-                                  i % size_t_step == 0;
-                              ++i;
-                              return remove;
-                            }),
-             v_.end());
-
-    Print();
+    v_.erase(
+        std::remove_if(
+            start_it, v_.end(),
+            [&i, size_t_start, size_t_end, size_t_step](const auto) -> bool {
+              const auto remove =
+                  i + size_t_start < size_t_end && i % size_t_step == 0;
+              ++i;
+              return remove;
+            }),
+        v_.end());
   }
 
   /// @brief Replaces the given slice with the elements of @p other. If @p step
