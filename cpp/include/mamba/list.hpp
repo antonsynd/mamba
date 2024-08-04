@@ -526,7 +526,7 @@ class List {
     const auto start = slice_params.start;
     const auto end = slice_params.end;
 
-    const auto num_old_elems = GetNumberOfElementsInSlice(start, end, 1);
+    const auto num_old_elems = end - start;
     const auto num_new_elems = other.v_.size();
 
     if (num_old_elems < num_new_elems) {
