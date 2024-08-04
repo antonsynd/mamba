@@ -223,30 +223,45 @@ class List {
   List<T> Slice(Int start = 0, Int end = kEndIndex, Int step = 1) const {
     List<T> res;
 
-    auto slice_params_opt = EvaluateSliceValidity(start, end, step);
+    auto slice_params_opt = TryGetNormalizedSliceParams(start, end, step);
 
     if (!slice_params_opt) {
       return res;
     }
 
-    auto [start_it, end_it] =
-        ReadSliceParams(*std::move(slice_params_opt), start, end);
+    const auto size_t_start = slice_params_opt->start;
+    const auto size_t_end = slice_params_opt->end;
+    const auto size_t_step = slice_params_opt->step;
 
     // Simple range copy
-    if (step == 1) {
-      res.v_.reserve(end - start);
+    if (size_t_step == 1) {
+      res.v_.reserve(size_t_end - size_t_start);
+
+      // Need to recalculate in case reserve() invalidated the pre-calculated
+      // iterators
+      const auto start_it = v_.begin() + size_t_start;
+      const auto end_it = v_.begin() + size_t_end;
+
       std::copy(start_it, end_it, std::back_inserter(res.v_));
 
       return res;
     }
 
     // Stepped range copy
-    res.v_.reserve(GetNumberOfElementsInSlice(start, end, step));
+    res.v_.reserve(
+        GetNumberOfElementsInSlice(size_t_start, size_t_end, size_t_step));
 
-    Int i = 0;
+    // Need to recalculate in case reserve() invalidated the pre-calculated
+    // iterators
+    const auto start_it = v_.begin() + size_t_start;
+    const auto end_it = v_.begin() + size_t_end;
+
+    size_t i = 0;
 
     std::copy_if(start_it, end_it, std::back_inserter(res.v_),
-                 [&i, step](const auto) -> bool { return i++ % step == 0; });
+                 [&i, size_t_step](const auto) -> bool {
+                   return i++ % size_t_step == 0;
+                 });
 
     return res;
   }
@@ -261,25 +276,33 @@ class List {
   /// behavior of the parameters.
   /// @code del list[i:j(:k)]
   void DeleteSlice(Int start = 0, Int end = kEndIndex, Int step = 1) {
-    auto slice_params_opt = EvaluateSliceValidity(start, end, step);
+    auto slice_params_opt = TryGetNormalizedSliceParams(start, end, step);
 
     if (!slice_params_opt) {
       return;
     }
 
-    auto [start_it, _] =
-        ReadSliceParams(*std::move(slice_params_opt), start, end);
+    Print();
 
-    Int i = 0;
+    const auto [size_t_start, size_t_end, size_t_step, start_it, _] =
+        *std::move(slice_params_opt);
+
+    Print();
+
+    size_t i = 0;
 
     v_.erase(std::remove_if(start_it, v_.end(),
-                            [&i, start, step, end](const auto) -> bool {
-                              const auto keep =
-                                  i + start < end && i % step == 0;
+                            [&i, this, size_t_start, size_t_end,
+                             size_t_step](const auto) -> bool {
+                              const auto remove =
+                                  i + size_t_start < size_t_end &&
+                                  i % size_t_step == 0;
                               ++i;
-                              return keep;
+                              return remove;
                             }),
              v_.end());
+
+    Print();
   }
 
   /// @brief Replaces the given slice with the elements of @p other. If @p step
@@ -290,44 +313,18 @@ class List {
                     Int start = 0,
                     Int end = kEndIndex,
                     Int step = 1) {
-    auto slice_params_opt = EvaluateSliceValidity(start, end, step);
+    auto slice_params_opt = TryGetNormalizedSliceParams(start, end, step);
 
     if (!slice_params_opt) {
       return;
     }
 
-    auto [start_it, end_it] =
-        ReadSliceParams(*std::move(slice_params_opt), start, end);
-
-    const auto num_old_elems = GetNumberOfElementsInSlice(start, end, step);
-
     // Single step case, replace all in the range
     if (step == 1) {
-      const auto num_old_elems_size = static_cast<size_t>(num_old_elems);
-      const auto num_new_elems = other.v_.size();
-
-      if (num_old_elems_size < num_new_elems) {
-        ReplaceSliceSingleStepExpanding(start, num_old_elems_size,
-                                        num_new_elems, other);
-      } else if (num_old_elems_size > num_new_elems) {
-        ReplaceSliceSingleStepReducing(start_it, num_old_elems_size,
-                                       num_new_elems, other);
-      } else {
-        // Trivial case, replace 1-to-1
-        std::copy(other.v_.begin(), other.v_.end(), start_it);
-      }
-
-      return;
+      ReplaceSliceSingleStep(other, *std::move(slice_params_opt));
+    } else {
+      ReplaceSliceMultiStep(other, *std::move(slice_params_opt));
     }
-
-    if (other.v_.size() != num_old_elems) {
-      throw ValueError(
-          "ValueError: attempt to assign sequence of size {} to extended slice "
-          "of size {}");
-    }
-
-    (void)start_it;
-    (void)end_it;
   }
 
   /// @brief Returns the index of @p elem in the list, starting the search from
@@ -421,23 +418,25 @@ class List {
   }
 
  private:
-  Int ClampIndex(Int idx) const {
+  size_t ClampIndex(Int idx) const {
     if (idx < 0) {
       return 0;
     } else if (idx > v_.size()) {
       return v_.size();
     }
 
-    return idx;
+    return static_cast<size_t>(idx);
   }
 
-  Int GetNumberOfElementsInSlice(Int start, Int end, Int step) const {
+  size_t GetNumberOfElementsInSlice(size_t start,
+                                    size_t end,
+                                    size_t step) const {
     // Efficient ceil division (from ChatGPT)
-    const Int length = end - start;
+    const auto length = end - start;
     return (length + step - 1) / step;
   }
 
-  std::optional<Int> TryGetNormalizedIndex(Int idx) const {
+  std::optional<size_t> TryGetNormalizedIndex(Int idx) const {
     if (idx < 0) {
       idx += v_.size();
     }
@@ -446,30 +445,18 @@ class List {
       return std::nullopt;
     }
 
-    return idx;
+    return static_cast<size_t>(idx);
   }
 
   Bool IsIndexOutOfBounds(Int idx) const {
     return !!TryGetNormalizedIndex(idx);
   }
 
-  iterator GetIterator(Int idx) {
-    if (idx < 0) {
-      return v_.end() + idx;
-    }
+  iterator GetIterator(size_t idx) { return v_.begin() + idx; }
 
-    return v_.begin() + idx;
-  }
+  const_iterator GetIterator(size_t idx) const { return v_.cbegin() + idx; }
 
-  const_iterator GetIterator(Int idx) const {
-    if (idx < 0) {
-      return v_.cend() + idx;
-    }
-
-    return v_.cbegin() + idx;
-  }
-
-  std::optional<std::pair<Int, Int>>
+  std::optional<std::pair<size_t, size_t>>
   TryGetNormalizedSliceIndices(Int start, Int end, Int step) const {
     // Zero step is invalid
     if (step == 0) {
@@ -477,12 +464,17 @@ class List {
     }
 
     // Negative step is no-op
-    if (step < 0 && step != kEndIndex) {
+    if (step < 0) {
       return std::nullopt;
     }
 
     start = TryGetNormalizedIndex(start).value_or(0);
-    end = TryGetNormalizedIndex(end).value_or(v_.size());
+
+    if (end == kEndIndex) {
+      end = v_.size();
+    } else {
+      end = TryGetNormalizedIndex(end).value_or(v_.size());
+    }
 
     // Start beyond end is no-op
     if (start >= end) {
@@ -494,66 +486,71 @@ class List {
 
   template <typename It>
   struct SliceParams {
-    Int start;
-    Int end;
+    size_t start;
+    size_t end;
+    size_t step;
     It start_it;
     It end_it;
   };
 
   std::optional<SliceParams<const_iterator>>
-  EvaluateSliceValidity(Int start, Int end, Int step) const {
+  TryGetNormalizedSliceParams(Int start, Int end, Int step) const {
     const auto indices_opt = TryGetNormalizedSliceIndices(start, end, step);
 
     if (!indices_opt) {
       return std::nullopt;
     }
 
-    start = indices_opt->first;
-    end = indices_opt->second;
+    const auto size_t_start = indices_opt->first;
+    const auto size_t_end = indices_opt->second;
 
-    return SliceParams<const_iterator>{start, end, GetIterator(start),
-                                       GetIterator(end)};
+    return SliceParams<const_iterator>{
+        size_t_start, size_t_end, static_cast<size_t>(step),
+        GetIterator(size_t_start), GetIterator(size_t_end)};
   }
 
-  std::optional<SliceParams<iterator>> EvaluateSliceValidity(Int start,
-                                                             Int end,
-                                                             Int step) {
+  std::optional<SliceParams<iterator>> TryGetNormalizedSliceParams(Int start,
+                                                                   Int end,
+                                                                   Int step) {
     const auto indices_opt = TryGetNormalizedSliceIndices(start, end, step);
 
     if (!indices_opt) {
       return std::nullopt;
     }
 
-    start = indices_opt->first;
-    end = indices_opt->second;
+    const auto size_t_start = indices_opt->first;
+    const auto size_t_end = indices_opt->second;
 
-    return SliceParams<iterator>{start, end, GetIterator(start),
-                                 GetIterator(end)};
+    return SliceParams<iterator>{
+        size_t_start, size_t_end, static_cast<size_t>(step),
+        GetIterator(size_t_start), GetIterator(size_t_end)};
   }
 
-  std::pair<const_iterator, const_iterator> ReadSliceParams(
-      SliceParams<const_iterator> params,
-      Int& start,
-      Int& end) const {
-    start = params.start;
-    end = params.end;
+  void ReplaceSliceSingleStep(const List<T>& other,
+                              SliceParams<iterator> slice_params) {
+    const auto start_it = std::move(slice_params.start_it);
+    const auto start = slice_params.start;
+    const auto end = slice_params.end;
 
-    return std::make_pair(std::move(params.start_it), std::move(params.end_it));
+    const auto num_old_elems = GetNumberOfElementsInSlice(start, end, 1);
+    const auto num_new_elems = other.v_.size();
+
+    if (num_old_elems < num_new_elems) {
+      ReplaceSliceSingleStepExpanding(other, start, num_old_elems,
+                                      num_new_elems);
+    } else if (num_old_elems > num_new_elems) {
+      ReplaceSliceSingleStepReducing(other, start_it, num_old_elems,
+                                     num_new_elems);
+    } else {
+      // Trivial case, replace 1-to-1
+      std::copy(other.v_.begin(), other.v_.end(), start_it);
+    }
   }
 
-  std::pair<iterator, iterator> ReadSliceParams(SliceParams<iterator> params,
-                                                Int& start,
-                                                Int& end) {
-    start = params.start;
-    end = params.end;
-
-    return std::make_pair(std::move(params.start_it), std::move(params.end_it));
-  }
-
-  void ReplaceSliceSingleStepExpanding(Int start,
+  void ReplaceSliceSingleStepExpanding(const List<T>& other,
+                                       size_t start,
                                        size_t num_old_elems,
-                                       size_t num_new_elems,
-                                       const List<T>& other) {
+                                       size_t num_new_elems) {
     const auto num_extra_elems = num_new_elems - num_old_elems;
     v_.resize(v_.size() + num_extra_elems);
 
@@ -569,18 +566,34 @@ class List {
     std::copy(other.v_.begin(), other.v_.end(), start_it);
   }
 
-  void ReplaceSliceSingleStepReducing(iterator start_it,
+  void ReplaceSliceSingleStepReducing(const List<T>& other,
+                                      iterator start_it,
                                       size_t num_old_elems,
-                                      size_t num_new_elems,
-                                      const List<T>& other) {
+                                      size_t num_new_elems) {
     const auto num_elems_to_remove = num_old_elems - num_new_elems;
 
     // Copy into desired range
     start_it = std::copy(other.v_.begin(), other.v_.end(), start_it);
-    auto end_it = start_it + num_elems_to_remove;
+    const auto end_it = start_it + num_elems_to_remove;
 
     // Erase leftover elements
     v_.erase(start_it, end_it);
+  }
+
+  void ReplaceSliceMultiStep(const List<T>& other,
+                             SliceParams<iterator> slice_params) {
+    const auto [start, end, step, start_it, end_it] = std::move(slice_params);
+    const auto num_old_elems = GetNumberOfElementsInSlice(start, end, step);
+
+    if (other.v_.size() != num_old_elems) {
+      throw ValueError(
+          "ValueError: attempt to assign sequence of size {} to extended slice "
+          "of size {}");
+    }
+
+    (void)start_it;
+    (void)end_it;
+    (void)other;
   }
 
   void Print() const {
