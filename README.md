@@ -8,4 +8,20 @@ possible.
 * A Python-based transpiler to transpile a statically-typed subset of Python
 to C++.
 
-Requires C++20.
+## Requirements
+* C++20
+* [Chiri](https://github.com/antonsynd/chiri)
+* CMake 3.14+
+* Python 3.8+
+
+## How to build and run tests
+
+```sh
+chiri pkg release
+```
+
+## Statically-typed subset of Python
+
+| Feature | Supported? | Notes |
+| --- | --- | --- |
+| TODO | TODO | TODO |
