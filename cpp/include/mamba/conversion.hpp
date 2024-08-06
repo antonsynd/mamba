@@ -47,7 +47,7 @@ types::Str Str(types::Str&& s) {
 }
 
 template <concepts::StrConvertible T>
-types::Bool Str(const T& t) {
+types::Str Str(const T& t) {
   return t.AsStr();
 }
 

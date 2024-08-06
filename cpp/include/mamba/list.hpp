@@ -7,6 +7,7 @@
 #include <iterator>
 #include <limits>
 #include <optional>
+#include <sstream>
 #include <utility>
 #include <vector>
 
@@ -15,6 +16,7 @@
 #include "mamba/iterable.hpp"
 #include "mamba/iterator.hpp"
 #include "mamba/not_null.hpp"
+#include "mamba/str.hpp"
 #include "mamba/value.hpp"
 
 namespace mamba::builtins::types {
@@ -349,13 +351,25 @@ class List {
     throw ValueError("{elem} is not in list");
   }
 
-  /// @todo
+  /// @brief Inserts @p elem so that it becomes the element at @p idx, pushing
+  /// any element at that position to the right. @p idx is clamped to the
+  /// length of the list.
   /// @code list.insert(idx, x)
-  void Insert(Int idx, T elem) {}
+  void Insert(Int idx, T elem) {
+    const auto size_t_idx = ClampIndex(idx);
+    // clamp idx, insert elem before current element at that index
+  }
 
-  /// @todo
+  /// @brief Removes the element at @p idx and returns it. If @p idx is out of
+  /// bounds, then throws IndexError.
   /// @code list.pop(idx)
-  value Pop(Int idx = -1) {}
+  value Pop(Int idx = -1) {
+    const auto idx_opt = TryGetNormalizedIndex(idx);
+
+    if (!idx_opt) {
+      throw IndexError("pop index out of range");
+    }
+  }
 
   /// @brief Removes the first occurrence of @p elem from the list. Elements
   /// are shifted to make the list contiguous. If the list is empty or
@@ -585,23 +599,44 @@ class List {
           "of size {}");
     }
 
-    (void)start_it;
-    (void)end_it;
-    (void)other;
+    size_t idx = 0;
+    auto other_it = other.v_.begin();
+    const auto other_end = other.v_.end();
+
+    std::for_each(start_it, end_it,
+                  [&idx, step, &other_it, &other_end](auto& elem) {
+                    if (other_it == other_end) {
+                      // Shouldn't happen, but here as a fail-safe
+                      return;
+                    }
+
+                    if (idx % step == 0) {
+                      elem = *other_it;
+                      ++other_it;
+                    }
+
+                    ++idx;
+                  });
   }
 
-  void Print() const {
-    std::cout << "[ ";
+  Str AsStr() const {
+    std::ostringstream oss;
+
+    oss << "[";
 
     if (!v_.empty()) {
-      auto last = v_.size() - 1;
+      const auto last = v_.size() - 1;
+
       for (size_t i = 0; i < last; ++i) {
-        std::cout << v_[i] << ", ";
+        oss << Str(v_[i]) << ", ";
       }
 
-      std::cout << v_[last];
+      oss << Str(v_[last]);
     }
-    std::cout << " ]" << std::endl;
+
+    std::cout << "]" << std::endl;
+
+    return oss.str();
   }
 
   std::vector<T> v_;
