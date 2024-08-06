@@ -645,6 +645,9 @@ class List {
                   });
   }
 
+  /// @brief Returns the string representation of the list.
+  /// @todo Use Repr() for inner elements.
+  /// @code `str(list)`
   Str AsStr() const {
     std::ostringstream oss;
 
@@ -664,6 +667,10 @@ class List {
 
     return oss.str();
   }
+
+  /// @brief Returns the string representation of the list.
+  /// @code `list`
+  Str Repr() const { return AsStr(); }
 
   std::vector<T> v_;
 };
