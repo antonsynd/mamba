@@ -76,7 +76,7 @@ class List {
   /// @code list.append(...)
   template <typename... Args>
   void Append(T elem, Args... rest) {
-    static_assert((std::is_same<T, Args>::value && ...),
+    static_assert((std::is_same_v<T, Args> && ...),
                   "All elements must be of the same type.");
     Append(elem);
     Append(rest...);
