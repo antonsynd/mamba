@@ -356,8 +356,14 @@ class List {
   /// length of the list.
   /// @code list.insert(idx, x)
   void Insert(Int idx, T elem) {
-    const auto size_t_idx = ClampIndex(idx);
-    // clamp idx, insert elem before current element at that index
+    const auto size_t_idx = NormalizeOrClampIndex(idx);
+
+    if (size_t_idx == v_.size()) {
+      v_.emplace_back(elem);
+    } else {
+      const auto it = GetIterator(size_t_idx);
+      v_.insert(it, elem);
+    }
   }
 
   /// @brief Removes the element at @p idx and returns it. If @p idx is out of
@@ -369,6 +375,20 @@ class List {
     if (!idx_opt) {
       throw IndexError("pop index out of range");
     }
+
+    const auto size_t_idx = *idx_opt;
+    const auto it = GetIterator(size_t_idx);
+    auto elem = *it;
+
+    if (size_t_idx == v_.size() - 1) {
+      // Trivial case, pop from the back
+      v_.pop_back();
+    } else {
+      // Erase an element from the start or middle
+      v_.erase(it);
+    }
+
+    return elem;
   }
 
   /// @brief Removes the first occurrence of @p elem from the list. Elements
@@ -405,20 +425,22 @@ class List {
 
   /// @code list.__iter__()
   Iterator<List<T>> Iter() {
-    return details::ListIterator(v_.cbegin(), v_.cend());
+    return details::ListIterator(v_.begin(), v_.end());
   }
 
   /// @code bool(list)
   Bool AsBool() const { return !v_.empty(); }
 
-  /// @brief
+  /// @brief Returns false all the time for all arguments so long as they are
+  /// not a list of the same type of elements.
   /// @code list == other
   template <typename U>
   Bool Eq(const U&) const {
     return false;
   }
 
-  /// @brief
+  /// @brief Returns true if this and @p other have the same elements (or
+  /// references thereof), and false otherwise.
   /// @code list === other
   template <>
   Bool Eq(const List<T>& other) const {
@@ -454,6 +476,10 @@ class List {
     }
 
     return static_cast<size_t>(idx);
+  }
+
+  size_t NormalizeOrClampIndex(Int idx) const {
+    return TryGetNormalizedIndex(idx).value_or(ClampIndex(idx));
   }
 
   Bool IsIndexOutOfBounds(Int idx) const {

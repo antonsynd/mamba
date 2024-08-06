@@ -977,4 +977,182 @@ TEST(List, ReplaceSliceNoArgsIsCompleteReplacement) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, InsertIntoEmpty) {
+  // If
+  List<Int> l;
+
+  // When
+  l.Insert(0, 5);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {5};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, InsertIntoNonEmpty) {
+  // If
+  List<Int> l = {1, 3, 7};
+
+  // When
+  l.Insert(1, 5);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 5, 3, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, InsertIntoNonEmptyBeyondLeftBound) {
+  // If
+  List<Int> l = {1, 3, 7};
+
+  // When
+  l.Insert(-100, 5);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {5, 1, 3, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, InsertIntoNonEmptyBeyondRightBound) {
+  // If
+  List<Int> l = {1, 3, 7};
+
+  // When
+  l.Insert(100, 5);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 7, 5};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, InsertIntoNonEmptyAtLeftBound) {
+  // If
+  List<Int> l = {1, 3, 7};
+
+  // When
+  l.Insert(0, 5);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {5, 1, 3, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, InsertIntoNonEmptyBeforeRightBound) {
+  // If
+  List<Int> l = {1, 3, 7};
+
+  // When
+  l.Insert(-1, 5);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, InsertIntoNonEmptyAtRightBound) {
+  // If
+  List<Int> l = {1, 3, 7};
+
+  // When
+  l.Insert(3, 5);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 7, 5};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, PopEmpty) {
+  // If
+  List<Int> l;
+
+  // When/then
+  EXPECT_THROW(l.Pop(), IndexError);
+}
+
+TEST(List, PopLast) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.Pop();
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, PopFront) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.Pop(0);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, PopMiddle) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.Pop(1);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, PopNegative) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l.Pop(-2);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, PopOutOfBoundsLeft) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_THROW(l.Pop(-100), IndexError);
+}
+
+TEST(List, PopOutOfBoundsRight) {
+  // If
+  List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_THROW(l.Pop(100), IndexError);
+}
+
 }  // namespace mamba::builtins::types::test
