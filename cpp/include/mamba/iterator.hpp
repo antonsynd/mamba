@@ -3,6 +3,7 @@
 #include <type_traits>
 
 #include "mamba/sequence.hpp"
+#include "mamba/value.hpp"
 
 namespace mamba::builtins {
 
@@ -19,19 +20,15 @@ namespace mamba::builtins {
 // };
 
 // TODO
-template <types::Sequence T>
+template <concepts::Value T>
 class Iterator {
  public:
   virtual Iterator<T> Iter() const = 0;
-  virtual T::value Next() = 0;
-
-  // virtual iterator_t<T::value_t> begin() = 0;
-  // virtual iterator_t<T::value_t> end() = 0;
+  virtual T Next() = 0;
 };
 
-template <typename T>
-  requires types::Sequence<T> || std::is_same_v<T, Iterator<T>>
-Iterator<T> Iter(const T& sequence) {
+template <concepts::Value T, types::Sequence S>
+Iterator<T> Iter(const S& sequence) {
   return sequence.Iter();
 }
 

@@ -23,21 +23,19 @@ namespace mamba::builtins::types {
 namespace details {
 
 // Forward declaration
-template <typename T>
+template <concepts::Value T>
 class ListIterator;
 
 }  // namespace details
 
 template <concepts::Value T>
 class List {
- private:
-  using iterator = std::vector<T>::iterator;
-  using const_iterator = std::vector<T>::const_iterator;
-
  public:
   using value = T;
   using reference = value&;
   using const_reference = const value&;
+  using iterator = std::vector<value>::iterator;
+  using const_iterator = std::vector<value>::const_iterator;
 
   static constexpr auto kEndIndex = std::numeric_limits<Int>::min();
 
@@ -99,9 +97,7 @@ class List {
   /// @brief Extends this list with the elements of @p other.
   /// @todo Fix to not assume list
   /// @code list.extend(Iterable)
-  template <typename I>
-    requires concepts::Iterable<I>
-  void Extend(const I& other) {
+  void Extend(const List<T>& other) {
     v_.reserve(v_.size() + other.v_.size());
 
     std::copy(other.v_.cbegin(), other.v_.cend(), std::back_inserter(v_));
@@ -423,13 +419,24 @@ class List {
   /// @code sort(list, key, reverse)
   void Sort(void* key, Bool reverse = false) {}
 
+  /// @todo
   /// @code list.__iter__()
-  Iterator<List<T>> Iter() {
-    return details::ListIterator(v_.begin(), v_.end());
-  }
+  Iterator<T> Iter() { return details::ListIterator(v_.begin(), v_.end()); }
+
+  /// @brief Native support for C++ for..in loops.
+  iterator begin() { return v_.begin(); }
+  iterator end() { return v_.end(); }
+  const_iterator begin() const { return v_.cbegin(); }
+  const_iterator end() const { return v_.cend(); }
+  const_iterator cbegin() const { return v_.cbegin(); }
+  const_iterator cend() const { return v_.cend(); }
 
   /// @code bool(list)
   Bool AsBool() const { return !v_.empty(); }
+
+  /// @brief Implicit conversion to Bool and bool (C++) for conditionals.
+  /// @code if list
+  operator Bool() const { return AsBool(); }
 
   /// @brief Returns false all the time for all arguments so long as they are
   /// not a list of the same type of elements.
@@ -445,6 +452,17 @@ class List {
   template <>
   Bool Eq(const List<T>& other) const {
     return v_ == other.v_;
+  }
+
+  /// @brief Native support for C++ == and != operators.
+  template <typename U>
+  bool operator==(const U& other) const {
+    return Eq(other);
+  }
+
+  template <typename U>
+  bool operator!=(const U& other) const {
+    return !Eq(other);
   }
 
  private:
@@ -677,15 +695,18 @@ class List {
 
 namespace details {
 
-template <typename T>
-class ListIterator : public Iterator<List<T>> {
+template <concepts::Value T>
+class ListIterator : public Iterator<T> {
  public:
-  ListIterator(std::vector<T>::iterator it, std::vector<T>::iterator end)
+  using value = T;
+  using iterator = List<value>::iterator;
+
+  ListIterator(iterator it, iterator end)
       : it_(std::move(it)), end_(std::move(end)) {}
 
-  Iterator<T> Iter() const override { return *this; }
+  Iterator<value> Iter() const override { return *this; }
 
-  T Next() override {
+  value Next() override {
     if (it_ == end_) {
       throw StopIteration("end of iterator");
     }
@@ -693,9 +714,12 @@ class ListIterator : public Iterator<List<T>> {
     return *it_++;
   }
 
+  iterator begin() { return it_; }
+  iterator end() { return end_; }
+
  private:
-  std::vector<T>::iterator it_;
-  std::vector<T>::iterator end_;
+  iterator it_;
+  iterator end_;
 };
 
 }  // namespace details

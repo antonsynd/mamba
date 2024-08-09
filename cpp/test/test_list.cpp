@@ -1155,4 +1155,20 @@ TEST(List, PopOutOfBoundsRight) {
   EXPECT_THROW(l.Pop(100), IndexError);
 }
 
+TEST(List, NativeIteration) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+  const auto expected = as_vector(l);
+
+  // When
+  std::vector<Int> actual;
+
+  for (const auto elem : l) {
+    actual.emplace_back(elem);
+  }
+
+  // Then
+  EXPECT_EQ(actual, expected);
+}
+
 }  // namespace mamba::builtins::types::test
