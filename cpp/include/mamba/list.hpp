@@ -13,8 +13,7 @@
 
 #include "mamba/concepts.hpp"
 #include "mamba/error.hpp"
-#include "mamba/iterable.hpp"
-#include "mamba/iterator.hpp"
+#include "mamba/iteration.hpp"
 #include "mamba/not_null.hpp"
 #include "mamba/str.hpp"
 #include "mamba/value.hpp"
@@ -421,7 +420,9 @@ class List {
 
   /// @todo
   /// @code list.__iter__()
-  Iterator<T> Iter() { return details::ListIterator(v_.begin(), v_.end()); }
+  memory::Handle<Iterator<T>> Iter() {
+    return details::ListIterator<T>(v_.begin(), v_.end());
+  }
 
   /// @brief Native support for C++ for..in loops.
   iterator begin() { return v_.begin(); }
@@ -434,8 +435,8 @@ class List {
   /// @code bool(list)
   Bool AsBool() const { return !v_.empty(); }
 
-  /// @brief Implicit conversion to Bool and bool (C++) for conditionals.
-  /// @code if list
+  /// @brief Implicit conversion to Bool (C++ bool) for conditionals.
+  /// @code if list:
   operator Bool() const { return AsBool(); }
 
   /// @brief Returns false all the time for all arguments so long as they are
@@ -448,7 +449,7 @@ class List {
 
   /// @brief Returns true if this and @p other have the same elements (or
   /// references thereof), and false otherwise.
-  /// @code list === other
+  /// @code list == other
   template <>
   Bool Eq(const List<T>& other) const {
     return v_ == other.v_;
@@ -704,7 +705,7 @@ class ListIterator : public Iterator<T> {
   ListIterator(iterator it, iterator end)
       : it_(std::move(it)), end_(std::move(end)) {}
 
-  Iterator<value> Iter() const override { return *this; }
+  memory::Handle<Iterator<value>> Iter() override { return *this; }
 
   value Next() override {
     if (it_ == end_) {
