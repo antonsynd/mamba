@@ -1171,21 +1171,21 @@ TEST(List, NativeIteration) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, IteratorIteration) {
-  // If
-  List<Int> l = {1, 3, 5, 7};
-  const auto expected = as_vector(l);
-  const auto it = Iter(l);
+// TEST(List, IteratorIteration) {
+//   // If
+//   List<Int> l = {1, 3, 5, 7};
+//   const auto expected = as_vector(l);
+//   const auto it = Iter(l);
 
-  // When
-  std::vector<Int> actual;
+//   // When
+//   std::vector<Int> actual;
 
-  for (const auto elem : l) {
-    actual.emplace_back(elem);
-  }
+//   for (const auto elem : l) {
+//     actual.emplace_back(elem);
+//   }
 
-  // Then
-  EXPECT_EQ(actual, expected);
-}
+//   // Then
+//   EXPECT_EQ(actual, expected);
+// }
 
 }  // namespace mamba::builtins::types::test

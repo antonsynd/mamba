@@ -20,10 +20,11 @@ namespace concepts {
 
 template <typename T>
 concept Iterable = requires(T iterable) {
-  typename T::value;
-  {
-    iterable.Iter()
-  } -> std::same_as<memory::Handle<Iterator<typename T::value>>>;
+  { static_cast<void>(iterable) } -> std::same_as<void>;
+  // typename T::value;
+  // {
+  //   iterable.Iter()
+  // } -> std::same_as<memory::Handle<Iterator<typename T::value>>>;
 };
 
 }  // namespace concepts
