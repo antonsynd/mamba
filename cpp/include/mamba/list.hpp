@@ -15,15 +15,13 @@
 #include "mamba/entity.hpp"
 #include "mamba/error.hpp"
 #include "mamba/iteration.hpp"
-#include "mamba/not_null.hpp"
 #include "mamba/str.hpp"
-#include "mamba/value.hpp"
 
 namespace mamba::builtins::types {
 namespace details {
 
 // Forward declaration
-template <concepts::Value T>
+template <concepts::Entity T>
 class ListIterator;
 
 }  // namespace details
@@ -419,11 +417,11 @@ class List {
   /// @code sort(list, key, reverse)
   void Sort(void* key, Bool reverse = false) {}
 
-  // /// @todo
-  // /// @code list.__iter__()
-  // memory::Handle<Iterator<T>> Iter() {
-  //   return Init<details::ListIterator<T>(v_.begin(), v_.end());
-  // }
+  /// @todo
+  /// @code list.__iter__()
+  memory::Handle<Iterator<T>> Iter() {
+    return memory::Init<details::ListIterator<T>>(v_.begin(), v_.end());
+  }
 
   /// @brief Native support for C++ for..in loops.
   iterator begin() { return v_.begin(); }
@@ -697,32 +695,36 @@ class List {
 
 namespace details {
 
-// template <concepts::Value T>
-// class ListIterator : public Iterator<T> {
-//  public:
-//   using value = T;
-//   using iterator = List<value>::iterator;
+template <concepts::Entity T>
+class ListIterator : public Iterator<T> {
+ public:
+  using value = T;
+  using iterator = List<value>::iterator;
 
-//   ListIterator(iterator it, iterator end)
-//       : it_(std::move(it)), end_(std::move(end)) {}
+  ListIterator(iterator it, iterator end)
+      : it_(std::move(it)), end_(std::move(end)) {}
 
-//   memory::Handle<Iterator<value>> Iter() override { return *this; }
+  memory::Handle<Iterator<value>> Iter() override {
+    // TODO: undefined behavior creating shared_ptr when one already exists
+    // should return a reference to itself
+    return memory::Handle<ListIterator<value>>(this);
+  }
 
-//   value Next() override {
-//     if (it_ == end_) {
-//       throw StopIteration("end of iterator");
-//     }
+  value Next() override {
+    if (it_ == end_) {
+      throw StopIteration("end of iterator");
+    }
 
-//     return *it_++;
-//   }
+    return *it_++;
+  }
 
-//   iterator begin() { return it_; }
-//   iterator end() { return end_; }
+  iterator begin() { return it_; }
+  iterator end() { return end_; }
 
-//  private:
-//   iterator it_;
-//   iterator end_;
-// };
+ private:
+  iterator it_;
+  iterator end_;
+};
 
 }  // namespace details
 
