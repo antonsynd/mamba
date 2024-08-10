@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "mamba/concepts.hpp"
+#include "mamba/entity.hpp"
 #include "mamba/error.hpp"
 #include "mamba/iteration.hpp"
 #include "mamba/not_null.hpp"
@@ -27,7 +28,7 @@ class ListIterator;
 
 }  // namespace details
 
-template <concepts::Value T>
+template <concepts::Entity T>
 class List {
  public:
   using value = T;
