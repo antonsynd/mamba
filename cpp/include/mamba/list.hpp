@@ -696,7 +696,8 @@ class List {
 namespace details {
 
 template <concepts::Entity T>
-class ListIterator : public Iterator<T> {
+class ListIterator : public Iterator<T>,
+                     std::enable_shared_from_this<ListIterator<T>> {
  public:
   using value = T;
   using iterator = List<value>::iterator;
@@ -704,10 +705,10 @@ class ListIterator : public Iterator<T> {
   ListIterator(iterator it, iterator end)
       : it_(std::move(it)), end_(std::move(end)) {}
 
+  ~ListIterator() override = default;
+
   memory::Handle<Iterator<value>> Iter() override {
-    // TODO: undefined behavior creating shared_ptr when one already exists
-    // should return a reference to itself
-    return memory::Handle<ListIterator<value>>(this);
+    return memory::Init<ListIterator<T>>(*this);
   }
 
   value Next() override {

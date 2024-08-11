@@ -42,9 +42,4 @@ memory::Handle<T> Iter(memory::Handle<T>& iterable_handle) {
   return iterable_handle;
 }
 
-template <concepts::Iterable T>
-memory::Handle<Iterator<typename T::value>> Iter(T& iterable) {
-  return iterable.Iter();
-}
-
 }  // namespace mamba::builtins
