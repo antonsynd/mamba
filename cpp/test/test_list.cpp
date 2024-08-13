@@ -1174,15 +1174,14 @@ TEST(List, NativeIteration) {
 
 TEST(List, IteratorIteration) {
   // If
-  memory::Handle<List<Int>> l =
-      memory::Init<List<Int>>(std::initializer_list<Int>{1, 3, 5, 7});
-  const auto expected = as_vector(*l);
+  List<Int> l = {1, 3, 5, 7};
+  const auto expected = as_vector(l);
   const auto it = Iter(l);
 
   // When
   std::vector<Int> actual;
 
-  for (const auto elem : *l) {
+  for (const auto elem : l) {
     actual.emplace_back(elem);
   }
 
