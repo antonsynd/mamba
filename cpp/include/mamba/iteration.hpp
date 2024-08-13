@@ -22,12 +22,13 @@ namespace concepts {
 template <typename T>
 concept Iterable = requires(T iterable) {
   typename T::value;
+  concepts::Entity<typename T::value>;
   { iterable.Iter() } -> std::same_as<Iterator<typename T::value>>;
 };
 
 }  // namespace concepts
 
-template <concepts::Value T>
+template <concepts::Entity T>
 T Next(Iterator<T>& it) {
   return it.Next();
 }

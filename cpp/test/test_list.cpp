@@ -1,12 +1,17 @@
-#include <gtest/gtest.h>
+#include <stddef.h>  // for size_t
 
-#include <initializer_list>
-#include <vector>
+#include <string>  // for basic_string
+#include <vector>  // for vector
 
-#include "mamba/conversion.hpp"
-#include "mamba/int.hpp"
-#include "mamba/list.hpp"
-#include "mamba/sequence.hpp"
+#include "gtest/gtest.h"  // for Message, TestPartResult, AssertionRe...
+
+#include "mamba/conversion.hpp"  // for Bool, Repr, Str
+#include "mamba/error.hpp"       // for ValueError, IndexError
+#include "mamba/float.hpp"       // for Float
+#include "mamba/int.hpp"         // for Int
+#include "mamba/iteration.hpp"   // for Iter
+#include "mamba/list.hpp"        // for List
+#include "mamba/sequence.hpp"    // for Len, In, Max, Min
 
 namespace mamba::builtins::types::test {
 namespace {
@@ -1267,6 +1272,38 @@ TEST(List, NativeEqualityDifferentType) {
 
   // When/then
   ASSERT_NE(l, m);
+}
+
+TEST(List, AsStrEmpty) {
+  // If
+  const List<Int> l;
+
+  // When/then
+  EXPECT_EQ(conversion::Str(l), "[]");
+}
+
+TEST(List, AsStrNotEmpty) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_EQ(conversion::Str(l), "[1, 3, 5, 7]");
+}
+
+TEST(List, ReprEmpty) {
+  // If
+  const List<Int> l;
+
+  // When/then
+  EXPECT_EQ(conversion::Repr(l), "[]");
+}
+
+TEST(List, ReprNotEmpty) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+
+  // When/then
+  EXPECT_EQ(conversion::Repr(l), "[1, 3, 5, 7]");
 }
 
 }  // namespace mamba::builtins::types::test

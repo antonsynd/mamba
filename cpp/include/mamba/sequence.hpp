@@ -1,6 +1,7 @@
 #pragma once
 
 #include "mamba/bool.hpp"
+#include "mamba/entity.hpp"
 #include "mamba/int.hpp"
 #include "mamba/iteration.hpp"
 
@@ -25,7 +26,7 @@ T::value Max(const T& sequence) {
   return sequence.Max();
 }
 
-template <Sequence T, typename U>
+template <Sequence T, concepts::Entity U>
 types::Bool In(const T& sequence, U value) {
   return sequence.In(value);
 }

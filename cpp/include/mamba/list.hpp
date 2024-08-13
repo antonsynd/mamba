@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "mamba/concepts.hpp"
+#include "mamba/conversion.hpp"
 #include "mamba/entity.hpp"
 #include "mamba/error.hpp"
 #include "mamba/iteration.hpp"
@@ -438,11 +439,16 @@ class List {
     std::reverse(data_->v.begin(), data_->v.end());
   }
 
-  /// @todo
+  /// @brief Sorts the list in-place, with the order of equal-comparing
+  /// elements guaranteed to be preserved.
   /// @code sort(list, key, reverse)
-  void Sort(void* key, Bool reverse = false) {}
+  void Sort(std::optional<std::function<bool(const T& a, const T& b)>> key =
+                std::nullopt,
+            Bool reverse = false) {
+    std::sort(data_->v.begin(), data_->v.end());
+  }
 
-  /// @todo
+  /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
   Iterator<T> Iter() {
     return details::ListIterator<T>(data_->v.begin(), data_->v.end());
@@ -502,13 +508,13 @@ class List {
       const auto last = data_->v.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << Str(data_->v[i]) << ", ";
+        oss << conversion::Str(data_->v[i]) << ", ";
       }
 
-      oss << Str(data_->v[last]);
+      oss << conversion::Str(data_->v[last]);
     }
 
-    std::cout << "]" << std::endl;
+    oss << "]";
 
     return oss.str();
   }
@@ -524,13 +530,13 @@ class List {
       const auto last = data_->v.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << Repr(data_->v[i]) << ", ";
+        oss << conversion::Repr(data_->v[i]) << ", ";
       }
 
-      oss << Repr(data_->v[last]);
+      oss << conversion::Repr(data_->v[last]);
     }
 
-    std::cout << "]" << std::endl;
+    oss << "]";
 
     return oss.str();
   }
