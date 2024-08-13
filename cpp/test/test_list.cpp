@@ -1189,4 +1189,84 @@ TEST(List, IteratorIteration) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, EqualitySameObject) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+  const auto copy = l;
+  ASSERT_NE(&l, &copy);
+
+  // When/then
+  EXPECT_TRUE(l.Eq(copy));
+}
+
+TEST(List, NativeEqualitySameObject) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+  const auto copy = l;
+  ASSERT_NE(&l, &copy);
+
+  // When/then
+  EXPECT_EQ(l, copy);
+}
+
+TEST(List, NativeInEqualitySameObject) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+  const auto copy = l;
+  ASSERT_NE(&l, &copy);
+
+  // When/then
+  EXPECT_FALSE(l != copy);
+}
+
+TEST(List, EqualityDifferentObject) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+  List<Int> m = {1, 3, 5, 7, 9};
+  ASSERT_NE(&l, &m);
+
+  // When/then
+  EXPECT_FALSE(l.Eq(m));
+
+  // When
+  m.Pop();
+
+  // Then
+  EXPECT_TRUE(l.Eq(m));
+}
+
+TEST(List, NativeEqualityAndInequalityDifferentObject) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+  List<Int> m = {1, 3, 5, 7, 9};
+  ASSERT_NE(&l, &m);
+
+  // When/then
+  EXPECT_NE(l, m);
+
+  // When
+  m.Pop();
+
+  // Then
+  EXPECT_EQ(l, m);
+}
+
+TEST(List, EqualityDifferentType) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+  const List<Float> m = {1.0, 3.0, 5.0, 7.0};
+
+  // When/then
+  EXPECT_FALSE(l.Eq(m));
+}
+
+TEST(List, NativeEqualityDifferentType) {
+  // If
+  const List<Int> l = {1, 3, 5, 7};
+  const List<Float> m = {1.0, 3.0, 5.0, 7.0};
+
+  // When/then
+  ASSERT_NE(l, m);
+}
+
 }  // namespace mamba::builtins::types::test

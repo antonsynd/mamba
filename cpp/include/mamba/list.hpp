@@ -33,6 +33,8 @@ class List {
   struct Data {
    public:
     std::vector<T> v;
+
+    bool operator==(const Data& other) const { return v == other.v; }
   };
 
   std::shared_ptr<Data> data_;
@@ -469,30 +471,13 @@ class List {
     return false;
   }
 
-  /// @brief Returns true if this and @p other point to the same list, and
-  /// false otherwise.
+  /// @brief Returns true if this and @p other point to the same list or if
+  /// they contain the same elements, and false otherwise.
   /// @code list == other
   template <>
   Bool Eq(const List<T>& other) const {
-    // Pointer comparison
-    return data_.get() == other.data_.get();
-  }
-
-  /// @brief Returns false all the time for all arguments so long as they are
-  /// not a list of the same type of elements.
-  /// @code list === other
-  template <typename U>
-  Bool StrictEq(const U&) const {
-    return false;
-  }
-
-  /// @brief Returns true if this and @p other have the same elements, and
-  /// false otherwise.
-  /// @code list === other
-  template <>
-  Bool StrictEq(const List<T>& other) const {
-    // Invoke Data::operator==()
-    return *data_ == *other.data_;
+    // Pointer comparison first, otherwise Data::operator==()
+    return data_ == other.data_ || *data_ == *other.data_;
   }
 
   /// @brief Native support for C++ == and != operators.
@@ -504,6 +489,50 @@ class List {
   template <typename U>
   bool operator!=(const U& other) const {
     return !Eq(other);
+  }
+
+  /// @brief Returns the string representation of the list.
+  /// @code `str(list)`
+  Str AsStr() const {
+    std::ostringstream oss;
+
+    oss << "[";
+
+    if (!data_->v.empty()) {
+      const auto last = data_->v.size() - 1;
+
+      for (size_t i = 0; i < last; ++i) {
+        oss << Str(data_->v[i]) << ", ";
+      }
+
+      oss << Str(data_->v[last]);
+    }
+
+    std::cout << "]" << std::endl;
+
+    return oss.str();
+  }
+
+  /// @brief Returns the representation of the list.
+  /// @code `repr(list)`
+  Str Repr() const {
+    std::ostringstream oss;
+
+    oss << "[";
+
+    if (!data_->v.empty()) {
+      const auto last = data_->v.size() - 1;
+
+      for (size_t i = 0; i < last; ++i) {
+        oss << Repr(data_->v[i]) << ", ";
+      }
+
+      oss << Repr(data_->v[last]);
+    }
+
+    std::cout << "]" << std::endl;
+
+    return oss.str();
   }
 
  private:
@@ -706,33 +735,6 @@ class List {
                     ++idx;
                   });
   }
-
-  /// @brief Returns the string representation of the list.
-  /// @todo Use Repr() for inner elements.
-  /// @code `str(list)`
-  Str AsStr() const {
-    std::ostringstream oss;
-
-    oss << "[";
-
-    if (!data_->v.empty()) {
-      const auto last = data_->v.size() - 1;
-
-      for (size_t i = 0; i < last; ++i) {
-        oss << Str(data_->v[i]) << ", ";
-      }
-
-      oss << Str(data_->v[last]);
-    }
-
-    std::cout << "]" << std::endl;
-
-    return oss.str();
-  }
-
-  /// @brief Returns the string representation of the list.
-  /// @code `list`
-  Str Repr() const { return AsStr(); }
 };
 
 namespace details {
@@ -748,6 +750,10 @@ class ListIterator : public Iterator<T> {
    public:
     iterator it;
     iterator end;
+
+    bool operator==(const Data& other) const {
+      return it == other.it && end == other.end;
+    }
   };
 
   std::shared_ptr<Data> data_;
