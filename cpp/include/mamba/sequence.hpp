@@ -7,13 +7,13 @@
 namespace mamba::builtins::types {
 
 template <typename T>
-concept Sequence = concepts::Iterable<T> && requires(const T sequence) {
-  typename T::value;
-  // { sequence.In(typename T::value{}) } -> std::same_as<types::Bool>;
-  { sequence.Len() } -> std::same_as<types::Int>;
-  { sequence.Max() } -> std::same_as<typename T::value>;
-  { sequence.Min() } -> std::same_as<typename T::value>;
-};
+concept Sequence = concepts::Iterable<T> &&
+                   requires(const T sequence, typename T::value elem) {
+                     { sequence.In(elem) } -> std::same_as<types::Bool>;
+                     { sequence.Len() } -> std::same_as<types::Int>;
+                     { sequence.Max() } -> std::same_as<typename T::value>;
+                     { sequence.Min() } -> std::same_as<typename T::value>;
+                   };
 
 template <Sequence T>
 T::value Min(const T& sequence) {

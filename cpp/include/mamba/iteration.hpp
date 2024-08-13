@@ -33,9 +33,9 @@ T Next(Iterator<T>& it) {
 }
 
 template <concepts::Iterable T>
-T Iter(T& iterable_handle) {
-  // Simply copy the handle
-  return iterable_handle;
+T Iter(T& it) {
+  // Return a copy
+  return it;
 }
 
 }  // namespace mamba::builtins

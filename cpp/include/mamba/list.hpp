@@ -97,7 +97,7 @@ class List {
 
   /// @brief Returns whether @p elem is in the list. O(n).
   /// @code elem in list
-  bool In(T elem) const {
+  Bool In(T elem) const {
     return std::find(data_->v.cbegin(), data_->v.cend(), elem) !=
            data_->v.cend();
   }
