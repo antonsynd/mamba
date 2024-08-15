@@ -12,6 +12,7 @@
 #include <utility>
 #include <vector>
 
+#include "mamba/comparison.hpp"
 #include "mamba/concepts.hpp"
 #include "mamba/conversion.hpp"
 #include "mamba/entity.hpp"
@@ -442,10 +443,24 @@ class List {
   /// @brief Sorts the list in-place, with the order of equal-comparing
   /// elements guaranteed to be preserved.
   /// @code sort(list, key, reverse)
-  void Sort(std::optional<std::function<bool(const T& a, const T& b)>> key =
-                std::nullopt,
+  template <operators::concepts::LessThanComparable U>
+  void Sort(std::optional<std::function<U(const T& t)>> key = std::nullopt,
             Bool reverse = false) {
-    std::sort(data_->v.begin(), data_->v.end());
+    if (data_->v.empty()) {
+      return;
+    }
+
+    if (key) {
+      std::sort(data_->v.begin(), data_->v.end());
+    } else {
+      std::sort(
+          data_->v.begin(), data_->v.end(),
+          [&key](const auto a, const auto b) { return (*key)(a) < (*key)(b); });
+    }
+
+    if (reverse) {
+      std::reverse(data_->v.begin(), data_->v.end());
+    }
   }
 
   /// @brief Returns an iterator to this list.
