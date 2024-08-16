@@ -1,9 +1,23 @@
 #pragma once
 
-#include <cstdint>
+#include "mamba/types/bool.hpp"
+#include "mamba/types/int.hpp"
+#include "mamba/types/str.hpp"
 
-namespace mamba::builtins::types {
+namespace mamba::builtins {
 
-using Int = std::int_least32_t;
+using Int = types::Int;
 
-}  // namespace mamba::builtins::types
+types::Bool AsBool(Int i) {
+  return i != 0;
+}
+
+types::Str AsStr(Int i) {
+  return std::to_string(i);
+}
+
+types::Str Repr(Int i) {
+  return std::to_string(i);
+}
+
+}  // namespace mamba::builtins

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "mamba/bool.hpp"
-#include "mamba/entity.hpp"
-#include "mamba/int.hpp"
+#include "mamba/concepts/entity.hpp"
 #include "mamba/iteration.hpp"
+#include "mamba/types/bool.hpp"
+#include "mamba/types/int.hpp"
 
-namespace mamba::builtins::types {
+namespace mamba::builtins {
 
 template <typename T>
 concept Sequence = concepts::Iterable<T> &&
@@ -36,4 +36,4 @@ types::Int Len(const T& sequence) {
   return sequence.Len();
 }
 
-}  // namespace mamba::builtins::types
+}  // namespace mamba::builtins

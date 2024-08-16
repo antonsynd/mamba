@@ -1,9 +1,9 @@
 #pragma once
 
-#include "mamba/int.hpp"
+#include "mamba/types/bool.hpp"
 
-namespace mamba::builtins::types {
+namespace mamba::builtins {
 
-using Bool = Int;
+using Bool = types::Bool;
 
-}  // namespace mamba::builtins::types
+}  // namespace mamba::builtins

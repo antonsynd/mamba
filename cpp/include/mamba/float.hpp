@@ -1,15 +1,23 @@
 #pragma once
 
-#if __cplusplus >= 202302L
-#include <stdfloat>
-#endif  // __cplusplus >= 202302L
+#include "mamba/types/bool.hpp"
+#include "mamba/types/float.hpp"
+#include "mamba/types/str.hpp"
 
-namespace mamba::builtins::types {
+namespace mamba::builtins {
 
-#if __cplusplus >= 202302L
-using Float = std::float64_t;
-#else   // __cplusplus >= 202302L
-using Float = double;
-#endif  // __cplusplus >= 202302L
+using Float = types::Float;
 
-}  // namespace mamba::builtins::types
+types::Bool AsBool(Float f) {
+  return f != 0;
+}
+
+types::Str AsStr(Float f) {
+  return std::to_string(f);
+}
+
+types::Str Repr(Float f) {
+  return std::to_string(f);
+}
+
+}  // namespace mamba::builtins

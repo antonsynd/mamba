@@ -8,7 +8,7 @@ namespace mamba::builtins {
 
 template <typename... Args>
 void print(Args&&... args) {
-  std::cout << Str(args) << &&...;
+  std::cout << AsStr(args) << &&...;
   std::cout << std::endl;
 }
 

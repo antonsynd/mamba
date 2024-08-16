@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <utility>
 
-#include "mamba/str.hpp"
+#include "mamba/types/str.hpp"
 
 namespace mamba::builtins {
 

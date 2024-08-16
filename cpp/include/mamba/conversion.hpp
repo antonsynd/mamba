@@ -4,68 +4,22 @@
 #include <type_traits>
 #include <utility>
 
-#include "mamba/bool.hpp"
-#include "mamba/concepts.hpp"
-#include "mamba/float.hpp"
-#include "mamba/int.hpp"
-#include "mamba/object.hpp"
-#include "mamba/str.hpp"
+#include "mamba/concepts/bool_convertible.hpp"
+#include "mamba/concepts/object.hpp"
+#include "mamba/concepts/str_convertible.hpp"
+#include "mamba/types/bool.hpp"
+#include "mamba/types/str.hpp"
 
-namespace mamba::builtins::conversion {
-
-// TODO: Add overload for Bool if necessary
-types::Bool Bool(types::Int i) {
-  return i != 0;
-}
-
-types::Bool Bool(types::Float f) {
-  return f != 0;
-}
-
-types::Bool Bool(types::Str s) {
-  return !s.empty();
-}
+namespace mamba::builtins {
 
 template <concepts::BoolConvertible T>
-types::Bool Bool(const T& t) {
+types::Bool AsBool(const T& t) {
   return t.AsBool();
 }
 
-// TODO: Add overload for Bool if necessary
-types::Str Str(types::Int i) {
-  return std::to_string(i);
-}
-
-types::Str Str(types::Float f) {
-  return std::to_string(f);
-}
-
-/// @note The return value is expected to be a new copy of @p s. Returning an
-/// lvalue ref is not expected here. However, we can move a temporary if it
-/// was passed in, hence the use of a forwarding reference.
-types::Str Str(types::Str&& s) {
-  return std::forward<types::Str>(s);
-}
-
 template <concepts::StrConvertible T>
-types::Str Str(const T& t) {
+types::Str AsStr(const T& t) {
   return t.AsStr();
-}
-
-// TODO: Add overload for Bool if necessary
-types::Str Repr(types::Int i) {
-  return std::to_string(i);
-}
-
-types::Str Repr(types::Float f) {
-  return std::to_string(f);
-}
-
-/// @note The return value is expected to be a new copy of @p s. Returning an
-/// lvalue ref is not expected here. However, we can move a temporary if it
-/// was passed in, hence the use of a forwarding reference.
-types::Str Repr(types::Str&& s) {
-  return std::forward<types::Str>(s);
 }
 
 template <concepts::Object T>
@@ -73,4 +27,4 @@ types::Str Repr(const T& t) {
   return t.Repr();
 }
 
-}  // namespace mamba::builtins::conversion
+}  // namespace mamba::builtins

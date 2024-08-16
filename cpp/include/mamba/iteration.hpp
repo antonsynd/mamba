@@ -4,7 +4,7 @@
 #include <memory>
 #include <type_traits>
 
-#include "mamba/entity.hpp"
+#include "mamba/concepts/entity.hpp"
 
 namespace mamba::builtins {
 

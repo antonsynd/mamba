@@ -1,7 +1,7 @@
 #pragma once
 
-#include "mamba/object.hpp"
-#include "mamba/value.hpp"
+#include "mamba/concepts/object.hpp"
+#include "mamba/concepts/value.hpp"
 
 namespace mamba::builtins::concepts {
 

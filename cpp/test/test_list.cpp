@@ -13,7 +13,7 @@
 #include "mamba/list.hpp"        // for List
 #include "mamba/sequence.hpp"    // for Len, In, Max, Min
 
-namespace mamba::builtins::types::test {
+namespace mamba::builtins::test {
 namespace {
 
 template <typename T>
@@ -658,7 +658,7 @@ TEST(List, BoolEmpty) {
   const List<Int> l;
 
   // When/then
-  EXPECT_FALSE(conversion::Bool(l));
+  EXPECT_FALSE(AsBool(l));
 }
 
 TEST(List, BoolNonEmpty) {
@@ -666,7 +666,7 @@ TEST(List, BoolNonEmpty) {
   const List<Int> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_TRUE(conversion::Bool(l));
+  EXPECT_TRUE(AsBool(l));
 }
 
 TEST(List, IndexEmpty) {
@@ -1279,7 +1279,7 @@ TEST(List, AsStrEmpty) {
   const List<Int> l;
 
   // When/then
-  EXPECT_EQ(conversion::Str(l), "[]");
+  EXPECT_EQ(AsStr(l), "[]");
 }
 
 TEST(List, AsStrNotEmpty) {
@@ -1287,7 +1287,7 @@ TEST(List, AsStrNotEmpty) {
   const List<Int> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_EQ(conversion::Str(l), "[1, 3, 5, 7]");
+  EXPECT_EQ(AsStr(l), "[1, 3, 5, 7]");
 }
 
 TEST(List, ReprEmpty) {
@@ -1295,7 +1295,7 @@ TEST(List, ReprEmpty) {
   const List<Int> l;
 
   // When/then
-  EXPECT_EQ(conversion::Repr(l), "[]");
+  EXPECT_EQ(Repr(l), "[]");
 }
 
 TEST(List, ReprNotEmpty) {
@@ -1303,7 +1303,15 @@ TEST(List, ReprNotEmpty) {
   const List<Int> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_EQ(conversion::Repr(l), "[1, 3, 5, 7]");
+  EXPECT_EQ(Repr(l), "[1, 3, 5, 7]");
 }
 
-}  // namespace mamba::builtins::types::test
+TEST(List, Sort) {
+  // If
+  List<Int> l = {7, 3, 1, 1, 5};
+
+  // When
+  l.Sort();
+}
+
+}  // namespace mamba::builtins::test
