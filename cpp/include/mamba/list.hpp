@@ -447,25 +447,38 @@ class List {
   }
 
   /// @brief Sorts the list in-place, with the order of equal-comparing
-  /// elements guaranteed to be preserved.
-  /// @code sort(list, key, reverse)
-  template <concepts::LessThanComparable U = T>
-  void Sort(std::optional<std::function<U(const T& t)>> key = std::nullopt,
-            types::Bool reverse = false) {
+  /// elements guaranteed to be preserved. Each element is compared using
+  /// the less-than operator.
+  /// @code sort(list, reverse)
+  void Sort(types::Bool reverse = false) {
     if (data_->v.empty()) {
       return;
     }
 
-    if (key) {
-      std::sort(
-          data_->v.begin(), data_->v.end(),
-          [&key](const auto a, const auto b) { return (*key)(a) < (*key)(b); });
-
-    } else {
-      std::sort(data_->v.begin(), data_->v.end());
-    }
+    std::sort(data_->v.begin(), data_->v.end());
 
     if (reverse) {
+      // TODO: Fix so that it doesn't reverse items that sort the same
+      std::reverse(data_->v.begin(), data_->v.end());
+    }
+  }
+
+  /// @brief Sorts the list in-place, with the order of equal-comparing
+  /// elements guaranteed to be preserved. Every element is transformed via
+  /// @p key before it is compared using the less-than operator.
+  /// @code sort(list, key, reverse)
+  template <concepts::LessThanComparable U = T>
+  void Sort(std::function<U(const T& t)> key, types::Bool reverse = false) {
+    // TODO: Maybe use std::invocable<> instead of std::function<>
+    if (data_->v.empty()) {
+      return;
+    }
+
+    std::sort(data_->v.begin(), data_->v.end(),
+              [&key](const auto a, const auto b) { return key(a) < key(b); });
+
+    if (reverse) {
+      // TODO: Fix so that it doesn't reverse items that sort the same
       std::reverse(data_->v.begin(), data_->v.end());
     }
   }

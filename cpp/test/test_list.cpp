@@ -1312,6 +1312,27 @@ TEST(List, Sort) {
 
   // When
   l.Sort();
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, SortReverse) {
+  // If
+  List<Int> l = {7, 3, 1, 1, 5};
+
+  // When
+  l.Sort(true);
+
+  // Then
+  const auto actual = as_vector(l);
+  // TODO: Fix so that it doesn't reverse items that sort the same
+  const std::vector<Int> expected = {7, 5, 3, 1, 1};
+
+  EXPECT_EQ(actual, expected);
 }
 
 }  // namespace mamba::builtins::test
