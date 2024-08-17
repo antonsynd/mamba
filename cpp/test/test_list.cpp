@@ -63,6 +63,20 @@ TEST(List, InitializerListConstructor) {
   EXPECT_EQ(actual, expected);
 }
 
+// TEST(List, IterableConstructor) {
+//   // If/when
+//   List<Int> source = {1, 3, 5, 7};
+//   const List<Int> l{source.Iter()};
+
+//   // Then
+//   ASSERT_EQ(Len(l), 4);
+
+//   const auto actual = as_vector(l);
+//   const std::vector<Int> expected = {1, 3, 5, 7};
+
+//   EXPECT_EQ(actual, expected);
+// }
+
 TEST(List, AppendOneElement) {
   // If
   List<Int> l = {1, 3, 5, 7};

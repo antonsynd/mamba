@@ -64,14 +64,25 @@ class List {
   /// @code list(Iterable)
   template <typename I>
     requires concepts::TypedIterable<I, T>
-  explicit List(const I& it) : data_(new Data()) {}
+  explicit List(I& iterable) : data_(new Data()) {
+    bool no_stop_iteration = true;
+    auto it = iterable.Iter();
+
+    while (no_stop_iteration) {
+      try {
+        Append(Next(it));
+      } catch (StopIteration) {
+        no_stop_iteration = false;
+        break;
+      }
+    }
+  }
 
   /// @brief Creates a list with the provided variadic arguments.
   /// @code list(...)
   template <typename... Args>
-  List(T elem, Args... rest) : data_(new Data()) {
-    Append(elem);
-    Append(rest...);
+  List(Args... rest) : data_(new Data()) {
+    (Append(std::forward<Args>(rest)), ...);
   }
 
   /// @brief Creates a list from an initializer list (list literal).
@@ -97,11 +108,8 @@ class List {
   /// @brief Appends @p elem and @p rest to the end of the list.
   /// @code list.append(...)
   template <typename... Args>
-  void Append(T elem, Args... rest) {
-    static_assert((std::is_same_v<T, Args> && ...),
-                  "All elements must be of the same type.");
-    Append(elem);
-    Append(rest...);
+  void Append(Args... rest) {
+    (Append(std::forward<Args>(rest)), ...);
   }
 
   /// @brief Returns whether @p elem is in the list. O(n).
@@ -791,6 +799,7 @@ class ListIterator : public Iterator<T> {
  public:
   using value = T;
   using iterator = List<value>::iterator;
+  using const_iterator = List<value>::const_iterator;
 
  private:
   struct Data {
@@ -823,8 +832,13 @@ class ListIterator : public Iterator<T> {
     return *data_->it++;
   }
 
+  // Native support for C++ for..each loops
   iterator begin() { return data_->it; }
   iterator end() { return data_->end; }
+  const_iterator begin() const { return data_->it; }
+  const_iterator end() const { return data_->end; }
+  const_iterator cbegin() const { return data_->it; }
+  const_iterator cend() const { return data_->end; }
 };
 
 }  // namespace details
