@@ -105,7 +105,7 @@ class List {
   /// @code list.append(elem)
   void Append(T elem) { data_->v.emplace_back(elem); }
 
-  /// @brief Appends @p elem and @p rest to the end of the list.
+  /// @brief Appends variadic args @p rest to the end of the list.
   /// @code list.append(...)
   template <typename... Args>
   void Append(Args... rest) {
