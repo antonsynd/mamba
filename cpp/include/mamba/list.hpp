@@ -26,6 +26,11 @@ namespace details {
 template <concepts::Entity T>
 class ListIterator;
 
+template <typename F, typename K>
+concept ListSortKey = requires(const F& key_func, const K& k) {
+  { key_func(k) } -> concepts::LessThanComparable;
+};
+
 }  // namespace details
 
 template <typename T>
@@ -58,7 +63,7 @@ class List {
   /// are copied.
   /// @code list(Iterable)
   template <typename I>
-    requires concepts::Iterable<I>
+    requires concepts::TypedIterable<I, T>
   explicit List(const I& it) : data_(new Data()) {}
 
   /// @brief Creates a list with the provided variadic arguments.
@@ -467,9 +472,9 @@ class List {
   /// elements guaranteed to be preserved. Every element is transformed via
   /// @p key before it is compared using the less-than operator.
   /// @code sort(list, key, reverse)
-  template <concepts::LessThanComparable U = T>
-  void Sort(std::function<U(const T& t)> key, types::Bool reverse = false) {
-    // TODO: Maybe use std::invocable<> instead of std::function<>
+  template <typename K>
+    requires details::ListSortKey<K, T>
+  void Sort(const K& key, types::Bool reverse = false) {
     if (data_->v.empty()) {
       return;
     }
@@ -790,20 +795,21 @@ class ListIterator : public Iterator<T> {
  private:
   struct Data {
    public:
-    iterator it;
-    iterator end;
+    Data(iterator it, iterator end) : it(std::move(it)), end(std::move(end)) {}
 
     bool operator==(const Data& other) const {
       return it == other.it && end == other.end;
     }
+
+    iterator it;
+    iterator end;
   };
 
   std::shared_ptr<Data> data_;
 
  public:
   ListIterator(iterator it, iterator end)
-      : data_(
-            std::make_shared<Data>(it_(std::move(it)), end_(std::move(end)))) {}
+      : data_(std::make_shared<Data>(std::move(it), std::move(end))) {}
 
   ~ListIterator() override = default;
 

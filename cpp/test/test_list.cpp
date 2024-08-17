@@ -1335,4 +1335,42 @@ TEST(List, SortReverse) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, SortWithKey) {
+  // If
+  List<Int> l = {7, 3, 1, 1, 5};
+
+  // This effectively inverts the sort
+  const auto key = [](const Int i) -> Float {
+    return 1.0 / static_cast<Float>(i);
+  };
+
+  // When
+  l.Sort(key);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {7, 5, 3, 1, 1};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, SortWithKeyAndReverse) {
+  // If
+  List<Int> l = {7, 3, 1, 1, 5};
+
+  // This effectively inverts the sort, but the reverse reverses it again
+  const auto key = [](const Int i) -> Float {
+    return 1.0 / static_cast<Float>(i);
+  };
+
+  // When
+  l.Sort(key, true);
+
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
 }  // namespace mamba::builtins::test
