@@ -24,4 +24,10 @@ chiri pkg release
 
 | Feature | Supported? | Notes |
 | --- | --- | --- |
-| TODO | TODO | TODO |
+| `dict[K, V]` | TODO | All keys must be of the same type `K` and all values must be of type `V` |
+| `float` | `Yes` | N/A |
+| `int` | `Yes` | N/A |
+| `list[T]` | `Yes` | All elements must be of the same type `T` |
+| `set[T]` | TODO | All elements must be of the same type `T` |
+| `str` | TODO | N/A |
+| `tuple[...]` | TODO | N/A |
