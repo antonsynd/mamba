@@ -46,28 +46,6 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   static constexpr auto kEndIndex = std::numeric_limits<types::Int>::min();
 
-  /// @brief Returns the representation of the list.
-  /// @code `repr(list)`
-  types::Str Repr() const {
-    std::ostringstream oss;
-
-    oss << "[";
-
-    if (!v_.empty()) {
-      const auto last = v_.size() - 1;
-
-      for (size_t i = 0; i < last; ++i) {
-        oss << builtins::Repr(v_[i]) << ", ";
-      }
-
-      oss << builtins::Repr(v_[last]);
-    }
-
-    oss << "]";
-
-    return oss.str();
-  }
-
   /// @brief Creates an empty list.
   /// @code list()
   List() {}
@@ -570,6 +548,28 @@ class List : public std::enable_shared_from_this<List<T>> {
       }
 
       oss << builtins::AsStr(v_[last]);
+    }
+
+    oss << "]";
+
+    return oss.str();
+  }
+
+  /// @brief Returns the representation of the list.
+  /// @code `repr(list)`
+  types::Str Repr() const {
+    std::ostringstream oss;
+
+    oss << "[";
+
+    if (!v_.empty()) {
+      const auto last = v_.size() - 1;
+
+      for (size_t i = 0; i < last; ++i) {
+        oss << builtins::Repr(v_[i]) << ", ";
+      }
+
+      oss << builtins::Repr(v_[last]);
     }
 
     oss << "]";
