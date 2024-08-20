@@ -6,6 +6,7 @@
 
 #include "mamba/concepts/entity.hpp"
 #include "mamba/concepts/utils.hpp"
+#include "mamba/memory/handle.hpp"
 
 namespace mamba::builtins {
 
@@ -16,15 +17,15 @@ class Iterator {
 
   virtual ~Iterator() = default;
 
-  virtual Iterator<T> Iter() { return *this; };
-  virtual T Next() { throw StopIteration("end of iterator"); };
+  virtual memory::Handle<Iterator<T>> Iter() = 0;
+  virtual T Next() = 0;
 };
 
 namespace concepts {
 
 template <typename T, typename U>
 concept TypedIterable = requires(T iterable) {
-  { iterable.Iter() } -> std::same_as<Iterator<U>>;
+  { iterable.Iter() } -> std::same_as<memory::Handle<Iterator<U>>>;
 };
 
 template <typename T>
@@ -38,13 +39,13 @@ T Next(Iterator<T>& it) {
 }
 
 template <concepts::Entity T>
-Iterator<T> Iter(Iterator<T>& it) {
+memory::Handle<Iterator<T>> Iter(Iterator<T>& it) {
   // Return a copy
   return it;
 }
 
 template <concepts::Iterable T>
-Iterator<typename T::value> Iter(T& it) {
+memory::Handle<Iterator<typename T::value>> Iter(T& it) {
   return it.Iter();
 }
 

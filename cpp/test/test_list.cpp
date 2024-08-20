@@ -1,5 +1,6 @@
 #include <stddef.h>  // for size_t
 
+#include <memory>  // for shared_ptr
 #include <string>  // for basic_string
 #include <vector>  // for vector
 
@@ -161,11 +162,11 @@ TEST(List, CopyEmpty) {
 
   // When
   auto copy = l.Copy();
-  copy.Append(5);
+  copy->Append(5);
 
   // Then
-  EXPECT_NE(&l, &copy);
-  EXPECT_NE(Len(l), Len(copy));
+  EXPECT_NE(&l, copy.get());
+  EXPECT_NE(Len(l), Len(*copy));
 }
 
 TEST(List, CopyNonEmpty) {
@@ -174,14 +175,14 @@ TEST(List, CopyNonEmpty) {
 
   // When
   auto copy = l.Copy();
-  copy.Append(9);
+  copy->Append(9);
 
   // Then
   const auto actual_l_items = as_vector(l);
   const std::vector<Int> expected_l_items = {1, 3, 5, 7};
   EXPECT_EQ(actual_l_items, expected_l_items);
 
-  const auto actual_copy_items = as_vector(copy);
+  const auto actual_copy_items = as_vector(*copy);
   const std::vector<Int> expected_copy_items = {1, 3, 5, 7, 9};
   EXPECT_EQ(actual_copy_items, expected_copy_items);
 }
