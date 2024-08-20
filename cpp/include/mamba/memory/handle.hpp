@@ -3,10 +3,11 @@
 #include <memory>
 
 #include "mamba/concepts/object.hpp"
-#include "mamba/concepts/value.hpp"
 
 namespace mamba::builtins::memory {
 
+// Simple alias without constraints. Adding concepts::Object here makes it
+// impossible to evaluate T because it is not a complete type at this point
 template <typename T>
 using Handle = std::shared_ptr<T>;
 

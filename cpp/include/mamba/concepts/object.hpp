@@ -22,7 +22,7 @@ concept EquatableObject = Object<T> && requires(const T t) {
 
 template <typename T>
 concept GreaterThanComparableObject = Object<T> && requires(const T t) {
-  { t.Lt(t) } -> std::same_as<types::Bool>;
+  { t.Gt(t) } -> std::same_as<types::Bool>;
 };
 
 template <typename T>

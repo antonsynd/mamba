@@ -24,7 +24,7 @@ concept EquatableValue = Value<T> && requires(const T t) {
 
 template <typename T>
 concept GreaterThanComparableValue = Value<T> && requires(const T t) {
-  { t < t } -> std::same_as<bool>;
+  { t > t } -> std::same_as<bool>;
 };
 
 template <typename T>

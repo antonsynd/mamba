@@ -24,8 +24,8 @@ class Iterator {
 namespace concepts {
 
 template <typename T, typename U>
-concept TypedIterable = requires(T iterable) {
-  { iterable.Iter() } -> std::same_as<memory::Handle<Iterator<U>>>;
+concept TypedIterable = requires(T* iterable) {
+  { iterable->Iter() } -> std::same_as<memory::Handle<Iterator<U>>>;
 };
 
 template <typename T>
