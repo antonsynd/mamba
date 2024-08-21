@@ -21,7 +21,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
   using const_reference = const value&;
 
   /// @brief Creates an empty dict.
-  /// @code `dict()`
+  /// @code dict()
   Dict() {}
 
   template <concepts::Mapping T>
@@ -73,6 +73,8 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   // Iter()
 
+  /// @brief Clears the elements of the dict.
+  /// @code dict.clear()
   void Clear() { m_.clear(); }
 
   /// @brief Creates a shallow copy of the dict.
@@ -83,7 +85,15 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   // static FromKeys();
 
-  // Get(key, default)
+  mapped_type Get(const K& key, V default_value) {
+    auto it = m_.find(key);
+
+    if (it == m_.end()) {
+      return default_value;
+    }
+
+    return it->second;
+  }
 
   // Items()
 
@@ -95,12 +105,67 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   // SetDefault(key, default)
 
-  // Update(other)
+  void Update(const Dict<K, V>& other) {
+    //
+  }
 
   // Values()
 
-  // operator|(other)
-  // operator|=(other)
+  memory::Handle<Dict<K, V>> operator|(const Dict<K, V>& other) const {
+    auto res = memory::Init<Dict<K, V>>(*this);
+    res.Update(other);
+    return res;
+  }
+
+  void operator|=(const Dict<K, V>& other) { Update(other); }
+
+  /// @brief Returns the string representation of the dict.
+  /// @code str(dict)
+  types::Str AsStr() const {
+    std::ostringstream oss;
+
+    oss << "{";
+
+    if (!m_.empty()) {
+      const auto last = v_.size() - 1;
+      auto it = v_.begin();
+
+      for (size_t i = 0; i < last; ++i, ++it) {
+        oss << builtins::AsStr(it->first) << ": " << builtins::AsStr(it->second)
+            << ", ";
+      }
+
+      oss << builtins::AsStr(it->first) << ": " << builtins::AsStr(it->second);
+    }
+
+    oss << "}";
+
+    return oss.str();
+  }
+
+  /// @brief Returns the representation of the dict.
+  /// @code repr(dict)
+  types::Str Repr() const {
+    std::ostringstream oss;
+
+    oss << "{";
+
+    if (!m_.empty()) {
+      const auto last = v_.size() - 1;
+      auto it = v_.begin();
+
+      for (size_t i = 0; i < last; ++i, ++it) {
+        oss << builtins::AsStr(it->first) << ": " << builtins::AsStr(it->second)
+            << ", ";
+      }
+
+      oss << builtins::AsStr(it->first) << ": " << builtins::AsStr(it->second);
+    }
+
+    oss << "}";
+
+    return oss.str();
+  }
 
  private:
   std::unordered_map<K, V> m_;

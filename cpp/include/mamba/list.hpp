@@ -55,7 +55,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// are copied.
   /// @code list(Iterable)
   template <typename I>
-    requires concepts::TypedIterable<I, T>
+    requires concepts::TypedIterable<I, value>
   explicit List(I& iterable) {
     bool no_stop_iteration = true;
     auto it = iterable.Iter();
@@ -79,7 +79,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Creates a list from an initializer list (list literal).
   /// @code [...]
-  List(std::initializer_list<T> elements) {
+  List(std::initializer_list<value> elements) {
     v_.reserve(elements.size());
 
     std::copy(elements.begin(), elements.end(), std::back_inserter(v_));
@@ -89,13 +89,13 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// methods.
   /// @code List.__init__()
   template <typename... Args>
-  static memory::Handle<List<T>> Init(Args&&... args) {
-    return memory::Init<List<T>>(std::forward<Args>(args)...);
+  static memory::Handle<List<value>> Init(Args&&... args) {
+    return memory::Init<List<value>>(std::forward<Args>(args)...);
   }
 
   /// @brief Appends @p elem to the end of the list.
   /// @code list.append(elem)
-  void Append(T elem) { v_.emplace_back(elem); }
+  void Append(value elem) { v_.emplace_back(elem); }
 
   /// @brief Appends variadic args @p rest to the end of the list.
   /// @code list.append(...)
@@ -106,7 +106,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns whether @p elem is in the list. O(n).
   /// @code elem in list
-  types::Bool In(T elem) const {
+  types::Bool In(value elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 
@@ -116,15 +116,15 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Creates a shallow copy of the list.
   /// @code list.copy()
-  memory::Handle<List<T>> Copy() const {
+  memory::Handle<List<value>> Copy() const {
     // Invoke copy constructor
-    return memory::Init<List<T>>(*this);
+    return Init(*this);
   }
 
   /// @brief Extends this list with the elements of @p other.
   /// @todo Fix to not assume list
   /// @code list.extend(Iterable)
-  void Extend(const List<T>& other) {
+  void Extend(const List<value>& other) {
     v_.reserve(v_.size() + other.v_.size());
 
     std::copy(other.v_.cbegin(), other.v_.cend(), std::back_inserter(v_));
@@ -132,31 +132,31 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Extends this list with the elements of @p other.
   /// @code list += other
-  void operator+=(const List<T>& other) { this->Extend(other); }
+  void operator+=(const List<value>& other) { this->Extend(other); }
 
   /// @brief Concatenates this list with @p other.
   /// @code list + other
-  List<T> operator+(const List<T>& other) const {
-    List<T> res = *this;
+  memory::Handle<List<value>> operator+(const List<value>& other) const {
+    auto res = Init(*this);
 
-    res.Extend(other);
+    res->Extend(other);
 
     return res;
   }
 
   /// @brief Returns a copy of this list with its elements repeated @p i times.
   /// @code list * i
-  List<T> operator*(types::Int i) const {
-    List<T> res;
+  memory::Handle<List<value>> operator*(types::Int i) const {
+    auto res = Init();
 
     if (i <= 0) {
       return res;
     }
 
-    res.v_.reserve(v_.size() * i);
+    res->v_.reserve(v_.size() * i);
 
     for (; i > 0; --i) {
-      res.Extend(*this);
+      res->Extend(*this);
     }
 
     return res;
@@ -234,9 +234,9 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns the number of times @p elem is present in the list.
   /// @code list.count(x)
-  types::Int Count(T elem) const {
+  types::Int Count(value elem) const {
     return std::count_if(v_.cbegin(), v_.cend(),
-                         [elem](T val) { return val == elem; });
+                         [elem](value val) { return val == elem; });
   }
 
   /// @brief Returns the elements in the list such that the elements' indices
@@ -245,10 +245,10 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// If @p step is negative, then the returned list is empty. If @p step is
   /// 0, then this throws ValueError.
   /// @code list[i:j:k]
-  List<T> Slice(types::Int start = 0,
-                types::Int end = kEndIndex,
-                types::Int step = 1) const {
-    List<T> res;
+  memory::Handle<List<value>> Slice(types::Int start = 0,
+                                    types::Int end = kEndIndex,
+                                    types::Int step = 1) const {
+    auto res = Init();
 
     auto slice_params_opt = TryGetNormalizedSliceParams(start, end, step);
 
@@ -262,20 +262,20 @@ class List : public std::enable_shared_from_this<List<T>> {
 
     // Simple range copy
     if (size_t_step == 1) {
-      res.v_.reserve(size_t_end - size_t_start);
+      res->v_.reserve(size_t_end - size_t_start);
 
       // Need to recalculate in case reserve() invalidated the pre-calculated
       // iterators
       const auto start_it = v_.begin() + size_t_start;
       const auto end_it = v_.begin() + size_t_end;
 
-      std::copy(start_it, end_it, std::back_inserter(res.v_));
+      std::copy(start_it, end_it, std::back_inserter(res->v_));
 
       return res;
     }
 
     // Stepped range copy
-    res.v_.reserve(
+    res->v_.reserve(
         GetNumberOfElementsInSlice(size_t_start, size_t_end, size_t_step));
 
     // Need to recalculate in case reserve() invalidated the pre-calculated
@@ -285,7 +285,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
     size_t i = 0;
 
-    std::copy_if(start_it, end_it, std::back_inserter(res.v_),
+    std::copy_if(start_it, end_it, std::back_inserter(res->v_),
                  [&i, size_t_step](const auto) -> bool {
                    return i++ % size_t_step == 0;
                  });
@@ -294,9 +294,9 @@ class List : public std::enable_shared_from_this<List<T>> {
   }
 
 #if __cplusplus >= 202302L
-  List<T> operator[](types::Int start = 0,
-                     types::Int end = kEndIndex,
-                     types::Int step = 1) const {
+  memory::Handle<List<value>> operator[](types::Int start = 0,
+                                         types::Int end = kEndIndex,
+                                         types::Int step = 1) const {
     return Slice(start, end, step);
   }
 #endif  // __cplusplus >= 202302L
@@ -334,7 +334,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// is not 1, then the length of @p other must be equal to the length of the
   /// slice, otherwise a ValueError will be thrown.
   /// @code list[i:j:k] = other
-  void ReplaceSlice(const List<T>& other,
+  void ReplaceSlice(const List<value>& other,
                     types::Int start = 0,
                     types::Int end = kEndIndex,
                     types::Int step = 1) {
@@ -357,7 +357,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// If @p start is negative, it is clamped to 0. If @p start is greater than
   /// the last index in the list, then it throws ValueError.
   /// @code list.index(i, (j))
-  types::Int Index(T elem, types::Int start = 0) const {
+  types::Int Index(value elem, types::Int start = 0) const {
     return Index(elem, start, v_.size());
   }
 
@@ -368,7 +368,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// then it throws ValueError. If @p end is greater than the last index in
   /// the list, it is clamped to the length of the list.
   /// @code list.index(i, j, k)
-  types::Int Index(T elem, types::Int start, types::Int end) const {
+  types::Int Index(value elem, types::Int start, types::Int end) const {
     end = ClampIndex(end);
 
     for (types::Int idx = ClampIndex(start); idx < end; ++idx) {
@@ -384,7 +384,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// any element at that position to the right. @p idx is clamped to the
   /// length of the list.
   /// @code list.insert(idx, x)
-  void Insert(types::Int idx, T elem) {
+  void Insert(types::Int idx, value elem) {
     const auto size_t_idx = NormalizeOrClampIndex(idx);
 
     if (size_t_idx == v_.size()) {
@@ -424,7 +424,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// are shifted to make the list contiguous. If the list is empty or
   /// @p elem does not occur in the list, throws ValueError.
   /// @code list.remove(elem)
-  void Remove(const T& elem) {
+  void Remove(const value& elem) {
     if (v_.empty()) {
       throw ValueError("List.Remove(x): x not in list");
     }
@@ -470,7 +470,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @p key before it is compared using the less-than operator.
   /// @code sort(list, key, reverse)
   template <typename K>
-    requires details::ListSortKey<K, T>
+    requires details::ListSortKey<K, value>
   void Sort(const K& key, types::Bool reverse = false) {
     if (v_.empty()) {
       return;
@@ -487,8 +487,8 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
-  memory::Handle<Iterator<T>> Iter() {
-    return memory::Init<details::ListIterator<T>>(v_.begin(), v_.end());
+  memory::Handle<Iterator<value>> Iter() {
+    return details::ListIterator<value>::Init(v_.begin(), v_.end());
   }
 
   /// @brief Native support for C++ for..in loops.
@@ -518,7 +518,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// false otherwise.
   /// @code list == other
   template <>
-  types::Bool Eq(const List<T>& other) const {
+  types::Bool Eq(const List<value>& other) const {
     return v_ == other.v_;
   }
 
@@ -534,7 +534,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   }
 
   /// @brief Returns the string representation of the list.
-  /// @code `str(list)`
+  /// @code str(list)
   types::Str AsStr() const {
     std::ostringstream oss;
 
@@ -556,7 +556,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   }
 
   /// @brief Returns the representation of the list.
-  /// @code `repr(list)`
+  /// @code repr(list)
   types::Str Repr() const {
     std::ostringstream oss;
 
@@ -691,7 +691,7 @@ class List : public std::enable_shared_from_this<List<T>> {
         GetIterator(size_t_start), GetIterator(size_t_end)};
   }
 
-  void ReplaceSliceSingleStep(const List<T>& other,
+  void ReplaceSliceSingleStep(const List<value>& other,
                               SliceParams<iterator> slice_params) {
     const auto start_it = std::move(slice_params.start_it);
     const auto start = slice_params.start;
@@ -712,7 +712,7 @@ class List : public std::enable_shared_from_this<List<T>> {
     }
   }
 
-  void ReplaceSliceSingleStepExpanding(const List<T>& other,
+  void ReplaceSliceSingleStepExpanding(const List<value>& other,
                                        size_t start,
                                        size_t num_old_elems,
                                        size_t num_new_elems) {
@@ -731,7 +731,7 @@ class List : public std::enable_shared_from_this<List<T>> {
     std::copy(other.v_.begin(), other.v_.end(), start_it);
   }
 
-  void ReplaceSliceSingleStepReducing(const List<T>& other,
+  void ReplaceSliceSingleStepReducing(const List<value>& other,
                                       iterator start_it,
                                       size_t num_old_elems,
                                       size_t num_new_elems) {
@@ -745,7 +745,7 @@ class List : public std::enable_shared_from_this<List<T>> {
     v_.erase(start_it, end_it);
   }
 
-  void ReplaceSliceMultiStep(const List<T>& other,
+  void ReplaceSliceMultiStep(const List<value>& other,
                              SliceParams<iterator> slice_params) {
     const auto [start, end, step, start_it, end_it] = std::move(slice_params);
     const auto num_old_elems = GetNumberOfElementsInSlice(start, end, step);
@@ -776,7 +776,7 @@ class List : public std::enable_shared_from_this<List<T>> {
                   });
   }
 
-  std::vector<T> v_;
+  std::vector<value> v_;
 };
 
 namespace details {
@@ -794,8 +794,17 @@ class ListIterator : public Iterator<T>,
 
   ~ListIterator() override = default;
 
+  /// @brief Generic constructor forwarding arguments to actual constructor
+  /// methods.
+  /// @code ListIterator.__init__()
+  template <typename... Args>
+  static memory::Handle<ListIterator<value>> Init(Args&&... args) {
+    return memory::Init<ListIterator<value>>(std::forward<Args>(args)...);
+  }
+
   memory::Handle<Iterator<value>> Iter() override {
-    return std::enable_shared_from_this<ListIterator<T>>::shared_from_this();
+    return std::enable_shared_from_this<
+        ListIterator<value>>::shared_from_this();
   }
 
   value Next() override {
