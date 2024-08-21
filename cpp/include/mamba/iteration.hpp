@@ -38,12 +38,6 @@ T Next(Iterator<T>& it) {
   return it.Next();
 }
 
-template <concepts::Entity T>
-memory::Handle<Iterator<T>> Iter(Iterator<T>& it) {
-  // Return a copy
-  return it;
-}
-
 template <concepts::Iterable T>
 memory::Handle<Iterator<typename T::value>> Iter(T& it) {
   return it.Iter();
