@@ -117,9 +117,8 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @brief Creates a shallow copy of the list.
   /// @code list.copy()
   memory::Handle<List<T>> Copy() const {
-    auto res = memory::Init<List<T>>();
-    res->v_ = v_;
-    return res;
+    // Invoke copy constructor
+    return memory::Init<List<T>>(*this);
   }
 
   /// @brief Extends this list with the elements of @p other.

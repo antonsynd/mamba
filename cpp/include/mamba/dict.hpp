@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <optional>
 #include <unordered_map>
 
@@ -11,7 +12,7 @@
 namespace mamba::builtins {
 
 template <concepts::Entity K, concepts::Entity V>
-class Dict {
+class Dict : public std::enable_shared_from_this<Dict<K, V>> {
  public:
   using key_type = K;
   using mapped_type = V;
@@ -74,7 +75,11 @@ class Dict {
 
   void Clear() { m_.clear(); }
 
-  // Copy()
+  /// @brief Creates a shallow copy of the dict.
+  /// @code dict.copy()
+  memory::Handle<Dict<K, V>> Copy() const {
+    return memory::Init<Dict<K, V>>(*this);
+  }
 
   // static FromKeys();
 
