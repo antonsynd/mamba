@@ -16,7 +16,10 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
  public:
   using key_type = K;
   using mapped_type = V;
+  using self = Dict<key_type, mapped_type>;
+  using handle = memory::Handle<self>;
   using value_type = std::pair<const key_type, mapped_type>;
+  using storage = std::unordered_map<key_type, mapped_type>;
   using reference = value_type&;
   using const_reference = const value&;
 
@@ -31,11 +34,11 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
   /// class dict(mapping, **kwargs)
   /// class dict(iterable, **kwargs)
 
-  List<K> AsList() {}
+  List<key_type> AsList() {}
 
   types::Int Len() const { return m_.size(); }
 
-  mapped_type& operator[](const K& key) {
+  mapped_type& operator[](const key_type& key) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -46,7 +49,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return it->second;
   }
 
-  const mapped_type& operator[](const K& key) const {
+  const mapped_type& operator[](const key_type& key) const {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -58,9 +61,9 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
   }
 
   // TODO: make generic access, if K is Handle, then const K&, else K
-  virtual mapped_type Missing(const K& key) { throw ValueError(""); }
+  virtual mapped_type Missing(const key_type& key) { throw ValueError(""); }
 
-  void DeleteKey(const K& key) {
+  void DeleteKey(const key_type& key) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -69,7 +72,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     }
   }
 
-  types::Bool In(K key) const {}
+  types::Bool In(key_type key) const {}
 
   // Iter()
 
@@ -79,8 +82,8 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   /// @brief Creates a shallow copy of the dict.
   /// @code dict.copy()
-  memory::Handle<Dict<K, V>> Copy() const {
-    return memory::Init<Dict<K, V>>(*this);
+  memory::Handle<Dict<key_type, mapped_type>> Copy() const {
+    return memory::Init<Dict<key_type, mapped_type>>(*this);
   }
 
   // static FromKeys();
@@ -168,7 +171,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
   }
 
  private:
-  std::unordered_map<K, V> m_;
+  storage m_;
 };
 
 namespace details {
