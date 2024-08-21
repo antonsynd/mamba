@@ -18,6 +18,7 @@
 #include "mamba/error.hpp"
 #include "mamba/iteration.hpp"
 #include "mamba/memory/handle.hpp"
+#include "mamba/types/int.hpp"
 #include "mamba/types/str.hpp"
 
 namespace mamba::builtins {
