@@ -18,6 +18,7 @@
 #include "mamba/error.hpp"
 #include "mamba/iteration.hpp"
 #include "mamba/memory/handle.hpp"
+#include "mamba/memory/utils.hpp"
 #include "mamba/templates/utils.hpp"
 #include "mamba/types/int.hpp"
 #include "mamba/types/str.hpp"
@@ -86,7 +87,13 @@ class List : public std::enable_shared_from_this<List<T>> {
   List(std::initializer_list<value> elements) {
     v_.reserve(elements.size());
 
-    std::copy(elements.begin(), elements.end(), std::back_inserter(v_));
+    if constexpr (concepts::Handle<value>) {
+      std::copy(std::make_move_iterator(elements.begin()),
+                std::make_move_iterator(elements.end()),
+                std::back_inserter(v_));
+    } else {
+      std::copy(elements.begin(), elements.end(), std::back_inserter(v_));
+    }
   }
 
   /// @brief Generic constructor forwarding arguments to actual constructor
@@ -99,7 +106,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Appends @p elem to the end of the list.
   /// @code list.append(elem)
-  void Append(value elem) { v_.emplace_back(elem); }
+  void Append(templates::ReadOnly<value> elem) { v_.emplace_back(elem); }
 
   /// @brief Appends variadic args @p rest to the end of the list.
   /// @code list.append(...)
@@ -110,7 +117,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns whether @p elem is in the list. O(n).
   /// @code elem in list
-  types::Bool In(value elem) const {
+  types::Bool In(templates::ReadOnly<value> elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 
@@ -238,9 +245,10 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns the number of times @p elem is present in the list.
   /// @code list.count(x)
-  types::Int Count(value elem) const {
-    return std::count_if(v_.cbegin(), v_.cend(),
-                         [elem](value val) { return val == elem; });
+  types::Int Count(templates::ReadOnly<value> elem) const {
+    return std::count_if(
+        v_.cbegin(), v_.cend(),
+        [elem](templates::ReadOnly<value> val) { return val == elem; });
   }
 
   /// @brief Returns the elements in the list such that the elements' indices
@@ -361,7 +369,8 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// If @p start is negative, it is clamped to 0. If @p start is greater than
   /// the last index in the list, then it throws ValueError.
   /// @code list.index(i, (j))
-  types::Int Index(value elem, types::Int start = 0) const {
+  types::Int Index(templates::ReadOnly<value> elem,
+                   types::Int start = 0) const {
     return Index(elem, start, v_.size());
   }
 
@@ -372,7 +381,9 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// then it throws ValueError. If @p end is greater than the last index in
   /// the list, it is clamped to the length of the list.
   /// @code list.index(i, j, k)
-  types::Int Index(value elem, types::Int start, types::Int end) const {
+  types::Int Index(templates::ReadOnly<value> elem,
+                   types::Int start,
+                   types::Int end) const {
     end = ClampIndex(end);
 
     for (types::Int idx = ClampIndex(start); idx < end; ++idx) {
@@ -395,7 +406,7 @@ class List : public std::enable_shared_from_this<List<T>> {
       v_.emplace_back(elem);
     } else {
       const auto it = GetIterator(size_t_idx);
-      v_.insert(it, elem);
+      v_.insert(it, memory::own(elem));
     }
   }
 
@@ -428,7 +439,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// are shifted to make the list contiguous. If the list is empty or
   /// @p elem does not occur in the list, throws ValueError.
   /// @code list.remove(elem)
-  void Remove(value elem) {
+  void Remove(templates::ReadOnly<value> elem) {
     if (v_.empty()) {
       throw ValueError("List.Remove(x): x not in list");
     }

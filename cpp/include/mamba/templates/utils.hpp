@@ -7,9 +7,15 @@
 namespace mamba::builtins::templates {
 
 template <concepts::Entity T>
-using Lvalue =
+using ReadOnly =
     std::conditional_t<concepts::Handle<T>,
-                       const memory::Handle<T::element_type>&,
+                       const T&,
+                       std::conditional_t<concepts::Value<T>, T, void>>;
+
+template <concepts::Entity T>
+using Owned =
+    std::conditional_t<concepts::Handle<T>,
+                       T&&,
                        std::conditional_t<concepts::Value<T>, T, void>>;
 
 }  // namespace mamba::builtins::templates
