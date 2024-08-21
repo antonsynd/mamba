@@ -6,6 +6,8 @@
 
 namespace mamba::builtins::concepts {
 
+/// @brief A type that can be converted to a Str. For generic programming
+/// with AsStr().
 template <typename T>
 concept StrConvertible = requires(const T t) {
   { t.AsStr() } -> std::same_as<types::Str>;

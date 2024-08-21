@@ -10,6 +10,7 @@
 
 namespace mamba::builtins::concepts {
 
+/// @brief An object that has inherent methods, i.e. not a pure value type.
 template <typename T>
 concept Object = !Value<T> && requires(const T t) {
   { t.Repr() } -> std::same_as<types::Str>;

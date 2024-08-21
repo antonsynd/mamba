@@ -5,6 +5,8 @@
 
 namespace mamba::builtins::concepts {
 
+/// @brief Concept for all things that can be operated on and stored, e.g.
+/// handles of objects or pure values.
 template <typename T>
 concept Entity = Handle<T> || Value<T>;
 

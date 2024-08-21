@@ -8,6 +8,8 @@
 
 namespace mamba::builtins::concepts {
 
+/// @brief Concept for handles of objects. Used as a disjunct with Value
+/// types to form the Entity concept.
 template <typename T>
 concept Handle =
     HasElementType<T> && Object<typename T::element_type> && requires {

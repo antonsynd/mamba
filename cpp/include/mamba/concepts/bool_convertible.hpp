@@ -6,6 +6,8 @@
 
 namespace mamba::builtins::concepts {
 
+/// @brief A type that can be converted to a Bool. For generic programming
+/// with AsBool().
 template <typename T>
 concept BoolConvertible = requires(const T t) {
   { t.AsBool() } -> std::same_as<types::Bool>;

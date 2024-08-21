@@ -11,6 +11,8 @@ namespace mamba::builtins::memory {
 template <typename T>
 using Handle = std::shared_ptr<T>;
 
+/// @brief Instantiates an object of type @tparam T with @p args and returns
+/// a handle to the object.
 template <concepts::Object T, typename... Args>
 static Handle<T> Init(Args&&... args) {
   return std::make_shared<T>(std::forward<Args>(args)...);
