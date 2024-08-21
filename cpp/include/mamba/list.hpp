@@ -18,6 +18,7 @@
 #include "mamba/error.hpp"
 #include "mamba/iteration.hpp"
 #include "mamba/memory/handle.hpp"
+#include "mamba/templates/utils.hpp"
 #include "mamba/types/int.hpp"
 #include "mamba/types/str.hpp"
 
@@ -427,7 +428,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// are shifted to make the list contiguous. If the list is empty or
   /// @p elem does not occur in the list, throws ValueError.
   /// @code list.remove(elem)
-  void Remove(const value& elem) {
+  void Remove(value elem) {
     if (v_.empty()) {
       throw ValueError("List.Remove(x): x not in list");
     }
