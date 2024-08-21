@@ -31,7 +31,7 @@ template <concepts::Entity T>
 class ListIterator;
 
 template <typename F, typename K>
-concept ListSortKey = requires(const F& key_func, const K& k) {
+concept ListSortKey = requires(const F& key_func, templates::ReadOnly<K> k) {
   { key_func(k) } -> concepts::LessThanComparable;
 };
 
