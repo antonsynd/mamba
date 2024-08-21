@@ -42,8 +42,9 @@ class List : public std::enable_shared_from_this<List<T>> {
   using value = T;
   using reference = value&;
   using const_reference = const value&;
-  using iterator = std::vector<value>::iterator;
-  using const_iterator = std::vector<value>::const_iterator;
+  using storage = std::vector<value>;
+  using iterator = storage::iterator;
+  using const_iterator = storage::const_iterator;
 
   static constexpr auto kEndIndex = std::numeric_limits<types::Int>::min();
 
@@ -54,9 +55,9 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @brief Creates a list with the same elements as @p it. Value types
   /// are copied.
   /// @code list(Iterable)
-  template <typename I>
-    requires concepts::TypedIterable<I, value>
-  explicit List(I& iterable) {
+  template <typename It>
+    requires concepts::TypedIterable<It, value>
+  explicit List(It& iterable) {
     bool no_stop_iteration = true;
     auto it = iterable.Iter();
 
@@ -776,7 +777,7 @@ class List : public std::enable_shared_from_this<List<T>> {
                   });
   }
 
-  std::vector<value> v_;
+  storage v_;
 };
 
 namespace details {
