@@ -92,7 +92,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// methods.
   /// @code List.__init__()
   template <typename... Args>
-  static memory::Handle<self> Init(Args&&... args) {
+  static handle Init(Args&&... args) {
     return memory::Init<self>(std::forward<Args>(args)...);
   }
 

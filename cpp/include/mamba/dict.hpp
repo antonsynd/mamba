@@ -34,6 +34,14 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
   /// class dict(mapping, **kwargs)
   /// class dict(iterable, **kwargs)
 
+  /// @brief Generic constructor forwarding arguments to actual constructor
+  /// methods.
+  /// @code Dict.__init__()
+  template <typename... Args>
+  static handle Init(Args&&... args) {
+    return memory::Init<self>(std::forward<Args>(args)...);
+  }
+
   List<key_type> AsList() {}
 
   types::Int Len() const { return m_.size(); }
@@ -82,13 +90,11 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   /// @brief Creates a shallow copy of the dict.
   /// @code dict.copy()
-  memory::Handle<Dict<key_type, mapped_type>> Copy() const {
-    return memory::Init<Dict<key_type, mapped_type>>(*this);
-  }
+  handle Copy() const { return Init(*this); }
 
   // static FromKeys();
 
-  mapped_type Get(const K& key, V default_value) {
+  mapped_type Get(const key_type& key, mapped_type default_value) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -108,19 +114,19 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   // SetDefault(key, default)
 
-  void Update(const Dict<K, V>& other) {
+  void Update(const self& other) {
     //
   }
 
   // Values()
 
-  memory::Handle<Dict<K, V>> operator|(const Dict<K, V>& other) const {
-    auto res = memory::Init<Dict<K, V>>(*this);
+  handle operator|(const self& other) const {
+    auto res = Init(*this);
     res.Update(other);
     return res;
   }
 
-  void operator|=(const Dict<K, V>& other) { Update(other); }
+  void operator|=(const self& other) { Update(other); }
 
   /// @brief Returns the string representation of the dict.
   /// @code str(dict)
