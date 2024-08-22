@@ -40,6 +40,7 @@ template <typename T>
   requires concepts::LessThanComparable<T> && concepts::Entity<T>
 class List : public std::enable_shared_from_this<List<T>> {
  public:
+  using element = T;
   using value = T;
   using reference = value&;
   using const_reference = const value&;
@@ -132,8 +133,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   }
 
   /// @brief Extends this list with the elements of @p other.
-  /// @todo Fix to not assume list
-  /// @code list.extend(Iterable)
+  /// @code list.extend(list)
   void Extend(const self& other) {
     v_.reserve(v_.size() + other.v_.size());
 
@@ -471,11 +471,13 @@ class List : public std::enable_shared_from_this<List<T>> {
       return;
     }
 
-    std::sort(v_.begin(), v_.end());
-
     if (reverse) {
-      // TODO: Fix so that it doesn't reverse items that sort the same
-      std::reverse(v_.begin(), v_.end());
+      // We sort with the inverse of the comparison to make sure the sort
+      // is stable, rather than reverse the results afterwards
+      std::sort(v_.begin(), v_.end(),
+                [](const auto a, const auto b) { return !(a < b); });
+    } else {
+      std::sort(v_.begin(), v_.end());
     }
   }
 
@@ -491,12 +493,11 @@ class List : public std::enable_shared_from_this<List<T>> {
     }
 
     std::sort(v_.begin(), v_.end(),
-              [&key](const auto a, const auto b) { return key(a) < key(b); });
-
-    if (reverse) {
-      // TODO: Fix so that it doesn't reverse items that sort the same
-      std::reverse(v_.begin(), v_.end());
-    }
+              [&key, &reverse](const auto a, const auto b) {
+                // We use reverse to invert the comparison so that the sort
+                // is stable, rather than reverse the results afterwards
+                return reverse ^ (key(a) < key(b));
+              });
   }
 
   /// @brief Returns an iterator to this list.

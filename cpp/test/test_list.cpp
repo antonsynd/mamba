@@ -1,18 +1,23 @@
 #include <stddef.h>  // for size_t
 
-#include <memory>  // for shared_ptr
-#include <string>  // for basic_string
-#include <vector>  // for vector
+#include <memory>   // for shared_ptr, enable_shared_from_this
+#include <string>   // for basic_string
+#include <utility>  // for forward
+#include <vector>   // for vector
 
-#include "gtest/gtest.h"  // for Message, TestPartResult, AssertionRe...
+#include "gtest/gtest.h"  // for Test, Message, TestPartResult, TEST
 
-#include "mamba/conversion.hpp"  // for Bool, Repr, Str
-#include "mamba/error.hpp"       // for ValueError, IndexError
-#include "mamba/float.hpp"       // for Float
-#include "mamba/int.hpp"         // for Int
-#include "mamba/iteration.hpp"   // for Iter
-#include "mamba/list.hpp"        // for List
-#include "mamba/sequence.hpp"    // for Len, In, Max, Min
+#include "mamba/conversion.hpp"     // for AsBool, AsStr, Repr
+#include "mamba/error.hpp"          // for ValueError, IndexError
+#include "mamba/float.hpp"          // for Float
+#include "mamba/int.hpp"            // for Int, AsStr, Repr
+#include "mamba/iteration.hpp"      // for Iter, Iterator
+#include "mamba/list.hpp"           // for List
+#include "mamba/memory/handle.hpp"  // for Handle, Init
+#include "mamba/sequence.hpp"       // for Len, In, Max, Min
+#include "mamba/types/bool.hpp"     // for Bool
+#include "mamba/types/int.hpp"      // for Int
+#include "mamba/types/str.hpp"      // for Str
 
 namespace mamba::builtins::test {
 namespace {
@@ -27,6 +32,44 @@ std::vector<T> as_vector(const List<T>& l) {
 
   return res;
 }
+
+struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
+ public:
+  using self = IntWrapper;
+  using handle = memory::Handle<self>;
+
+  static size_t GetNextId() {
+    static size_t id;
+
+    return id++;
+  }
+
+  IntWrapper(types::Int value) : v_(value), id_(GetNextId()) {}
+
+  template <typename... Args>
+  static handle Init(Args&&... args) {
+    return memory::Init<self>(std::forward<Args>(args)...);
+  }
+
+  size_t Id() const { return id_; }
+  types::Int Value() const { return v_; }
+
+  types::Str Repr() const { return ""; }
+
+  types::Bool Eq(const IntWrapper& other) const { return v_ == other.v_; }
+
+  types::Bool Lt(const IntWrapper& other) const { return v_ < other.v_; }
+
+  bool operator==(const IntWrapper& other) const { return Eq(other); }
+
+  bool operator!=(const IntWrapper& other) const { return !(*this == other); }
+
+  bool operator<(const IntWrapper& other) const { return Lt(other); }
+
+ private:
+  types::Int v_;
+  size_t id_;
+};
 
 }  // anonymous namespace
 
@@ -1344,10 +1387,37 @@ TEST(List, SortReverse) {
 
   // Then
   const auto actual = as_vector(l);
-  // TODO: Fix so that it doesn't reverse items that sort the same
   const std::vector<Int> expected = {7, 5, 3, 1, 1};
 
   EXPECT_EQ(actual, expected);
+}
+
+TEST(List, SortReverseStable) {
+  // If
+  List<memory::Handle<IntWrapper>> l;
+  const std::vector<Int> values = {7, 3, 1, 1, 5};
+
+  for (const auto v : values) {
+    l.Append(IntWrapper::Init(v));
+  }
+
+  // When
+  l.Sort(true);
+
+  // Then
+  const std::vector<Int> expected_values = {7, 5, 3, 1, 1};
+  const std::vector<size_t> expected_ids = {0, 4, 2, 3, 1};
+
+  std::vector<Int> actual_values;
+  std::vector<size_t> actual_ids;
+
+  for (const auto& elem : l) {
+    actual_values.emplace_back(elem->Value());
+    actual_ids.emplace_back(elem->Id());
+  }
+
+  EXPECT_EQ(actual_values, expected_values);
+  EXPECT_EQ(actual_ids, expected_ids);
 }
 
 TEST(List, SortWithKey) {
