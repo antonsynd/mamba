@@ -18,7 +18,6 @@
 #include "mamba/error.hpp"
 #include "mamba/iteration.hpp"
 #include "mamba/memory/handle.hpp"
-#include "mamba/memory/utils.hpp"
 #include "mamba/templates/utils.hpp"
 #include "mamba/types/int.hpp"
 #include "mamba/types/str.hpp"
@@ -406,7 +405,7 @@ class List : public std::enable_shared_from_this<List<T>> {
       v_.emplace_back(elem);
     } else {
       const auto it = GetIterator(size_t_idx);
-      v_.insert(it, memory::own(elem));
+      v_.insert(it, elem);
     }
   }
 

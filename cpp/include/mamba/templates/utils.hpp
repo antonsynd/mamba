@@ -12,10 +12,4 @@ using ReadOnly =
                        const T&,
                        std::conditional_t<concepts::Value<T>, T, void>>;
 
-template <concepts::Entity T>
-using Owned =
-    std::conditional_t<concepts::Handle<T>,
-                       T&&,
-                       std::conditional_t<concepts::Value<T>, T, void>>;
-
 }  // namespace mamba::builtins::templates
