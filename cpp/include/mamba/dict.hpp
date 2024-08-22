@@ -7,6 +7,8 @@
 #include "mamba/concepts/entity.hpp"
 #include "mamba/error.hpp"
 #include "mamba/list.hpp"
+#include "mamba/memory/utils.hpp"
+#include "mamba/templates/utils.hpp"
 #include "mamba/types/int.hpp"
 
 namespace mamba::builtins {
@@ -46,7 +48,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   types::Int Len() const { return m_.size(); }
 
-  mapped_type& operator[](const key_type& key) {
+  mapped_type& operator[](templates::ReadOnly<key_type> key) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -57,7 +59,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return it->second;
   }
 
-  const mapped_type& operator[](const key_type& key) const {
+  const mapped_type& operator[](templates::ReadOnly<key_type> key) const {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -68,8 +70,9 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return it->second;
   }
 
-  // TODO: make generic access, if K is Handle, then const K&, else K
-  virtual mapped_type Missing(const key_type& key) { throw ValueError(""); }
+  virtual mapped_type Missing(templates::ReadOnly<key_type> key) {
+    throw ValueError("");
+  }
 
   void DeleteKey(const key_type& key) {
     auto it = m_.find(key);
@@ -80,7 +83,9 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     }
   }
 
-  types::Bool In(key_type key) const {}
+  types::Bool In(templates::ReadOnly<key_type> key) const {
+    return m_.contains(key);
+  }
 
   // Iter()
 
@@ -94,11 +99,12 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   // static FromKeys();
 
-  mapped_type Get(const key_type& key, mapped_type default_value) {
+  mapped_type Get(templates::ReadOnly<key_type> key,
+                  mapped_type default_value) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
-      return default_value;
+      return memory::own(default_value);
     }
 
     return it->second;
