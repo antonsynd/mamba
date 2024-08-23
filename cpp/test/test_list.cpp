@@ -7,6 +7,7 @@
 
 #include "gtest/gtest.h"  // for Test, Message, TestPartResult, TEST
 
+#include "mamba/conversion.hpp"
 #include "mamba/error.hpp"          // for ValueError, IndexError
 #include "mamba/float.hpp"          // for Float
 #include "mamba/int.hpp"            // for Int, AsStr, Repr

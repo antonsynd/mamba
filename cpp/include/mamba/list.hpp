@@ -554,6 +554,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @brief Returns the string representation of the list.
   /// @code str(list)
   types::Str AsStr() const {
+    std::cout << "List.AsStr()" << std::endl;
     std::ostringstream oss;
 
     oss << "[";

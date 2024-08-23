@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <utility>
 
 #include "mamba/types/bool.hpp"
@@ -22,6 +23,7 @@ types::Bool AsBool(Str s) {
 /// lvalue ref is not expected here. However, we can move a temporary if it
 /// was passed in, hence the use of a forwarding reference.
 Str AsStr(Str&& s) {
+  std::cout << "Str::AsStr()" << std::endl;
   return std::forward<Str>(s);
 }
 
