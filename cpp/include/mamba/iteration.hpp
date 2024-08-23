@@ -5,41 +5,43 @@
 #include <type_traits>
 
 #include "mamba/concepts/entity.hpp"
-#include "mamba/concepts/utils.hpp"
-#include "mamba/memory/handle.hpp"
+#include "mamba/memory/managed.hpp"
 
 namespace mamba::builtins {
 
 template <concepts::Entity T>
 class Iterator {
  public:
-  using value = T;
+  using element = T;
+  using value = memory::managed_t<element>;
 
   virtual ~Iterator() = default;
 
-  virtual memory::Handle<Iterator<T>> Iter() = 0;
-  virtual T Next() = 0;
+  virtual memory::handle_t<Iterator<element>> Iter() = 0;
+  virtual value Next() = 0;
+
+  virtual types::Str Repr() const { return ""; }
 };
 
 namespace concepts {
 
 template <typename T, typename U>
 concept TypedIterable = requires(T* iterable) {
-  { iterable->Iter() } -> std::same_as<memory::Handle<Iterator<U>>>;
+  { iterable->Iter() } -> std::same_as<memory::handle_t<Iterator<U>>>;
 };
 
 template <typename T>
-concept Iterable = HasValueType<T> && TypedIterable<T, typename T::value>;
+concept Iterable = TypedIterable<T, typename T::element>;
 
 }  // namespace concepts
 
 template <concepts::Entity T>
-T Next(Iterator<T>& it) {
+memory::managed_t<T> Next(Iterator<T>& it) {
   return it.Next();
 }
 
 template <concepts::Iterable T>
-memory::Handle<Iterator<typename T::value>> Iter(T& it) {
+memory::handle_t<Iterator<typename T::element>> Iter(T& it) {
   return it.Iter();
 }
 

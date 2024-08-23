@@ -7,7 +7,6 @@
 
 #include "gtest/gtest.h"  // for Test, Message, TestPartResult, TEST
 
-#include "mamba/conversion.hpp"     // for AsBool, AsStr, Repr
 #include "mamba/error.hpp"          // for ValueError, IndexError
 #include "mamba/float.hpp"          // for Float
 #include "mamba/int.hpp"            // for Int, AsStr, Repr
@@ -36,7 +35,7 @@ std::vector<T> as_vector(const List<T>& l) {
 struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
  public:
   using self = IntWrapper;
-  using handle = memory::Handle<self>;
+  using handle = memory::handle_t<self>;
 
   static size_t GetNextId() {
     static size_t id;
@@ -1394,7 +1393,7 @@ TEST(List, SortReverse) {
 
 TEST(List, SortReverseStable) {
   // If
-  List<memory::Handle<IntWrapper>> l;
+  List<IntWrapper> l;
   const std::vector<Int> values = {7, 3, 1, 1, 5};
 
   for (const auto v : values) {

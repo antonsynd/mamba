@@ -3,7 +3,6 @@
 #include <concepts>
 #include <type_traits>
 
-#include "mamba/concepts/str_convertible.hpp"
 #include "mamba/concepts/value.hpp"
 #include "mamba/types/bool.hpp"
 #include "mamba/types/str.hpp"

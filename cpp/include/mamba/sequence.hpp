@@ -1,7 +1,6 @@
 #pragma once
 
 #include "mamba/concepts/entity.hpp"
-#include "mamba/concepts/utils.hpp"
 #include "mamba/iteration.hpp"
 #include "mamba/types/bool.hpp"
 #include "mamba/types/int.hpp"
@@ -19,8 +18,7 @@ concept TypedSequence = concepts::TypedIterable<T, U> &&
                         };
 
 template <typename T>
-concept Sequence =
-    HasValueType<T> && concepts::TypedSequence<T, typename T::value>;
+concept Sequence = concepts::TypedSequence<T, typename T::value>;
 
 }  // namespace concepts
 
