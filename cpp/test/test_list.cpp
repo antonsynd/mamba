@@ -87,6 +87,14 @@ TEST(List, EmptyConstructor) {
   EXPECT_EQ(Len(l), 0);
 }
 
+TEST(List, EmptyConstructorObject) {
+  // If/when
+  const List<IntWrapper> l;
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
 TEST(List, VariadicConstructor) {
   // If/when
   const List<Int> l(1, 3, 5, 7);

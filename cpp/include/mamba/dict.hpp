@@ -1,14 +1,17 @@
 #pragma once
 
+#include <initializer_list>
 #include <memory>
 #include <optional>
 #include <unordered_map>
 
 #include "mamba/concepts/entity.hpp"
+#include "mamba/conversion.hpp"
 #include "mamba/error.hpp"
 #include "mamba/list.hpp"
-#include "mamba/memory/utils.hpp"
-#include "mamba/templates/utils.hpp"
+#include "mamba/memory/handle.hpp"
+#include "mamba/memory/managed.hpp"
+#include "mamba/memory/read_only.hpp"
 #include "mamba/types/int.hpp"
 
 namespace mamba::builtins {
@@ -16,21 +19,34 @@ namespace mamba::builtins {
 template <concepts::Entity K, concepts::Entity V>
 class Dict : public std::enable_shared_from_this<Dict<K, V>> {
  public:
-  using key_type = K;
-  using mapped_type = V;
-  using self = Dict<key_type, mapped_type>;
-  using handle = memory::Handle<self>;
+  /// @note Mamba-specific
+  using key_element = K;
+  using mapped_element = V;
+
+  using key_type = memory::managed_t<key_element>;
+  using mapped_type = memory::managed_t<mapped_element>;
   using value_type = std::pair<const key_type, mapped_type>;
-  using storage = std::unordered_map<key_type, mapped_type>;
   using reference = value_type&;
-  using const_reference = const value&;
+  using const_reference = const value_type&;
+
+  /// @note Mamba-specific
+  using storage = std::unordered_map<key_type, mapped_type>;
+
+  using iterator = storage::iterator;
+  using const_iterator = storage::const_iterator;
+
+  /// @note Mamba-specific
+  using self = Dict<key_element, mapped_element>;
+  using handle = memory::handle_t<self>;
 
   /// @brief Creates an empty dict.
   /// @code dict()
   Dict() {}
 
-  template <concepts::Mapping T>
-  Dict(const Mapping& mapping) {}
+  Dict(std::initializer_list<std::pair<key_type, mapped_type>>) {};
+
+  // template <concepts::Mapping T>
+  // Dict(const Mapping& mapping) {}
 
   /// class dict(**kwargs)
   /// class dict(mapping, **kwargs)
@@ -44,11 +60,19 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return memory::Init<self>(std::forward<Args>(args)...);
   }
 
-  List<key_type> AsList() {}
+  memory::handle_t<List<key_element>> AsList() {
+    auto l = memory::Init<List<key_element>>();
+
+    for (const auto it : m_) {
+      l.Append(it->first);
+    }
+
+    return l;
+  }
 
   types::Int Len() const { return m_.size(); }
 
-  mapped_type& operator[](templates::ReadOnly<key_type> key) {
+  mapped_type& operator[](memory::ReadOnly<key_element> key) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -59,7 +83,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return it->second;
   }
 
-  const mapped_type& operator[](templates::ReadOnly<key_type> key) const {
+  const mapped_type& operator[](memory::ReadOnly<key_element> key) const {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -70,11 +94,11 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return it->second;
   }
 
-  virtual mapped_type Missing(templates::ReadOnly<key_type> key) {
+  virtual mapped_type Missing(memory::ReadOnly<key_element> key) {
     throw ValueError("");
   }
 
-  void DeleteKey(const key_type& key) {
+  void DeleteKey(memory::ReadOnly<key_element> key) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -83,7 +107,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     }
   }
 
-  types::Bool In(templates::ReadOnly<key_type> key) const {
+  types::Bool In(memory::ReadOnly<key_element> key) const {
     return m_.contains(key);
   }
 
@@ -99,12 +123,12 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   // static FromKeys();
 
-  mapped_type Get(templates::ReadOnly<key_type> key,
+  mapped_type Get(memory::ReadOnly<key_element> key,
                   mapped_type default_value) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
-      return memory::own(default_value);
+      return default_value;
     }
 
     return it->second;
@@ -142,8 +166,8 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     oss << "{";
 
     if (!m_.empty()) {
-      const auto last = v_.size() - 1;
-      auto it = v_.begin();
+      const auto last = m_.size() - 1;
+      auto it = m_.begin();
 
       for (size_t i = 0; i < last; ++i, ++it) {
         oss << builtins::AsStr(it->first) << ": " << builtins::AsStr(it->second)
@@ -166,8 +190,8 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     oss << "{";
 
     if (!m_.empty()) {
-      const auto last = v_.size() - 1;
-      auto it = v_.begin();
+      const auto last = m_.size() - 1;
+      auto it = m_.begin();
 
       for (size_t i = 0; i < last; ++i, ++it) {
         oss << builtins::AsStr(it->first) << ": " << builtins::AsStr(it->second)

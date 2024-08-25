@@ -41,16 +41,20 @@ template <typename T>
   requires concepts::Entity<T> && concepts::LessThanComparable<T>
 class List : public std::enable_shared_from_this<List<T>> {
  public:
+  /// @note Mamba-specific
   using element = T;
 
   using value = memory::managed_t<element>;
   using reference = value&;
   using const_reference = const value&;
 
+  /// @note Mamba-specific
   using storage = std::vector<value>;
+
   using iterator = storage::iterator;
   using const_iterator = storage::const_iterator;
 
+  /// @note Mamba-specific
   using self = List<element>;
   using handle = memory::handle_t<self>;
 
