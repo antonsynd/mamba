@@ -5,7 +5,8 @@
 
 namespace mamba::builtins::concepts {
 
-/// @brief Concept for objects or pure values.
+/// @brief Concept for objects or pure values. This is for use in templating
+/// the main element type of containers.
 template <typename T>
 concept Entity = Object<T> || Value<T>;
 

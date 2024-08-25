@@ -13,7 +13,9 @@ template <typename T>
 using handle_t = std::shared_ptr<T>;
 
 /// @brief Concept for handles of objects. Used as a disjunct with Value for
-/// managed entities.
+/// managed entities in variables, members, function arguments, and actual
+/// container storage elements (but not the raw template element type itself).
+/// @see managed.hpp
 template <typename T>
 concept Handle = concepts::Object<typename T::element_type> && requires {
   typename std::enable_if_t<
