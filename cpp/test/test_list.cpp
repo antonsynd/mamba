@@ -9,17 +9,20 @@
 
 #include "gtest/gtest.h"  // for Test, Message, TestPartResult, TEST
 
-#include "mamba/conversion.hpp"
-#include "mamba/error.hpp"          // for ValueError, IndexError
-#include "mamba/float.hpp"          // for Float
-#include "mamba/int.hpp"            // for Int, AsStr, Repr
-#include "mamba/iteration.hpp"      // for Iter, Iterator
-#include "mamba/list.hpp"           // for List
-#include "mamba/memory/handle.hpp"  // for Handle, Init
-#include "mamba/sequence.hpp"       // for Len, In, Max, Min
-#include "mamba/types/bool.hpp"     // for Bool
-#include "mamba/types/int.hpp"      // for Int
-#include "mamba/types/str.hpp"      // for Str
+#include "mamba/__memory/handle.hpp"          // for handle_t, Init
+#include "mamba/builtins/__as_bool/bool.hpp"  // for AsBool
+#include "mamba/builtins/__as_str/int.hpp"    // for AsStr
+#include "mamba/builtins/__repr/int.hpp"      // for Repr
+#include "mamba/builtins/as_str.hpp"          // for AsStr
+#include "mamba/builtins/bool.hpp"            // for Bool
+#include "mamba/builtins/error.hpp"           // for ValueError, IndexError
+#include "mamba/builtins/float.hpp"           // for Float
+#include "mamba/builtins/int.hpp"             // for Int
+#include "mamba/builtins/iteration.hpp"       // for Iter, Iterator
+#include "mamba/builtins/list.hpp"            // for List
+#include "mamba/builtins/repr.hpp"            // for Repr
+#include "mamba/builtins/sequence.hpp"        // for Len, In, Max, Min
+#include "mamba/builtins/str.hpp"             // for Str
 
 namespace mamba::builtins::test {
 namespace {
@@ -38,31 +41,31 @@ std::vector<T> as_vector(const List<T>& l) {
 struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
  public:
   using self = IntWrapper;
-  using handle = memory::handle_t<self>;
+  using handle = __memory::handle_t<self>;
 
   static void ResetId() { global_id_ = 0; }
   static size_t GetNextId() { return global_id_++; }
 
-  IntWrapper(types::Int value) : v_(value), id_(GetNextId()) {}
+  IntWrapper(Int value) : v_(value), id_(GetNextId()) {}
 
   template <typename... Args>
   static handle Init(Args&&... args) {
-    return memory::Init<self>(std::forward<Args>(args)...);
+    return __memory::Init<self>(std::forward<Args>(args)...);
   }
 
   size_t Id() const { return id_; }
-  types::Int Value() const { return v_; }
+  Int Value() const { return v_; }
 
-  types::Str AsStr() const {
+  Str AsStr() const {
     std::ostringstream oss;
     oss << "[Repr(value=" << v_ << ", id=" << id_ << ")]";
     return oss.str();
   }
 
-  types::Str Repr() const { return AsStr(); }
+  Str Repr() const { return AsStr(); }
 
-  types::Bool Eq(const IntWrapper& other) const { return v_ == other.v_; }
-  types::Bool Lt(const IntWrapper& other) const { return v_ < other.v_; }
+  Bool Eq(const IntWrapper& other) const { return v_ == other.v_; }
+  Bool Lt(const IntWrapper& other) const { return v_ < other.v_; }
 
   bool operator==(const IntWrapper& other) const { return Eq(other); }
   bool operator!=(const IntWrapper& other) const { return !(*this == other); }
@@ -71,7 +74,7 @@ struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
  private:
   inline static size_t global_id_ = 0;
 
-  types::Int v_;
+  Int v_;
   size_t id_;
 };
 
