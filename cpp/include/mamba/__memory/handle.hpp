@@ -32,3 +32,5 @@ static handle_t<T> Init(Args&&... args) {
 }
 
 }  // namespace mamba::builtins::__memory
+
+// IWYU pragma: private

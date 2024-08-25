@@ -9,10 +9,9 @@
 
 #include "gtest/gtest.h"  // for Test, Message, TestPartResult, TEST
 
+#include "mamba/__concepts/object.hpp"        // for Object
 #include "mamba/__memory/handle.hpp"          // for handle_t, Init
 #include "mamba/builtins/__as_bool/bool.hpp"  // for AsBool
-#include "mamba/builtins/__as_str/int.hpp"    // for AsStr
-#include "mamba/builtins/__repr/int.hpp"      // for Repr
 #include "mamba/builtins/as_str.hpp"          // for AsStr
 #include "mamba/builtins/bool.hpp"            // for Bool
 #include "mamba/builtins/error.hpp"           // for ValueError, IndexError
@@ -20,6 +19,7 @@
 #include "mamba/builtins/int.hpp"             // for Int
 #include "mamba/builtins/iteration.hpp"       // for Iter, Iterator
 #include "mamba/builtins/list.hpp"            // for List
+#include "mamba/builtins/object.hpp"          // for Str
 #include "mamba/builtins/repr.hpp"            // for Repr
 #include "mamba/builtins/sequence.hpp"        // for Len, In, Max, Min
 #include "mamba/builtins/str.hpp"             // for Str
@@ -27,18 +27,8 @@
 namespace mamba::builtins::test {
 namespace {
 
-template <typename T>
-std::vector<T> as_vector(const List<T>& l) {
-  std::vector<T> res;
-
-  for (size_t i = 0; i < Len(l); ++i) {
-    res.emplace_back(l[i]);
-  }
-
-  return res;
-}
-
-struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
+struct IntWrapper : public Object,
+                    public std::enable_shared_from_this<IntWrapper> {
  public:
   using self = IntWrapper;
   using handle = __memory::handle_t<self>;
@@ -62,7 +52,9 @@ struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
     return oss.str();
   }
 
-  Str Repr() const { return AsStr(); }
+  operator Int() const { return v_; }
+
+  Str Repr() const override { return AsStr(); }
 
   Bool Eq(const IntWrapper& other) const { return v_ == other.v_; }
   Bool Lt(const IntWrapper& other) const { return v_ < other.v_; }
@@ -77,6 +69,21 @@ struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
   Int v_;
   size_t id_;
 };
+
+template <typename T, typename U = T>
+std::vector<U> as_vector(const List<T>& l) {
+  std::vector<U> res;
+
+  for (size_t i = 0; i < Len(l); ++i) {
+    if constexpr (__concepts::Object<T>) {
+      res.emplace_back(static_cast<const U>(*l[i]));
+    } else {
+      res.emplace_back(static_cast<const U>(l[i]));
+    }
+  }
+
+  return res;
+}
 
 }  // anonymous namespace
 
@@ -109,6 +116,20 @@ TEST(List, VariadicConstructor) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, VariadicConstructorObject) {
+  // If/when
+  const List<IntWrapper> l(IntWrapper::Init(1), IntWrapper::Init(3),
+                           IntWrapper::Init(5), IntWrapper::Init(7));
+
+  // Then
+  ASSERT_EQ(Len(l), 4);
+
+  const auto actual = as_vector<IntWrapper, Int>(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
 TEST(List, InitializerListConstructor) {
   // If/when
   const List<Int> l = {1, 3, 5, 7};
@@ -117,6 +138,20 @@ TEST(List, InitializerListConstructor) {
   ASSERT_EQ(Len(l), 4);
 
   const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, InitializerListConstructorObject) {
+  // If/when
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // Then
+  ASSERT_EQ(Len(l), 4);
+
+  const auto actual = as_vector<IntWrapper, Int>(l);
   const std::vector<Int> expected = {1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
@@ -131,6 +166,21 @@ TEST(List, IterableConstructor) {
   ASSERT_EQ(Len(l), 4);
 
   const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, IterableConstructorObject) {
+  // If/when
+  List<IntWrapper> source = {IntWrapper::Init(1), IntWrapper::Init(3),
+                             IntWrapper::Init(5), IntWrapper::Init(7)};
+  const List<IntWrapper> l{*source.Iter()};
+
+  // Then
+  ASSERT_EQ(Len(l), 4);
+
+  const auto actual = as_vector<IntWrapper, Int>(l);
   const std::vector<Int> expected = {1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
@@ -152,6 +202,23 @@ TEST(List, AppendOneElement) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, AppendOneElementObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l.Append(IntWrapper::Init(9));
+
+  // Then
+  ASSERT_EQ(Len(l), 5);
+
+  const auto actual = as_vector<IntWrapper, Int>(l);
+  const std::vector<Int> expected = {1, 3, 5, 7, 9};
+
+  EXPECT_EQ(actual, expected);
+}
+
 TEST(List, AppendVariadicElements) {
   // If
   List<Int> l = {1, 3, 5, 7};
@@ -168,12 +235,37 @@ TEST(List, AppendVariadicElements) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, AppendVariadicElementsObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l.Append(IntWrapper::Init(9), IntWrapper::Init(11), IntWrapper::Init(13));
+
+  // Then
+  ASSERT_EQ(Len(l), 7);
+
+  const auto actual = as_vector<IntWrapper, Int>(l);
+  const std::vector<Int> expected = {1, 3, 5, 7, 9, 11, 13};
+
+  EXPECT_EQ(actual, expected);
+}
+
 TEST(List, InEmpty) {
   // If
   const List<Int> l;
 
   // When/then
   EXPECT_FALSE(In(l, 1));
+}
+
+TEST(List, InEmptyObject) {
+  // If
+  const List<IntWrapper> l;
+
+  // When/then
+  EXPECT_FALSE(In(l, IntWrapper::Init(1)));
 }
 
 TEST(List, InNotActuallyIn) {

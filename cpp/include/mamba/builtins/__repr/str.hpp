@@ -15,3 +15,5 @@ inline __types::Str Repr(__types::Str s) {
 }
 
 }  // namespace mamba::builtins
+
+// IWYU pragma: private

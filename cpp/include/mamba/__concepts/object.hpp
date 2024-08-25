@@ -30,3 +30,5 @@ concept LessThanComparableObject = Object<T> && requires(const T t) {
 };
 
 }  // namespace mamba::builtins::__concepts
+
+// IWYU pragma: private

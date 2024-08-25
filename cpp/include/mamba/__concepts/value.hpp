@@ -34,3 +34,5 @@ concept LessThanComparableValue = Value<T> && requires(const T t) {
 };
 
 }  // namespace mamba::builtins::__concepts
+
+// IWYU pragma: private

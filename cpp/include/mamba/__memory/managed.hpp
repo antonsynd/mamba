@@ -24,3 +24,5 @@ template <typename T>
 concept Managed = Handle<T> || __concepts::Value<T>;
 
 }  // namespace mamba::builtins::__memory
+
+// IWYU pragma: private

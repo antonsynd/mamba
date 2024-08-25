@@ -8,3 +8,5 @@ namespace mamba::builtins::__types {
 using Bool = bool;
 
 }  // namespace mamba::builtins::__types
+
+// IWYU pragma: private

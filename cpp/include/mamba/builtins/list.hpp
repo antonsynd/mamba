@@ -165,6 +165,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
     return res;
   }
+
   handle operator+(const handle& other) const { return operator+(*other); }
 
   /// @brief Returns a copy of this list with its elements repeated @p i times.
@@ -595,7 +596,6 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @brief Returns the string representation of the list.
   /// @code str(list)
   __types::Str AsStr() const {
-    std::cout << "List.AsStr()" << std::endl;
     std::ostringstream oss;
 
     oss << "[";

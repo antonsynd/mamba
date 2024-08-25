@@ -10,3 +10,5 @@ inline __types::Str AsStr(__types::Bool b) {
 }
 
 }  // namespace mamba::builtins
+
+// IWYU pragma: private

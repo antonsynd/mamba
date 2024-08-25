@@ -19,3 +19,5 @@ concept LessThanComparable =
     LessThanComparableValue<T> || LessThanComparableObject<T>;
 
 }  // namespace mamba::builtins::__concepts
+
+// IWYU pragma: private

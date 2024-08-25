@@ -13,3 +13,5 @@ using Float = double;
 #endif  // __cplusplus >= 202302L
 
 }  // namespace mamba::builtins::__types
+
+// IWYU pragma: private

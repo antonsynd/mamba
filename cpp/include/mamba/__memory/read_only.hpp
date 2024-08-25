@@ -17,3 +17,5 @@ using ReadOnly =
                        std::conditional_t<__concepts::Value<T>, T, void>>;
 
 }  // namespace mamba::builtins::__memory
+
+// IWYU pragma: private

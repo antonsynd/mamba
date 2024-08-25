@@ -8,3 +8,5 @@ namespace mamba::builtins::__types {
 using Str = std::string;
 
 }  // namespace mamba::builtins::__types
+
+// IWYU pragma: private

@@ -39,9 +39,20 @@ __memory::managed_t<T> Next(Iterator<T>& it) {
   return it.Next();
 }
 
+template <__concepts::Entity T>
+__memory::managed_t<T> Next(const __memory::handle_t<Iterator<T>>& it) {
+  return Next(*it);
+}
+
 template <__concepts::Iterable T>
 __memory::handle_t<Iterator<typename T::element>> Iter(T& it) {
   return it.Iter();
+}
+
+template <__concepts::Iterable T>
+__memory::handle_t<Iterator<typename T::element>> Iter(
+    const __memory::handle_t<T>& it) {
+  return Iter(*it);
 }
 
 }  // namespace mamba::builtins

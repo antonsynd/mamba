@@ -2,12 +2,12 @@
 
 #include "mamba/__concepts/str_convertible.hpp"
 #include "mamba/__memory/handle.hpp"
-#include "mamba/builtins/__as_str/bool.hpp"   // IWYU: export
-#include "mamba/builtins/__as_str/float.hpp"  // IWYU: export
-#include "mamba/builtins/__as_str/int.hpp"    // IWYU: export
-#include "mamba/builtins/__as_str/none.hpp"   // IWYU: export
-#include "mamba/builtins/__as_str/str.hpp"    // IWYU: export
-#include "mamba/builtins/__as_str/tuple.hpp"  // IWYU: export
+#include "mamba/builtins/__as_str/bool.hpp"   // IWYU pragma: export
+#include "mamba/builtins/__as_str/float.hpp"  // IWYU pragma: export
+#include "mamba/builtins/__as_str/int.hpp"    // IWYU pragma: export
+#include "mamba/builtins/__as_str/none.hpp"   // IWYU pragma: export
+#include "mamba/builtins/__as_str/str.hpp"    // IWYU pragma: export
+#include "mamba/builtins/__as_str/tuple.hpp"  // IWYU pragma: export
 #include "mamba/builtins/__types/str.hpp"
 
 namespace mamba::builtins {

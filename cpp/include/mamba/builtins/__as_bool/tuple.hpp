@@ -12,3 +12,5 @@ namespace mamba::builtins {
 // }
 
 }  // namespace mamba::builtins
+
+// IWYU pragma: private

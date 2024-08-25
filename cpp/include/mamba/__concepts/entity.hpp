@@ -11,3 +11,5 @@ template <typename T>
 concept Entity = Object<T> || Value<T>;
 
 }  // namespace mamba::builtins::__concepts
+
+// IWYU pragma: private

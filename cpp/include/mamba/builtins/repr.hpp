@@ -2,12 +2,12 @@
 
 #include "mamba/__concepts/object.hpp"
 #include "mamba/__memory/handle.hpp"
-#include "mamba/builtins/__repr/bool.hpp"   // IWYU: export
-#include "mamba/builtins/__repr/float.hpp"  // IWYU: export
-#include "mamba/builtins/__repr/int.hpp"    // IWYU: export
-#include "mamba/builtins/__repr/none.hpp"   // IWYU: export
-#include "mamba/builtins/__repr/str.hpp"    // IWYU: export
-#include "mamba/builtins/__repr/tuple.hpp"  // IWYU: export
+#include "mamba/builtins/__repr/bool.hpp"   // IWYU pragma: export
+#include "mamba/builtins/__repr/float.hpp"  // IWYU pragma: export
+#include "mamba/builtins/__repr/int.hpp"    // IWYU pragma: export
+#include "mamba/builtins/__repr/none.hpp"   // IWYU pragma: export
+#include "mamba/builtins/__repr/str.hpp"    // IWYU pragma: export
+#include "mamba/builtins/__repr/tuple.hpp"  // IWYU pragma: export
 #include "mamba/builtins/__types/str.hpp"
 
 namespace mamba::builtins {

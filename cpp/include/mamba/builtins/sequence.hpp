@@ -1,6 +1,7 @@
 #pragma once
 
 #include "mamba/__concepts/entity.hpp"
+#include "mamba/__memory/handle.hpp"
 #include "mamba/__memory/managed.hpp"
 #include "mamba/__memory/read_only.hpp"
 #include "mamba/builtins/__types/bool.hpp"
@@ -31,8 +32,20 @@ __memory::managed_t<typename T::element> Min(const T& sequence) {
 }
 
 template <__concepts::Sequence T>
+__memory::managed_t<typename T::element> Min(
+    const __memory::handle_t<T>& sequence) {
+  return Min(*sequence);
+}
+
+template <__concepts::Sequence T>
 __memory::managed_t<typename T::element> Max(const T& sequence) {
   return sequence.Max();
+}
+
+template <__concepts::Sequence T>
+__memory::managed_t<typename T::element> Max(
+    const __memory::handle_t<T>& sequence) {
+  return Max(*sequence);
 }
 
 template <__concepts::Sequence T>
@@ -42,8 +55,19 @@ __types::Bool In(const T& sequence,
 }
 
 template <__concepts::Sequence T>
+__types::Bool In(const __memory::handle_t<T>& sequence,
+                 __memory::ReadOnly<typename T::element> value) {
+  return In(*sequence, value);
+}
+
+template <__concepts::Sequence T>
 __types::Int Len(const T& sequence) {
   return sequence.Len();
+}
+
+template <__concepts::Sequence T>
+__types::Int Len(const __memory::handle_t<T>& sequence) {
+  return Len(*sequence);
 }
 
 }  // namespace mamba::builtins

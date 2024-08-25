@@ -9,3 +9,5 @@ class Object {
 };
 
 }  // namespace mamba::builtins::__types
+
+// IWYU pragma: private

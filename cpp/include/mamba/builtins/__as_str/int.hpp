@@ -12,3 +12,5 @@ inline __types::Str AsStr(__types::Int i) {
 }
 
 }  // namespace mamba::builtins
+
+// IWYU pragma: private

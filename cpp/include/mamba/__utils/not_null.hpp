@@ -101,3 +101,5 @@ template <typename T>
 using not_null = gsl::not_null<T>;
 
 }  // namespace mamba::builtins::__utils
+
+// IWYU pragma: private
