@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <concepts>
 #include <initializer_list>
-#include <iostream>
 #include <iterator>
 #include <limits>
 #include <memory>
@@ -12,6 +11,7 @@
 #include <utility>
 #include <vector>
 
+#include "mamba/comparison.hpp"
 #include "mamba/concepts/comparable.hpp"
 #include "mamba/concepts/entity.hpp"
 #include "mamba/conversion.hpp"
@@ -477,10 +477,12 @@ class List : public std::enable_shared_from_this<List<T>> {
     if (reverse) {
       // We sort with the inverse of the comparison to make sure the sort
       // is stable, rather than reverse the results afterwards
-      std::sort(v_.begin(), v_.end(),
-                [](const auto a, const auto b) { return !(a < b); });
+      std::sort(v_.begin(), v_.end(), [](const auto a, const auto b) {
+        return !(operators::Lt(a, b) || !operators::Lt(b, a));
+      });
     } else {
-      std::sort(v_.begin(), v_.end());
+      std::sort(v_.begin(), v_.end(),
+                [](const auto a, const auto b) { return operators::Lt(a, b); });
     }
   }
 
@@ -495,12 +497,19 @@ class List : public std::enable_shared_from_this<List<T>> {
       return;
     }
 
-    std::sort(v_.begin(), v_.end(),
-              [&key, &reverse](const auto a, const auto b) {
-                // We use reverse to invert the comparison so that the sort
-                // is stable, rather than reverse the results afterwards
-                return reverse ^ (key(a) < key(b));
-              });
+    if (reverse) {
+      // We sort with the inverse of the comparison to make sure the sort
+      // is stable, rather than reverse the results afterwards
+      std::sort(v_.begin(), v_.end(), [&key](const auto a, const auto b) {
+        const auto ka = key(a);
+        const auto kb = key(b);
+        return !(operators::Lt(ka, kb) || !operators::Lt(kb, ka));
+      });
+    } else {
+      std::sort(v_.begin(), v_.end(), [&key](const auto a, const auto b) {
+        return operators::Lt(key(a), key(b));
+      });
+    }
   }
 
   /// @brief Returns an iterator to this list.

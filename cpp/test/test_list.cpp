@@ -1,9 +1,11 @@
 #include <stddef.h>  // for size_t
 
-#include <memory>   // for shared_ptr, enable_shared_from_this
-#include <string>   // for basic_string
-#include <utility>  // for forward
-#include <vector>   // for vector
+#include <__fwd/sstream.h>  // for ostringstream
+#include <memory>           // for shared_ptr, enable_shared_from_this
+#include <sstream>          // for basic_ostream, basic_ostringstream
+#include <string>           // for basic_string
+#include <utility>          // for forward
+#include <vector>           // for vector
 
 #include "gtest/gtest.h"  // for Test, Message, TestPartResult, TEST
 
@@ -38,11 +40,8 @@ struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
   using self = IntWrapper;
   using handle = memory::handle_t<self>;
 
-  static size_t GetNextId() {
-    static size_t id;
-
-    return id++;
-  }
+  static void ResetId() { global_id_ = 0; }
+  static size_t GetNextId() { return global_id_++; }
 
   IntWrapper(types::Int value) : v_(value), id_(GetNextId()) {}
 
@@ -54,19 +53,26 @@ struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
   size_t Id() const { return id_; }
   types::Int Value() const { return v_; }
 
-  types::Str Repr() const { return ""; }
+  types::Str AsStr() const {
+    std::ostringstream oss;
+    oss << "[Repr(value=" << v_ << ", id=" << id_ << ")]";
+    return oss.str();
+  }
+
+  types::Str Repr() const { return AsStr(); }
 
   types::Bool Eq(const IntWrapper& other) const { return v_ == other.v_; }
-
   types::Bool Lt(const IntWrapper& other) const { return v_ < other.v_; }
+  types::Bool Gt(const IntWrapper& other) const { return v_ > other.v_; }
 
   bool operator==(const IntWrapper& other) const { return Eq(other); }
-
   bool operator!=(const IntWrapper& other) const { return !(*this == other); }
-
   bool operator<(const IntWrapper& other) const { return Lt(other); }
+  bool operator>(const IntWrapper& other) const { return Gt(other); }
 
  private:
+  inline static size_t global_id_ = 0;
+
   types::Int v_;
   size_t id_;
 };
@@ -1378,6 +1384,36 @@ TEST(List, Sort) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, SortStable) {
+  // If
+  List<IntWrapper> l;
+  const std::vector<Int> values = {7, 3, 1, 1, 5};
+
+  IntWrapper::ResetId();
+
+  for (const auto v : values) {
+    l.Append(IntWrapper::Init(v));
+  }
+
+  // When
+  l.Sort();
+
+  // Then
+  const std::vector<Int> expected_values = {1, 1, 3, 5, 7};
+  const std::vector<size_t> expected_ids = {2, 3, 1, 4, 0};
+
+  std::vector<Int> actual_values;
+  std::vector<size_t> actual_ids;
+
+  for (const auto& elem : l) {
+    actual_values.emplace_back(elem->Value());
+    actual_ids.emplace_back(elem->Id());
+  }
+
+  EXPECT_EQ(actual_values, expected_values);
+  EXPECT_EQ(actual_ids, expected_ids);
+}
+
 TEST(List, SortReverse) {
   // If
   List<Int> l = {7, 3, 1, 1, 5};
@@ -1397,6 +1433,8 @@ TEST(List, SortReverseStable) {
   List<IntWrapper> l;
   const std::vector<Int> values = {7, 3, 1, 1, 5};
 
+  IntWrapper::ResetId();
+
   for (const auto v : values) {
     l.Append(IntWrapper::Init(v));
   }
@@ -1406,7 +1444,7 @@ TEST(List, SortReverseStable) {
 
   // Then
   const std::vector<Int> expected_values = {7, 5, 3, 1, 1};
-  const std::vector<size_t> expected_ids = {0, 4, 2, 3, 1};
+  const std::vector<size_t> expected_ids = {0, 4, 1, 2, 3};
 
   std::vector<Int> actual_values;
   std::vector<size_t> actual_ids;
