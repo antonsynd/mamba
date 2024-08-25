@@ -63,12 +63,10 @@ struct IntWrapper : std::enable_shared_from_this<IntWrapper> {
 
   types::Bool Eq(const IntWrapper& other) const { return v_ == other.v_; }
   types::Bool Lt(const IntWrapper& other) const { return v_ < other.v_; }
-  types::Bool Gt(const IntWrapper& other) const { return v_ > other.v_; }
 
   bool operator==(const IntWrapper& other) const { return Eq(other); }
   bool operator!=(const IntWrapper& other) const { return !(*this == other); }
   bool operator<(const IntWrapper& other) const { return Lt(other); }
-  bool operator>(const IntWrapper& other) const { return Gt(other); }
 
  private:
   inline static size_t global_id_ = 0;
