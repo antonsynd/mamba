@@ -1,7 +1,5 @@
 #pragma once
 
-#include <concepts>
-
 #include "mamba/__concepts/object.hpp"
 #include "mamba/__concepts/value.hpp"
 

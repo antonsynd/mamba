@@ -16,6 +16,7 @@
 #include "mamba/builtins/__as_bool/bool.hpp"  // for AsBool
 #include "mamba/builtins/as_str.hpp"          // for AsStr
 #include "mamba/builtins/bool.hpp"            // for Bool
+#include "mamba/builtins/comparators.hpp"     // for Lt, Eq
 #include "mamba/builtins/error.hpp"           // for ValueError, IndexError
 #include "mamba/builtins/float.hpp"           // for Float
 #include "mamba/builtins/int.hpp"             // for Int
@@ -59,12 +60,10 @@ struct Wrapper : public Object,
 
   Str Repr() const override { return AsStr(); }
 
-  Bool Eq(const Wrapper& other) const { return v_ == other.v_; }
-  Bool Lt(const Wrapper& other) const { return v_ < other.v_; }
-
-  bool operator==(const Wrapper& other) const { return Eq(other); }
-  bool operator!=(const Wrapper& other) const { return !(*this == other); }
-  bool operator<(const Wrapper& other) const { return Lt(other); }
+  Bool Eq(const self& other) const { return v_ == other.v_; }
+  Bool Eq(const handle& other) const { return v_ == other->v_; }
+  Bool Lt(const self& other) const { return v_ < other.v_; }
+  Bool Lt(const handle& other) const { return v_ < other.v_; }
 
  private:
   inline static size_t global_id_ = 0;

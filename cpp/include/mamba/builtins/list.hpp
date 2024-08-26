@@ -19,7 +19,7 @@
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/str.hpp"
 #include "mamba/builtins/as_str.hpp"
-#include "mamba/builtins/comparison.hpp"
+#include "mamba/builtins/comparators.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/repr.hpp"
@@ -273,11 +273,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   __types::Int Count(__memory::ReadOnly<element> elem) const {
     return std::count_if(v_.cbegin(), v_.cend(),
                          [elem](__memory::ReadOnly<element> val) {
-                           if constexpr (__concepts::Object<element>) {
-                             return *val == *elem;
-                           } else {
-                             return val == elem;
-                           }
+                           return operators::Eq(val, elem);
                          });
   }
 
@@ -424,9 +420,11 @@ class List : public std::enable_shared_from_this<List<T>> {
     end = ClampIndex(end);
 
     for (__types::Int idx = ClampIndex(start); idx < end; ++idx) {
-      if (v_[idx] == elem) {
+      // if (operators::operator==(v_[idx], elem)) {
+      if (operators::Eq(v_[idx], elem)) {
         return idx;
       }
+      // }
     }
 
     throw ValueError("{elem} is not in list");
@@ -485,7 +483,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
     if constexpr (__concepts::Object<element>) {
       it = std::find_if(v_.begin(), v_.end(), [&elem](const auto v) {
-        return operators::Eq(*elem, *v);
+        return operators::Eq(elem, v);
       });
     } else {
       it = std::find(v_.begin(), v_.end(), elem);
