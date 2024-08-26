@@ -12,10 +12,60 @@ __types::Bool GtEq(T&& t, U&& u) {
          Eq(std::forward<T>(t), std::forward<U>(u));
 }
 
-// C++ operator
-template <typename T, typename U>
-bool operator>=(T&& t, U&& u) {
-  return GtEq(std::forward<T>(t), std::forward<U>(u));
+}  // namespace mamba::builtins::operators
+
+// C++ operators
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator>=(const T& t, const U& u) {
+  return t.GtEq(u);
 }
 
-}  // namespace mamba::builtins::operators
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator>=(const T& t, const mamba::builtins::__memory::handle_t<U>& u) {
+  return t.GtEq(*u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Value U>
+bool operator>=(const T& t, const U u) {
+  return t.GtEq(u);
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Object U>
+bool operator>=(const T t, const U& u) {
+  return t >= u;
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Object U>
+bool operator>=(const T t, const mamba::builtins::__memory::handle_t<U>& u) {
+  return t >= *u;
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Value U>
+bool operator>=(const T t, const U u) {
+  return t >= u;
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator>=(const mamba::builtins::__memory::handle_t<T> t,
+                const mamba::builtins::__memory::handle_t<U> u) {
+  return t->GtEq(*u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator>=(const mamba::builtins::__memory::handle_t<T>& t, const U& u) {
+  return t->GtEq(u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Value U>
+bool operator>=(const mamba::builtins::__memory::handle_t<T> t, const U u) {
+  return t->GtEq(u);
+}

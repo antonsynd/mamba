@@ -54,15 +54,116 @@ __types::Bool Eq(const __memory::handle_t<T> t, const U u) {
   return t->Eq(u);
 }
 
-// C++ operators
-template <typename T, typename U>
-bool operator==(T&& t, U&& u) {
-  return Eq(std::forward<T>(t), std::forward<U>(u));
-}
-
-template <typename T, typename U>
-bool operator!=(T&& t, U&& u) {
-  return !operator==(std::forward<T>(t), std::forward<U>(u));
-}
-
 }  // namespace mamba::builtins::operators
+
+// C++ operators
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator==(const T& t, const U& u) {
+  return t.Eq(u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator==(const T& t, const mamba::builtins::__memory::handle_t<U>& u) {
+  return t.Eq(*u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Value U>
+bool operator==(const T& t, const U u) {
+  return t.Eq(u);
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Object U>
+bool operator==(const T t, const U& u) {
+  return t == u;
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Object U>
+bool operator==(const T t, const mamba::builtins::__memory::handle_t<U>& u) {
+  return t == *u;
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Value U>
+bool operator==(const T t, const U u) {
+  return t == u;
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator==(const mamba::builtins::__memory::handle_t<T> t,
+                const mamba::builtins::__memory::handle_t<U> u) {
+  return t->Eq(*u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator==(const mamba::builtins::__memory::handle_t<T>& t, const U& u) {
+  return t->Eq(u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Value U>
+bool operator==(const mamba::builtins::__memory::handle_t<T> t, const U u) {
+  return t->Eq(u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator!=(const T& t, const U& u) {
+  return !(t == u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator!=(const T& t, const mamba::builtins::__memory::handle_t<U>& u) {
+  return !(t == u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Value U>
+bool operator!=(const T& t, const U u) {
+  return !(t == u);
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Object U>
+bool operator!=(const T t, const U& u) {
+  return !(t == u);
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Object U>
+bool operator!=(const T t, const mamba::builtins::__memory::handle_t<U>& u) {
+  return !(t == u);
+}
+
+template <mamba::builtins::__concepts::Value T,
+          mamba::builtins::__concepts::Value U>
+bool operator!=(const T t, const U u) {
+  return !(t == u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator!=(const mamba::builtins::__memory::handle_t<T> t,
+                const mamba::builtins::__memory::handle_t<U> u) {
+  return !(t == u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Object U>
+bool operator!=(const mamba::builtins::__memory::handle_t<T>& t, const U& u) {
+  return !(t == u);
+}
+
+template <mamba::builtins::__concepts::Object T,
+          mamba::builtins::__concepts::Value U>
+bool operator!=(const mamba::builtins::__memory::handle_t<T> t, const U u) {
+  return !(t == u);
+}

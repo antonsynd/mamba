@@ -420,11 +420,9 @@ class List : public std::enable_shared_from_this<List<T>> {
     end = ClampIndex(end);
 
     for (__types::Int idx = ClampIndex(start); idx < end; ++idx) {
-      // if (operators::operator==(v_[idx], elem)) {
-      if (operators::Eq(v_[idx], elem)) {
+      if (v_[idx] == elem) {
         return idx;
       }
-      // }
     }
 
     throw ValueError("{elem} is not in list");
@@ -482,9 +480,8 @@ class List : public std::enable_shared_from_this<List<T>> {
     auto it = v_.end();
 
     if constexpr (__concepts::Object<element>) {
-      it = std::find_if(v_.begin(), v_.end(), [&elem](const auto v) {
-        return operators::Eq(elem, v);
-      });
+      it = std::find_if(v_.begin(), v_.end(),
+                        [&elem](const auto v) { return elem == v; });
     } else {
       it = std::find(v_.begin(), v_.end(), elem);
     }
