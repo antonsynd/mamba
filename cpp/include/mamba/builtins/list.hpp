@@ -242,7 +242,13 @@ class List : public std::enable_shared_from_this<List<T>> {
       throw ValueError("Min() arg is an empty sequence");
     }
 
-    return *std::min_element(v_.cbegin(), v_.cend());
+    if constexpr (__concepts::Object<element>) {
+      return *std::min_element(
+          v_.cbegin(), v_.cend(),
+          [](const auto a, const auto b) { return operators::Lt(*a, *b); });
+    } else {
+      return *std::min_element(v_.cbegin(), v_.cend());
+    }
   }
 
   /// @brief Returns the biggest element in the list. If the list is empty,
@@ -253,15 +259,26 @@ class List : public std::enable_shared_from_this<List<T>> {
       throw ValueError("Max() arg is an empty sequence");
     }
 
-    return *std::max_element(v_.cbegin(), v_.cend());
+    if constexpr (__concepts::Object<element>) {
+      return *std::max_element(
+          v_.cbegin(), v_.cend(),
+          [](const auto a, const auto b) { return operators::Lt(*a, *b); });
+    } else {
+      return *std::max_element(v_.cbegin(), v_.cend());
+    }
   }
 
   /// @brief Returns the number of times @p elem is present in the list.
   /// @code list.count(x)
   __types::Int Count(__memory::ReadOnly<element> elem) const {
-    return std::count_if(
-        v_.cbegin(), v_.cend(),
-        [elem](__memory::ReadOnly<value> val) { return val == elem; });
+    return std::count_if(v_.cbegin(), v_.cend(),
+                         [elem](__memory::ReadOnly<element> val) {
+                           if constexpr (__concepts::Object<element>) {
+                             return *val == *elem;
+                           } else {
+                             return val == elem;
+                           }
+                         });
   }
 
   /// @brief Returns the elements in the list such that the elements' indices
@@ -464,7 +481,15 @@ class List : public std::enable_shared_from_this<List<T>> {
       throw ValueError("List.Remove(x): x not in list");
     }
 
-    auto it = std::find(v_.begin(), v_.end(), elem);
+    auto it = v_.end();
+
+    if constexpr (__concepts::Object<element>) {
+      it = std::find_if(v_.begin(), v_.end(), [&elem](const auto v) {
+        return operators::Eq(*elem, *v);
+      });
+    } else {
+      it = std::find(v_.begin(), v_.end(), elem);
+    }
 
     if (it == v_.end()) {
       throw ValueError("List.Remove(x): x not in list");
@@ -509,7 +534,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @p key before it is compared using the less-than operator.
   /// @code sort(list, key, reverse)
   template <typename K>
-    requires details::ListSortKey<K, value>
+    requires details::ListSortKey<K, element>
   void Sort(const K& key, __types::Bool reverse = false) {
     if (v_.empty()) {
       return;
@@ -564,7 +589,13 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @code list == other
   template <>
   __types::Bool Eq(const self& other) const {
-    return v_ == other.v_;
+    if constexpr (__concepts::Object<element>) {
+      return std::equal(
+          v_.begin(), v_.end(), other.v_.begin(), other.v_.end(),
+          [](const auto a, const auto b) { return operators::Eq(*a, *b); });
+    } else {
+      return v_ == other.v_;
+    }
   }
 
   template <>
@@ -812,7 +843,8 @@ class List : public std::enable_shared_from_this<List<T>> {
 
     if (other.v_.size() != num_old_elems) {
       throw ValueError(
-          "ValueError: attempt to assign sequence of size {} to extended slice "
+          "ValueError: attempt to assign sequence of size {} to extended "
+          "slice "
           "of size {}");
     }
 
