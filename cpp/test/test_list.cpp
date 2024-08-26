@@ -276,6 +276,15 @@ TEST(List, InNotActuallyIn) {
   EXPECT_FALSE(In(l, 4));
 }
 
+TEST(List, InNotActuallyInObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When/then
+  EXPECT_FALSE(In(l, IntWrapper::Init(4)));
+}
+
 TEST(List, InActuallyIn) {
   // If
   const List<Int> l = {1, 3, 5, 7};
@@ -284,9 +293,29 @@ TEST(List, InActuallyIn) {
   EXPECT_TRUE(In(l, 5));
 }
 
+TEST(List, InActuallyInObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When/then
+  EXPECT_FALSE(In(l, IntWrapper::Init(5)));
+}
+
 TEST(List, ClearEmpty) {
   // If
   List<Int> l;
+
+  // When
+  l.Clear();
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, ClearEmptyObject) {
+  // If
+  List<IntWrapper> l;
 
   // When
   l.Clear();
@@ -306,6 +335,18 @@ TEST(List, ClearNonEmpty) {
   EXPECT_EQ(Len(l), 0);
 }
 
+TEST(List, ClearNonEmptyObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l.Clear();
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
 TEST(List, CopyEmpty) {
   // If
   const List<Int> l;
@@ -313,6 +354,19 @@ TEST(List, CopyEmpty) {
   // When
   auto copy = l.Copy();
   copy->Append(5);
+
+  // Then
+  EXPECT_NE(&l, copy.get());
+  EXPECT_NE(Len(l), Len(*copy));
+}
+
+TEST(List, CopyEmptyObject) {
+  // If
+  const List<IntWrapper> l;
+
+  // When
+  auto copy = l.Copy();
+  copy->Append(IntWrapper::Init(5));
 
   // Then
   EXPECT_NE(&l, copy.get());
@@ -337,10 +391,41 @@ TEST(List, CopyNonEmpty) {
   EXPECT_EQ(actual_copy_items, expected_copy_items);
 }
 
+TEST(List, CopyNonEmptyObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  auto copy = l.Copy();
+  copy->Append(IntWrapper::Init(9));
+
+  // Then
+  const auto actual_l_items = as_vector<IntWrapper, Int>(l);
+  const std::vector<Int> expected_l_items = {1, 3, 5, 7};
+  EXPECT_EQ(actual_l_items, expected_l_items);
+
+  const auto actual_copy_items = as_vector<IntWrapper, Int>(*copy);
+  const std::vector<Int> expected_copy_items = {1, 3, 5, 7, 9};
+  EXPECT_EQ(actual_copy_items, expected_copy_items);
+}
+
 TEST(List, ExtendEmptyAndEmptyOther) {
   // If
   List<Int> l;
   const List<Int> other;
+
+  // When
+  l.Extend(other);
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, ExtendEmptyAndEmptyOtherObject) {
+  // If
+  List<IntWrapper> l;
+  const List<IntWrapper> other;
 
   // When
   l.Extend(other);
@@ -364,6 +449,22 @@ TEST(List, ExtendEmptyAndNonEmptyOther) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, ExtendEmptyAndNonEmptyOtherObject) {
+  // If
+  List<IntWrapper> l;
+  const List<IntWrapper> other = {IntWrapper::Init(1), IntWrapper::Init(3),
+                                  IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l.Extend(other);
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
 TEST(List, ExtendNonEmptyAndNonEmptyOther) {
   // If
   List<Int> l = {9, 11, 13};
@@ -374,6 +475,23 @@ TEST(List, ExtendNonEmptyAndNonEmptyOther) {
 
   // Then
   const auto actual = as_vector(l);
+  const std::vector<Int> expected = {9, 11, 13, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ExtendNonEmptyAndNonEmptyOtherObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(9), IntWrapper::Init(11),
+                        IntWrapper::Init(13)};
+  const List<IntWrapper> other = {IntWrapper::Init(1), IntWrapper::Init(3),
+                                  IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l.Extend(other);
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(l);
   const std::vector<Int> expected = {9, 11, 13, 1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
@@ -394,6 +512,23 @@ TEST(List, AdditionAssignmentOperator) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, AdditionAssignmentOperatorObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(9), IntWrapper::Init(11),
+                        IntWrapper::Init(13)};
+  const List<IntWrapper> other = {IntWrapper::Init(1), IntWrapper::Init(3),
+                                  IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l += other;
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(l);
+  const std::vector<Int> expected = {9, 11, 13, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
 TEST(List, AdditionOperator) {
   // If
   const List<Int> l = {9, 11, 13};
@@ -404,6 +539,23 @@ TEST(List, AdditionOperator) {
 
   // Then
   const auto actual = as_vector(*sum);
+  const std::vector<Int> expected = {9, 11, 13, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, AdditionOperatorObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(9), IntWrapper::Init(11),
+                              IntWrapper::Init(13)};
+  const List<IntWrapper> other = {IntWrapper::Init(1), IntWrapper::Init(3),
+                                  IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  const auto sum = l + other;
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(*sum);
   const std::vector<Int> expected = {9, 11, 13, 1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
@@ -420,9 +572,33 @@ TEST(List, MultiplicationOperatorNegative) {
   EXPECT_EQ(Len(*product), 0);
 }
 
+TEST(List, MultiplicationOperatorNegativeObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  const auto product = l * -1;
+
+  // Then
+  EXPECT_EQ(Len(*product), 0);
+}
+
 TEST(List, MultiplicationOperatorZero) {
   // If
   const List<Int> l = {1, 3, 5, 7};
+
+  // When
+  const auto product = l * 0;
+
+  // Then
+  EXPECT_EQ(Len(*product), 0);
+}
+
+TEST(List, MultiplicationOperatorZeroObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
 
   // When
   const auto product = l * 0;
@@ -445,6 +621,21 @@ TEST(List, MultiplicationOperatorOne) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, MultiplicationOperatorOneObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  const auto product = l * 1;
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(*product);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
 TEST(List, MultiplicationOperatorMoreThanOne) {
   // If
   const List<Int> l = {1, 3, 5, 7};
@@ -454,6 +645,21 @@ TEST(List, MultiplicationOperatorMoreThanOne) {
 
   // Then
   const auto actual = as_vector(*product);
+  const std::vector<Int> expected = {1, 3, 5, 7, 1, 3, 5, 7, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, MultiplicationOperatorMoreThanOneObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  const auto product = l * 3;
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(*product);
   const std::vector<Int> expected = {1, 3, 5, 7, 1, 3, 5, 7, 1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
@@ -470,9 +676,33 @@ TEST(List, MultiplicationAssignmentOperatorNegative) {
   EXPECT_EQ(Len(l), 0);
 }
 
+TEST(List, MultiplicationAssignmentOperatorNegativeObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l *= -1;
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
 TEST(List, MultiplicationAssignmentOperatorZero) {
   // If
   List<Int> l = {1, 3, 5, 7};
+
+  // When
+  l *= 0;
+
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
+
+TEST(List, MultiplicationAssignmentOperatorZeroObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7)};
 
   // When
   l *= 0;
@@ -495,6 +725,21 @@ TEST(List, MultiplicationAssignmentOperatorOne) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, MultiplicationAssignmentOperatorOneObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l *= 1;
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
 TEST(List, MultiplicationAssignmentOperatorMoreThanOne) {
   // If
   List<Int> l = {1, 3, 5, 7};
@@ -504,6 +749,21 @@ TEST(List, MultiplicationAssignmentOperatorMoreThanOne) {
 
   // Then
   const auto actual = as_vector(l);
+  const std::vector<Int> expected = {1, 3, 5, 7, 1, 3, 5, 7, 1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, MultiplicationAssignmentOperatorMoreThanOneObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When
+  l *= 3;
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(l);
   const std::vector<Int> expected = {1, 3, 5, 7, 1, 3, 5, 7, 1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
@@ -520,6 +780,18 @@ TEST(List, GetByPositiveIndex) {
   EXPECT_EQ(l[3], 7);
 }
 
+TEST(List, GetByPositiveIndexObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When/then
+  EXPECT_EQ(l[0]->Value(), 1);
+  EXPECT_EQ(l[1]->Value(), 3);
+  EXPECT_EQ(l[2]->Value(), 5);
+  EXPECT_EQ(l[3]->Value(), 7);
+}
+
 TEST(List, GetByNegativeIndex) {
   // If
   const List<Int> l = {1, 3, 5, 7};
@@ -529,6 +801,18 @@ TEST(List, GetByNegativeIndex) {
   EXPECT_EQ(l[-2], 5);
   EXPECT_EQ(l[-3], 3);
   EXPECT_EQ(l[-4], 1);
+}
+
+TEST(List, GetByNegativeIndexObject) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When/then
+  EXPECT_EQ(l[-1]->Value(), 7);
+  EXPECT_EQ(l[-2]->Value(), 5);
+  EXPECT_EQ(l[-3]->Value(), 3);
+  EXPECT_EQ(l[-4]->Value(), 1);
 }
 
 TEST(List, GetByOutOfBounds) {

@@ -10,7 +10,8 @@ template <__concepts::Value T>
 struct ValueWrapper {
  public:
   constexpr ValueWrapper(T&& t) : t_(std::forward<T>(t)) {}
-  constexpr ~ValueWrapper() = default;
+
+  ValueWrapper& operator=(T&& t) constexpr { t_ = std::forward<T>(t); }
 
   constexpr T& operator*() { return t_; }
   constexpr const T& operator*() const { return t_; }
