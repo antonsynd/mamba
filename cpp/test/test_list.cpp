@@ -2576,7 +2576,8 @@ TEST(List, EqualitySameObjectObject) {
   // If
   const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
                               IntWrapper::Init(5), IntWrapper::Init(7)};
-  const auto copy = l;
+  const List<IntWrapper> copy = {IntWrapper::Init(1), IntWrapper::Init(3),
+                                 IntWrapper::Init(5), IntWrapper::Init(7)};
   ASSERT_NE(&l, &copy);
 
   // When/then
@@ -2597,7 +2598,8 @@ TEST(List, NativeEqualitySameObjectObject) {
   // If
   const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
                               IntWrapper::Init(5), IntWrapper::Init(7)};
-  const auto copy = l;
+  const List<IntWrapper> copy = {IntWrapper::Init(1), IntWrapper::Init(3),
+                                 IntWrapper::Init(5), IntWrapper::Init(7)};
   ASSERT_NE(&l, &copy);
 
   // When/then
@@ -2618,7 +2620,8 @@ TEST(List, NativeInEqualitySameObjectObject) {
   // If
   const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
                               IntWrapper::Init(5), IntWrapper::Init(7)};
-  const auto copy = l;
+  const List<IntWrapper> copy = {IntWrapper::Init(1), IntWrapper::Init(3),
+                                 IntWrapper::Init(5), IntWrapper::Init(7)};
   ASSERT_NE(&l, &copy);
 
   // When/then
