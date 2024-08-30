@@ -1,5 +1,3 @@
-#include <string>  // for basic_string
-
 #include "gtest/gtest.h"  // for Test, TEST
 
 #include "mamba/builtins/dict.hpp"  // for Dict
@@ -9,7 +7,7 @@ namespace mamba::builtins::test {
 
 TEST(Dict, EmptyConstructor) {
   // If/when
-  Dict<Int, Int> d;
+  const Dict<Int, Int> d;
 
   // Then
   EXPECT_EQ(d.Len(), 0);
