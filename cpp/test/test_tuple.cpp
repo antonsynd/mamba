@@ -1,3 +1,5 @@
+#include <string>  // for basic_string
+
 #include "gtest/gtest.h"  // for Test, TEST
 
 #include "mamba/builtins/int.hpp"    // for Int
