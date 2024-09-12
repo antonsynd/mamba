@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <concepts>
 #include <initializer_list>
 #include <memory>
@@ -34,12 +35,13 @@ class Set : public std::enable_shared_from_this<Set<T>> {
   /// @note Mamba-specific
   using element = T;
 
-  using value = __memory::managed_t<element>;
-  using reference = value&;
-  using const_reference = const value&;
+  using key_type = __memory::managed_t<element>;
+  using value_type = key_type;
+  using reference = value_type&;
+  using const_reference = const value_type&;
 
   /// @note Mamba-specific
-  using storage = std::unordered_set<value>;
+  using storage = std::unordered_set<value_type>;
 
   using iterator = storage::iterator;
   using const_iteratro = storage::const_iterator;
@@ -80,10 +82,10 @@ class Set : public std::enable_shared_from_this<Set<T>> {
 
   /// @brief Creates a set from an initializer list (set literal).
   /// @code {...}
-  Set(std::initializer_list<value> elements) {
+  Set(std::initializer_list<value_type> elements) {
     s_.reserve(elements.size());
 
-    if constexpr (__memory::Handle<value>) {
+    if constexpr (__memory::Handle<value_type>) {
       std::copy(std::make_move_iterator(elements.begin()),
                 std::make_move_iterator(elements.end()),
                 std::back_inserter(s_));
@@ -129,83 +131,85 @@ class Set : public std::enable_shared_from_this<Set<T>> {
   /// @p elem does not occur in the set, throws KeyError.
   /// @code set.remove(elem)
   void Remove(__memory::ReadOnly<element> elem) {
-    if (s_.empty()) {
+    auto it_opt = TryFind(elem);
+
+    if (!it_opt) {
       throw KeyError("Set.Remove(x): x not in set");
     }
 
-    auto it = v_.end();
-
-    if constexpr (__concepts::Object<element>) {
-      it = std::find_if(s_.begin(), s_.end(),
-                        [&elem](const auto v) { return elem == v; });
-    } else {
-      it = std::find(s_.begin(), s_.end(), elem);
-    }
-
-    if (it == s_.end()) {
-      throw ValueError("Set.Remove(x): x not in set");
-    }
-
-    s_.erase(it);
+    s_.erase(*it_opt);
   }
 
   /// @brief Removes @p elem from the set. If the set is empty or
   /// @p elem does not occur in the set, does nothing.
   /// @code set.remove(elem)
   void Discard(__memory::ReadOnly<element> elem) {
-    if (s_.empty()) {
-      return;
+    auto it_opt = TryFind(elem);
+
+    if (it_opt) {
+      s_.erase(*it_opt);
     }
-
-    auto it = v_.end();
-
-    if constexpr (__concepts::Object<element>) {
-      it = std::find_if(s_.begin(), s_.end(),
-                        [&elem](const auto v) { return elem == v; });
-    } else {
-      it = std::find(s_.begin(), s_.end(), elem);
-    }
-
-    if (it == s_.end()) {
-      return;
-    }
-
-    s_.erase(it);
   }
 
   /// @brief Removes an arbitrary element and returns it. If the set is empty,
   /// then throws KeyError.
   /// @code set.pop()
-  value Pop() {
+  value_type Pop() {
     if (s_.empty()) {
-      throw KeyError("pop index out of range");
+      throw KeyError("pop from an empty set");
     }
 
-    const auto size_t_idx = *idx_opt;
-    const auto it = GetIterator(size_t_idx);
+    auto it = s_.begin();
+    // Copy, but it's okay, it's either a shared pointer or a raw value
     auto elem = *it;
 
-    if (size_t_idx == v_.size() - 1) {
-      // Trivial case, pop from the back
-      v_.pop_back();
-    } else {
-      // Erase an element from the start or middle
-      v_.erase(it);
-    }
+    s_.erase(it);
 
     return elem;
   }
 
-  __types::Bool IsDisjoint(void other) const {}
-  __types::Bool IsSubset(void other) const {}
+  /// @code set.isdisjoint(other)
+  __types::Bool IsDisjoint(const handle& other) const {
+    return Intersection(other)->s_.empty();
+  }
 
-  bool operator<=(void other) const { return IsSubset(other); }
-  bool operator<(void other) const { return IsSubset(other) && !Eq(other); }
+  /// @code set.issubset(other)
+  template <typename It>
+    requires __concepts::TypedIterable<It, element>
+  __types::Bool IsSubset(It& other) const {}
 
-  __types::Bool IsSuperset(void other) const {}
+  /// @code set.__lteq__(other)
+  __types::Bool LtEq(const handle& other) const { return IsSubset(other); }
 
-  bool operator>=(void other) const { return IsSuperset(other); }
-  bool operator>(void other) const { return IsSuperset(other) && !Eq(other); }
+  /// @code set <= other
+  bool operator<=(const handle& other) const { return LtEq(other); }
+
+  /// @code set.__lt__(other)
+  __types::Bool Lt(const handle& other) const {
+    return LtEq(other) && !Eq(other);
+  }
+
+  /// @code set < other
+  bool operator<(const handle& other) const { return Lt(other); }
+
+  /// @code set.issuperset(other)
+  template <typename It>
+    requires __concepts::TypedIterable<It, element>
+  __types::Bool IsSuperset(It& other) const {}
+
+  /// @code set.__gteq__(other)
+  __types::Bool GtEq(const handle& other) const { return IsSuperset(other); }
+
+  /// @code set.__gt__(other)
+  __types::Bool Gt(const handle& other) const {
+    return GtEq(other) && !Eq(other);
+  }
+
+  /// @code set >= other
+  bool operator>=(void other) const { return GtEq(other); }
+
+  /// @code set > other
+  bool operator>(void other) const { return Gt(other); }
 
   handle Union(void other) const {}
   handle operator|(void other) const { return Union(other); }
@@ -279,7 +283,7 @@ class Set : public std::enable_shared_from_this<Set<T>> {
   __types::Bool Eq(const self& other) const {
     if constexpr (__concepts::Object<element>) {
       return std::equal(
-          s_.begin(), s_.end(), other.v_.begin(), other.v_.end(),
+          s_.begin(), s_.end(), other.s_.begin(), other.s_.end(),
           [](const auto a, const auto b) { return operators::Eq(*a, *b); });
     } else {
       return s_ == other.s_;
@@ -357,6 +361,23 @@ class Set : public std::enable_shared_from_this<Set<T>> {
   }
 
  private:
+  std::optional<iterator> TryFind(__memory::ReadOnly<element> elem) {
+    if (s_.empty()) {
+      return std::nullopt;
+    }
+
+    auto it = s_.end();
+
+    if constexpr (__concepts::Object<element>) {
+      it = std::find_if(s_.begin(), s_.end(),
+                        [&elem](const auto v) { return elem == v; });
+    } else {
+      it = std::find(s_.begin(), s_.end(), elem);
+    }
+
+    return it;
+  }
+
   storage s_;
 };
 
@@ -368,7 +389,7 @@ class SetIterator : public Iterator<T>,
  public:
   using element = T;
 
-  using value = __memory::managed_t<element>;
+  using value_type = __memory::managed_t<element>;
 
   using iterator = Set<element>::iterator;
   using const_iterator = Set<element>::const_iterator;
@@ -393,7 +414,7 @@ class SetIterator : public Iterator<T>,
     return std::enable_shared_from_this<self>::shared_from_this();
   }
 
-  value Next() override {
+  value_type Next() override {
     if (it_ == end_) {
       throw StopIteration("end of iterator");
     }
@@ -410,6 +431,15 @@ class SetIterator : public Iterator<T>,
   const_iterator end() const { return end_; }
   const_iterator cbegin() const { return it_; }
   const_iterator cend() const { return end_; }
+
+  bool operator==(const self& other) const {
+    return it_ == other.it_ && end_ == other.end_;
+  }
+
+  bool operator==(const handle& other) const { return it_ == *other; }
+
+  bool operator!=(const self& other) const { return !(*this == other); }
+  bool operator!=(const handle& other) const { return !(*this == *other); }
 
  private:
   iterator it_;

@@ -614,6 +614,15 @@ class TupleIterator : public Iterator<T>,
   const_iterator cbegin() const { return it_; }
   const_iterator cend() const { return end_; }
 
+  bool operator==(const self& other) const {
+    return it_ == other.it_ && end_ == other.end_;
+  }
+
+  bool operator==(const handle& other) const { return it_ == *other; }
+
+  bool operator!=(const self& other) const { return !(*this == other); }
+  bool operator!=(const handle& other) const { return !(*this == *other); }
+
  private:
   iterator it_;
   iterator end_;

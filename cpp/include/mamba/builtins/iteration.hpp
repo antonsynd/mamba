@@ -55,4 +55,50 @@ __memory::handle_t<Iterator<typename T::element>> Iter(
   return Iter(*it);
 }
 
+// template <__concepts::Iterable T>
+// class CppIterator {
+//  public:
+//   /// @note Mamba-specific
+//   using element = typename T::element;
+//   using self = CppIterator<T>;
+//   using iterator = __memory::handle_t<Iterator<element>>;
+
+//   using value_type = __memory::managed_t<element>;
+
+//   explicit CppIterator(T iterable) : at_end_(false), it_(iterable.Iter()) {}
+
+//   self& operator++() {
+//     try {
+//       Next(*it_);
+//     } catch (StopIteration) {
+//       no_stop_iteration = false;
+//     }
+
+//     return *this;
+//   }
+
+//   self operator++(int) {
+//     auto res = it;
+//     this->operator++();
+
+//     return res;
+//   }
+
+//   value_type operator*() { return *it_; }
+
+//   bool operator==(const self& other) const {return }
+
+//   self begin() const {
+//     return *this;
+//   }
+//   self end() const {
+//     auto res = *this;
+//     res.at_end_ = true;
+//   }
+
+//  private:
+//   bool at_end_;
+//   iterator it_;
+// };
+
 }  // namespace mamba::builtins

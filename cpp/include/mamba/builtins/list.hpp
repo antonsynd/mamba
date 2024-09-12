@@ -45,12 +45,12 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @note Mamba-specific
   using element = T;
 
-  using value = __memory::managed_t<element>;
-  using reference = value&;
-  using const_reference = const value&;
+  using value_type = __memory::managed_t<element>;
+  using reference = value_type&;
+  using const_reference = const value_type&;
 
   /// @note Mamba-specific
-  using storage = std::vector<value>;
+  using storage = std::vector<value_type>;
 
   using iterator = storage::iterator;
   using const_iterator = storage::const_iterator;
@@ -93,10 +93,10 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Creates a list from an initializer list (list literal).
   /// @code [...]
-  List(std::initializer_list<value> elements) {
+  List(std::initializer_list<value_type> elements) {
     v_.reserve(elements.size());
 
-    if constexpr (__memory::Handle<value>) {
+    if constexpr (__memory::Handle<value_type>) {
       std::copy(std::make_move_iterator(elements.begin()),
                 std::make_move_iterator(elements.end()),
                 std::back_inserter(v_));
@@ -237,7 +237,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @brief Returns the smallest element in the list. If the list is empty,
   /// throws ValueError.
   /// @code min(list)
-  value Min() const {
+  value_type Min() const {
     if (v_.empty()) {
       throw ValueError("Min() arg is an empty sequence");
     }
@@ -254,7 +254,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @brief Returns the biggest element in the list. If the list is empty,
   /// throws ValueError.
   /// @code max(list)
-  value Max() const {
+  value_type Max() const {
     if (v_.empty()) {
       throw ValueError("Max() arg is an empty sequence");
     }
@@ -432,7 +432,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// any element at that position to the right. @p idx is clamped to the
   /// length of the list.
   /// @code list.insert(idx, x)
-  void Insert(__types::Int idx, value elem) {
+  void Insert(__types::Int idx, value_type elem) {
     const auto size_t_idx = NormalizeOrClampIndex(idx);
 
     if (size_t_idx == v_.size()) {
@@ -446,7 +446,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @brief Removes the element at @p idx and returns it. If @p idx is out of
   /// bounds, then throws IndexError.
   /// @code list.pop(idx)
-  value Pop(__types::Int idx = -1) {
+  value_type Pop(__types::Int idx = -1) {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -874,7 +874,7 @@ class ListIterator : public Iterator<T>,
  public:
   using element = T;
 
-  using value = __memory::managed_t<element>;
+  using value_type = __memory::managed_t<element>;
 
   using iterator = List<element>::iterator;
   using const_iterator = List<element>::const_iterator;
@@ -899,7 +899,7 @@ class ListIterator : public Iterator<T>,
     return std::enable_shared_from_this<self>::shared_from_this();
   }
 
-  value Next() override {
+  value_type Next() override {
     if (it_ == end_) {
       throw StopIteration("end of iterator");
     }
@@ -916,6 +916,15 @@ class ListIterator : public Iterator<T>,
   const_iterator end() const { return end_; }
   const_iterator cbegin() const { return it_; }
   const_iterator cend() const { return end_; }
+
+  bool operator==(const self& other) const {
+    return it_ == other.it_ && end_ == other.end_;
+  }
+
+  bool operator==(const handle& other) const { return it_ == *other; }
+
+  bool operator!=(const self& other) const { return !(*this == other); }
+  bool operator!=(const handle& other) const { return !(*this == *other); }
 
  private:
   iterator it_;
