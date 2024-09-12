@@ -17,7 +17,7 @@ template <typename T, typename U>
 concept TypedSequence =
     __concepts::TypedIterable<T, U> &&
     requires(const T& sequence, __memory::ReadOnly<U> elem) {
-      { sequence.In(elem) } -> std::same_as<__types::Bool>;
+      { sequence.Contains(elem) } -> std::same_as<__types::Bool>;
       { sequence.Len() } -> std::same_as<__types::Int>;
       { sequence.Max() } -> std::same_as<__memory::managed_t<U>>;
       { sequence.Min() } -> std::same_as<__memory::managed_t<U>>;
@@ -55,15 +55,15 @@ __memory::managed_t<typename T::element> Max(
 }
 
 template <__concepts::Sequence T>
-__types::Bool In(const T& sequence,
-                 __memory::ReadOnly<typename T::element> value) {
-  return sequence.In(value);
+__types::Bool Contains(const T& sequence,
+                       __memory::ReadOnly<typename T::element> value) {
+  return sequence.Contains(value);
 }
 
 template <__concepts::Sequence T>
-__types::Bool In(const __memory::handle_t<T>& sequence,
-                 __memory::ReadOnly<typename T::element> value) {
-  return In(*sequence, value);
+__types::Bool Contains(const __memory::handle_t<T>& sequence,
+                       __memory::ReadOnly<typename T::element> value) {
+  return Contains(*sequence, value);
 }
 
 template <__concepts::Sequence T>

@@ -126,7 +126,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns whether @p elem is in the list. O(n).
   /// @code elem in list
-  __types::Bool In(__memory::ReadOnly<element> elem) const {
+  __types::Bool Contains(__memory::ReadOnly<element> elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 

@@ -106,7 +106,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     }
   }
 
-  __types::Bool In(__memory::ReadOnly<key_element> key) const {
+  __types::Bool Contains(__memory::ReadOnly<key_element> key) const {
     return m_.contains(key);
   }
 

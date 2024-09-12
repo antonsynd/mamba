@@ -24,7 +24,7 @@
 #include "mamba/builtins/list.hpp"            // for List
 #include "mamba/builtins/object.hpp"          // for Str
 #include "mamba/builtins/repr.hpp"            // for Repr
-#include "mamba/builtins/sequence.hpp"        // for Len, In, Max, Min
+#include "mamba/builtins/sequence.hpp"        // for Len, Contains, Max, Min
 #include "mamba/builtins/str.hpp"             // for Str
 
 namespace mamba::builtins::test {
@@ -257,54 +257,54 @@ TEST(List, AppendVariadicElementsObject) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, InEmpty) {
+TEST(List, ContainsEmpty) {
   // If
   const List<Int> l;
 
   // When/then
-  EXPECT_FALSE(In(l, 1));
+  EXPECT_FALSE(Contains(l, 1));
 }
 
-TEST(List, InEmptyObject) {
+TEST(List, ContainsEmptyObject) {
   // If
   const List<IntWrapper> l;
 
   // When/then
-  EXPECT_FALSE(In(l, IntWrapper::Init(1)));
+  EXPECT_FALSE(Contains(l, IntWrapper::Init(1)));
 }
 
-TEST(List, InNotActuallyIn) {
+TEST(List, ContainsNotActuallyIn) {
   // If
   const List<Int> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_FALSE(In(l, 4));
+  EXPECT_FALSE(Contains(l, 4));
 }
 
-TEST(List, InNotActuallyInObject) {
+TEST(List, ContainsNotActuallyInObject) {
   // If
   const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
                               IntWrapper::Init(5), IntWrapper::Init(7)};
 
   // When/then
-  EXPECT_FALSE(In(l, IntWrapper::Init(4)));
+  EXPECT_FALSE(Contains(l, IntWrapper::Init(4)));
 }
 
-TEST(List, InActuallyIn) {
+TEST(List, ContainsActuallyIn) {
   // If
   const List<Int> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_TRUE(In(l, 5));
+  EXPECT_TRUE(Contains(l, 5));
 }
 
-TEST(List, InActuallyInObject) {
+TEST(List, ContainsActuallyInObject) {
   // If
   const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
                               IntWrapper::Init(5), IntWrapper::Init(7)};
 
   // When/then
-  EXPECT_FALSE(In(l, IntWrapper::Init(5)));
+  EXPECT_FALSE(Contains(l, IntWrapper::Init(5)));
 }
 
 TEST(List, ClearEmpty) {

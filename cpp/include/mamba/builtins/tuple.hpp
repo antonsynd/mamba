@@ -46,7 +46,7 @@ class TupleIterator;
 //   requires details::Heterogeneous<Args...>
 // class Tuple {
 //  public:
-//   __types::Bool In(elem) const;
+//   __types::Bool Contains(elem) const;
 //   __types::Int Len() const;
 
 //  private:
@@ -131,7 +131,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   /// @brief Returns whether @p elem is in the tuple. O(n).
   /// @code elem in tuple
-  __types::Bool In(__memory::ReadOnly<element> elem) const {
+  __types::Bool Contains(__memory::ReadOnly<element> elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 
