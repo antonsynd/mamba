@@ -569,13 +569,12 @@ template <__concepts::Entity T>
 class TupleIterator : public Iterator<T>,
                       public std::enable_shared_from_this<TupleIterator<T>> {
  public:
+  /// @brief Mamba-specific
   using element = T;
 
-  using value = __memory::managed_t<element>;
+  using value_type = __memory::managed_t<element>;
 
-  using iterator = Tuple<element>::iterator;
-  using const_iterator = Tuple<element>::const_iterator;
-
+  /// @brief Mamba-specific
   using self = TupleIterator<element>;
   using handle = __memory::handle_t<self>;
 
@@ -596,7 +595,7 @@ class TupleIterator : public Iterator<T>,
     return std::enable_shared_from_this<self>::shared_from_this();
   }
 
-  value Next() override {
+  value_type Next() override {
     if (it_ == end_) {
       throw StopIteration("end of iterator");
     }
@@ -605,14 +604,6 @@ class TupleIterator : public Iterator<T>,
   }
 
   __types::Str Repr() const override { return "TupleIterator"; }
-
-  // Native support for C++ for..each loops
-  iterator begin() { return it_; }
-  iterator end() { return end_; }
-  const_iterator begin() const { return it_; }
-  const_iterator end() const { return end_; }
-  const_iterator cbegin() const { return it_; }
-  const_iterator cend() const { return end_; }
 
   bool operator==(const self& other) const {
     return it_ == other.it_ && end_ == other.end_;

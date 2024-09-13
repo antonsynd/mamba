@@ -7,19 +7,81 @@
 #include "mamba/__concepts/entity.hpp"
 #include "mamba/__memory/managed.hpp"
 #include "mamba/builtins/__types/object.hpp"
+#include "mamba/builtins/error.hpp"
 
 namespace mamba::builtins {
+namespace details {
+
+// Forward declaration
+template <__concepts::Entity T>
+class IteratorWrapper;
+
+}  // namespace details
 
 template <__concepts::Entity T>
 class Iterator : public builtins::__types::Object {
  public:
+  /// @brief Mamba-specific
   using element = T;
-  using value = __memory::managed_t<element>;
+  using self = Iterator<element>;
+  using handle = __memory::handle_t<self>;
+
+  using iterator = details::IteratorWrapper<element>;
+  using value_type = __memory::managed_t<element>;
 
   virtual ~Iterator() = default;
 
   virtual __memory::handle_t<Iterator<element>> Iter() = 0;
-  virtual value Next() = 0;
+
+  /// @brief Returns the next value from the iterator, starting from the first
+  /// value.
+  /// @code next(iterator)
+  virtual value_type Next() = 0;
+
+  /// @brief Returns false all the time for all arguments by default.
+  /// @code iterator == other
+  template <typename U>
+  __types::Bool Eq(const U&) const {
+    return false;
+  }
+
+  /// @brief Returns true if this and @p other contain the same elements, and
+  /// false otherwise.
+  /// @code list == other
+  template <>
+  __types::Bool Eq(const self& other) const {
+    return this == &other;
+  }
+
+  template <>
+  __types::Bool Eq(const handle& other) const {
+    return Eq(*other);
+  }
+
+  /// @brief Native support for C++ == and != operators.
+  template <typename U>
+  bool operator==(const U& other) const {
+    return Eq(other);
+  }
+
+  template <>
+  bool operator==(const handle& other) const {
+    return operator==(*other);
+  }
+
+  template <typename U>
+  bool operator!=(const U& other) const {
+    return !Eq(other);
+  }
+
+  template <>
+  bool operator!=(const handle& other) const {
+    return operator!=(*other);
+  }
+
+  // Native C++ iteration support
+  iterator begin() const { return iterator(*this); }
+  iterator end() const { return iterator(*this, true); }
 };
 
 namespace __concepts {
@@ -55,50 +117,61 @@ __memory::handle_t<Iterator<typename T::element>> Iter(
   return Iter(*it);
 }
 
-// template <__concepts::Iterable T>
-// class CppIterator {
-//  public:
-//   /// @note Mamba-specific
-//   using element = typename T::element;
-//   using self = CppIterator<T>;
-//   using iterator = __memory::handle_t<Iterator<element>>;
+namespace details {
 
-//   using value_type = __memory::managed_t<element>;
+template <__concepts::Entity T>
+class IteratorWrapper {
+ public:
+  /// @note Mamba-specific
+  using element = T;
+  using self = IteratorWrapper<element>;
+  using iterator = __memory::handle_t<Iterator<element>>;
 
-//   explicit CppIterator(T iterable) : at_end_(false), it_(iterable.Iter()) {}
+  using value_type = __memory::managed_t<element>;
 
-//   self& operator++() {
-//     try {
-//       Next(*it_);
-//     } catch (StopIteration) {
-//       no_stop_iteration = false;
-//     }
+  explicit IteratorWrapper(iterator it, bool at_end = false)
+      : at_end_(at_end), it_(it) {}
 
-//     return *this;
-//   }
+  self& operator++() {
+    if (at_end_) {
+      return *this;
+    }
 
-//   self operator++(int) {
-//     auto res = it;
-//     this->operator++();
+    try {
+      Next(it_);
+    } catch (StopIteration) {
+      at_end_ = true;
+    }
 
-//     return res;
-//   }
+    return *this;
+  }
 
-//   value_type operator*() { return *it_; }
+  self operator++(int) {
+    auto res = *it_;
+    this->operator++();
 
-//   bool operator==(const self& other) const {return }
+    return res;
+  }
 
-//   self begin() const {
-//     return *this;
-//   }
-//   self end() const {
-//     auto res = *this;
-//     res.at_end_ = true;
-//   }
+  value_type operator*() { return *it_; }
 
-//  private:
-//   bool at_end_;
-//   iterator it_;
-// };
+  bool operator==(const self& other) const {
+    return at_end_ == other.at_end_ && it_ == other.it_;
+  }
+
+  bool operator!=(const self& other) const { return !(*this == other); }
+
+  self begin() const { return *this; }
+  self end() const {
+    auto res = *this;
+    res.at_end_ = true;
+  }
+
+ private:
+  bool at_end_;
+  iterator it_;
+};
+
+}  // namespace details
 
 }  // namespace mamba::builtins

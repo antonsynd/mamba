@@ -387,13 +387,12 @@ template <__concepts::Entity T>
 class SetIterator : public Iterator<T>,
                     public std::enable_shared_from_this<SetIterator<T>> {
  public:
+  /// @brief Mamba-specific
   using element = T;
 
   using value_type = __memory::managed_t<element>;
 
-  using iterator = Set<element>::iterator;
-  using const_iterator = Set<element>::const_iterator;
-
+  /// @brief Mamba-specific
   using self = SetIterator<element>;
   using handle = __memory::handle_t<self>;
 
@@ -423,14 +422,6 @@ class SetIterator : public Iterator<T>,
   }
 
   __types::Str Repr() const override { return "SetIterator"; }
-
-  // Native support for C++ for..each loops
-  iterator begin() { return it_; }
-  iterator end() { return end_; }
-  const_iterator begin() const { return it_; }
-  const_iterator end() const { return end_; }
-  const_iterator cbegin() const { return it_; }
-  const_iterator cend() const { return end_; }
 
   bool operator==(const self& other) const {
     return it_ == other.it_ && end_ == other.end_;
