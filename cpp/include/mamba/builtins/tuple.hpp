@@ -573,6 +573,7 @@ class TupleIterator : public Iterator<T>,
   using element = T;
 
   using value_type = __memory::managed_t<element>;
+  using iterator = Tuple<element>::iterator;
 
   /// @brief Mamba-specific
   using self = TupleIterator<element>;

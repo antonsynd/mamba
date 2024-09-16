@@ -876,6 +876,7 @@ class ListIterator : public Iterator<T>,
   using element = T;
 
   using value_type = __memory::managed_t<element>;
+  using iterator = List<element>::iterator;
 
   /// @brief Mamba-specific
   using self = ListIterator<element>;

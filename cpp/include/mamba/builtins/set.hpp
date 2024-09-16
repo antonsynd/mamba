@@ -391,6 +391,7 @@ class SetIterator : public Iterator<T>,
   using element = T;
 
   using value_type = __memory::managed_t<element>;
+  using iterator = Set<element>::iterator;
 
   /// @brief Mamba-specific
   using self = SetIterator<element>;
