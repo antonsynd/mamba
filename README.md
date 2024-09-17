@@ -1,5 +1,16 @@
 # mamba
 
+Mamba is a transpiler for a statically-typed subset of Python 3 to C++20.
+
+This is mainly an educational project to explore what challenges there are in
+implementing a programming language. I don't currently have plans to complete
+anything besides a statically-typed subset of the Python builtins.
+
+Check the C++ and Python tests for status on the implementation and what
+works and what doesn't.
+
+## Design
+
 This project consists of two parts:
 * A C++ transpilation target for a statically-typed subset of Python. This aims
 to provide a nearly 1-to-1 equivalent of many Python's built-in symbols, so
