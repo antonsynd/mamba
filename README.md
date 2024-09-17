@@ -20,10 +20,16 @@ possible.
 to C++.
 
 ## Requirements
-* C++20
+* C++20*
+* clang-format
+* include-what-you-use
+* [Google Test](https://github.com/google/googletest)
 * [Chiri](https://github.com/antonsynd/chiri)
 * CMake 3.14+
 * Python 3.8+
+
+*My local development is on macOS with `clang`. I might test `g++` later on,
+but right now, for best results, use `clang`.
 
 ## How to build and run tests
 
