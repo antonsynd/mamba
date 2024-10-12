@@ -20,17 +20,18 @@
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/repr.hpp"
 
-namespace mamba::builtins {
+namespace mamba::builtins::__types {
 namespace details {
 
 // Forward declaration
 template <__concepts::Entity T>
-class SetIterator;
+class SetIteratorBase;
 
 }  // namespace details
 
-template <__concepts::Entity T>
-class Set : public std::enable_shared_from_this<Set<T>> {
+/// Curiously recurring template
+template <__concepts::Entity T, typename Derived>
+class SetBase : public std::enable_shared_from_this<Derived<T>> {
  public:
   /// @note Mamba-specific
   using element = T;
@@ -47,19 +48,19 @@ class Set : public std::enable_shared_from_this<Set<T>> {
   using const_iterator = storage::const_iterator;
 
   /// @note Mamba-specific
-  using self = Set<element>;
+  using self = Derived<element>;
   using handle = __memory::handle_t<self>;
 
   /// @brief Creates an empty set.
   /// @code set()
-  Set() {}
+  SetBase() {}
 
   /// @brief Creates a set from the elements in @p it. Value types
   /// are copied.
   /// @code set(Iterable)
   template <typename It>
     requires __concepts::TypedIterable<It, element>
-  explicit Set(It& iterable) {
+  explicit SetBase(It& iterable) {
     bool no_stop_iteration = true;
     auto it = iterable.Iter();
 
@@ -76,13 +77,12 @@ class Set : public std::enable_shared_from_this<Set<T>> {
   /// @brief Creates a set with the provided variadic arguments.
   /// @code set(...)
   template <typename... Args>
-  Set(Args... rest) {
+  SetBase(Args... rest) {
     (Add(std::forward<Args>(rest)), ...);
   }
 
-  /// @brief Creates a set from an initializer list (set literal).
-  /// @code {...}
-  Set(std::initializer_list<value_type> elements) {
+  /// @brief Creates a set from an initializer list.
+  SetBase(std::initializer_list<value_type> elements) {
     s_.reserve(elements.size());
 
     if constexpr (__memory::Handle<value_type>) {
@@ -94,27 +94,11 @@ class Set : public std::enable_shared_from_this<Set<T>> {
     }
   }
 
-  /// @brief Generic constructor forwarding arguments to actual constructor
-  /// methods.
-  /// @code Set.__init__()
-  template <typename... Args>
-  static handle Init(Args&&... args) {
-    return __memory::Init<self>(std::forward<Args>(args)...);
-  }
-
-  /// @brief Adds @p elem to the set.
-  /// @code set.add(elem)
-  void Add(__memory::ReadOnly<element> elem) { s_.emplace(elem); }
-
   /// @brief Returns whether @p elem is in the set. O(1).
   /// @code elem in set
   __types::Bool In(__memory::ReadOnly<element> elem) const {
     return s_.count(elem);
   }
-
-  /// @brief Clears the elements of the set.
-  /// @code set.clear()
-  void Clear() { s_.clear(); }
 
   /// @brief Creates a shallow copy of the set.
   /// @code set.copy()
@@ -126,47 +110,6 @@ class Set : public std::enable_shared_from_this<Set<T>> {
   /// @brief Returns the number of elements in the set.
   /// @code len(set)
   __types::Int Len() const { return s_.size(); }
-
-  /// @brief Removes @p elem from the set. If the set is empty or
-  /// @p elem does not occur in the set, throws KeyError.
-  /// @code set.remove(elem)
-  void Remove(__memory::ReadOnly<element> elem) {
-    auto it_opt = TryFind(elem);
-
-    if (!it_opt) {
-      throw KeyError("Set.Remove(x): x not in set");
-    }
-
-    s_.erase(*it_opt);
-  }
-
-  /// @brief Removes @p elem from the set. If the set is empty or
-  /// @p elem does not occur in the set, does nothing.
-  /// @code set.remove(elem)
-  void Discard(__memory::ReadOnly<element> elem) {
-    auto it_opt = TryFind(elem);
-
-    if (it_opt) {
-      s_.erase(*it_opt);
-    }
-  }
-
-  /// @brief Removes an arbitrary element and returns it. If the set is empty,
-  /// then throws KeyError.
-  /// @code set.pop()
-  value_type Pop() {
-    if (s_.empty()) {
-      throw KeyError("pop from an empty set");
-    }
-
-    auto it = s_.begin();
-    // Copy, but it's okay, it's either a shared pointer or a raw value
-    auto elem = *it;
-
-    s_.erase(it);
-
-    return elem;
-  }
 
   /// @code set.isdisjoint(other)
   __types::Bool IsDisjoint(const handle& other) const {
@@ -214,43 +157,19 @@ class Set : public std::enable_shared_from_this<Set<T>> {
   handle Union(void other) const {}
   handle operator|(void other) const { return Union(other); }
 
-  void Update(void other) {}
-  self& operator|=(void other) {
-    Update(other);
-    return *this;
-  }
-
   handle Intersection(void other) const {}
   handle operator&(void other) const { return Intersection(other); }
-
-  void IntersectionUpdate(void other) {}
-  self& operator&=(void other) {
-    IntersectionUpdate(other);
-    return *this;
-  }
 
   handle Difference(void other) const {}
   handle operator-(void other) const { return Difference(other); }
 
-  void DifferenceUpdate(void other) {}
-  self& operator-=(void other) {
-    DifferenceUpdate(other);
-    return *this;
-  }
-
   handle SymmetricDifference(void other) const {}
   handle operator^(void other) const { return SymmetricDifference(other); }
-
-  void SymmetricDifferenceUpdate(void other) {}
-  self& operator^=(void other) {
-    SymmetricDifferenceUpdate(other);
-    return *this;
-  }
 
   /// @brief Returns an iterator to this set.
   /// @code set.__iter__()
   __memory::handle_t<Iterator<element>> Iter() {
-    return details::SetIterator<element>::Init(s_.begin(), s_.end());
+    return details::SetIteratorBase<element>::Init(s_.begin(), s_.end());
   }
 
   /// @brief Native support for C++ for..in loops.
@@ -318,10 +237,20 @@ class Set : public std::enable_shared_from_this<Set<T>> {
 
   /// @brief Returns the string representation of the set.
   /// @code str(set)
-  __types::Str AsStr() const {
+  virtual __types::Str AsStr() const = 0;
+
+  /// @brief Returns the representation of the set.
+  /// @code repr(set)
+  virtual __types::Str Repr() const = 0;
+
+ protected:
+  /// @brief Returns the string representation of the set.
+  /// @code str(set)
+  __types::Str AsStrImpl(std::string_view prefix,
+                         std::string_view suffix) const {
     std::ostringstream oss;
 
-    oss << "{";
+    oss << prefix;
 
     if (!s_.empty()) {
       const auto last = s_.size() - 1;
@@ -333,17 +262,18 @@ class Set : public std::enable_shared_from_this<Set<T>> {
       oss << builtins::AsStr(s_[last]);
     }
 
-    oss << "}";
+    oss << suffix;
 
     return oss.str();
   }
 
   /// @brief Returns the representation of the set.
   /// @code repr(set)
-  __types::Str Repr() const {
+  __types::Str ReprImpl(std::string_view prefix,
+                        std::string_view suffix) const {
     std::ostringstream oss;
 
-    oss << "{";
+    oss << prefix;
 
     if (!s_.empty()) {
       const auto last = s_.size() - 1;
@@ -355,12 +285,11 @@ class Set : public std::enable_shared_from_this<Set<T>> {
       oss << builtins::Repr(s_[last]);
     }
 
-    oss << "}";
+    oss << suffix;
 
     return oss.str();
   }
 
- private:
   std::optional<iterator> TryFind(__memory::ReadOnly<element> elem) {
     if (s_.empty()) {
       return std::nullopt;
@@ -384,27 +313,28 @@ class Set : public std::enable_shared_from_this<Set<T>> {
 namespace details {
 
 template <__concepts::Entity T>
-class SetIterator : public Iterator<T>,
-                    public std::enable_shared_from_this<SetIterator<T>> {
+class SetIteratorBase
+    : public Iterator<T>,
+      public std::enable_shared_from_this<SetIteratorBase<T>> {
  public:
   /// @brief Mamba-specific
   using element = T;
 
   using value_type = __memory::managed_t<element>;
-  using iterator = Set<element>::iterator;
+  using iterator = SetBase<element>::iterator;
 
   /// @brief Mamba-specific
-  using self = SetIterator<element>;
+  using self = SetIteratorBase<element>;
   using handle = __memory::handle_t<self>;
 
-  SetIterator(iterator it, iterator end)
+  SetIteratorBase(iterator it, iterator end)
       : it_(std::move(it)), end_(std::move(end)) {}
 
-  ~SetIterator() override = default;
+  ~SetIteratorBase() override = default;
 
   /// @brief Generic constructor forwarding arguments to actual constructor
   /// methods.
-  /// @code SetIterator.__init__()
+  /// @code SetIteratorBase.__init__()
   template <typename... Args>
   static handle Init(Args&&... args) {
     return __memory::Init<self>(std::forward<Args>(args)...);
@@ -422,7 +352,7 @@ class SetIterator : public Iterator<T>,
     return *it_++;
   }
 
-  __types::Str Repr() const override { return "SetIterator"; }
+  __types::Str Repr() const override { return "SetIteratorBase"; }
 
   bool operator==(const self& other) const {
     return it_ == other.it_ && end_ == other.end_;
@@ -440,4 +370,4 @@ class SetIterator : public Iterator<T>,
 
 }  // namespace details
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::__types
