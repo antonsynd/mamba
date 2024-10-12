@@ -11,7 +11,7 @@ TEST(Set, EmptyConstructor) {
   // If/when
   // const Set<Int> s;
 
-  // // Then
+  // Then
   // EXPECT_EQ(s.Len(), 0);
 }
 
