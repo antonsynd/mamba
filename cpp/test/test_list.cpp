@@ -1480,13 +1480,23 @@ TEST(List, IndexNonEmpty) {
   EXPECT_EQ(l.Index(5), 2);
 }
 
-TEST(List, IndexNonEmptyObject) {
+TEST(List, IndexNonEmptyObjectSame) {
   // If
   const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
                               IntWrapper::Init(5), IntWrapper::Init(7)};
 
   // When/then
-  EXPECT_EQ(l.Index(IntWrapper::Init(5)), 2);
+  const auto third_elem = l[2];
+  EXPECT_EQ(l.Index(third_elem), 2);
+}
+
+TEST(List, IndexNonEmptyObjectNotSame) {
+  // If
+  const List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                              IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When/then
+  EXPECT_THROW(l.Index(IntWrapper::Init(5)), ValueError);
 }
 
 TEST(List, RemoveEmpty) {
@@ -1536,19 +1546,29 @@ TEST(List, RemovePresentOnce) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, RemovePresentOnceObject) {
+TEST(List, RemovePresentOnceObjectSame) {
   // If
   List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
                         IntWrapper::Init(5), IntWrapper::Init(7)};
 
   // When
-  l.Remove(IntWrapper::Init(3));
+  const auto second_elem = l[1];
+  l.Remove(second_elem);
 
   // Then
   const auto actual = as_vector<IntWrapper, Int>(l);
   const std::vector<Int> expected = {1, 5, 7};
 
   EXPECT_EQ(actual, expected);
+}
+
+TEST(List, RemovePresentOnceObjectNotSame) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7)};
+
+  // When/then
+  EXPECT_THROW(l.Remove(IntWrapper::Init(3)), ValueError);
 }
 
 TEST(List, RemovePresentMoreThanOnce) {
@@ -1565,20 +1585,48 @@ TEST(List, RemovePresentMoreThanOnce) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, RemovePresentMoreThanOnceObject) {
+TEST(List, RemovePresentMoreThanOnceObjectSame) {
   // If
   List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
                         IntWrapper::Init(5), IntWrapper::Init(7),
                         IntWrapper::Init(3)};
 
   // When
-  l.Remove(IntWrapper::Init(3));
+  const auto second_elem = l[1];
+  l.Remove(second_elem);
 
   // Then
   const auto actual = as_vector<IntWrapper, Int>(l);
   const std::vector<Int> expected = {1, 5, 7, 3};
 
   EXPECT_EQ(actual, expected);
+}
+
+TEST(List, RemovePresentMoreThanOnceObjectSameLast) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7),
+                        IntWrapper::Init(3)};
+
+  // When
+  const auto last_elem = l[-1];
+  l.Remove(last_elem);
+
+  // Then
+  const auto actual = as_vector<IntWrapper, Int>(l);
+  const std::vector<Int> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, RemovePresentMoreThanOnceObjectNotSame) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(3),
+                        IntWrapper::Init(5), IntWrapper::Init(7),
+                        IntWrapper::Init(3)};
+
+  // When
+  EXPECT_THROW(l.Remove(IntWrapper::Init(3)), ValueError);
 }
 
 TEST(List, RemoveAtEnd) {
@@ -1595,19 +1643,29 @@ TEST(List, RemoveAtEnd) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, RemoveAtEndObject) {
+TEST(List, RemoveAtEndObjectSame) {
   // If
   List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(5),
                         IntWrapper::Init(7), IntWrapper::Init(3)};
 
   // When
-  l.Remove(IntWrapper::Init(3));
+  const auto last_elem = l[-1];
+  l.Remove(last_elem);
 
   // Then
   const auto actual = as_vector<IntWrapper, Int>(l);
   const std::vector<Int> expected = {1, 5, 7};
 
   EXPECT_EQ(actual, expected);
+}
+
+TEST(List, RemoveAtEndObjectNotSame) {
+  // If
+  List<IntWrapper> l = {IntWrapper::Init(1), IntWrapper::Init(5),
+                        IntWrapper::Init(7), IntWrapper::Init(3)};
+
+  // When/then
+  EXPECT_THROW(l.Remove(IntWrapper::Init(3)), ValueError);
 }
 
 TEST(List, DeleteSliceZeroStep) {

@@ -58,6 +58,9 @@ __types::Bool Eq(const __memory::handle_t<T> t, const U u) {
 
 // C++ operators
 
+// NOTE: operator==() and operator!=() with handle_t<T> as both arguments
+// conflicts with std::shared_ptr<T>::operator!=(), so they are not defined
+
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator==(const T& t, const U& u) {
@@ -92,13 +95,6 @@ template <mamba::builtins::__concepts::Value T,
           mamba::builtins::__concepts::Value U>
 bool operator==(const T t, const U u) {
   return t == u;
-}
-
-template <mamba::builtins::__concepts::Object T,
-          mamba::builtins::__concepts::Object U>
-bool operator==(const mamba::builtins::__memory::handle_t<T> t,
-                const mamba::builtins::__memory::handle_t<U> u) {
-  return t->Eq(*u);
 }
 
 template <mamba::builtins::__concepts::Object T,
@@ -146,13 +142,6 @@ bool operator!=(const T t, const mamba::builtins::__memory::handle_t<U>& u) {
 template <mamba::builtins::__concepts::Value T,
           mamba::builtins::__concepts::Value U>
 bool operator!=(const T t, const U u) {
-  return !(t == u);
-}
-
-template <mamba::builtins::__concepts::Object T,
-          mamba::builtins::__concepts::Object U>
-bool operator!=(const mamba::builtins::__memory::handle_t<T> t,
-                const mamba::builtins::__memory::handle_t<U> u) {
   return !(t == u);
 }
 

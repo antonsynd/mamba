@@ -420,11 +420,7 @@ class List : public std::enable_shared_from_this<List<T>> {
     end = ClampIndex(end);
 
     for (__types::Int idx = ClampIndex(start); idx < end; ++idx) {
-      if constexpr (__concepts::Object<element>) {
-        if (*v_[idx] == *elem) {
-          return idx;
-        }
-      } else if (v_[idx] == elem) {
+      if (v_[idx] == elem) {
         return idx;
       }
     }
@@ -485,7 +481,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
     if constexpr (__concepts::Object<element>) {
       it = std::find_if(v_.begin(), v_.end(),
-                        [&elem](const auto v) { return *elem == *v; });
+                        [&elem](const auto v) { return elem == v; });
     } else {
       it = std::find(v_.begin(), v_.end(), elem);
     }
