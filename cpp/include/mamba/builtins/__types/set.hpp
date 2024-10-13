@@ -273,7 +273,7 @@ class SetBase : public std::enable_shared_from_this<Derived<T>> {
                         std::string_view suffix) const {
     std::ostringstream oss;
 
-    oss << prefix;
+    oss << prefix << "{";
 
     if (!s_.empty()) {
       const auto last = s_.size() - 1;
@@ -285,7 +285,7 @@ class SetBase : public std::enable_shared_from_this<Derived<T>> {
       oss << builtins::Repr(s_[last]);
     }
 
-    oss << suffix;
+    oss << "}" << suffix;
 
     return oss.str();
   }
