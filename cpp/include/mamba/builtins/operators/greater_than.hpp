@@ -9,17 +9,17 @@ namespace mamba::builtins::operators {
 
 template <__concepts::Object T, __concepts::Object U>
 __types::Bool Gt(const T& t, const U& u) {
-  return t.Gt(u);
+  return t.__Gt(u);
 }
 
 template <__concepts::Object T, __concepts::Object U>
 __types::Bool Gt(const T& t, const __memory::handle_t<U>& u) {
-  return t.Gt(*u);
+  return t.__Gt(*u);
 }
 
 template <__concepts::Object T, __concepts::Value U>
 __types::Bool Gt(const T& t, const U u) {
-  return t.Gt(u);
+  return t.__Gt(u);
 }
 
 template <__concepts::Value T, __concepts::Object U>
@@ -39,17 +39,17 @@ __types::Bool Gt(const T t, const U u) {
 
 template <__concepts::Object T, __concepts::Object U>
 __types::Bool Gt(const __memory::handle_t<T> t, const __memory::handle_t<U> u) {
-  return t->Gt(*u);
+  return t->__Gt(*u);
 }
 
 template <__concepts::Object T, __concepts::Object U>
 __types::Bool Gt(const __memory::handle_t<T>& t, const U& u) {
-  return t->Gt(u);
+  return t->__Gt(u);
 }
 
 template <__concepts::Object T, __concepts::Value U>
 __types::Bool Gt(const __memory::handle_t<T> t, const U u) {
-  return t->Gt(u);
+  return t->__Gt(u);
 }
 
 }  // namespace mamba::builtins::operators
@@ -58,19 +58,19 @@ __types::Bool Gt(const __memory::handle_t<T> t, const U u) {
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator>(const T& t, const U& u) {
-  return t.Gt(u);
+  return t.__Gt(u);
 }
 
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator>(const T& t, const mamba::builtins::__memory::handle_t<U>& u) {
-  return t.Gt(*u);
+  return t.__Gt(*u);
 }
 
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Value U>
 bool operator>(const T& t, const U u) {
-  return t.Gt(u);
+  return t.__Gt(u);
 }
 
 template <mamba::builtins::__concepts::Value T,
@@ -95,17 +95,17 @@ template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator>(const mamba::builtins::__memory::handle_t<T> t,
                const mamba::builtins::__memory::handle_t<U> u) {
-  return t->Gt(*u);
+  return t->__Gt(*u);
 }
 
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator>(const mamba::builtins::__memory::handle_t<T>& t, const U& u) {
-  return t->Gt(u);
+  return t->__Gt(u);
 }
 
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Value U>
 bool operator>(const mamba::builtins::__memory::handle_t<T> t, const U u) {
-  return t->Gt(u);
+  return t->__Gt(u);
 }

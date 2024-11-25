@@ -125,13 +125,13 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   /// methods.
   /// @code Tuple.__init__()
   template <typename... Args>
-  static handle Init(Args&&... args) {
+  static handle __Init(Args&&... args) {
     return __memory::Init<self>(std::forward<Args>(args)...);
   }
 
   /// @brief Returns whether @p elem is in the tuple. O(n).
   /// @code elem in tuple
-  __types::Bool Contains(__memory::ReadOnly<element> elem) const {
+  __types::Bool __Contains(__memory::ReadOnly<element> elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 
@@ -157,7 +157,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   /// @brief Returns a copy of this tuple with its elements repeated @p i times.
   /// @code tuple * i
   handle operator*(__types::Int i) const {
-    auto res = Init();
+    auto res = __Init();
 
     if (i <= 0) {
       return res;
@@ -184,7 +184,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   /// @brief Returns the number of elements in the tuple.
   /// @code len(tuple)
-  __types::Int Len() const { return v_.size(); }
+  __types::Int __Len() const { return v_.size(); }
 
   /// @brief Returns the smallest element in the tuple. If the tuple is empty,
   /// throws ValueError.
@@ -238,7 +238,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   handle Slice(__types::Int start = 0,
                __types::Int end = kEndIndex,
                __types::Int step = 1) const {
-    auto res = Init();
+    auto res = __Init();
 
     auto slice_params_opt = TryGetNormalizedSliceParams(start, end, step);
 
@@ -324,8 +324,8 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   /// @brief Returns an iterator to this tuple.
   /// @code tuple.__iter__()
-  __memory::handle_t<Iterator<element>> Iter() {
-    return details::TupleIterator<element>::Init(v_.begin(), v_.end());
+  __memory::handle_t<Iterator<element>> __Iter() {
+    return details::TupleIterator<element>::__Init(v_.begin(), v_.end());
   }
 
   /// @brief Native support for C++ for..in loops.
@@ -337,17 +337,17 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   const_iterator cend() const { return v_.cend(); }
 
   /// @code bool(tuple)
-  __types::Bool AsBool() const { return !v_.empty(); }
+  __types::Bool __Bool() const { return !v_.empty(); }
 
   /// @brief Implicit conversion to Bool (C++ bool) for conditionals.
   /// @code if tuple:
-  operator __types::Bool() const { return AsBool(); }
+  operator __types::Bool() const { return __Bool(); }
 
   /// @brief Returns false all the time for all arguments so long as they are
   /// not a tuple of the same type of elements.
   /// @code tuple == other
   template <typename U>
-  __types::Bool Eq(const U&) const {
+  __types::Bool __Eq(const U&) const {
     return false;
   }
 
@@ -355,7 +355,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   /// false otherwise.
   /// @code tuple == other
   template <>
-  __types::Bool Eq(const self& other) const {
+  __types::Bool __Eq(const self& other) const {
     if constexpr (__concepts::Object<element>) {
       return std::equal(
           v_.begin(), v_.end(), other.v_.begin(), other.v_.end(),
@@ -366,14 +366,14 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   }
 
   template <>
-  __types::Bool Eq(const handle& other) const {
-    return Eq(*other);
+  __types::Bool __Eq(const handle& other) const {
+    return __Eq(*other);
   }
 
   /// @brief Native support for C++ == and != operators.
   template <typename U>
   bool operator==(const U& other) const {
-    return Eq(other);
+    return __Eq(other);
   }
 
   template <>
@@ -383,7 +383,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   template <typename U>
   bool operator!=(const U& other) const {
-    return !Eq(other);
+    return !__Eq(other);
   }
 
   template <>
@@ -393,7 +393,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   /// @brief Returns the string representation of the tuple.
   /// @code str(tuple)
-  __types::Str AsStr() const {
+  __types::Str __Str() const {
     std::ostringstream oss;
 
     oss << "(";
@@ -415,7 +415,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   /// @brief Returns the representation of the tuple.
   /// @code repr(tuple)
-  __types::Str Repr() const {
+  __types::Str __Repr() const {
     std::ostringstream oss;
 
     oss << "(";
@@ -588,15 +588,15 @@ class TupleIterator : public Iterator<T>,
   /// methods.
   /// @code TupleIterator.__init__()
   template <typename... Args>
-  static handle Init(Args&&... args) {
+  static handle __Init(Args&&... args) {
     return __memory::Init<self>(std::forward<Args>(args)...);
   }
 
-  __memory::handle_t<Iterator<element>> Iter() override {
+  __memory::handle_t<Iterator<element>> __Iter() override {
     return std::enable_shared_from_this<self>::shared_from_this();
   }
 
-  value_type Next() override {
+  value_type __Next() override {
     if (it_ == end_) {
       throw StopIteration("end of iterator");
     }
@@ -604,7 +604,7 @@ class TupleIterator : public Iterator<T>,
     return *it_++;
   }
 
-  __types::Str Repr() const override { return "TupleIterator"; }
+  __types::Str __Repr() const override { return "TupleIterator"; }
 
   bool operator==(const self& other) const {
     return it_ == other.it_ && end_ == other.end_;

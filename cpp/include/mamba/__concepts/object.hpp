@@ -16,17 +16,17 @@ concept Object = !Value<T>;
 
 template <typename T>
 concept EquatableObject = Object<T> && requires(const T t) {
-  { t.Eq(t) } -> std::same_as<__types::Bool>;
+  { t.__Eq(t) } -> std::same_as<__types::Bool>;
 };
 
 template <typename T>
 concept GreaterThanComparableObject = Object<T> && requires(const T t) {
-  { t.Gt(t) } -> std::same_as<__types::Bool>;
+  { t.__Gt(t) } -> std::same_as<__types::Bool>;
 };
 
 template <typename T>
 concept LessThanComparableObject = Object<T> && requires(const T t) {
-  { t.Lt(t) } -> std::same_as<__types::Bool>;
+  { t.__Lt(t) } -> std::same_as<__types::Bool>;
 };
 
 }  // namespace mamba::builtins::__concepts

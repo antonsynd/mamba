@@ -69,7 +69,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return l;
   }
 
-  __types::Int Len() const { return m_.size(); }
+  __types::Int __Len() const { return m_.size(); }
 
   mapped_type& operator[](__memory::ReadOnly<key_element> key) {
     auto it = m_.find(key);
@@ -106,7 +106,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     }
   }
 
-  __types::Bool Contains(__memory::ReadOnly<key_element> key) const {
+  __types::Bool __Contains(__memory::ReadOnly<key_element> key) const {
     return m_.contains(key);
   }
 
@@ -159,7 +159,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   /// @brief Returns the string representation of the dict.
   /// @code str(dict)
-  __types::Str AsStr() const {
+  __types::Str __Str() const {
     std::ostringstream oss;
 
     oss << "{";
@@ -183,7 +183,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   /// @brief Returns the representation of the dict.
   /// @code repr(dict)
-  __types::Str Repr() const {
+  __types::Str __Repr() const {
     std::ostringstream oss;
 
     oss << "{";

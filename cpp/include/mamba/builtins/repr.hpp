@@ -14,7 +14,7 @@ namespace mamba::builtins {
 
 template <__concepts::Object T>
 __types::Str Repr(const T& t) {
-  return t.Repr();
+  return t.__Repr();
 }
 
 template <__concepts::Object T>

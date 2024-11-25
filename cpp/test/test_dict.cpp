@@ -12,7 +12,7 @@ TEST(Dict, EmptyConstructor) {
   const Dict<Int, Int> d;
 
   // Then
-  EXPECT_EQ(d.Len(), 0);
+  EXPECT_EQ(d.__Len(), 0);
 }
 
 }  // namespace mamba::builtins::test

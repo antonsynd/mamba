@@ -18,19 +18,19 @@ __types::Bool LtEq(T&& t, U&& u) {
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator<=(const T& t, const U& u) {
-  return t.LtEq(u);
+  return t.__LtEq(u);
 }
 
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator<=(const T& t, const mamba::builtins::__memory::handle_t<U>& u) {
-  return t.LtEq(*u);
+  return t.__LtEq(*u);
 }
 
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Value U>
 bool operator<=(const T& t, const U u) {
-  return t.LtEq(u);
+  return t.__LtEq(u);
 }
 
 template <mamba::builtins::__concepts::Value T,
@@ -55,17 +55,17 @@ template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator<=(const mamba::builtins::__memory::handle_t<T> t,
                 const mamba::builtins::__memory::handle_t<U> u) {
-  return t->LtEq(*u);
+  return t->__LtEq(*u);
 }
 
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Object U>
 bool operator<=(const mamba::builtins::__memory::handle_t<T>& t, const U& u) {
-  return t->LtEq(u);
+  return t->__LtEq(u);
 }
 
 template <mamba::builtins::__concepts::Object T,
           mamba::builtins::__concepts::Value U>
 bool operator<=(const mamba::builtins::__memory::handle_t<T> t, const U u) {
-  return t->LtEq(u);
+  return t->__LtEq(u);
 }

@@ -12,7 +12,7 @@ TEST(Tuple, EmptyConstructor) {
   const Tuple<Int> t;
 
   // Then
-  EXPECT_EQ(t.Len(), 0);
+  EXPECT_EQ(t.__Len(), 0);
 }
 
 }  // namespace mamba::builtins::test

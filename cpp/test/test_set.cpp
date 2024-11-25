@@ -12,7 +12,7 @@ TEST(Set, EmptyConstructor) {
   // const Set<Int> s;
 
   // Then
-  // EXPECT_EQ(s.Len(), 0);
+  // EXPECT_EQ(s.__Len(), 0);
 }
 
 }  // namespace mamba::builtins::test

@@ -14,7 +14,7 @@ namespace mamba::builtins {
 
 template <__concepts::BoolConvertibleObject T>
 __types::Bool AsBool(__memory::ReadOnlyObject<T> t) {
-  return t->AsBool();
+  return t->__Bool();
 }
 
 }  // namespace mamba::builtins

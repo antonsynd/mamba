@@ -11,7 +11,7 @@ namespace mamba::builtins::__concepts {
 /// with AsStr().
 template <typename T>
 concept StrConvertibleObject = Object<T> && requires(const T t) {
-  { t.AsStr() } -> std::same_as<__types::Str>;
+  { t.__Str() } -> std::same_as<__types::Str>;
 };
 
 }  // namespace mamba::builtins::__concepts

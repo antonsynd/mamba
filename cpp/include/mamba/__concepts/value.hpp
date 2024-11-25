@@ -3,19 +3,18 @@
 #include <concepts>
 
 #include "mamba/builtins/__types/bool.hpp"
+#include "mamba/builtins/__types/complex.hpp"
 #include "mamba/builtins/__types/float.hpp"
 #include "mamba/builtins/__types/int.hpp"
-#include "mamba/builtins/__types/none.hpp"
 #include "mamba/builtins/__types/str.hpp"
 #include "mamba/builtins/__types/tuple.hpp"
 
 namespace mamba::builtins::__concepts {
 
-// TODO: Fix Tuple<...>
 template <typename T>
 concept Value =
     std::same_as<T, __types::Int> || std::same_as<T, __types::Float> ||
-    std::same_as<T, __types::Bool> || std::same_as<T, __types::None>;
+    std::same_as<T, __types::Bool> || std::same_as<T, __types::Complex>;
 
 template <typename T>
 concept EquatableValue = Value<T> && requires(const T t) {

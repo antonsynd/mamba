@@ -406,15 +406,15 @@ class SetIterator : public Iterator<T>,
   /// methods.
   /// @code SetIterator.__init__()
   template <typename... Args>
-  static handle Init(Args&&... args) {
+  static handle __Init(Args&&... args) {
     return __memory::Init<self>(std::forward<Args>(args)...);
   }
 
-  __memory::handle_t<Iterator<element>> Iter() override {
+  __memory::handle_t<Iterator<element>> __Iter() override {
     return std::enable_shared_from_this<self>::shared_from_this();
   }
 
-  value_type Next() override {
+  value_type __Next() override {
     if (it_ == end_) {
       throw StopIteration("end of iterator");
     }
@@ -422,7 +422,7 @@ class SetIterator : public Iterator<T>,
     return *it_++;
   }
 
-  __types::Str Repr() const override { return "SetIterator"; }
+  __types::Str __Repr() const override { return "SetIterator"; }
 
   bool operator==(const self& other) const {
     return it_ == other.it_ && end_ == other.end_;

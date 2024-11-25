@@ -5,7 +5,8 @@
 
 namespace mamba::builtins {
 
-inline __types::Str AsStr(__types::None) {
+template <typename T>
+inline __types::Str AsStr(__types::None<T>) {
   return "None";
 }
 

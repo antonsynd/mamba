@@ -31,17 +31,17 @@ class Iterator : public builtins::__types::Object {
 
   virtual ~Iterator() = default;
 
-  virtual __memory::handle_t<Iterator<element>> Iter() = 0;
+  virtual __memory::handle_t<Iterator<element>> __Iter() = 0;
 
   /// @brief Returns the next value from the iterator, starting from the first
   /// value.
   /// @code next(iterator)
-  virtual value_type Next() = 0;
+  virtual value_type __Next() = 0;
 
   /// @brief Returns false all the time for all arguments by default.
   /// @code iterator == other
   template <typename U>
-  __types::Bool Eq(const U&) const {
+  __types::Bool __Eq(const U&) const {
     return false;
   }
 
@@ -49,12 +49,12 @@ class Iterator : public builtins::__types::Object {
   /// false otherwise.
   /// @code list == other
   template <>
-  __types::Bool Eq(const self& other) const {
+  __types::Bool __Eq(const self& other) const {
     return this == &other;
   }
 
   template <>
-  __types::Bool Eq(const handle& other) const {
+  __types::Bool __Eq(const handle& other) const {
     return Eq(*other);
   }
 
@@ -88,7 +88,7 @@ namespace __concepts {
 
 template <typename T, typename U>
 concept TypedIterable = requires(T* iterable) {
-  { iterable->Iter() } -> std::same_as<__memory::handle_t<Iterator<U>>>;
+  { iterable->__Iter() } -> std::same_as<__memory::handle_t<Iterator<U>>>;
 };
 
 template <typename T>
@@ -98,7 +98,7 @@ concept Iterable = TypedIterable<T, typename T::element>;
 
 template <__concepts::Entity T>
 __memory::managed_t<T> Next(Iterator<T>& it) {
-  return it.Next();
+  return it.__Next();
 }
 
 template <__concepts::Entity T>
@@ -108,7 +108,7 @@ __memory::managed_t<T> Next(const __memory::handle_t<Iterator<T>>& it) {
 
 template <__concepts::Iterable T>
 __memory::handle_t<Iterator<typename T::element>> Iter(T& it) {
-  return it.Iter();
+  return it.__Iter();
 }
 
 template <__concepts::Iterable T>

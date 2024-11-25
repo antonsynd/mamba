@@ -77,11 +77,11 @@ class FrozenSet final : public __types::SetBase<T, FrozenSet<T>> {
 
   /// @brief Returns the string representation of the frozen set.
   /// @code str(frozenset)
-  __types::Str AsStr() const override { return AsStr("frozenset(", ")"); }
+  __types::Str __Str() const override { return AsStr("frozenset(", ")"); }
 
   /// @brief Returns the representation of the frozen set.
   /// @code repr(frozen set)
-  __types::Str Repr() const override { return ReprImpl("frozenset(", ")"); }
+  __types::Str __Repr() const override { return ReprImpl("frozenset(", ")"); }
 };
 
 }  // namespace mamba::builtins

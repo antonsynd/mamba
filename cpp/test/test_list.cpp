@@ -50,7 +50,7 @@ struct Wrapper : public Object,
   size_t Id() const { return id_; }
   T Value() const { return v_; }
 
-  Str AsStr() const {
+  Str __Str() const {
     std::ostringstream oss;
     oss << "[Wrapper(value=" << v_ << ", id=" << id_ << ")]";
     return oss.str();
@@ -58,12 +58,12 @@ struct Wrapper : public Object,
 
   operator T() const { return v_; }
 
-  Str Repr() const override { return AsStr(); }
+  Str __Repr() const override { return __Str(); }
 
-  Bool Eq(const self& other) const { return v_ == other.v_; }
-  Bool Eq(const handle& other) const { return v_ == other->v_; }
-  Bool Lt(const self& other) const { return v_ < other.v_; }
-  Bool Lt(const handle& other) const { return v_ < other.v_; }
+  Bool __Eq(const self& other) const { return v_ == other.v_; }
+  Bool __Eq(const handle& other) const { return v_ == other->v_; }
+  Bool __Lt(const self& other) const { return v_ < other.v_; }
+  Bool __Lt(const handle& other) const { return v_ < other.v_; }
 
  private:
   inline static size_t global_id_ = 0;
@@ -165,7 +165,7 @@ TEST(List, InitializerListConstructorObject) {
 TEST(List, IterableConstructor) {
   // If/when
   List<Int> source = {1, 3, 5, 7};
-  const List<Int> l{*source.Iter()};
+  const List<Int> l{*source.__Iter()};
 
   // Then
   ASSERT_EQ(Len(l), 4);
@@ -180,7 +180,7 @@ TEST(List, IterableConstructorObject) {
   // If/when
   List<IntWrapper> source = {IntWrapper::Init(1), IntWrapper::Init(3),
                              IntWrapper::Init(5), IntWrapper::Init(7)};
-  const List<IntWrapper> l{*source.Iter()};
+  const List<IntWrapper> l{*source.__Iter()};
 
   // Then
   ASSERT_EQ(Len(l), 4);
@@ -2626,7 +2626,7 @@ TEST(List, EqualitySameObject) {
   ASSERT_NE(&l, &copy);
 
   // When/then
-  EXPECT_TRUE(l.Eq(copy));
+  EXPECT_TRUE(l.__Eq(copy));
 }
 
 TEST(List, EqualitySameObjectObject) {
@@ -2638,7 +2638,7 @@ TEST(List, EqualitySameObjectObject) {
   ASSERT_NE(&l, &copy);
 
   // When/then
-  EXPECT_TRUE(l.Eq(copy));
+  EXPECT_TRUE(l.__Eq(copy));
 }
 
 TEST(List, NativeEqualitySameObject) {
@@ -2692,13 +2692,13 @@ TEST(List, EqualityDifferentObject) {
   ASSERT_NE(&l, &m);
 
   // When/then
-  EXPECT_FALSE(l.Eq(m));
+  EXPECT_FALSE(l.__Eq(m));
 
   // When
   m.Pop();
 
   // Then
-  EXPECT_TRUE(l.Eq(m));
+  EXPECT_TRUE(l.__Eq(m));
 }
 
 TEST(List, EqualityDifferentObjectObject) {
@@ -2711,13 +2711,13 @@ TEST(List, EqualityDifferentObjectObject) {
   ASSERT_NE(&l, &m);
 
   // When/then
-  EXPECT_FALSE(l.Eq(m));
+  EXPECT_FALSE(l.__Eq(m));
 
   // When
   m.Pop();
 
   // Then
-  EXPECT_TRUE(l.Eq(m));
+  EXPECT_TRUE(l.__Eq(m));
 }
 
 TEST(List, NativeEqualityAndInequalityDifferentObject) {
@@ -2761,7 +2761,7 @@ TEST(List, EqualityDifferentType) {
   const List<Float> m = {1.0, 3.0, 5.0, 7.0};
 
   // When/then
-  EXPECT_FALSE(l.Eq(m));
+  EXPECT_FALSE(l.__Eq(m));
 }
 
 TEST(List, EqualityDifferentTypeObject) {
@@ -2773,7 +2773,7 @@ TEST(List, EqualityDifferentTypeObject) {
       FloatWrapper::Init(7.0)};
 
   // When/then
-  EXPECT_FALSE(l.Eq(m));
+  EXPECT_FALSE(l.__Eq(m));
 }
 
 TEST(List, NativeEqualityDifferentType) {

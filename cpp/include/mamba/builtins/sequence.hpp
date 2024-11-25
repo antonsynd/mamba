@@ -17,14 +17,14 @@ template <typename T, typename U>
 concept TypedSequence =
     __concepts::TypedIterable<T, U> &&
     requires(const T& sequence, __memory::ReadOnly<U> elem) {
-      { sequence.Contains(elem) } -> std::same_as<__types::Bool>;
-      { sequence.Len() } -> std::same_as<__types::Int>;
+      { sequence.__Contains(elem) } -> std::same_as<__types::Bool>;
+      { sequence.__Len() } -> std::same_as<__types::Int>;
       { sequence.Max() } -> std::same_as<__memory::managed_t<U>>;
       { sequence.Min() } -> std::same_as<__memory::managed_t<U>>;
       // All sequences must have an Eq() method that returns __types::Bool
       // and accepts any argument of any type
       [](auto&& arg) -> decltype(static_cast<__types::Bool>(
-                         sequence.Eq(std::forward<decltype(arg)>(arg)))) {};
+                         sequence.__Eq(std::forward<decltype(arg)>(arg)))) {};
     };
 
 template <typename T>
@@ -57,7 +57,7 @@ __memory::managed_t<typename T::element> Max(
 template <__concepts::Sequence T>
 __types::Bool Contains(const T& sequence,
                        __memory::ReadOnly<typename T::element> value) {
-  return sequence.Contains(value);
+  return sequence.__Contains(value);
 }
 
 template <__concepts::Sequence T>
@@ -68,7 +68,7 @@ __types::Bool Contains(const __memory::handle_t<T>& sequence,
 
 template <__concepts::Sequence T>
 __types::Int Len(const T& sequence) {
-  return sequence.Len();
+  return sequence.__Len();
 }
 
 template <__concepts::Sequence T>
@@ -76,10 +76,10 @@ __types::Int Len(const __memory::handle_t<T>& sequence) {
   return Len(*sequence);
 }
 
-template <__concepts::Sequence T, __concepts::Sequence U>
-__types::Bool Eq(const __memory::handle_t<T>& lhs,
-                 const __memory::handle_t<U>& rhs) {
-  return lhs->Len(*rhs);
-}
+// template <__concepts::Sequence T, __concepts::Sequence U>
+// __types::Bool Eq(const __memory::handle_t<T>& lhs,
+//                  const __memory::handle_t<U>& rhs) {
+//   return lhs->__Len(*rhs);
+// }
 
 }  // namespace mamba::builtins

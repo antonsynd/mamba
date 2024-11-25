@@ -14,7 +14,7 @@ namespace mamba::builtins {
 
 template <__concepts::StrConvertibleObject T>
 __types::Str AsStr(const T& t) {
-  return t.AsStr();
+  return t.__Str();
 }
 
 template <__concepts::StrConvertibleObject T>
