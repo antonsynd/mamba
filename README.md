@@ -1,23 +1,18 @@
 # mamba
 
-Mamba is a transpiler for a statically-typed subset of Python 3 to C++20.
+Mamba is an educational project exploring a transpilation target for
+[Sidewinder](https://github.com/antonsynd/sidewinder), a statically-typed
+Pythonic language, to C++20.
 
-This is mainly an educational project to explore what challenges there are in
-implementing a programming language. I don't currently have plans to complete
-anything besides a statically-typed subset of the Python builtins.
-
-Check the C++ and Python tests for status on the implementation and what
-works and what doesn't.
+Check the `cpp/test` subdirectory for status on the implementation.
 
 ## Design
 
-This project consists of two parts:
-* A C++ transpilation target for a statically-typed subset of Python. This aims
-to provide a nearly 1-to-1 equivalent of many Python's built-in symbols, so
-that a transpiler can easily translate those Python symbols as trivially as
-possible.
-* A Python-based transpiler to transpile a statically-typed subset of Python
-to C++.
+This provides a C++ transpilation target for a statically-typed Pythonic
+language called [Sidewinder](https://github.com/antonsynd/sidewinder). This
+aims to provide a nearly 1-to-1 equivalent of the built-in symbols in
+Sidewinder (which are based on those in Python 3), so that a transpiler can
+translate those symbols as trivially as possible.
 
 ## Requirements
 * C++20*
