@@ -5,7 +5,7 @@
 namespace mamba::builtins::__types {
 
 class Object {
-  virtual Str __Repr() const = 0;
+  virtual Str __Repr__() const = 0;
 };
 
 }  // namespace mamba::builtins::__types

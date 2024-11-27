@@ -3,12 +3,12 @@
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/float.hpp"
 
-namespace mamba::builtins {
+namespace mamba::builtins::__conversion {
 
-inline __types::Bool AsBool(__types::Float f) {
+inline __types::Bool Bool(__types::Float f) {
   return f != 0.0;
 }
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::__conversion
 
 // IWYU pragma: private

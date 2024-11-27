@@ -5,10 +5,9 @@
 #include <optional>
 #include <unordered_map>
 
-#include "mamba/__concepts/entity.hpp"
-#include "mamba/__memory/handle.hpp"
-#include "mamba/__memory/managed.hpp"
-#include "mamba/__memory/read_only.hpp"
+#include "mamba/builtins/__memory/const.hpp"
+#include "mamba/builtins/__memory/handle.hpp"
+#include "mamba/builtins/__memory/managed.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/list.hpp"

@@ -9,23 +9,23 @@
 
 #include "gtest/gtest.h"  // for Test, Message, TestPartResult, TEST
 
-#include "mamba/__concepts/object.hpp"        // for Object
-#include "mamba/__concepts/value.hpp"         // for Value
-#include "mamba/__memory/handle.hpp"          // for handle_t, Init
-#include "mamba/__memory/read_only.hpp"       // for ReadOnly
-#include "mamba/builtins/__as_bool/bool.hpp"  // for AsBool
-#include "mamba/builtins/as_str.hpp"          // for AsStr
-#include "mamba/builtins/bool.hpp"            // for Bool
-#include "mamba/builtins/comparators.hpp"     // for Lt, Eq
-#include "mamba/builtins/error.hpp"           // for ValueError, IndexError
-#include "mamba/builtins/float.hpp"           // for Float
-#include "mamba/builtins/int.hpp"             // for Int
-#include "mamba/builtins/iteration.hpp"       // for Iter, Iterator
-#include "mamba/builtins/list.hpp"            // for List
-#include "mamba/builtins/object.hpp"          // for Str
-#include "mamba/builtins/repr.hpp"            // for Repr
-#include "mamba/builtins/sequence.hpp"        // for Len, Contains, Max, Min
-#include "mamba/builtins/str.hpp"             // for Str
+#include "mamba/builtins/__concepts/object.hpp"     // for Object
+#include "mamba/builtins/__concepts/value.hpp"      // for Value
+#include "mamba/builtins/__dunder/__bool/bool.hpp"  // for Bool
+#include "mamba/builtins/__memory/const.hpp"        // for ReadOnly
+#include "mamba/builtins/__memory/mut.hpp"          // for Ref, Init
+#include "mamba/builtins/bool.hpp"                  // for Bool
+#include "mamba/builtins/comparators.hpp"           // for Lt, Eq
+#include "mamba/builtins/conversion/str.hpp"        // for Str
+#include "mamba/builtins/error.hpp"      // for ValueError, IndexError
+#include "mamba/builtins/float.hpp"      // for Float
+#include "mamba/builtins/int.hpp"        // for Int
+#include "mamba/builtins/iteration.hpp"  // for Iter, Iterator
+#include "mamba/builtins/list.hpp"       // for List
+#include "mamba/builtins/object.hpp"     // for Str
+#include "mamba/builtins/repr.hpp"       // for Repr
+#include "mamba/builtins/sequence.hpp"   // for Len, Contains, Max, Min
+#include "mamba/builtins/str.hpp"        // for Str
 
 namespace mamba::builtins::test {
 namespace {
@@ -35,7 +35,6 @@ struct Wrapper : public Object,
                  public std::enable_shared_from_this<Wrapper<T>> {
  public:
   using self = Wrapper;
-  using handle = __memory::handle_t<self>;
 
   static void ResetId() { global_id_ = 0; }
   static size_t GetNextId() { return global_id_++; }
@@ -43,14 +42,14 @@ struct Wrapper : public Object,
   Wrapper(T value) : v_(value), id_(GetNextId()) {}
 
   template <typename... Args>
-  static handle Init(Args&&... args) {
+  static __memory::Mut<self> Init(Args&&... args) {
     return __memory::Init<self>(std::forward<Args>(args)...);
   }
 
   size_t Id() const { return id_; }
   T Value() const { return v_; }
 
-  Str __Str() const {
+  StrType __Str__() const {
     std::ostringstream oss;
     oss << "[Wrapper(value=" << v_ << ", id=" << id_ << ")]";
     return oss.str();
@@ -58,12 +57,10 @@ struct Wrapper : public Object,
 
   operator T() const { return v_; }
 
-  Str __Repr() const override { return __Str(); }
+  StrType __Repr__() const override { return __Str__(); }
 
-  Bool __Eq(const self& other) const { return v_ == other.v_; }
-  Bool __Eq(const handle& other) const { return v_ == other->v_; }
-  Bool __Lt(const self& other) const { return v_ < other.v_; }
-  Bool __Lt(const handle& other) const { return v_ < other.v_; }
+  Bool __Eq__(__memory::Mut<self> other) const { return v_ == other->v_; }
+  Bool __Lt__(__memory::Const<self> other) const { return v_ < other.v_; }
 
  private:
   inline static size_t global_id_ = 0;

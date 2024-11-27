@@ -4,8 +4,8 @@
 #include <memory>
 #include <type_traits>
 
-#include "mamba/__concepts/entity.hpp"
-#include "mamba/__memory/managed.hpp"
+#include "mamba/builtins/__memory/const.hpp"
+#include "mamba/builtins/__memory/mut.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/error.hpp"
 
@@ -13,71 +13,36 @@ namespace mamba::builtins {
 namespace details {
 
 // Forward declaration
-template <__concepts::Entity T>
+template <typename T>
 class IteratorWrapper;
 
 }  // namespace details
 
-template <__concepts::Entity T>
+template <typename T>
 class Iterator : public builtins::__types::Object {
  public:
-  /// @brief Mamba-specific
-  using element = T;
-  using self = Iterator<element>;
-  using handle = __memory::handle_t<self>;
+  using value_type = T;
+  using iterator = details::IteratorWrapper<value_type>;
 
-  using iterator = details::IteratorWrapper<element>;
-  using value_type = __memory::managed_t<element>;
+  /// @brief Mamba-specific
+  using self = Iterator<value_type>;
 
   virtual ~Iterator() = default;
 
-  virtual __memory::handle_t<Iterator<element>> __Iter() = 0;
+  virtual __memory::Mut<Iterator<value_type>> __Iter__() = 0;
 
   /// @brief Returns the next value from the iterator, starting from the first
   /// value.
   /// @code next(iterator)
-  virtual value_type __Next() = 0;
-
-  /// @brief Returns false all the time for all arguments by default.
-  /// @code iterator == other
-  template <typename U>
-  __types::Bool __Eq(const U&) const {
-    return false;
-  }
+  virtual value_type __Next__() = 0;
 
   /// @brief Returns true if this and @p other contain the same elements, and
   /// false otherwise.
   /// @code list == other
-  template <>
-  __types::Bool __Eq(const self& other) const {
-    return this == &other;
-  }
+  __types::Bool __Eq__(const self& other) const { return this == &other; }
+  __types::Bool __Ne__(const self& other) const { return !__Eq__(other); }
 
-  template <>
-  __types::Bool __Eq(const handle& other) const {
-    return Eq(*other);
-  }
-
-  /// @brief Native support for C++ == and != operators.
-  template <typename U>
-  bool operator==(const U& other) const {
-    return Eq(other);
-  }
-
-  template <>
-  bool operator==(const handle& other) const {
-    return operator==(*other);
-  }
-
-  template <typename U>
-  bool operator!=(const U& other) const {
-    return !Eq(other);
-  }
-
-  template <>
-  bool operator!=(const handle& other) const {
-    return operator!=(*other);
-  }
+  bool operator!=(const self& other) const { return !__Ne__(other); }
 
   // Native C++ iteration support
   iterator begin() const { return iterator(*this); }
@@ -88,7 +53,7 @@ namespace __concepts {
 
 template <typename T, typename U>
 concept TypedIterable = requires(T* iterable) {
-  { iterable->__Iter() } -> std::same_as<__memory::handle_t<Iterator<U>>>;
+  { iterable->__Iter__() } -> std::same_as<__memory::Mut<Iterator<U>>>;
 };
 
 template <typename T>
@@ -96,38 +61,36 @@ concept Iterable = TypedIterable<T, typename T::element>;
 
 }  // namespace __concepts
 
-template <__concepts::Entity T>
-__memory::managed_t<T> Next(Iterator<T>& it) {
-  return it.__Next();
+template <typename T>
+T Next(Iterator<T>& it) {
+  return it.__Next__();
 }
 
-template <__concepts::Entity T>
-__memory::managed_t<T> Next(const __memory::handle_t<Iterator<T>>& it) {
+template <typename T>
+T Next(__memory::Const<Iterator<T>> it) {
   return Next(*it);
 }
 
 template <__concepts::Iterable T>
-__memory::handle_t<Iterator<typename T::element>> Iter(T& it) {
-  return it.__Iter();
+__memory::Mut<Iterator<T>> Iter(T& it) {
+  return it.__Iter__();
 }
 
 template <__concepts::Iterable T>
-__memory::handle_t<Iterator<typename T::element>> Iter(
-    const __memory::handle_t<T>& it) {
+__memory::Mut<Iterator<T>> Iter(__memory::Const<T> it) {
   return Iter(*it);
 }
 
 namespace details {
 
-template <__concepts::Entity T>
+template <typename T>
 class IteratorWrapper {
  public:
-  /// @note Mamba-specific
-  using element = T;
-  using self = IteratorWrapper<element>;
-  using iterator = __memory::handle_t<Iterator<element>>;
+  using value_type = T;
 
-  using value_type = __memory::managed_t<element>;
+  /// @note Mamba-specific
+  using self = IteratorWrapper<value_type>;
+  using iterator = __memory::Mut<Iterator<value_type>>;
 
   explicit IteratorWrapper(iterator it, bool at_end = false)
       : at_end_(at_end), it_(it) {}

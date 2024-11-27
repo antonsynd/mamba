@@ -10,11 +10,13 @@ struct Complex {
   Int Real() const { return real_; }
   Int Imag() const { return imag_; }
 
-  Bool __Eq(const Complex& other) const {
+  Bool __Eq__(const Complex& other) const {
     return real_ == other.real_ && imag_ == other.imag_;
   }
 
-  bool operator==(const Complex& other) const { return __Eq(other); }
+  Bool __Ne__(const Complex& other) const { return !__Eq__(other); }
+
+  bool operator==(const Complex& other) const { return __Eq__(other); }
   bool operator!=(const Complex& other) const { return !(*this == other); }
 
  private:

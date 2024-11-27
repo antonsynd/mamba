@@ -5,12 +5,12 @@
 #include "mamba/builtins/__types/float.hpp"
 #include "mamba/builtins/__types/str.hpp"
 
-namespace mamba::builtins {
+namespace mamba::builtins::__conversion {
 
-inline __types::Str AsStr(__types::Float f) {
+inline __types::Str Str(__types::Float f) {
   return std::to_string(f);
 }
 
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::__conversion
 
 // IWYU pragma: private
