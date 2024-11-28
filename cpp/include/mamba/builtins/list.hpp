@@ -606,10 +606,10 @@ class List : public __types::Object,
       const auto last = v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << builtins::Repr(v_[i]) << ", ";
+        oss << Repr(v_[i]) << ", ";
       }
 
-      oss << builtins::Repr(v_[last]);
+      oss << Repr(v_[last]);
     }
 
     oss << "]";
