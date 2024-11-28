@@ -7,6 +7,6 @@
 
 namespace mamba::builtins {
 
-using Int = __types::Int;
+using IntType = __types::Int;
 
 }  // namespace mamba::builtins

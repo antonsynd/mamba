@@ -7,6 +7,6 @@
 
 namespace mamba::builtins {
 
-using Bool = __types::Bool;
+using BoolType = __types::Bool;
 
 }  // namespace mamba::builtins

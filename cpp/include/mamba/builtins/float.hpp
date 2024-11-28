@@ -7,6 +7,6 @@
 
 namespace mamba::builtins {
 
-using Float = __types::Float;
+using FloatType = __types::Float;
 
 }  // namespace mamba::builtins

@@ -106,7 +106,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @code List.__init__()
   template <typename... Args>
   static __memory::Ret<self> __Init__(Args&&... args) {
-    return __memory::Init<self>(std::forward<Args>(args)...);
+    return __operators::Init<self>(std::forward<Args>(args)...);
   }
 
   /// @brief Appends @p elem to the end of the list.
@@ -462,11 +462,11 @@ class List : public std::enable_shared_from_this<List<T>> {
 
     auto it = v_.end();
 
-    if constexpr (__concepts::Object<element>) {
+    if constexpr (__concepts::Value<element>) {
+      it = std::find(v_.begin(), v_.end(), elem);
+    } else {
       it = std::find_if(v_.begin(), v_.end(),
                         [&elem](const auto v) { return elem == v; });
-    } else {
-      it = std::find(v_.begin(), v_.end(), elem);
     }
 
     if (it == v_.end()) {
@@ -582,10 +582,10 @@ class List : public std::enable_shared_from_this<List<T>> {
       const auto last = v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << conversion::Str(v_[i]) << ", ";
+        oss << __conversion::Str(v_[i]) << ", ";
       }
 
-      oss << conversion::Str(v_[last]);
+      oss << __conversion::Str(v_[last]);
     }
 
     oss << "]";
@@ -613,19 +613,6 @@ class List : public std::enable_shared_from_this<List<T>> {
     oss << "]";
 
     return oss.str();
-  }
-
-  /// @brief Implicit conversion to std::vector for C++ interop and testing.
-  operator std::vector<value_type>() const { return v_; }
-
-  template <__concepts::Object T>
-  operator std::vector<T>() const {
-    std::vector<T> res;
-
-    std::for_each(v_.begin(), v_.end(),
-                  [&res](const auto& elem) { res.emplace_back(*elem); });
-
-    return res;
   }
 
  private:
@@ -856,7 +843,7 @@ class ListIterator : public Iterator<T>,
   /// @code ListIterator.__init__()
   template <typename... Args>
   static __memory::Ret<self> __Init__(Args&&... args) {
-    return __memory::Init<self>(std::forward<Args>(args)...);
+    return __operators::Init<self>(std::forward<Args>(args)...);
   }
 
   __memory::Ret<Iterator<element>> __Iter__() override {
