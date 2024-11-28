@@ -11,18 +11,17 @@
 
 #include "mamba/builtins/__concepts/object.hpp"     // for Object
 #include "mamba/builtins/__concepts/value.hpp"      // for Value
+#include "mamba/builtins/__conversion/str.hpp"      // for Str
 #include "mamba/builtins/__dunder/__bool/bool.hpp"  // for Bool
-#include "mamba/builtins/__memory/const.hpp"        // for ReadOnly
-#include "mamba/builtins/__memory/mut.hpp"          // for Ref, Init
+#include "mamba/builtins/__memory/args.hpp"         // for Const
 #include "mamba/builtins/bool.hpp"                  // for Bool
-#include "mamba/builtins/comparators.hpp"           // for Lt, Eq
-#include "mamba/builtins/conversion/str.hpp"        // for Str
 #include "mamba/builtins/error.hpp"      // for ValueError, IndexError
 #include "mamba/builtins/float.hpp"      // for Float
 #include "mamba/builtins/int.hpp"        // for Int
 #include "mamba/builtins/iteration.hpp"  // for Iter, Iterator
 #include "mamba/builtins/list.hpp"       // for List
 #include "mamba/builtins/object.hpp"     // for Str
+#include "mamba/builtins/operators.hpp"  // for Lt, Eq
 #include "mamba/builtins/repr.hpp"       // for Repr
 #include "mamba/builtins/sequence.hpp"   // for Len, Contains, Max, Min
 #include "mamba/builtins/str.hpp"        // for Str
@@ -77,10 +76,10 @@ std::vector<U> as_vector(const List<T>& l) {
   std::vector<U> res;
 
   for (size_t i = 0; i < Len(l); ++i) {
-    if constexpr (__concepts::Object<T>) {
-      res.emplace_back(static_cast<const U>(*l[i]));
-    } else {
+    if constexpr (__concepts::Value<T>) {
       res.emplace_back(static_cast<const U>(l[i]));
+    } else {
+      res.emplace_back(static_cast<const U>(*l[i]));
     }
   }
 
@@ -89,9 +88,19 @@ std::vector<U> as_vector(const List<T>& l) {
 
 }  // anonymous namespace
 
+TEST(List, ValueListIsSequence) {
+  // If/when/then
+  static_assert(__concepts::Sequence<List<Int>>);
+}
+
+TEST(List, ObjectListIsSequence) {
+  // If/when/then
+  static_assert(__concepts::Sequence<List<IntWrapper>>);
+}
+
 TEST(List, EmptyConstructor) {
   // If/when
-  const List<Int> l;
+  const auto l = __memory::Init<List<Int>>();
 
   // Then
   EXPECT_EQ(Len(l), 0);
@@ -99,7 +108,7 @@ TEST(List, EmptyConstructor) {
 
 TEST(List, EmptyConstructorObject) {
   // If/when
-  const List<IntWrapper> l;
+  const auto l = __memory::Init<List<IntWrapper>>();
 
   // Then
   EXPECT_EQ(Len(l), 0);
@@ -107,21 +116,21 @@ TEST(List, EmptyConstructorObject) {
 
 TEST(List, VariadicConstructor) {
   // If/when
-  const List<Int> l(1, 3, 5, 7);
+  const auto l = __memory::Init<List<Int>>(1, 3, 5, 7);
 
   // Then
   ASSERT_EQ(Len(l), 4);
 
-  const auto actual = as_vector(l);
   const std::vector<Int> expected = {1, 3, 5, 7};
 
-  EXPECT_EQ(actual, expected);
+  EXPECT_EQ(l, expected);
 }
 
 TEST(List, VariadicConstructorObject) {
   // If/when
-  const List<IntWrapper> l(IntWrapper::Init(1), IntWrapper::Init(3),
-                           IntWrapper::Init(5), IntWrapper::Init(7));
+  const auto l = __memory::Init<List<IntWrapper>>(
+      IntWrapper::Init(1), IntWrapper::Init(3), IntWrapper::Init(5),
+      IntWrapper::Init(7));
 
   // Then
   ASSERT_EQ(Len(l), 4);

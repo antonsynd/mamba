@@ -1,20 +1,23 @@
 #pragma once
 
+#include <concepts>
 #include <memory>
 
-namespace mamba::builtins::__memory {
+namespace mamba::builtins {
+namespace __memory {
 
 // Simple alias
 template <typename T>
 using Ref = std::shared_ptr<T>;
 
-/// @brief Instantiates an object of type @tparam T with @p args and returns
-/// a reference to the object.
-template <typename T, typename... Args>
-static Ref<T> Init(Args&&... args) {
-  return std::make_shared<T>(std::forward<Args>(args)...);
-}
+}  // namespace __memory
 
-}  // namespace mamba::builtins::__memory
+namespace __concepts {
+
+template <typename T>
+concept IsRef = std::same_as<T, __memory::Ref<typename T::element_type>>;
+
+}  // namespace __concepts
+}  // namespace mamba::builtins
 
 // IWYU pragma: private

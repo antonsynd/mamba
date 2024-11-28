@@ -12,12 +12,12 @@
 #include <vector>
 
 #include "mamba/builtins/__concepts/comparable.hpp"
-#include "mamba/builtins/__memory/const.hpp"
-#include "mamba/builtins/__memory/mut.hpp"
+#include "mamba/builtins/__conversion/str.hpp"
+#include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__memory/ref.hpp"
+#include "mamba/builtins/__operators/init.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/str.hpp"
-#include "mamba/builtins/conversion/str.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/repr.hpp"
@@ -42,7 +42,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// @note Mamba-specific
   using element = T;
 
-  using value_type = __memory::Mut<element>;
+  using value_type = __memory::Elem<element>;
   using reference = value_type&;
   using const_reference = const value_type&;
 
@@ -65,7 +65,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// are copied.
   /// @code list(Iterable)
   template <typename It>
-    requires __concepts::TypedIterable<It, element>
+    requires __concepts::IterableOf<It, element>
   explicit List(It& iterable) {
     bool no_stop_iteration = true;
     auto it = iterable.__Iter();
@@ -105,7 +105,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// methods.
   /// @code List.__init__()
   template <typename... Args>
-  static __memory::Mut<self> __Init__(Args&&... args) {
+  static __memory::Ret<self> __Init__(Args&&... args) {
     return __memory::Init<self>(std::forward<Args>(args)...);
   }
 
@@ -132,7 +132,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Creates a shallow copy of the list.
   /// @code list.copy()
-  __memory::Mut<self> Copy() const {
+  __memory::Ret<self> Copy() const {
     // Invoke copy constructor
     return __Init(*this);
   }
@@ -151,7 +151,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Concatenates this list with @p other.
   /// @code list + other
-  __memory::Mut<self> operator+(__memory::Const<self> other) const {
+  __memory::Ret<self> operator+(__memory::Const<self> other) const {
     auto res = __Init(*this);
 
     res->Extend(other);
@@ -161,7 +161,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns a copy of this list with its elements repeated @p i times.
   /// @code list * i
-  __memory::Mut<self> operator*(__types::Int i) const {
+  __memory::Ret<self> operator*(__types::Int i) const {
     auto res = __Init__();
 
     if (i <= 0) {
@@ -273,7 +273,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   /// If @p step is negative, then the returned list is empty. If @p step is
   /// 0, then this throws ValueError.
   /// @code list[i:j:k]
-  __memory::Mut<self> Slice(__types::Int start = 0,
+  __memory::Ret<self> Slice(__types::Int start = 0,
                             __types::Int end = kEndIndex,
                             __types::Int step = 1) const {
     auto res = __Init__();
@@ -322,7 +322,7 @@ class List : public std::enable_shared_from_this<List<T>> {
   }
 
 #if __cplusplus >= 202302L
-  __memory::Mut<self> operator[](__types::Int start = 0,
+  __memory::Ret<self> operator[](__types::Int start = 0,
                                  __types::Int end = kEndIndex,
                                  __types::Int step = 1) const {
     return Slice(start, end, step);
@@ -534,7 +534,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
-  __memory::Mut<Iterator<element>> __Iter__() {
+  __memory::Ret<Iterator<element>> __Iter__() {
     return details::ListIterator<element>::__Init__(v_.begin(), v_.end());
   }
 
@@ -613,6 +613,19 @@ class List : public std::enable_shared_from_this<List<T>> {
     oss << "]";
 
     return oss.str();
+  }
+
+  /// @brief Implicit conversion to std::vector for C++ interop and testing.
+  operator std::vector<value_type>() const { return v_; }
+
+  template <__concepts::Object T>
+  operator std::vector<T>() const {
+    std::vector<T> res;
+
+    std::for_each(v_.begin(), v_.end(),
+                  [&res](const auto& elem) { res.emplace_back(*elem); });
+
+    return res;
   }
 
  private:
@@ -827,7 +840,7 @@ class ListIterator : public Iterator<T>,
   /// @brief Mamba-specific
   using element = T;
 
-  using value_type = __memory::Mut<element>;
+  using value_type = __memory::Elem<element>;
   using iterator = List<element>::iterator;
 
   /// @brief Mamba-specific
@@ -842,11 +855,11 @@ class ListIterator : public Iterator<T>,
   /// methods.
   /// @code ListIterator.__init__()
   template <typename... Args>
-  static __memory::Mut<self> __Init__(Args&&... args) {
+  static __memory::Ret<self> __Init__(Args&&... args) {
     return __memory::Init<self>(std::forward<Args>(args)...);
   }
 
-  __memory::Mut<Iterator<element>> __Iter__() override {
+  __memory::Ret<Iterator<element>> __Iter__() override {
     return std::enable_shared_from_this<self>::shared_from_this();
   }
 

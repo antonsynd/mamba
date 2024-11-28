@@ -5,8 +5,7 @@
 
 namespace mamba::builtins::__conversion {
 
-template <typename T>
-inline __types::Str Str(__types::None<T>) {
+inline __types::Str Str(__types::None) {
   return "None";
 }
 

@@ -9,7 +9,7 @@
 #include "mamba/builtins/__memory/ref.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 
-namespace mamba::builtins::conversion {
+namespace mamba::builtins::__conversion {
 
 template <typename T>
 __types::Bool Bool(const T& t) {
@@ -21,4 +21,4 @@ __types::Bool Bool(const __memory::Ref<T>& t) {
   return Bool(*t);
 }
 
-}  // namespace mamba::builtins::conversion
+}  // namespace mamba::builtins::__conversion

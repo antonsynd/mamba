@@ -4,32 +4,103 @@
 #include <optional>
 #include <type_traits>
 
-#include "mamba/builtins/__concepts/value.hpp"
+#include "mamba/builtins/__memory/const.hpp"
+#include "mamba/builtins/__memory/ref.hpp"
 
 namespace mamba::builtins::__types {
 
-/// @brief Templated None type.
-template <typename T>
-using None =
-    std::conditional_t<__concepts::Value<T>, std::nullopt_t, std::nullptr_t>;
+struct None {
+ public:
+  None() = default;
 
-namespace details {
+  /// @brief Implicit conversion from std::nullopt_t/std::nullptr_t
+  None(std::nullopt_t) {}
+  None(std::nullptr_t) {}
 
-template <typename T>
-constexpr auto select_none_value() {
-  if constexpr (__concepts::Value<T>) {
+  /// @brief Implicit conversion to std::nullopt_t/std::nullptr_t
+  constexpr operator std::nullopt_t() const { return std::nullopt; }
+
+  constexpr operator std::nullptr_t() const { return nullptr; }
+
+  /// @brief Implicit conversion to std::optional<T> and Ref<T>
+  template <typename T>
+  constexpr operator std::optional<T>() const {
     return std::nullopt;
-  } else {
+  }
+
+  template <typename T>
+  constexpr operator __memory::Ref<T>() const {
     return nullptr;
   }
-}
 
-}  // namespace details
+  /// @brief (In)equality operators
+  constexpr bool operator==(std::nullopt_t) const { return true; }
+  constexpr bool operator!=(std::nullopt_t) const { return false; }
 
-/// @brief Templated None constant.
-template <typename T>
-constexpr auto kNone = select_none_value<T>();
+  constexpr bool operator==(std::nullptr_t) const { return true; }
+  constexpr bool operator!=(std::nullptr_t) const { return false; }
+
+  template <typename T>
+  bool operator==(const std::optional<T>& other) const {
+    return !other;
+  }
+
+  template <typename T>
+  bool operator!=(const std::optional<T>& other) const {
+    !(*this == other);
+  }
+
+  template <typename T>
+  bool operator==(__memory::Const<T> other) const {
+    return !other;
+  }
+
+  template <typename T>
+  bool operator!=(__memory::Const<T> other) const {
+    !(*this == other);
+  }
+};
+
+/// @brief Constant.
+constexpr None kNone;
 
 }  // namespace mamba::builtins::__types
+
+// Reverse (in)equality operators for commutivity
+constexpr bool operator==(std::nullopt_t, mamba::builtins::__types::None) {
+  return true;
+}
+constexpr bool operator!=(std::nullopt_t, mamba::builtins::__types::None) {
+  return false;
+}
+
+constexpr bool operator==(std::nullptr_t, mamba::builtins::__types::None) {
+  return true;
+}
+constexpr bool operator!=(std::nullptr_t, mamba::builtins::__types::None) {
+  return false;
+}
+
+template <typename T>
+bool operator==(const std::optional<T>& other, mamba::builtins::__types::None) {
+  return !other;
+}
+
+template <typename T>
+bool operator!=(const std::optional<T>& other, mamba::builtins::__types::None) {
+  return !!other;
+}
+
+template <typename T>
+bool operator==(mamba::builtins::__memory::Const<T> other,
+                mamba::builtins::__types::None) {
+  return !other;
+}
+
+template <typename T>
+bool operator!=(mamba::builtins::__memory::Const<T> other,
+                mamba::builtins::__types::None) {
+  return !!other;
+}
 
 // IWYU pragma: private

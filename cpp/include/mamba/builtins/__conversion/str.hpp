@@ -9,11 +9,11 @@
 #include "mamba/builtins/__memory/const.hpp"
 #include "mamba/builtins/__types/str.hpp"
 
-namespace mamba::builtins::conversion {
+namespace mamba::builtins::__conversion {
 
 template <typename T>
 __types::Str Str(__memory::Const<T> t) {
   return t->__Str__();
 }
 
-}  // namespace mamba::builtins::conversion
+}  // namespace mamba::builtins::__conversion

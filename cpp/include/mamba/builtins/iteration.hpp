@@ -4,8 +4,7 @@
 #include <memory>
 #include <type_traits>
 
-#include "mamba/builtins/__memory/const.hpp"
-#include "mamba/builtins/__memory/mut.hpp"
+#include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/error.hpp"
 
@@ -29,20 +28,25 @@ class Iterator : public builtins::__types::Object {
 
   virtual ~Iterator() = default;
 
-  virtual __memory::Mut<Iterator<value_type>> __Iter__() = 0;
+  virtual __memory::Ret<Iterator<value_type>> __Iter__() = 0;
 
   /// @brief Returns the next value from the iterator, starting from the first
   /// value.
   /// @code next(iterator)
   virtual value_type __Next__() = 0;
 
-  /// @brief Returns true if this and @p other contain the same elements, and
-  /// false otherwise.
-  /// @code list == other
-  __types::Bool __Eq__(const self& other) const { return this == &other; }
-  __types::Bool __Ne__(const self& other) const { return !__Eq__(other); }
+  /// @brief Returns true if this and @p other are the same iterators.
+  /// @code iterator == other
+  virtual __types::Bool __Eq__(__memory::Const<self> other) const {
+    return this == other.get();
+  }
 
-  bool operator!=(const self& other) const { return !__Ne__(other); }
+  virtual __types::Bool __Ne__(__memory::Const<self> other) const {
+    return !__Eq__(other);
+  }
+
+  bool operator==(__memory::Const<self> other) const { return !__Eq__(other); }
+  bool operator!=(__memory::Const<self> other) const { return !__Ne__(other); }
 
   // Native C++ iteration support
   iterator begin() const { return iterator(*this); }
@@ -52,33 +56,23 @@ class Iterator : public builtins::__types::Object {
 namespace __concepts {
 
 template <typename T, typename U>
-concept TypedIterable = requires(T* iterable) {
-  { iterable->__Iter__() } -> std::same_as<__memory::Mut<Iterator<U>>>;
+concept IterableOf = requires(T iterable) {
+  { iterable.__Iter__() } -> std::same_as<__memory::Ret<Iterator<U>>>;
 };
 
 template <typename T>
-concept Iterable = TypedIterable<T, typename T::element>;
+concept Iterable = IterableOf<T, typename T::element>;
 
 }  // namespace __concepts
 
 template <typename T>
-T Next(Iterator<T>& it) {
-  return it.__Next__();
-}
-
-template <typename T>
-T Next(__memory::Const<Iterator<T>> it) {
-  return Next(*it);
+__memory::Ret<T> Next(__memory::Const<Iterator<T>> it) {
+  return it->__Next__();
 }
 
 template <__concepts::Iterable T>
-__memory::Mut<Iterator<T>> Iter(T& it) {
-  return it.__Iter__();
-}
-
-template <__concepts::Iterable T>
-__memory::Mut<Iterator<T>> Iter(__memory::Const<T> it) {
-  return Iter(*it);
+__memory::Ret<Iterator<T>> Iter(__memory::Const<T> it) {
+  return it->__Iter__();
 }
 
 namespace details {
@@ -118,11 +112,13 @@ class IteratorWrapper {
 
   value_type operator*() { return *it_; }
 
-  bool operator==(const self& other) const {
-    return at_end_ == other.at_end_ && it_ == other.it_;
+  bool operator==(__memory::Const<self> other) const {
+    return at_end_ == other->at_end_ && it_ == other->it_;
   }
 
-  bool operator!=(const self& other) const { return !(*this == other); }
+  bool operator!=(__memory::Const<self> other) const {
+    return !(*this == other);
+  }
 
   self begin() const { return *this; }
   self end() const {
