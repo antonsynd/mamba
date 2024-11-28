@@ -18,7 +18,7 @@ class IteratorWrapper;
 }  // namespace details
 
 template <typename T>
-class Iterator : public builtins::__types::Object {
+class Iterator : public __types::Object {
  public:
   using value_type = T;
   using iterator = details::IteratorWrapper<value_type>;

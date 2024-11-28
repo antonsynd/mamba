@@ -15,16 +15,20 @@
 #include "mamba/builtins/float.hpp"             // for FloatType
 #include "mamba/builtins/int.hpp"               // for IntType
 #include "mamba/builtins/list.hpp"              // for List
-#include "mamba/builtins/object.hpp"            // for ObjectType
+#include "mamba/builtins/object.hpp"            // for Object
 #include "mamba/builtins/operators.hpp"         // for Init, operator==
+#include "mamba/builtins/repr.hpp"              // for Repr
 #include "mamba/builtins/sequence.hpp"          // for Len, Sequence
 #include "mamba/builtins/str.hpp"               // for StrType, Len
 
 namespace mamba::builtins::test {
+
+using namespace mamba::builtins::__memory;
+
 namespace {
 
 template <__concepts::Value T>
-struct Wrapper : public ObjectType,
+struct Wrapper : public Object,
                  public std::enable_shared_from_this<Wrapper<T>> {
  public:
   using self = Wrapper;
@@ -35,7 +39,7 @@ struct Wrapper : public ObjectType,
   Wrapper(T value) : v_(value), id_(GetNextId()) {}
 
   template <typename... Args>
-  static __memory::Ret<self> __Init__(Args&&... args) {
+  static Ret<self> __Init__(Args&&... args) {
     return Init<self>(std::forward<Args>(args)...);
   }
 
@@ -52,8 +56,8 @@ struct Wrapper : public ObjectType,
 
   StrType __Repr__() const override { return __Str__(); }
 
-  BoolType __Eq____(__memory::Mut<self> other) const { return v_ == other->v_; }
-  BoolType __Lt__(__memory::Const<self> other) const { return v_ < other.v_; }
+  BoolType __Eq____(Mut<self> other) const { return v_ == other->v_; }
+  BoolType __Lt__(Const<self> other) const { return v_ < other.v_; }
 
  private:
   inline static std::size_t global_id_ = 0;
@@ -66,7 +70,7 @@ using IntWrapper = Wrapper<IntType>;
 using FloatWrapper = Wrapper<FloatType>;
 
 template <typename T, typename U = T>
-std::vector<U> as_vector(__memory::Const<List<T>> l) {
+std::vector<U> as_vector(Const<List<T>> l) {
   std::vector<U> res;
 
   for (size_t i = 0; i < Len(l); ++i) {
@@ -2987,7 +2991,7 @@ TEST(List, InitializerListConstructorObject) {
 //                         Init<IntWrapper>(5)};
 
 //   // This effectively inverts the sort
-//   const auto key = [](__memory::Const<IntWrapper> i) -> FloatType {
+//   const auto key = [](Const<IntWrapper> i) -> FloatType {
 //     return 1.0 / static_cast<FloatType>(i->Value());
 //   };
 
@@ -3027,7 +3031,7 @@ TEST(List, InitializerListConstructorObject) {
 //                         Init<IntWrapper>(5)};
 
 //   // This effectively inverts the sort, but the reverse reverses it again
-//   const auto key = [](__memory::Const<IntWrapper> i) -> FloatType {
+//   const auto key = [](Const<IntWrapper> i) -> FloatType {
 //     return 1.0 / static_cast<FloatType>(i->Value());
 //   };
 

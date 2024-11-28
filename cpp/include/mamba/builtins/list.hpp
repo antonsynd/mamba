@@ -17,6 +17,7 @@
 #include "mamba/builtins/__memory/ref.hpp"
 #include "mamba/builtins/__operators/init.hpp"
 #include "mamba/builtins/__types/int.hpp"
+#include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
@@ -37,7 +38,8 @@ concept ListSortKey = requires(const F& key_func, __memory::Const<K> k) {
 }  // namespace details
 
 template <__concepts::LessThanComparable T>
-class List : public std::enable_shared_from_this<List<T>> {
+class List : public __types::Object,
+             public std::enable_shared_from_this<List<T>> {
  public:
   /// @note Mamba-specific
   using element = T;
@@ -595,7 +597,7 @@ class List : public std::enable_shared_from_this<List<T>> {
 
   /// @brief Returns the representation of the list.
   /// @code repr(list)
-  __types::Str __Repr__() const {
+  __types::Str __Repr__() const override {
     std::ostringstream oss;
 
     oss << "[";

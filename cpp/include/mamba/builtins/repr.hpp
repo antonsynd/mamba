@@ -6,13 +6,13 @@
 #include "mamba/builtins/__dunder/__repr/none.hpp"   // IWYU pragma: export
 #include "mamba/builtins/__dunder/__repr/str.hpp"    // IWYU pragma: export
 #include "mamba/builtins/__dunder/__repr/tuple.hpp"  // IWYU pragma: export
-#include "mamba/builtins/__memory/const.hpp"
+#include "mamba/builtins/__memory/ref.hpp"
 #include "mamba/builtins/__types/str.hpp"
 
 namespace mamba::builtins {
 
-template <typename T>
-__types::Str Repr(__memory::Const<T> t) {
+template <__concepts::IsRef T>
+__types::Str Repr(const T& t) {
   return t->__Repr__();
 }
 
