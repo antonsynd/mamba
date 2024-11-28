@@ -28,8 +28,7 @@ using namespace mamba::builtins::__memory;
 namespace {
 
 template <__concepts::Value T>
-struct Wrapper : public Object,
-                 public std::enable_shared_from_this<Wrapper<T>> {
+struct Wrapper : public Object<Wrapper<T>> {
  public:
   using self = Wrapper;
 

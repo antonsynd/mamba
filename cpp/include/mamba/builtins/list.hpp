@@ -38,8 +38,7 @@ concept ListSortKey = requires(const F& key_func, __memory::Const<K> k) {
 }  // namespace details
 
 template <__concepts::LessThanComparable T>
-class List : public __types::Object,
-             public std::enable_shared_from_this<List<T>> {
+class List : public __types::Object<List<T>> {
  public:
   /// @note Mamba-specific
   using element = T;
@@ -822,9 +821,10 @@ class List : public __types::Object,
 
 namespace details {
 
+// TODO: This might be a problem where we need to pass the subclass down
+// to have the correct std::enable_shared_from_this<T> behavior
 template <typename T>
-class ListIterator : public Iterator<T>,
-                     public std::enable_shared_from_this<ListIterator<T>> {
+class ListIterator : public Iterator<T> {
  public:
   /// @brief Mamba-specific
   using element = T;
