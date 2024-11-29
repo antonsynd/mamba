@@ -11,7 +11,7 @@
 #include <utility>
 #include <vector>
 
-#include "mamba/builtins/__concepts/comparable.hpp"
+#include "mamba/builtins/__concepts/orderable.hpp"
 #include "mamba/builtins/__conversion/str.hpp"
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__memory/ref.hpp"
@@ -135,7 +135,7 @@ class List : public __types::Object<List<T>> {
   /// @code list.copy()
   __memory::Ret<self> Copy() const {
     // Invoke copy constructor
-    return __Init(*this);
+    return __Init__(*this);
   }
 
   /// @brief Extends this list with the elements of @p other.

@@ -9,17 +9,6 @@
 namespace mamba::builtins::__concepts {
 
 template <typename T>
-concept Equatable = Value<T> || requires(const T lhs, __memory::Const<T> rhs) {
-  { lhs.__Eq__(rhs) } -> std::same_as<__types::Bool>;
-};
-
-template <typename T>
-concept Inequatable =
-    Value<T> || requires(const T lhs, __memory::Const<T> rhs) {
-      { lhs.__Ne__(rhs) } -> std::same_as<__types::Bool>;
-    };
-
-template <typename T>
 concept GreaterThanComparable =
     Value<T> || requires(const T lhs, __memory::Const<T> rhs) {
       { lhs.__Gt__(rhs) } -> std::same_as<__types::Bool>;

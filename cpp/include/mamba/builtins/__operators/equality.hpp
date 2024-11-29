@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "mamba/builtins/__concepts/comparable.hpp"
+#include "mamba/builtins/__concepts/equatable.hpp"
 #include "mamba/builtins/__memory/const.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 

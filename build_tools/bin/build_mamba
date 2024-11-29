@@ -81,7 +81,19 @@ def install(args: argparse.Namespace, rest: Sequence[str]) -> None:
 
 
 def memcheck(args: argparse.Namespace, rest: Sequence[str]) -> None:
+    # TODO: valgrind doesn't work on macOS
     pass
+    # build_test_dir: Path = CPP_BUILD_DIR / "test"
+
+    # if not build_test_dir.exists():
+    #     print(f"Tests were not built yet.", file=sys.stderr)
+    #     sys.exit(1)
+
+    # try:
+    #     subprocess.run(args=["valgrind", *rest], cwd=build_test_dir)
+    # except subprocess.CalledProcessError as e:
+    #     print(f"Encountered error {e}", file=sys.stderr)
+    #     sys.exit(1)
 
 
 def format(args: argparse.Namespace, rest: Sequence[str]) -> None:
