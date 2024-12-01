@@ -38,7 +38,7 @@ concept ListSortKey = requires(const F& key_func, __memory::Const<K> k) {
 }  // namespace details
 
 template <__concepts::LessThanComparable T>
-class List : public __types::Object<List<T>> {
+class List : public __types::Object {
  public:
   /// @note Mamba-specific
   using element = T;
@@ -66,14 +66,14 @@ class List : public __types::Object<List<T>> {
   /// are copied.
   /// @code list(Iterable)
   template <typename It>
-    requires __concepts::IterableOf<It, element>
-  explicit List(__memory::Const<It> iterable) {
+    requires __concepts::IterableRefOf<It, element>
+  explicit List(const T& iterable) {
     bool no_stop_iteration = true;
     auto it = iterable->__Iter();
 
     while (no_stop_iteration) {
       try {
-        Append(Next(*it));
+        Append(Next(it));
       } catch (StopIteration) {
         no_stop_iteration = false;
         break;
@@ -84,8 +84,9 @@ class List : public __types::Object<List<T>> {
   /// @brief Creates a list with the provided variadic arguments.
   /// @code list(...)
   template <typename... Args>
-  List(Args... rest) {
-    (Append(std::forward<Args>(rest)), ...);
+    requires(__concepts::IsArg<Args> && ...)
+  List(Args&&... rest) {
+    Append(std::forward<Args>(rest)...);
   }
 
   /// @brief Creates a list from an initializer list (list literal).
@@ -107,18 +108,17 @@ class List : public __types::Object<List<T>> {
   /// @code List.__init__()
   template <typename... Args>
   static __memory::Ret<self> __Init__(Args&&... args) {
-    return __operators::Init<self>(std::forward<Args>(args)...);
+    // return __operators::Init<self>(std::forward<Args>(args)...);
+    auto l = self(std::forward<Args>(args)...);
+    return std::make_shared<self>(std::move(l));
   }
-
-  /// @brief Appends @p elem to the end of the list.
-  /// @code list.append(elem)
-  void Append(__memory::Const<element> elem) { v_.emplace_back(elem); }
 
   /// @brief Appends variadic args @p rest to the end of the list.
   /// @code list.append(...)
   template <typename... Args>
-  void Append(Args... rest) {
-    (Append(std::forward<Args>(rest)), ...);
+    requires(__concepts::IsArg<Args> && ...)
+  void Append(Args&&... rest) {
+    (v_.emplace_back(std::forward<Args>(rest)), ...);
   }
 
   /// @brief Returns whether @p elem is in the list. O(n).
@@ -850,7 +850,7 @@ class ListIterator : public Iterator<T> {
 
   __memory::Ret<Iterator<element>> __Iter__() override {
     return std::dynamic_pointer_cast<Iterator<element>>(
-        __types::Object<Iterator<element>>::shared_from_this());
+        __types::Object::shared_from_this());
   }
 
   __memory::Ret<element> __Next__() override {

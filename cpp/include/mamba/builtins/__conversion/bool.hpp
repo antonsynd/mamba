@@ -6,7 +6,7 @@
 #include "mamba/builtins/__dunder/__bool/none.hpp"   // IWYU pragma: export
 #include "mamba/builtins/__dunder/__bool/str.hpp"    // IWYU pragma: export
 #include "mamba/builtins/__dunder/__bool/tuple.hpp"  // IWYU pragma: export
-#include "mamba/builtins/__memory/ref.hpp"
+#include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 
 namespace mamba::builtins::__conversion {
@@ -17,7 +17,7 @@ __types::Bool Bool(const T& t) {
 }
 
 template <typename T>
-__types::Bool Bool(const __memory::Ref<T>& t) {
+__types::Bool Bool(const __memory::Const<T>& t) {
   return Bool(*t);
 }
 

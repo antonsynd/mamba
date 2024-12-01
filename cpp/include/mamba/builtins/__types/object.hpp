@@ -1,35 +1,17 @@
 #pragma once
 
-#include <type_traits>
+#include <memory>
 
 #include "mamba/builtins/__types/str.hpp"
 
-namespace mamba::builtins {
-namespace __types {
+namespace mamba::builtins::__types {
 
-namespace details {
-
-class ObjectBase {
+class Object : public std::enable_shared_from_this<Object> {
  public:
-  virtual ~ObjectBase() = default;
-
+  virtual ~Object() = default;
   virtual Str __Repr__() const = 0;
 };
 
-}  // namespace details
-
-template <typename T>
-class Object : public details::ObjectBase,
-               public std::enable_shared_from_this<T> {};
-
-}  // namespace __types
-
-namespace __concepts {
-
-template <typename T>
-concept IsObject = std::is_base_of_v<__types::Object<T>, T>;
-
-}  // namespace __concepts
-}  // namespace mamba::builtins
+}  // namespace mamba::builtins::__types
 
 // IWYU pragma: private

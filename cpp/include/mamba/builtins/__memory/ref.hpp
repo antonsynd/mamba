@@ -2,13 +2,14 @@
 
 #include <concepts>
 #include <memory>
+#include <type_traits>
 
 namespace mamba::builtins {
 namespace __memory {
 
 // Simple alias
 template <typename T>
-using Ref = std::shared_ptr<T>;
+using Ref = std::shared_ptr<std::decay_t<T>>;
 
 }  // namespace __memory
 

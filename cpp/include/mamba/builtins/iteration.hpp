@@ -18,7 +18,7 @@ class IteratorWrapper;
 }  // namespace details
 
 template <typename T>
-class Iterator : public __types::Object<Iterator<T>> {
+class Iterator : public __types::Object {
  public:
   /// @brief Mamba-specific
   using element = T;
@@ -66,15 +66,23 @@ concept IterableOf = requires(T iterable) {
 template <typename T>
 concept Iterable = IterableOf<T, typename T::element>;
 
+template <typename T>
+concept IterableRef =
+    __concepts::IsRef<T> && Iterable<typename T::element_type>;
+
+template <typename T, typename U>
+concept IterableRefOf =
+    __concepts::IsRef<T> && IterableOf<typename T::element_type, U>;
+
 }  // namespace __concepts
 
-template <typename T>
-__memory::Ret<T> Next(__memory::Const<Iterator<T>> it) {
+template <__concepts::IterableRef T>
+__memory::Ret<typename T::element_type::element> Next(const T& it) {
   return it->__Next__();
 }
 
-template <__concepts::Iterable T>
-__memory::Ret<Iterator<T>> Iter(__memory::Const<T> it) {
+template <__concepts::IterableRef T>
+__memory::Ret<Iterator<typename T::element_type::element>> Iter(const T& it) {
   return it->__Iter__();
 }
 
@@ -135,5 +143,4 @@ class IteratorWrapper {
 };
 
 }  // namespace details
-
 }  // namespace mamba::builtins

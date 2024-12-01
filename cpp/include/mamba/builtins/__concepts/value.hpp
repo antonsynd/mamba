@@ -1,6 +1,7 @@
 #pragma once
 
 #include <concepts>
+#include <type_traits>
 
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/complex.hpp"
@@ -10,9 +11,10 @@
 namespace mamba::builtins::__concepts {
 
 template <typename T>
-concept Value =
-    std::same_as<T, __types::Int> || std::same_as<T, __types::Float> ||
-    std::same_as<T, __types::Bool> || std::same_as<T, __types::Complex>;
+concept Value = std::same_as<std::decay_t<T>, __types::Int> ||
+                std::same_as<std::decay_t<T>, __types::Float> ||
+                std::same_as<std::decay_t<T>, __types::Bool> ||
+                std::same_as<std::decay_t<T>, __types::Complex>;
 
 }  // namespace mamba::builtins::__concepts
 

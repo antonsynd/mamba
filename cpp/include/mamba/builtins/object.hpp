@@ -4,7 +4,6 @@
 
 namespace mamba::builtins {
 
-template <typename T>
-using Object = __types::Object<T>;
+using Object = __types::Object;
 
 }  // namespace mamba::builtins
