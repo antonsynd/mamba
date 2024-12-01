@@ -20,20 +20,23 @@ class IteratorWrapper;
 template <typename T>
 class Iterator : public __types::Object<Iterator<T>> {
  public:
-  using value_type = T;
+  /// @brief Mamba-specific
+  using element = T;
+
+  using value_type = __memory::Stored<T>;
   using iterator = details::IteratorWrapper<value_type>;
 
   /// @brief Mamba-specific
-  using self = Iterator<value_type>;
+  using self = Iterator<element>;
 
   virtual ~Iterator() = default;
 
-  virtual __memory::Ret<Iterator<value_type>> __Iter__() = 0;
+  virtual __memory::Ret<Iterator<element>> __Iter__() = 0;
 
   /// @brief Returns the next value from the iterator, starting from the first
   /// value.
   /// @code next(iterator)
-  virtual value_type __Next__() = 0;
+  virtual __memory::Ret<element> __Next__() = 0;
 
   /// @brief Returns true if this and @p other are the same iterators.
   /// @code iterator == other

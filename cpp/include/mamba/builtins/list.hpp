@@ -43,7 +43,7 @@ class List : public __types::Object<List<T>> {
   /// @note Mamba-specific
   using element = T;
 
-  using value_type = __memory::Elem<element>;
+  using value_type = __memory::Stored<element>;
   using reference = value_type&;
   using const_reference = const value_type&;
 
@@ -67,9 +67,9 @@ class List : public __types::Object<List<T>> {
   /// @code list(Iterable)
   template <typename It>
     requires __concepts::IterableOf<It, element>
-  explicit List(It& iterable) {
+  explicit List(__memory::Const<It> iterable) {
     bool no_stop_iteration = true;
-    auto it = iterable.__Iter();
+    auto it = iterable->__Iter();
 
     while (no_stop_iteration) {
       try {
@@ -829,7 +829,7 @@ class ListIterator : public Iterator<T> {
   /// @brief Mamba-specific
   using element = T;
 
-  using value_type = __memory::Elem<element>;
+  using value_type = __memory::Stored<element>;
   using iterator = List<element>::iterator;
 
   /// @brief Mamba-specific
@@ -849,10 +849,12 @@ class ListIterator : public Iterator<T> {
   }
 
   __memory::Ret<Iterator<element>> __Iter__() override {
-    return std::enable_shared_from_this<self>::shared_from_this();
+    return std::dynamic_pointer_cast<Iterator<element>>(
+        std::enable_shared_from_this<
+            __types::Object<Iterator<element>>>::shared_from_this());
   }
 
-  value_type __Next__() override {
+  __memory::Ret<element> __Next__() override {
     if (it_ == end_) {
       throw StopIteration("end of iterator");
     }

@@ -68,15 +68,15 @@ struct Wrapper : public Object<Wrapper<T>> {
 using IntWrapper = Wrapper<IntType>;
 using FloatWrapper = Wrapper<FloatType>;
 
-template <typename T, typename U = T>
-std::vector<U> as_vector(Const<List<T>> l) {
-  std::vector<U> res;
+template <typename T = IntType>
+std::vector<IntType> as_vector(Const<List<T>> l) {
+  std::vector<IntType> res;
 
   for (size_t i = 0; i < Len(l); ++i) {
     if constexpr (__concepts::Value<T>) {
-      res.emplace_back(static_cast<const U>((*l)[i]));
+      res.emplace_back(static_cast<const IntType>((*l)[i]));
     } else {
-      res.emplace_back(static_cast<const U>(*(*l)[i]));
+      res.emplace_back(static_cast<const IntType>(*(*l)[i]));
     }
   }
 
@@ -118,7 +118,7 @@ TEST(List, VariadicConstructor) {
   // Then
   ASSERT_EQ(Len(l), 4);
 
-  const auto actual = as_vector<IntType>(l);
+  const auto actual = as_vector(l);
   const std::vector<IntType> expected = {1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
@@ -133,7 +133,7 @@ TEST(List, VariadicConstructorObject) {
   // Then
   ASSERT_EQ(Len(l), 4);
 
-  const auto actual = as_vector<IntWrapper, IntType>(l);
+  const auto actual = as_vector<IntWrapper>(l);
   const std::vector<IntType> expected = {1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
@@ -161,25 +161,25 @@ TEST(List, InitializerListConstructorObject) {
   // Then
   ASSERT_EQ(Len(l), 4);
 
-  const auto actual = as_vector<IntWrapper, IntType>(l);
+  const auto actual = as_vector<IntWrapper>(l);
   const std::vector<IntType> expected = {1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
 }
 
-// TEST(List, IterableConstructor) {
-//   // If/when
-//   List<IntType> source = {1, 3, 5, 7};
-//   const List<IntType> l{*source.__Iter__()};
+TEST(List, IterableConstructor) {
+  // If/when
+  const auto source = Init<List<IntWrapper>>(1, 3, 5, 7);
+  const auto l = Init<List<IntWrapper>>(source->__Iter__());
 
-//   // Then
-//   ASSERT_EQ(Len(l), 4);
+  // Then
+  ASSERT_EQ(Len(l), 4);
 
-//   const auto actual = as_vector(l);
-//   const std::vector<IntType> expected = {1, 3, 5, 7};
+  const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {1, 3, 5, 7};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
 // TEST(List, IterableConstructorObject) {
 //   // If/when

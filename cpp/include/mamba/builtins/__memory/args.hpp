@@ -12,9 +12,9 @@ namespace mamba::builtins::__memory {
 template <typename T>
 using Ret = std::conditional_t<__concepts::Value<T>, T, Ref<T>>;
 
-/// @brief For use in storing (mutable) values.
+/// @brief Alias for use in storing (mutable) values.
 template <typename T>
-using Elem = Ret<T>;
+using Stored = Ret<T>;
 
 /// @brief For use in constant arguments.
 template <typename T>
