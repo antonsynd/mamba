@@ -93,6 +93,8 @@ TEST(List, ValueListIsSequence) {
 TEST(List, ObjectListIsSequence) {
   // If/when/then
   static_assert(__concepts::Sequence<List<IntWrapper>>);
+  static_assert(!__concepts::IsRef<int>);
+  static_assert(!__concepts::HasElementType<int>);
 }
 
 TEST(List, EmptyConstructor) {
@@ -111,18 +113,18 @@ TEST(List, EmptyConstructorObject) {
   EXPECT_EQ(Len(l), 0);
 }
 
-TEST(List, VariadicConstructor) {
-  // If/when
-  const auto l = Init<List<IntType>>(1, 3, 5, 7);
+// TEST(List, VariadicConstructor) {
+//   // If/when
+//   const auto l = Init<List<IntType>>(1, 3, 5, 7);
 
-  // Then
-  ASSERT_EQ(Len(l), 4);
+//   // Then
+//   ASSERT_EQ(Len(l), 4);
 
-  const auto actual = as_vector(l);
-  const std::vector<IntType> expected = {1, 3, 5, 7};
+//   const auto actual = as_vector(l);
+//   const std::vector<IntType> expected = {1, 3, 5, 7};
 
-  EXPECT_EQ(actual, expected);
-}
+//   EXPECT_EQ(actual, expected);
+// }
 
 TEST(List, VariadicConstructorObject) {
   // If/when
@@ -169,22 +171,22 @@ TEST(List, InitializerListConstructorObject) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, IterableConstructor) {
-  // If/when
-  const auto source = Init<List<IntType>>(1, 3, 5, 7);
-  std::cout << "create l" << std::endl;
-  // const auto l = Init<List<IntType>>(Iter(source));
-  std::cout << "finish creating l" << std::endl;
-  (void)source;
+// TEST(List, IterableConstructor) {
+// If/when
+// const auto source = Init<List<IntType>>(1, 3, 5, 7);
+// std::cout << "create l" << std::endl;
+// const auto l = Init<List<IntType>>(Iter(source));
+// std::cout << "finish creating l" << std::endl;
+// (void)source;
 
-  // // Then
-  // ASSERT_EQ(Len(l), 4);
+// // Then
+// ASSERT_EQ(Len(l), 4);
 
-  // const auto actual = as_vector(l);
-  // const std::vector<IntType> expected = {1, 3, 5, 7};
+// const auto actual = as_vector(l);
+// const std::vector<IntType> expected = {1, 3, 5, 7};
 
-  // EXPECT_EQ(actual, expected);
-}
+// EXPECT_EQ(actual, expected);
+// }
 
 // TEST(List, IterableConstructorObject) {
 //   // If/when

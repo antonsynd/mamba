@@ -19,7 +19,11 @@ using Ref = std::shared_ptr<T>;
 namespace __concepts {
 
 template <typename T>
+concept HasElementType = requires { typename T::element_type; };
+
+template <typename T>
 concept IsRef =
+    HasElementType<T> &&
     std::same_as<std::decay_t<T>, __memory::Ref<typename T::element_type>>;
 
 }  // namespace __concepts
