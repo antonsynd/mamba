@@ -108,9 +108,7 @@ class List : public __types::Object {
   /// @code List.__init__()
   template <typename... Args>
   static __memory::Ret<self> __Init__(Args&&... args) {
-    // return __operators::Init<self>(std::forward<Args>(args)...);
-    auto l = self(std::forward<Args>(args)...);
-    return std::make_shared<self>(std::move(l));
+    return __operators::Init<self>(std::forward<Args>(args)...);
   }
 
   /// @brief Appends variadic args @p rest to the end of the list.
