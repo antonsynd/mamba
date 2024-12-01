@@ -850,8 +850,7 @@ class ListIterator : public Iterator<T> {
 
   __memory::Ret<Iterator<element>> __Iter__() override {
     return std::dynamic_pointer_cast<Iterator<element>>(
-        std::enable_shared_from_this<
-            __types::Object<Iterator<element>>>::shared_from_this());
+        __types::Object<Iterator<element>>::shared_from_this());
   }
 
   __memory::Ret<element> __Next__() override {
