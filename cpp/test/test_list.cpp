@@ -124,20 +124,22 @@ TEST(List, VariadicConstructor) {
   EXPECT_EQ(actual, expected);
 }
 
-// TEST(List, VariadicConstructorObject) {
-//   // If/when
-//   const auto l =
-//       Init<List<IntWrapper>>(Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                              Init<IntWrapper>(5), Init<IntWrapper>(7));
+TEST(List, VariadicConstructorObject) {
+  // If/when
+  static_assert(__concepts::IsArg<std::shared_ptr<IntWrapper>>);
 
-//   // Then
-//   ASSERT_EQ(Len(l), 4);
+  const auto l =
+      Init<List<IntWrapper>>(Init<IntWrapper>(1), Init<IntWrapper>(3),
+                             Init<IntWrapper>(5), Init<IntWrapper>(7));
 
-//   const auto actual = as_vector<IntWrapper>(l);
-//   const std::vector<IntType> expected = {1, 3, 5, 7};
+  // Then
+  ASSERT_EQ(Len(l), 4);
 
-//   EXPECT_EQ(actual, expected);
-// }
+  const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {1, 3, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
 
 TEST(List, InitializerListConstructor) {
   // If/when

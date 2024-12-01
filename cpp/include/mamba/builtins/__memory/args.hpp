@@ -34,7 +34,8 @@ using Mut =
 namespace __concepts {
 
 template <typename T>
-concept IsArg = std::same_as<std::decay_t<T>, __memory::Ret<T>>;
+concept IsArg =
+    std::same_as<std::decay_t<T>, __memory::Ret<__memory::Unwrap<T>>>;
 
 }  // namespace __concepts
 }  // namespace mamba::builtins
