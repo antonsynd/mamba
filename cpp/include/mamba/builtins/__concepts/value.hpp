@@ -1,7 +1,6 @@
 #pragma once
 
 #include <concepts>
-#include <type_traits>
 
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/complex.hpp"

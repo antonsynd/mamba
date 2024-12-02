@@ -6,19 +6,28 @@
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 
+namespace mamba::builtins::__operators {
+
+template <__concepts::Equatable T>
+__types::Bool Eq(__memory::Const<T> lhs, __memory::Const<T> rhs) {
+  return lhs->__Eq__(rhs);
+}
+
+}  // namespace mamba::builtins::__operators
+
 // NOTE: operator==() and operator!=() with handle_t<T> as both arguments
 // conflicts with std::shared_ptr<T>::operator!=(), so they are not defined
 
 template <typename T>
 bool operator==(mamba::builtins::__memory::Const<T> lhs,
                 mamba::builtins::__memory::Const<T> rhs) {
-  return lhs.__Eq__(rhs);
+  return lhs->__Eq__(rhs);
 }
 
 template <mamba::builtins::__concepts::Inequatable T>
 bool operator!=(mamba::builtins::__memory::Const<T> lhs,
                 mamba::builtins::__memory::Const<T> rhs) {
-  return lhs.__Ne__(rhs);
+  return lhs->__Ne__(rhs);
 }
 
 template <typename T>

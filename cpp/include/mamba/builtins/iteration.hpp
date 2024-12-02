@@ -20,36 +20,34 @@ class IteratorWrapper;
 template <typename T>
 class Iterator : public __types::Object {
  public:
-  /// @brief Mamba-specific
-  using element = T;
-
-  using value_type = __memory::Stored<T>;
+  using value_type = T;
   using iterator = details::IteratorWrapper<value_type>;
 
   /// @brief Mamba-specific
-  using self = Iterator<element>;
+  using self = Iterator<value_type>;
+  using shared = std::shared_ptr<self>;
 
   virtual ~Iterator() = default;
 
-  virtual __memory::Ret<Iterator<element>> __Iter__() = 0;
+  virtual shared __Iter__() = 0;
 
   /// @brief Returns the next value from the iterator, starting from the first
   /// value.
   /// @code next(iterator)
-  virtual __memory::Ret<element> __Next__() = 0;
+  virtual value_type __Next__() = 0;
 
   /// @brief Returns true if this and @p other are the same iterators.
   /// @code iterator == other
-  virtual __types::Bool __Eq__(__memory::Const<self> other) const {
+  virtual __types::Bool __Eq__(const shared& other) const {
     return this == other.get();
   }
 
-  virtual __types::Bool __Ne__(__memory::Const<self> other) const {
+  virtual __types::Bool __Ne__(const shared& other) const {
     return !__Eq__(other);
   }
 
-  bool operator==(__memory::Const<self> other) const { return !__Eq__(other); }
-  bool operator!=(__memory::Const<self> other) const { return !__Ne__(other); }
+  bool operator==(const shared& other) const { return !__Eq__(other); }
+  bool operator!=(const shared& other) const { return !__Ne__(other); }
 
   // Native C++ iteration support
   iterator begin() const { return iterator(*this); }
@@ -60,29 +58,31 @@ namespace __concepts {
 
 template <typename T, typename U>
 concept IterableOf = requires(T iterable) {
-  { iterable.__Iter__() } -> std::same_as<__memory::Ret<Iterator<U>>>;
+  { iterable->__Iter__() } -> std::same_as<std::shared_ptr<Iterator<U>>>;
 };
 
 template <typename T>
-concept Iterable = IterableOf<T, typename T::element>;
-
-template <typename T>
-concept IterableRef =
-    __concepts::IsRef<T> && Iterable<typename T::element_type>;
-
-template <typename T, typename U>
-concept IterableRefOf =
-    __concepts::IsRef<T> && IterableOf<typename T::element_type, U>;
+concept Iterable = IterableOf<T, typename T::element_type::value_type>;
 
 }  // namespace __concepts
 
-template <__concepts::IterableRef T>
-__memory::Ret<typename T::element_type::element> Next(const T& it) {
+namespace details {
+
+template <__concepts::Iterable T>
+using IterableValueType = typename T::element_type::value_type;
+
+template <__concepts::Iterable T>
+using IterableIteratorType = Iterator<IterableValueType<T>>;
+
+}  // namespace details
+
+template <__concepts::Iterable T>
+details::IterableValueType<T> Next(const T& it) {
   return it->__Next__();
 }
 
-template <__concepts::IterableRef T>
-__memory::Ret<Iterator<typename T::element_type::element>> Iter(const T& it) {
+template <__concepts::Iterable T>
+std::shared_ptr<details::IterableIteratorType<T>> Iter(const T& it) {
   return it->__Iter__();
 }
 
@@ -95,7 +95,8 @@ class IteratorWrapper {
 
   /// @note Mamba-specific
   using self = IteratorWrapper<value_type>;
-  using iterator = __memory::Mut<Iterator<value_type>>;
+  using shared = std::shared_ptr<self>;
+  using iterator = std::shared_ptr<Iterator<value_type>>;
 
   explicit IteratorWrapper(iterator it, bool at_end = false)
       : at_end_(at_end), it_(it) {}
@@ -123,13 +124,11 @@ class IteratorWrapper {
 
   value_type operator*() { return *it_; }
 
-  bool operator==(__memory::Const<self> other) const {
+  bool operator==(const shared& other) const {
     return at_end_ == other->at_end_ && it_ == other->it_;
   }
 
-  bool operator!=(__memory::Const<self> other) const {
-    return !(*this == other);
-  }
+  bool operator!=(const shared& other) const { return !(*this == other); }
 
   self begin() const { return *this; }
   self end() const {

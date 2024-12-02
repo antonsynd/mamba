@@ -16,27 +16,27 @@ namespace mamba::builtins::__concepts {
 /// with Bool().
 template <typename T>
 concept BoolConvertible = Value<T> || requires(const T t) {
-  { t.__Bool__() } -> std::same_as<__types::Bool>;
+  { t->__Bool__() } -> std::same_as<__types::Bool>;
 };
 
 template <typename T>
 concept BytesConvertible = Value<T> || requires(const T t) {
-  { t.__Bytes__() } -> std::same_as<__types::Bytes>;
+  { t->__Bytes__() } -> std::same_as<__types::Bytes>;
 };
 
 template <typename T>
 concept ComplexConvertible = Value<T> || requires(const T t) {
-  { t.__Complex__() } -> std::same_as<__types::Complex>;
+  { t->__Complex__() } -> std::same_as<__types::Complex>;
 };
 
 template <typename T>
 concept FloatConvertible = Value<T> || requires(const T t) {
-  { t.__Float__() } -> std::same_as<__types::Float>;
+  { t->__Float__() } -> std::same_as<__types::Float>;
 };
 
 template <typename T>
 concept IntConvertible = Value<T> || requires(const T t) {
-  { t.__Int__() } -> std::same_as<__types::Int>;
+  { t->__Int__() } -> std::same_as<__types::Int>;
 };
 
 /// @brief A type that can be converted to a Str. For generic programming

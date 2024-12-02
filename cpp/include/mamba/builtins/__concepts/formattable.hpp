@@ -9,12 +9,12 @@ namespace mamba::builtins::__concepts {
 
 template <typename T>
 concept Formattable = Value<T> || requires(const T t) {
-  { t.__Format__() } -> std::same_as<__types::Str>;
+  { t->__Format__() } -> std::same_as<__types::Str>;
 };
 
 template <typename T>
 concept Representable = Value<T> || requires(const T t) {
-  { t.__Repr__() } -> std::same_as<__types::Str>;
+  { t->__Repr__() } -> std::same_as<__types::Str>;
 };
 
 }  // namespace mamba::builtins::__concepts

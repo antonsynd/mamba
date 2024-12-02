@@ -14,7 +14,6 @@
 #include "mamba/builtins/__concepts/orderable.hpp"
 #include "mamba/builtins/__conversion/str.hpp"
 #include "mamba/builtins/__memory/args.hpp"
-#include "mamba/builtins/__memory/ref.hpp"
 #include "mamba/builtins/__operators/init.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
@@ -40,21 +39,15 @@ concept ListSortKey = requires(const F& key_func, __memory::Const<K> k) {
 template <__concepts::LessThanComparable T>
 class List : public __types::Object {
  public:
-  /// @note Mamba-specific
-  using element = T;
-
-  using value_type = __memory::Stored<element>;
+  using value_type = T;
   using reference = value_type&;
   using const_reference = const value_type&;
-
-  /// @note Mamba-specific
-  using storage = std::vector<value_type>;
 
   using iterator = storage::iterator;
   using const_iterator = storage::const_iterator;
 
   /// @note Mamba-specific
-  using self = List<element>;
+  using self = List<value_type>;
 
   static constexpr auto kEndIndex = std::numeric_limits<__types::Int>::min();
 
@@ -66,7 +59,7 @@ class List : public __types::Object {
   /// are copied.
   /// @code list(Iterable)
   template <typename It>
-    requires __concepts::IterableRefOf<It, element>
+    requires __concepts::IterableOf<It, value_type>
   explicit List(const T& iterable) {
     bool no_stop_iteration = true;
     auto it = iterable->__Iter();
@@ -121,7 +114,7 @@ class List : public __types::Object {
 
   /// @brief Returns whether @p elem is in the list. O(n).
   /// @code elem in list
-  __types::Bool __Contains__(__memory::Const<element> elem) const {
+  __types::Bool __Contains__(__memory::Const<value_type> elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 
@@ -232,7 +225,7 @@ class List : public __types::Object {
       throw ValueError("Min() arg is an empty sequence");
     }
 
-    if constexpr (__concepts::Value<element>) {
+    if constexpr (__concepts::Value<value_type>) {
       return *std::min_element(v_.cbegin(), v_.cend());
     } else {
       return *std::min_element(
@@ -249,7 +242,7 @@ class List : public __types::Object {
       throw ValueError("Max() arg is an empty sequence");
     }
 
-    if constexpr (__concepts::Value<element>) {
+    if constexpr (__concepts::Value<value_type>) {
       return *std::max_element(v_.cbegin(), v_.cend());
     } else {
       return *std::max_element(
@@ -260,10 +253,10 @@ class List : public __types::Object {
 
   /// @brief Returns the number of times @p elem is present in the list.
   /// @code list.count(x)
-  __types::Int Count(__memory::Const<element> elem) const {
+  __types::Int Count(__memory::Const<value_type> elem) const {
     return std::count_if(
         v_.cbegin(), v_.cend(),
-        [elem](__memory::Const<element> val) { return val == elem; });
+        [elem](__memory::Const<value_type> val) { return val == elem; });
   }
 
   /// @brief Returns the elements in the list such that the elements' indices
@@ -384,7 +377,7 @@ class List : public __types::Object {
   /// If @p start is negative, it is clamped to 0. If @p start is greater than
   /// the last index in the list, then it throws ValueError.
   /// @code list.index(i, (j))
-  __types::Int Index(__memory::Const<element> elem,
+  __types::Int Index(__memory::Const<value_type> elem,
                      __types::Int start = 0) const {
     return Index(elem, start, v_.size());
   }
@@ -396,7 +389,7 @@ class List : public __types::Object {
   /// then it throws ValueError. If @p end is greater than the last index in
   /// the list, it is clamped to the length of the list.
   /// @code list.index(i, j, k)
-  __types::Int Index(__memory::Const<element> elem,
+  __types::Int Index(__memory::Const<value_type> elem,
                      __types::Int start,
                      __types::Int end) const {
     end = ClampIndex(end);
@@ -414,7 +407,7 @@ class List : public __types::Object {
   /// any element at that position to the right. @p idx is clamped to the
   /// length of the list.
   /// @code list.insert(idx, x)
-  void Insert(__types::Int idx, value_type elem) {
+  void Insert(__types::Int idx, __memory::Mut<value_type> elem) {
     const auto size_t_idx = NormalizeOrClampIndex(idx);
 
     if (size_t_idx == v_.size()) {
@@ -454,14 +447,14 @@ class List : public __types::Object {
   /// are shifted to make the list contiguous. If the list is empty or
   /// @p elem does not occur in the list, throws ValueError.
   /// @code list.remove(elem)
-  void Remove(__memory::Const<element> elem) {
+  void Remove(__memory::Const<value_type> elem) {
     if (v_.empty()) {
       throw ValueError("List.Remove(x): x not in list");
     }
 
     auto it = v_.end();
 
-    if constexpr (__concepts::Value<element>) {
+    if constexpr (__concepts::Value<value_type>) {
       it = std::find(v_.begin(), v_.end(), elem);
     } else {
       it = std::find_if(v_.begin(), v_.end(),
@@ -511,7 +504,7 @@ class List : public __types::Object {
   /// @p key before it is compared using the less-than operator.
   /// @code sort(list, key, reverse)
   template <typename K>
-    requires details::ListSortKey<K, element>
+    requires details::ListSortKey<K, value_type>
   void Sort(const K& key, __types::Bool reverse = false) {
     if (v_.empty()) {
       return;
@@ -533,8 +526,8 @@ class List : public __types::Object {
 
   /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
-  __memory::Ret<Iterator<element>> __Iter__() {
-    return details::ListIterator<element>::__Init__(v_.begin(), v_.end());
+  __memory::Ret<Iterator<value_type>> __Iter__() {
+    return details::ListIterator<value_type>::__Init__(v_.begin(), v_.end());
   }
 
   /// @brief Native support for C++ for..in loops.
@@ -556,7 +549,7 @@ class List : public __types::Object {
   /// false otherwise.
   /// @code list == other
   __types::Bool __Eq__(__memory::Const<self> other) const {
-    if constexpr (__concepts::Value<element>) {
+    if constexpr (__concepts::Value<value_type>) {
       return std::equal(v_.begin(), v_.end(), other->v_.begin(),
                         other->v_.end(),
                         [](const auto a, const auto b) { return a == b; });
@@ -824,14 +817,11 @@ namespace details {
 template <typename T>
 class ListIterator : public Iterator<T> {
  public:
-  /// @brief Mamba-specific
-  using element = T;
-
-  using value_type = __memory::Stored<element>;
-  using iterator = List<element>::iterator;
+  using value_type = T;
+  using iterator = List<value_type>::iterator;
 
   /// @brief Mamba-specific
-  using self = ListIterator<element>;
+  using self = ListIterator<value_type>;
 
   ListIterator(iterator it, iterator end)
       : it_(std::move(it)), end_(std::move(end)) {}
@@ -846,12 +836,12 @@ class ListIterator : public Iterator<T> {
     return __operators::Init<self>(std::forward<Args>(args)...);
   }
 
-  __memory::Ret<Iterator<element>> __Iter__() override {
-    return std::dynamic_pointer_cast<Iterator<element>>(
+  __memory::Ret<Iterator<value_type>> __Iter__() override {
+    return std::dynamic_pointer_cast<Iterator<value_type>>(
         __types::Object::shared_from_this());
   }
 
-  __memory::Ret<element> __Next__() override {
+  __memory::Ret<value_type> __Next__() override {
     if (it_ == end_) {
       throw StopIteration("end of iterator");
     }

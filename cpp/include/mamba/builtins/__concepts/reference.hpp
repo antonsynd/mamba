@@ -5,7 +5,7 @@
 namespace mamba::builtins::__concepts {
 
 template <typename T>
-concept Object = !Value<T>;
+concept Reference = !Value<T>;
 
 }  // namespace mamba::builtins::__concepts
 

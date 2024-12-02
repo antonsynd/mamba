@@ -4,8 +4,9 @@
 #include <optional>
 #include <type_traits>
 
+#include "mamba/builtins/__concepts/reference.hpp"
+#include "mamba/builtins/__concepts/value.hpp"
 #include "mamba/builtins/__memory/args.hpp"
-#include "mamba/builtins/__memory/ref.hpp"
 
 namespace mamba::builtins::__types {
 
@@ -22,14 +23,14 @@ struct None {
 
   constexpr operator std::nullptr_t() const { return nullptr; }
 
-  /// @brief Implicit conversion to std::optional<T> and Ref<T>
-  template <typename T>
+  /// @brief Implicit conversion to std::optional<T> and T (std::shared_ptr)
+  template <__concepts::Value T>
   constexpr operator std::optional<T>() const {
     return std::nullopt;
   }
 
-  template <typename T>
-  constexpr operator __memory::Ref<T>() const {
+  template <__concepts::Reference T>
+  constexpr operator T() const {
     return nullptr;
   }
 
@@ -40,22 +41,22 @@ struct None {
   constexpr bool operator==(std::nullptr_t) const { return true; }
   constexpr bool operator!=(std::nullptr_t) const { return false; }
 
-  template <typename T>
+  template <__concepts::Value T>
   bool operator==(const std::optional<T>& other) const {
     return !other;
   }
 
-  template <typename T>
+  template <__concepts::Value T>
   bool operator!=(const std::optional<T>& other) const {
     !(*this == other);
   }
 
-  template <typename T>
+  template <__concepts::Reference T>
   bool operator==(__memory::Const<T> other) const {
     return !other;
   }
 
-  template <typename T>
+  template <__concepts::Reference T>
   bool operator!=(__memory::Const<T> other) const {
     !(*this == other);
   }
@@ -81,23 +82,23 @@ constexpr bool operator!=(std::nullptr_t, mamba::builtins::__types::None) {
   return false;
 }
 
-template <typename T>
+template <mamba::builtins::__concepts::Value T>
 bool operator==(const std::optional<T>& other, mamba::builtins::__types::None) {
   return !other;
 }
 
-template <typename T>
+template <mamba::builtins::__concepts::Value T>
 bool operator!=(const std::optional<T>& other, mamba::builtins::__types::None) {
   return !!other;
 }
 
-template <typename T>
+template <mamba::builtins::__concepts::Reference T>
 bool operator==(mamba::builtins::__memory::Const<T> other,
                 mamba::builtins::__types::None) {
   return !other;
 }
 
-template <typename T>
+template <mamba::builtins::__concepts::Reference T>
 bool operator!=(mamba::builtins::__memory::Const<T> other,
                 mamba::builtins::__types::None) {
   return !!other;

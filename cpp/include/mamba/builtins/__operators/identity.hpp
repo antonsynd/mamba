@@ -1,5 +1,6 @@
 #pragma once
 
+#include "mamba/builtins/__concepts/reference.hpp"
 #include "mamba/builtins/__concepts/value.hpp"
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/bool.hpp"
@@ -14,8 +15,8 @@ __types::Bool Is(const T& lhs, const T& rhs) {
 }
 
 // Objects are compared by memory address
-template <typename T>
-__types::Bool Is(__memory::Const<T> lhs, __memory::Const<T> rhs) {
+template <__concepts::Reference T>
+__types::Bool Is(const T& lhs, const T& rhs) {
   return lhs == rhs;
 }
 
@@ -28,6 +29,10 @@ __types::Bool Is(__memory::Const<T>, __types::None) {
 template <typename T>
 __types::Bool Is(__types::None, __memory::Const<T>) {
   return false;
+}
+
+__types::Bool Is(__types::None, __types::None) {
+  return true;
 }
 
 }  // namespace mamba::builtins::__operators

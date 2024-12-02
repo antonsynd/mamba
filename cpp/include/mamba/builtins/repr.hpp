@@ -1,17 +1,16 @@
 #pragma once
 
+#include "mamba/builtins/__concepts/reference.hpp"
 #include "mamba/builtins/__dunder/__repr/bool.hpp"   // IWYU pragma: export
 #include "mamba/builtins/__dunder/__repr/float.hpp"  // IWYU pragma: export
 #include "mamba/builtins/__dunder/__repr/int.hpp"    // IWYU pragma: export
 #include "mamba/builtins/__dunder/__repr/none.hpp"   // IWYU pragma: export
-#include "mamba/builtins/__dunder/__repr/str.hpp"    // IWYU pragma: export
 #include "mamba/builtins/__dunder/__repr/tuple.hpp"  // IWYU pragma: export
-#include "mamba/builtins/__memory/ref.hpp"
 #include "mamba/builtins/__types/str.hpp"
 
 namespace mamba::builtins {
 
-template <__concepts::IsRef T>
+template <__concepts::Reference T>
 __types::Str Repr(const T& t) {
   return t->__Repr__();
 }
