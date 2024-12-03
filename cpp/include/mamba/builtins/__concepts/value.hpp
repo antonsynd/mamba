@@ -15,6 +15,9 @@ concept Value = std::same_as<std::decay_t<T>, __types::Int> ||
                 std::same_as<std::decay_t<T>, __types::Bool> ||
                 std::same_as<std::decay_t<T>, __types::Complex>;
 
+template <typename T>
+concept NotValue = !Value<T>;
+
 }  // namespace mamba::builtins::__concepts
 
 // IWYU pragma: private

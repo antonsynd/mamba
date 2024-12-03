@@ -8,14 +8,20 @@
 namespace mamba::builtins::__concepts {
 
 template <typename T>
-concept Formattable = Value<T> || requires(const T t) {
-  { t->__Format__() } -> std::same_as<__types::Str>;
+concept FormattableObject = requires(const T t) {
+  { t.__Format__() } -> std::same_as<__types::Str>;
 };
 
 template <typename T>
-concept Representable = Value<T> || requires(const T t) {
-  { t->__Repr__() } -> std::same_as<__types::Str>;
+concept RepresentableObject = requires(const T t) {
+  { t.__Repr__() } -> std::same_as<__types::Str>;
 };
+
+template <typename T>
+concept Formattable = Value<T> || FormattableObject<T>;
+
+template <typename T>
+concept Representable = Value<T> || RepresentableObject<T>;
 
 }  // namespace mamba::builtins::__concepts
 

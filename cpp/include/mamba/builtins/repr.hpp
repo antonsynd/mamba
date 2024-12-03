@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mamba/builtins/__concepts/reference.hpp"
+#include "mamba/builtins/__concepts/value.hpp"
 #include "mamba/builtins/__dunder/__repr/bool.hpp"   // IWYU pragma: export
 #include "mamba/builtins/__dunder/__repr/float.hpp"  // IWYU pragma: export
 #include "mamba/builtins/__dunder/__repr/int.hpp"    // IWYU pragma: export
@@ -10,9 +10,9 @@
 
 namespace mamba::builtins {
 
-template <__concepts::Reference T>
+template <__concepts::NotValue T>
 __types::Str Repr(const T& t) {
-  return t->__Repr__();
+  return t.__Repr__();
 }
 
 }  // namespace mamba::builtins

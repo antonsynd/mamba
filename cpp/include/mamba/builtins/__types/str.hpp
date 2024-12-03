@@ -12,28 +12,35 @@ namespace mamba::builtins::__types {
 // TODO: Make it Unicode friendly
 class Str final : public Object {
  public:
-  using shared = std::shared_ptr<Str>;
-
   Str() = default;
-  Str(std::string s) : s_(std::move(s)) {}
+  Str(std::string s) : data_(std::make_shared<Data>(std::move(s))) {}
 
-  operator std::string() const { return s_; }
+  operator std::string() const { return data_->s_; }
 
-  Bool __Bool__() const { return !s_.empty(); }
-  Int __Len__() const { return s_.size(); }
-  Bool __Eq__(const shared& other) const { return s_ == other->s_; }
+  Bool __Bool__() const override { return !data_->s_.empty(); }
 
-  /// @note This is a new copy.
-  shared __Str__() const { return __Repr__(); }
-
-  shared __Repr__() const {
-    // Invoke copy constructor
-    return std::make_shared<Str>(*this);
+  Str __Repr__() const override {
+    // Effectively a deep copy
+    return Str(data_->s_);
   }
 
+  /// @note This is a new copy.
+  Str __Str__() const { return __Repr__(); }
+
+  Bool __Eq__(const Str& other) const { return data_->s_ == other.data_->s_; }
+
+  Int __Len__() const { return data_->s_.size(); }
+
  private:
-  std::string s_;
-}
+  class Data {
+   public:
+    Data(std::string s) : s_(std::move(s)) {}
+
+    std::string s_;
+  };
+
+  std::shared_ptr<Data> data_;
+};
 
 }  // namespace mamba::builtins::__types
 
