@@ -24,8 +24,8 @@ struct None {
   constexpr bool operator==(std::nullopt_t) const { return true; }
   constexpr bool operator!=(std::nullopt_t) const { return false; }
 
-  bool operator==(const None&) const constexpr { return true; }
-  bool operator!=(const None&) const constexpr { return false; }
+  constexpr bool operator==(const None&) const { return true; }
+  constexpr bool operator!=(const None&) const { return false; }
 
   template <typename T>
   bool operator==(const std::optional<T>& other) const {

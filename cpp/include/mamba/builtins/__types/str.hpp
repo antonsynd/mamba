@@ -5,21 +5,24 @@
 
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/int.hpp"
-#include "mamba/builtins/__types/object.hpp"
 
 namespace mamba::builtins::__types {
 
 // TODO: Make it Unicode friendly
-class Str final : public Object {
+/// @note Str objects behave like objects but are treated as values.
+class Str final {
  public:
-  Str() = default;
+  Str() : data_(std::make_shared<Data>()) {};
+  Str(const char* s) : data_(std::make_shared<Data>(s)) {}
   Str(std::string s) : data_(std::make_shared<Data>(std::move(s))) {}
 
   operator std::string() const { return data_->s_; }
 
-  Bool __Bool__() const override { return !data_->s_.empty(); }
+  Int __Id__() const { return reinterpret_cast<Int>(data_.get()); }
 
-  Str __Repr__() const override {
+  Bool __Bool__() const { return !data_->s_.empty(); }
+
+  Str __Repr__() const {
     // Effectively a deep copy
     return Str(data_->s_);
   }
@@ -34,7 +37,8 @@ class Str final : public Object {
  private:
   class Data {
    public:
-    Data(std::string s) : s_(std::move(s)) {}
+    Data() = default;
+    explicit Data(std::string s) : s_(std::move(s)) {}
 
     std::string s_;
   };

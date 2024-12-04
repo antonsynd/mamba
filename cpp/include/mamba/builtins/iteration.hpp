@@ -4,7 +4,6 @@
 #include <memory>
 #include <type_traits>
 
-#include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/error.hpp"
 
@@ -17,6 +16,7 @@ class IteratorWrapper;
 
 }  // namespace details
 
+/// @brief Base class for all iterators.
 template <typename T>
 class Iterator : public __types::Object {
  public:
@@ -25,11 +25,12 @@ class Iterator : public __types::Object {
 
   /// @brief Mamba-specific
   using self = Iterator<value_type>;
-  using shared = std::shared_ptr<self>;
 
   virtual ~Iterator() = default;
 
-  virtual shared __Iter__() = 0;
+  /// @brief Returns a shallow copy of this iterator (sharing the same
+  /// underlying state).
+  virtual self __Iter__() const { return *this; }
 
   /// @brief Returns the next value from the iterator, starting from the first
   /// value.
@@ -38,16 +39,13 @@ class Iterator : public __types::Object {
 
   /// @brief Returns true if this and @p other are the same iterators.
   /// @code iterator == other
-  virtual __types::Bool __Eq__(const shared& other) const {
-    return this == other.get();
+  virtual __types::Bool __Eq__(const self& other) const {
+    return __Id__() == other.__Id__();
   }
 
-  virtual __types::Bool __Ne__(const shared& other) const {
+  virtual __types::Bool __Ne__(const self& other) const {
     return !__Eq__(other);
   }
-
-  bool operator==(const shared& other) const { return !__Eq__(other); }
-  bool operator!=(const shared& other) const { return !__Ne__(other); }
 
   // Native C++ iteration support
   iterator begin() const { return iterator(*this); }
@@ -58,19 +56,21 @@ namespace __concepts {
 
 template <typename T, typename U>
 concept IterableOf = requires(T iterable) {
-  { iterable->__Iter__() } -> std::same_as<std::shared_ptr<Iterator<U>>>;
+  { iterable.__Iter__() } -> std::same_as<Iterator<U>>;
 };
 
 template <typename T>
-concept Iterable = IterableOf<T, typename T::element_type::value_type>;
+concept Iterable = IterableOf<T, typename T::value_type>;
 
 }  // namespace __concepts
 
 namespace details {
 
+/// @brief Simple convenience alias.
 template <__concepts::Iterable T>
-using IterableValueType = typename T::element_type::value_type;
+using IterableValueType = typename T::value_type;
 
+/// @brief Simple convenience alias.
 template <__concepts::Iterable T>
 using IterableIteratorType = Iterator<IterableValueType<T>>;
 
@@ -78,16 +78,17 @@ using IterableIteratorType = Iterator<IterableValueType<T>>;
 
 template <__concepts::Iterable T>
 details::IterableValueType<T> Next(const T& it) {
-  return it->__Next__();
+  return it.__Next__();
 }
 
 template <__concepts::Iterable T>
-std::shared_ptr<details::IterableIteratorType<T>> Iter(const T& it) {
-  return it->__Iter__();
+details::IterableIteratorType<T> Iter(const T& it) {
+  return it.__Iter__();
 }
 
 namespace details {
 
+/// @brief Facilitates native C++ iteration.
 template <typename T>
 class IteratorWrapper {
  public:
@@ -95,9 +96,10 @@ class IteratorWrapper {
 
   /// @note Mamba-specific
   using self = IteratorWrapper<value_type>;
-  using shared = std::shared_ptr<self>;
-  using iterator = std::shared_ptr<Iterator<value_type>>;
+  using iterator = Iterator<value_type>;
 
+  /// @brief Constructs a C++ wrapper for a Mamba iterator. The internal state
+  /// of @p it is shared with the original by virtue of being a shallow copy.
   explicit IteratorWrapper(iterator it, bool at_end = false)
       : at_end_(at_end), it_(it) {}
 
@@ -124,11 +126,11 @@ class IteratorWrapper {
 
   value_type operator*() { return *it_; }
 
-  bool operator==(const shared& other) const {
-    return at_end_ == other->at_end_ && it_ == other->it_;
+  bool operator==(const self& other) const {
+    return at_end_ == other.at_end_ && it_ == other.it_;
   }
 
-  bool operator!=(const shared& other) const { return !(*this == other); }
+  bool operator!=(const self& other) const { return !(*this == other); }
 
   self begin() const { return *this; }
   self end() const {
@@ -137,6 +139,8 @@ class IteratorWrapper {
   }
 
  private:
+  // C++ only facility, no need to create std::shared_ptr<Data> over these
+  // members.
   bool at_end_;
   iterator it_;
 };

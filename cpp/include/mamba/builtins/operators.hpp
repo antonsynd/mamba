@@ -12,6 +12,6 @@
 namespace mamba::builtins {
 
 // Export Is() operators
-using __operators::identity;
+using namespace __operators::identity;
 
 }  // namespace mamba::builtins

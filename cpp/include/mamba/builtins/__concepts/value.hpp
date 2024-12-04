@@ -2,6 +2,7 @@
 
 #include <concepts>
 
+#include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/complex.hpp"
 #include "mamba/builtins/__types/float.hpp"
@@ -11,6 +12,7 @@ namespace mamba::builtins::__concepts {
 
 template <typename T>
 concept Value = std::same_as<std::decay_t<T>, __types::Int> ||
+                std::same_as<std::decay_t<T>, __types::BigInt> ||
                 std::same_as<std::decay_t<T>, __types::Float> ||
                 std::same_as<std::decay_t<T>, __types::Bool> ||
                 std::same_as<std::decay_t<T>, __types::Complex>;
