@@ -1,26 +1,27 @@
 #include <cstddef>  // for size_t
-#include <memory>   // for allocator, make_shared
-#include <sstream>  // for basic_ostringstream
-#include <string>   // for char_traits, basic_st...
+#include <memory>   // for allocator, make...
+#include <sstream>  // for basic_ostringst...
+#include <string>   // for char_traits
 #include <utility>  // for forward
 #include <vector>   // for vector
 
-#include "gtest/gtest.h"  // for Test, Message, CmpHel...
+#include "gtest/gtest.h"  // for Test, Message
 
-#include "mamba/builtins/__concepts/value.hpp"  // for Value
-#include "mamba/builtins/__memory/args.hpp"     // for Mut, Ret
-#include "mamba/builtins/__utils/literal.hpp"   // for Lit
-#include "mamba/builtins/big_int.hpp"           // for IntType
-#include "mamba/builtins/bool.hpp"              // for BoolType
-#include "mamba/builtins/float.hpp"             // for FloatType
-#include "mamba/builtins/int.hpp"               // for IntType
-#include "mamba/builtins/iteration.hpp"         // for Iter
-#include "mamba/builtins/list.hpp"              // for List
-#include "mamba/builtins/object.hpp"            // for Object
-#include "mamba/builtins/operators.hpp"         // for Init, operator==
-#include "mamba/builtins/repr.hpp"              // for Repr
-#include "mamba/builtins/sequence.hpp"          // for Len, Sequence
-#include "mamba/builtins/str.hpp"               // for StrType, Len
+#include "mamba/builtins/__concepts/object_like.hpp"  // for ObjectLike
+#include "mamba/builtins/__concepts/value.hpp"        // for Value
+#include "mamba/builtins/__conversion/str.hpp"        // for Str
+#include "mamba/builtins/__memory/args.hpp"           // for __memory
+#include "mamba/builtins/big_int.hpp"                 // for BigIntType
+#include "mamba/builtins/bool.hpp"                    // for BoolType
+#include "mamba/builtins/float.hpp"                   // for FloatType
+#include "mamba/builtins/int.hpp"                     // for IntType
+#include "mamba/builtins/iteration.hpp"               // for Iterator, Iter
+#include "mamba/builtins/list.hpp"                    // for List
+#include "mamba/builtins/object.hpp"                  // for Object
+#include "mamba/builtins/operators.hpp"               // for operator==
+#include "mamba/builtins/repr.hpp"                    // for Repr
+#include "mamba/builtins/sequence.hpp"                // for Len, Sequence
+#include "mamba/builtins/str.hpp"                     // for StrType
 
 namespace mamba::builtins::test {
 
@@ -191,7 +192,7 @@ TEST(List, InitializerListConstructorObject) {
 TEST(List, IterableConstructor) {
   // If/when
   const List<IntType> source = {1, 3, 5, 7};
-  const List<IntType> l = Iter(source);
+  const List<IntType> l = *Iter(source);
 
   // Then
   ASSERT_EQ(Len(l), 4);
@@ -202,36 +203,36 @@ TEST(List, IterableConstructor) {
   EXPECT_EQ(actual, expected);
 }
 
-// TEST(List, IterableConstructorObject) {
-//   // If/when
-//   const List<IntWrapper> source = {IntWrapper(1), IntWrapper(3),
-//                              IntWrapper(5), IntWrapper(7)};
-//   const List<IntWrapper> l = Iter(source);
+TEST(List, IterableConstructorObject) {
+  // If/when
+  const List<IntWrapper> source = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
+                                   IntWrapper(7)};
+  const List<IntWrapper> l = *Iter(source);
 
-//   // Then
-//   ASSERT_EQ(Len(l), 4);
+  // Then
+  ASSERT_EQ(Len(l), 4);
 
-//   const auto actual = as_vector<IntWrapper>(l);
-//   const std::vector<IntType> expected = {1, 3, 5, 7};
+  const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {1, 3, 5, 7};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, AppendOneElement) {
-//   // If
-//   List<IntType> l = {1, 3, 5, 7};
+TEST(List, AppendOneElement) {
+  // If
+  List<IntType> l = {1, 3, 5, 7};
 
-//   // When
-//   l.Append(9);
+  // When
+  l.Append(9);
 
-//   // Then
-//   ASSERT_EQ(Len(l), 5);
+  // Then
+  ASSERT_EQ(Len(l), 5);
 
-//   const auto actual = as_vector(l);
-//   const std::vector<IntType> expected = {1, 3, 5, 7, 9};
+  const auto actual = as_vector(l);
+  const std::vector<IntType> expected = {1, 3, 5, 7, 9};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
 // TEST(List, AppendOneElementObject) {
 //   // If

@@ -62,7 +62,7 @@ class List : public __types::Object {
   /// @code list(Iterable)
   template <typename It>
     requires __concepts::IterableOf<It, value_type>
-  explicit List(const T& iterable) : data_(std::make_shared<Data>()) {
+  List(const It& iterable) : data_(std::make_shared<Data>()) {
     bool no_stop_iteration = true;
     auto it = iterable.__Iter__();
 
@@ -74,13 +74,6 @@ class List : public __types::Object {
         break;
       }
     }
-  }
-
-  /// @brief Creates a list with the provided variadic arguments.
-  /// @code list(...)
-  template <typename... Args>
-  List(Args&&... rest) : data_(std::make_shared<Data>()) {
-    Append(std::forward<Args>(rest)...);
   }
 
   /// @brief Creates a list from an initializer list (list literal).
@@ -97,6 +90,14 @@ class List : public __types::Object {
                 std::make_move_iterator(elements.end()),
                 std::back_inserter(data_->v_));
     }
+  }
+
+  /// @brief Creates a list with the provided variadic arguments.
+  /// @code list(...)
+  template <typename... Args>
+    requires(std::same_as<std::decay_t<Args>, value_type> && ...)
+  List(Args&&... rest) : data_(std::make_shared<Data>()) {
+    Append(std::forward<Args>(rest)...);
   }
 
   /// @brief Generic constructor forwarding arguments to actual constructor
@@ -839,7 +840,7 @@ class ListIterator : public Iterator<T> {
   using base = Iterator<value_type>;
 
   ListIterator(iterator it, iterator end)
-      : data_(std::make_shared<Data>(std::move(it)), std::move(end)) {}
+      : data_(std::make_shared<Data>(std::move(it), std::move(end))) {}
 
   ~ListIterator() override = default;
 
@@ -887,6 +888,9 @@ class ListIterator : public Iterator<T> {
  private:
   class Data {
    public:
+    Data(iterator it, iterator end)
+        : it_(std::move(it)), end_(std::move(end)) {}
+
     iterator it_;
     iterator end_;
   };
