@@ -28,9 +28,10 @@ class Iterator : public __types::Object {
 
   virtual ~Iterator() = default;
 
-  /// @brief Returns a shallow copy of this iterator (sharing the same
-  /// underlying state).
-  virtual self __Iter__() const { return *this; }
+  /// @brief Should return a shallow copy of this iterator (sharing the same
+  /// underlying state). The std::unique_ptr is to work around the fact that
+  /// this class is abstract.
+  virtual std::unique_ptr<Iterator> __Iter__() const = 0;
 
   /// @brief Returns the next value from the iterator, starting from the first
   /// value.
@@ -55,8 +56,8 @@ class Iterator : public __types::Object {
 namespace __concepts {
 
 template <typename T, typename U>
-concept IterableOf = requires(T iterable) {
-  { iterable.__Iter__() } -> std::same_as<Iterator<U>>;
+concept IterableOf = requires(const T iterable) {
+  { iterable.__Iter__() } -> std::same_as<std::unique_ptr<Iterator<U>>>;
 };
 
 template <typename T>
@@ -77,12 +78,12 @@ using IterableIteratorType = Iterator<IterableValueType<T>>;
 }  // namespace details
 
 template <__concepts::Iterable T>
-details::IterableValueType<T> Next(const T& it) {
+details::IterableValueType<T> Next(T& it) {
   return it.__Next__();
 }
 
 template <__concepts::Iterable T>
-details::IterableIteratorType<T> Iter(const T& it) {
+std::unique_ptr<details::IterableIteratorType<T>> Iter(const T& it) {
   return it.__Iter__();
 }
 

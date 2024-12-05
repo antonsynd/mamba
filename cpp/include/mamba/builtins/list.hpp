@@ -68,7 +68,7 @@ class List : public __types::Object {
 
     while (no_stop_iteration) {
       try {
-        Append(Next(it));
+        Append(Next(*it));
       } catch (StopIteration) {
         no_stop_iteration = false;
         break;
@@ -533,9 +533,9 @@ class List : public __types::Object {
 
   /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
-  Iterator<value_type> __Iter__() {
-    return details::ListIterator<value_type>(data_->v_.begin(),
-                                             data_->v_.end());
+  std::unique_ptr<Iterator<value_type>> __Iter__() const {
+    return std::make_unique<details::ListIterator<value_type>>(
+        data_->v_.begin(), data_->v_.end());
   }
 
   /// @brief Native support for C++ for..in loops.
@@ -548,10 +548,6 @@ class List : public __types::Object {
 
   /// @code bool(list)
   __types::Bool __Bool__() const override { return !data_->v_.empty(); }
-
-  /// @brief Implicit conversion to Bool (C++ bool) for conditionals.
-  /// @code if list:
-  operator __types::Bool() const { return __Bool__(); }
 
   /// @brief Returns true if this and @p other contain the same elements, and
   /// false otherwise.
@@ -573,7 +569,7 @@ class List : public __types::Object {
 
   /// @brief Returns the string representation of the list.
   /// @code str(list)
-  __types::Str __Str__() const {
+  __types::Str __Str__() const override {
     std::ostringstream oss;
 
     oss << "[";
@@ -855,9 +851,9 @@ class ListIterator : public Iterator<T> {
     return self(std::forward<Args>(args)...);
   }
 
-  Iterator<value_type> __Iter__() const override {
+  std::unique_ptr<Iterator<value_type>> __Iter__() const override {
     // Return shallow copy of this
-    return *this;
+    return std::make_unique<self>(*this);
   }
 
   value_type __Next__() override {
@@ -875,12 +871,18 @@ class ListIterator : public Iterator<T> {
   }
 
   __types::Bool __Eq__(const base& other) const override {
-    if (const auto* other_ptr = dynamic_cast<self*>(&other)) {
+    if (const auto* other_ptr = dynamic_cast<const self*>(&other)) {
       return __Eq__(*other_ptr);
     }
 
     return false;
   }
+
+  __types::BigInt __Id__() const override {
+    return reinterpret_cast<__types::BigInt>(data_.get());
+  }
+
+  constexpr __types::Bool __Bool__() const override { return true; }
 
  private:
   class Data {

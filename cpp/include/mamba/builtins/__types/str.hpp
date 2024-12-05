@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/int.hpp"
 
@@ -18,9 +19,11 @@ class Str final {
 
   operator std::string() const { return data_->s_; }
 
-  Int __Id__() const { return reinterpret_cast<Int>(data_.get()); }
+  BigInt __Id__() const { return reinterpret_cast<BigInt>(data_.get()); }
 
   Bool __Bool__() const { return !data_->s_.empty(); }
+
+  operator bool() const { return __Bool__(); }
 
   Str __Repr__() const {
     // Effectively a deep copy

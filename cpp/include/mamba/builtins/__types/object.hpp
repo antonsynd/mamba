@@ -16,7 +16,7 @@ class Object {
   virtual BigInt __Id__() const = 0;
 
   // For C++ implicit conversion to bool
-  virtual operator bool() const { __Bool__(); }
+  virtual operator bool() const { return __Bool__(); }
 };
 
 }  // namespace mamba::builtins::__types
