@@ -4,6 +4,7 @@
 #include <memory>
 #include <type_traits>
 
+#include "mamba/builtins/__concepts/subclass.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/error.hpp"
 
@@ -28,16 +29,6 @@ class Iterator : public __types::Object {
 
   virtual ~Iterator() = default;
 
-  /// @brief Should return a shallow copy of this iterator (sharing the same
-  /// underlying state). The std::unique_ptr is to work around the fact that
-  /// this class is abstract.
-  virtual std::unique_ptr<Iterator> __Iter__() const = 0;
-
-  /// @brief Returns the next value from the iterator, starting from the first
-  /// value.
-  /// @code next(iterator)
-  virtual value_type __Next__() = 0;
-
   /// @brief Returns true if this and @p other are the same iterators.
   /// @code iterator == other
   virtual __types::Bool __Eq__(const self& other) const {
@@ -55,9 +46,19 @@ class Iterator : public __types::Object {
 
 namespace __concepts {
 
+template <typename T>
+concept IsIterator = requires(const T t) {
+  { T::value_type };
+} && SubclassOf<T, Iterator<typename T::value_type>>;
+
+template <typename T, typename U>
+concept IteratorOf = IsIterator<T> || requires(const T iterator) {
+  { iterator.__Next__() } -> std::same_as<U>;
+};
+
 template <typename T, typename U>
 concept IterableOf = requires(const T iterable) {
-  { iterable.__Iter__() } -> std::same_as<std::unique_ptr<Iterator<U>>>;
+  { iterable.__Iter__() } -> IteratorOf<U>;
 };
 
 template <typename T>
@@ -77,13 +78,14 @@ using IterableIteratorType = Iterator<IterableValueType<T>>;
 
 }  // namespace details
 
-template <__concepts::Iterable T>
-details::IterableValueType<T> Next(T& it) {
+template <typename T, typename U>
+  requires __concepts::IteratorOf<T, U>
+U Next(T& it) {
   return it.__Next__();
 }
 
 template <__concepts::Iterable T>
-std::unique_ptr<details::IterableIteratorType<T>> Iter(const T& it) {
+details::IterableIteratorType<T> Iter(const T& it) {
   return it.__Iter__();
 }
 

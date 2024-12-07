@@ -859,7 +859,7 @@ class ListIterator : public Iterator<T> {
 
   value_type __Next__() override {
     if (data_->it_ == data_->end_) {
-      throw StopIteration("end of iterator");
+      throw StopIteration();
     }
 
     return *data_->it_++;

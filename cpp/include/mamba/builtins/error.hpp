@@ -27,8 +27,7 @@ class AttributeError : public std::runtime_error {
 
 class StopIteration : public std::runtime_error {
  public:
-  explicit StopIteration(const __types::Str& message)
-      : std::runtime_error(message) {}
+  explicit StopIteration() : std::runtime_error("") {}
 };
 
 }  // namespace mamba::builtins
