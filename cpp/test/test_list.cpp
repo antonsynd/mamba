@@ -192,7 +192,7 @@ TEST(List, InitializerListConstructorObject) {
 TEST(List, IterableConstructor) {
   // If/when
   const List<IntType> source = {1, 3, 5, 7};
-  const List<IntType> l = *Iter(source);
+  const List<IntType> l = Iter(source);
 
   // Then
   ASSERT_EQ(Len(l), 4);
@@ -207,7 +207,7 @@ TEST(List, IterableConstructorObject) {
   // If/when
   const List<IntWrapper> source = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
                                    IntWrapper(7)};
-  const List<IntWrapper> l = *Iter(source);
+  const List<IntWrapper> l = Iter(source);
 
   // Then
   ASSERT_EQ(Len(l), 4);

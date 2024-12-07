@@ -1,7 +1,9 @@
 #pragma once
 
 #include <concepts>
+#include <iterator>
 #include <memory>
+#include <optional>
 #include <type_traits>
 
 #include "mamba/builtins/__concepts/subclass.hpp"
@@ -13,7 +15,7 @@ namespace details {
 
 // Forward declaration
 template <typename T>
-class IteratorWrapper;
+class IteratorFacade;
 
 }  // namespace details
 
@@ -22,12 +24,48 @@ template <typename T>
 class Iterator : public __types::Object {
  public:
   using value_type = T;
-  using iterator = details::IteratorWrapper<value_type>;
+  using iterator = details::IteratorFacade<value_type>;
 
   /// @brief Mamba-specific
   using self = Iterator<value_type>;
+  using next_function_t = std::function<value_type()>;
+
+  /// @brief Constructs this iterator with a custom lambda that should be
+  /// equivalent to a __Next__() invocation.
+  explicit Iterator(next_function_t next_func)
+      : data_(std::make_shared<Data>(std::move(next_func))) {}
+
+  /// @brief Constructs this iterator over standard C++ forward iterators
+  /// which must be have a lifetime at least as long as this iterator, which
+  /// is enforced by the std::shared_ptr parameters.
+  ///
+  /// @note Internally, this constructs capturing lambdas to invoke the
+  /// relevant iterator methods (dereference and sentinel detection).
+  template <std::forward_iterator It>
+  Iterator(std::shared_ptr<It> begin, std::shared_ptr<It> end)
+      : data_(std::make_shared<Data>([begin, end]() -> value_type {
+          if (begin == end) {
+            throw StopIteration();
+          }
+
+          auto res = **begin;
+          ++(*begin);
+          return res;
+        })) {}
 
   virtual ~Iterator() = default;
+
+  virtual __types::Str __Repr__() const override { return "Iterator"; }
+
+  virtual self __Iter__() const { return *this; }
+
+  virtual value_type __Next__() { return data_->next_func_(); }
+
+  virtual __types::BigInt __Id__() const override {
+    return reinterpret_cast<__types::BigInt>(data_.get());
+  }
+
+  constexpr __types::Bool __Bool__() const override { return true; }
 
   /// @brief Returns true if this and @p other are the same iterators.
   /// @code iterator == other
@@ -42,6 +80,14 @@ class Iterator : public __types::Object {
   // Native C++ iteration support
   iterator begin() const { return iterator(*this); }
   iterator end() const { return iterator(*this, true); }
+
+ private:
+  class Data {
+   public:
+    next_function_t next_func_;
+  };
+
+  std::shared_ptr<Data> data_;
 };
 
 namespace __concepts {
@@ -52,7 +98,7 @@ concept IsIterator = requires(const T t) {
 } && SubclassOf<T, Iterator<typename T::value_type>>;
 
 template <typename T, typename U>
-concept IteratorOf = IsIterator<T> || requires(const T iterator) {
+concept IteratorOf = IsIterator<T> || requires(T iterator) {
   { iterator.__Next__() } -> std::same_as<U>;
 };
 
@@ -91,61 +137,77 @@ details::IterableIteratorType<T> Iter(const T& it) {
 
 namespace details {
 
-/// @brief Facilitates native C++ iteration.
+/// @brief Facilitates native C++ iteration on Iterator<T>.
 template <typename T>
-class IteratorWrapper {
+class IteratorFacade : public std::input_iterator_tag {
  public:
   using value_type = T;
 
   /// @note Mamba-specific
-  using self = IteratorWrapper<value_type>;
+  using self = IteratorFacade<value_type>;
   using iterator = Iterator<value_type>;
 
   /// @brief Constructs a C++ wrapper for a Mamba iterator. The internal state
   /// of @p it is shared with the original by virtue of being a shallow copy.
-  explicit IteratorWrapper(iterator it, bool at_end = false)
-      : at_end_(at_end), it_(it) {}
+  explicit IteratorFacade(iterator it, bool at_end = false)
+      : it_(it), current_value_(std::nullopt) {
+    UncheckedAdvance();
+  }
 
+  /// @note Only pre-increment is supported. Post-increment requires
+  /// deep-copying of the underlying which is not trivial.
   self& operator++() {
-    if (at_end_) {
-      return *this;
-    }
-
-    try {
-      Next(it_);
-    } catch (StopIteration) {
-      at_end_ = true;
-    }
-
+    Advance();
     return *this;
   }
 
-  self operator++(int) {
-    auto res = *it_;
-    this->operator++();
+  value_type operator*() {
+    if (current_value_) {
+      throw ValueError(
+          "Mamba-internal error: Cannot dereference an iterator that has "
+          "already thrown StopIterator.");
+    }
 
-    return res;
+    return *current_value_;
   }
 
-  value_type operator*() { return *it_; }
-
   bool operator==(const self& other) const {
-    return at_end_ == other.at_end_ && it_ == other.it_;
+    return !!current_value_ == !!other.current_value_ && it_ == other.it_;
   }
 
   bool operator!=(const self& other) const { return !(*this == other); }
 
   self begin() const { return *this; }
+
   self end() const {
     auto res = *this;
-    res.at_end_ = true;
+    res.current_value_.reset();
+
+    return res;
   }
 
  private:
+  void UncheckedAdvance() {
+    try {
+      current_value_ = it_.__Next__();
+    } catch (StopIteration) {
+      current_value_.reset();
+    }
+  }
+
+  void Advance() {
+    if (!current_value_) {
+      // No-op
+      return;
+    }
+
+    UncheckedAdvance();
+  }
+
   // C++ only facility, no need to create std::shared_ptr<Data> over these
   // members.
-  bool at_end_;
   iterator it_;
+  std::optional<value_type> current_value_;
 };
 
 }  // namespace details

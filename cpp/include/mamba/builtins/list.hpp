@@ -68,7 +68,7 @@ class List : public __types::Object {
 
     while (no_stop_iteration) {
       try {
-        Append(Next(*it));
+        Append(it.__Next__());
       } catch (StopIteration) {
         no_stop_iteration = false;
         break;
@@ -534,9 +534,10 @@ class List : public __types::Object {
 
   /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
-  std::unique_ptr<Iterator<value_type>> __Iter__() const {
-    return std::make_unique<details::ListIterator<value_type>>(
-        data_->v_.begin(), data_->v_.end());
+  details::ListIterator<value_type> __Iter__() const {
+    return details::ListIterator<value_type>(
+        std::make_shared<iterator>(data_->v_.begin()),
+        std::make_shared<iterator>(data_->v_.end()));
   }
 
   /// @brief Native support for C++ for..in loops.
@@ -839,8 +840,8 @@ class ListIterator : public Iterator<T> {
   using self = ListIterator<value_type>;
   using base = Iterator<value_type>;
 
-  ListIterator(iterator it, iterator end)
-      : data_(std::make_shared<Data>(std::move(it), std::move(end))) {}
+  ListIterator(std::shared_ptr<iterator> it, std::shared_ptr<iterator> end)
+      : base(std::move(it), std::move(end)) {}
 
   ~ListIterator() override = default;
 
@@ -852,50 +853,7 @@ class ListIterator : public Iterator<T> {
     return self(std::forward<Args>(args)...);
   }
 
-  std::unique_ptr<Iterator<value_type>> __Iter__() const override {
-    // Return shallow copy of this
-    return std::make_unique<self>(*this);
-  }
-
-  value_type __Next__() override {
-    if (data_->it_ == data_->end_) {
-      throw StopIteration();
-    }
-
-    return *data_->it_++;
-  }
-
   __types::Str __Repr__() const override { return "ListIterator"; }
-
-  __types::Bool __Eq__(const self& other) const {
-    return data_->it_ == other.data_->it_ && data_->end_ == other.data_->end_;
-  }
-
-  __types::Bool __Eq__(const base& other) const override {
-    if (const auto* other_ptr = dynamic_cast<const self*>(&other)) {
-      return __Eq__(*other_ptr);
-    }
-
-    return false;
-  }
-
-  __types::BigInt __Id__() const override {
-    return reinterpret_cast<__types::BigInt>(data_.get());
-  }
-
-  constexpr __types::Bool __Bool__() const override { return true; }
-
- private:
-  class Data {
-   public:
-    Data(iterator it, iterator end)
-        : it_(std::move(it)), end_(std::move(end)) {}
-
-    iterator it_;
-    iterator end_;
-  };
-
-  std::shared_ptr<Data> data_;
 };
 
 }  // namespace details
