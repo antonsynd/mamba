@@ -124,14 +124,13 @@ using IterableIteratorType = Iterator<IterableValueType<T>>;
 
 }  // namespace details
 
-template <typename T, typename U>
-  requires __concepts::IteratorOf<T, U>
-U Next(T& it) {
+template <__concepts::IsIterator T>
+typename T::value_type Next(T& it) {
   return it.__Next__();
 }
 
 template <__concepts::Iterable T>
-details::IterableIteratorType<T> Iter(const T& it) {
+Iterator<typename T::value_type> Iter(const T& it) {
   return it.__Iter__();
 }
 
