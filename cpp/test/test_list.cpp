@@ -33,12 +33,13 @@ namespace {
 template <Value T>
 struct Wrapper : public Object {
  public:
-  using self = Wrapper<T>;
+  using value_type = T;
+  using self = Wrapper<value_type>;
 
   static void ResetId() { global_id_ = 0; }
   static std::size_t GetNextId() { return global_id_++; }
 
-  explicit Wrapper(T value)
+  explicit Wrapper(value_type value)
       : data_(std::make_shared<Data>(value, GetNextId())) {}
 
   template <typename... Args>
@@ -47,9 +48,9 @@ struct Wrapper : public Object {
   }
 
   std::size_t Id() const { return data_->id_; }
-  T Value() const { return data_->v_; }
+  value_type Value() const { return data_->v_; }
 
-  operator T() const { return data_->v_; }
+  operator value_type() const { return data_->v_; }
 
   StrType __Repr__() const override {
     std::ostringstream oss;
@@ -101,22 +102,22 @@ std::vector<IntType> as_vector(const List<T>& l) {
 
 TEST(List, ValueListIsObjectLike) {
   // If/when/then
-  static_assert(__concepts::ObjectLike<List<IntType>>);
+  static_assert(ObjectLike<List<IntType>>);
 }
 
 TEST(List, ObjectListIsObjectLike) {
   // If/when/then
-  static_assert(__concepts::ObjectLike<List<IntWrapper>>);
+  static_assert(ObjectLike<List<IntWrapper>>);
 }
 
 TEST(List, ValueListIsSequence) {
   // If/when/then
-  static_assert(__concepts::Sequence<List<IntType>>);
+  static_assert(Sequence<List<IntType>>);
 }
 
 TEST(List, ObjectListIsSequence) {
   // If/when/then
-  static_assert(__concepts::Sequence<List<IntWrapper>>);
+  static_assert(Sequence<List<IntWrapper>>);
 }
 
 TEST(List, EmptyConstructor) {
@@ -234,150 +235,150 @@ TEST(List, AppendOneElement) {
   EXPECT_EQ(actual, expected);
 }
 
-// TEST(List, AppendOneElementObject) {
-//   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+TEST(List, AppendOneElementObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
+                        IntWrapper(7)};
 
-//   // When
-//   l.Append(Init<IntWrapper>(9));
+  // When
+  l.Append(IntWrapper(9));
 
-//   // Then
-//   ASSERT_EQ(Len(l), 5);
+  // Then
+  ASSERT_EQ(Len(l), 5);
 
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
-//   const std::vector<IntType> expected = {1, 3, 5, 7, 9};
+  const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {1, 3, 5, 7, 9};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, AppendVariadicElements) {
-//   // If
-//   List<IntType> l = {1, 3, 5, 7};
+TEST(List, AppendVariadicElements) {
+  // If
+  List<IntType> l = {1, 3, 5, 7};
 
-//   // When
-//   l.Append(9, 11, 13);
+  // When
+  l.Append(9, 11, 13);
 
-//   // Then
-//   ASSERT_EQ(Len(l), 7);
+  // Then
+  ASSERT_EQ(Len(l), 7);
 
-//   const auto actual = as_vector(l);
-//   const std::vector<IntType> expected = {1, 3, 5, 7, 9, 11, 13};
+  const auto actual = as_vector(l);
+  const std::vector<IntType> expected = {1, 3, 5, 7, 9, 11, 13};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, AppendVariadicElementsObject) {
-//   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+TEST(List, AppendVariadicElementsObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
+                        IntWrapper(7)};
 
-//   // When
-//   l.Append(Init<IntWrapper>(9), Init<IntWrapper>(11), Init<IntWrapper>(13));
+  // When
+  l.Append(IntWrapper(9), IntWrapper(11), IntWrapper(13));
 
-//   // Then
-//   ASSERT_EQ(Len(l), 7);
+  // Then
+  ASSERT_EQ(Len(l), 7);
 
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
-//   const std::vector<IntType> expected = {1, 3, 5, 7, 9, 11, 13};
+  const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {1, 3, 5, 7, 9, 11, 13};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, ContainsEmpty) {
-//   // If
-//   const List<IntType> l;
+TEST(List, ContainsEmpty) {
+  // If
+  const List<IntType> l;
 
-//   // When/then
-//   EXPECT_FALSE(Contains(l, 1));
-// }
+  // When/then
+  EXPECT_FALSE(Contains(l, 1));
+}
 
-// TEST(List, ContainsEmptyObject) {
-//   // If
-//   const List<IntWrapper> l;
+TEST(List, ContainsEmptyObject) {
+  // If
+  const List<IntWrapper> l;
 
-//   // When/then
-//   EXPECT_FALSE(Contains(l, Init<IntWrapper>(1)));
-// }
+  // When/then
+  EXPECT_FALSE(Contains(l, IntWrapper(1)));
+}
 
-// TEST(List, ContainsNotActuallyIn) {
-//   // If
-//   const List<IntType> l = {1, 3, 5, 7};
+TEST(List, ContainsNotActuallyIn) {
+  // If
+  const List<IntType> l = {1, 3, 5, 7};
 
-//   // When/then
-//   EXPECT_FALSE(Contains(l, 4));
-// }
+  // When/then
+  EXPECT_FALSE(Contains(l, 4));
+}
 
 // TEST(List, ContainsNotActuallyInObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
+//                               IntWrapper(7)};
 
 //   // When/then
-//   EXPECT_FALSE(Contains(l, Init<IntWrapper>(4)));
+//   EXPECT_FALSE(Contains(l, IntWrapper(4)));
 // }
 
-// TEST(List, ContainsActuallyIn) {
-//   // If
-//   const List<IntType> l = {1, 3, 5, 7};
+TEST(List, ContainsActuallyIn) {
+  // If
+  const List<IntType> l = {1, 3, 5, 7};
 
-//   // When/then
-//   EXPECT_TRUE(Contains(l, 5));
-// }
+  // When/then
+  EXPECT_TRUE(Contains(l, 5));
+}
 
 // TEST(List, ContainsActuallyInObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
+//                               IntWrapper(7)};
 
 //   // When/then
-//   EXPECT_FALSE(Contains(l, Init<IntWrapper>(5)));
+//   EXPECT_FALSE(Contains(l, IntWrapper(5)));
 // }
 
-// TEST(List, ClearEmpty) {
-//   // If
-//   List<IntType> l;
+TEST(List, ClearEmpty) {
+  // If
+  List<IntType> l;
 
-//   // When
-//   l.Clear();
+  // When
+  l.Clear();
 
-//   // Then
-//   EXPECT_EQ(Len(l), 0);
-// }
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
 
-// TEST(List, ClearEmptyObject) {
-//   // If
-//   List<IntWrapper> l;
+TEST(List, ClearEmptyObject) {
+  // If
+  List<IntWrapper> l;
 
-//   // When
-//   l.Clear();
+  // When
+  l.Clear();
 
-//   // Then
-//   EXPECT_EQ(Len(l), 0);
-// }
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
 
-// TEST(List, ClearNonEmpty) {
-//   // If
-//   List<IntType> l = {1, 3, 5, 7};
+TEST(List, ClearNonEmpty) {
+  // If
+  List<IntType> l = {1, 3, 5, 7};
 
-//   // When
-//   l.Clear();
+  // When
+  l.Clear();
 
-//   // Then
-//   EXPECT_EQ(Len(l), 0);
-// }
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
 
-// TEST(List, ClearNonEmptyObject) {
-//   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+TEST(List, ClearNonEmptyObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
+                        IntWrapper(7)};
 
-//   // When
-//   l.Clear();
+  // When
+  l.Clear();
 
-//   // Then
-//   EXPECT_EQ(Len(l), 0);
-// }
+  // Then
+  EXPECT_EQ(Len(l), 0);
+}
 
 // TEST(List, CopyEmpty) {
 //   // If
@@ -398,7 +399,7 @@ TEST(List, AppendOneElement) {
 
 //   // When
 //   auto copy = l.Copy();
-//   copy->Append(Init<IntWrapper>(5));
+//   copy->Append(IntWrapper(5));
 
 //   // Then
 //   EXPECT_NE(&l, copy.get());
@@ -425,19 +426,19 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, CopyNonEmptyObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   auto copy = l.Copy();
-//   copy->Append(Init<IntWrapper>(9));
+//   copy->Append(IntWrapper(9));
 
 //   // Then
-//   const auto actual_l_items = as_vector<IntWrapper, IntType>(l);
+//   const auto actual_l_items = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected_l_items = {1, 3, 5, 7};
 //   EXPECT_EQ(actual_l_items, expected_l_items);
 
-//   const auto actual_copy_items = as_vector<IntWrapper, IntType>(*copy);
+//   const auto actual_copy_items = as_vector<IntWrapper>(*copy);
 //   const std::vector<IntType> expected_copy_items = {1, 3, 5, 7, 9};
 //   EXPECT_EQ(actual_copy_items, expected_copy_items);
 // }
@@ -484,14 +485,14 @@ TEST(List, AppendOneElement) {
 // TEST(List, ExtendEmptyAndNonEmptyOtherObject) {
 //   // If
 //   List<IntWrapper> l;
-//   const List<IntWrapper> other = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                                   Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> other = {IntWrapper(1), IntWrapper(3),
+//                                   IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.Extend(other);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -514,16 +515,16 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ExtendNonEmptyAndNonEmptyOtherObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(9), Init<IntWrapper>(11),
-//                         Init<IntWrapper>(13)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                                   Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(9), IntWrapper(11),
+//                         IntWrapper(13)};
+//   const List<IntWrapper> other = {IntWrapper(1), IntWrapper(3),
+//                                   IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.Extend(other);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {9, 11, 13, 1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -546,16 +547,16 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, AdditionAssignmentOperatorObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(9), Init<IntWrapper>(11),
-//                         Init<IntWrapper>(13)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                                   Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(9), IntWrapper(11),
+//                         IntWrapper(13)};
+//   const List<IntWrapper> other = {IntWrapper(1), IntWrapper(3),
+//                                   IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l += other;
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {9, 11, 13, 1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -578,16 +579,16 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, AdditionOperatorObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(9), Init<IntWrapper>(11),
-//                               Init<IntWrapper>(13)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                                   Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(9), IntWrapper(11),
+//                               IntWrapper(13)};
+//   const List<IntWrapper> other = {IntWrapper(1), IntWrapper(3),
+//                                   IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   const auto sum = l + other;
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*sum);
+//   const auto actual = as_vector<IntWrapper>(*sum);
 //   const std::vector<IntType> expected = {9, 11, 13, 1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -606,8 +607,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MultiplicationOperatorNegativeObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   const auto product = l * -1;
@@ -629,8 +630,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MultiplicationOperatorZeroObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   const auto product = l * 0;
@@ -655,14 +656,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MultiplicationOperatorOneObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   const auto product = l * 1;
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*product);
+//   const auto actual = as_vector<IntWrapper>(*product);
 //   const std::vector<IntType> expected = {1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -684,14 +685,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MultiplicationOperatorMoreThanOneObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   const auto product = l * 3;
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*product);
+//   const auto actual = as_vector<IntWrapper>(*product);
 //   const std::vector<IntType> expected = {1, 3, 5, 7, 1, 3, 5, 7, 1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -710,8 +711,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MultiplicationAssignmentOperatorNegativeObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l *= -1;
@@ -733,8 +734,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MultiplicationAssignmentOperatorZeroObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l *= 0;
@@ -759,14 +760,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MultiplicationAssignmentOperatorOneObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l *= 1;
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -788,14 +789,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MultiplicationAssignmentOperatorMoreThanOneObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l *= 3;
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 7, 1, 3, 5, 7, 1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -814,8 +815,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, GetByPositiveIndexObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_EQ(l[0]->Value(), 1);
@@ -837,8 +838,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, GetByNegativeIndexObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_EQ(l[-1]->Value(), 7);
@@ -858,8 +859,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, GetByOutOfBoundsObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_THROW(l[-5], IndexError);
@@ -882,11 +883,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SetByPositiveIndexObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
-//   l[2] = Init<IntWrapper>(6);
+//   l[2] = IntWrapper(6);
 
 //   // Then
 //   EXPECT_EQ(l[0]->Value(), 1);
@@ -911,11 +912,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SetByNegativeIndexObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
-//   l[-3] = Init<IntWrapper>(4);
+//   l[-3] = IntWrapper(4);
 
 //   // Then
 //   EXPECT_EQ(l[-1]->Value(), 7);
@@ -935,12 +936,12 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SetByOutOfBoundsObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
-//   EXPECT_THROW({ l[-5] = Init<IntWrapper>(9); }, IndexError);
-//   EXPECT_THROW({ l[4] = Init<IntWrapper>(11); }, IndexError);
+//   EXPECT_THROW({ l[-5] = IntWrapper(9); }, IndexError);
+//   EXPECT_THROW({ l[4] = IntWrapper(11); }, IndexError);
 // }
 
 // TEST(List, LenZero) {
@@ -969,8 +970,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, LenNonZeroObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_EQ(Len(l), 4);
@@ -1002,8 +1003,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MinNonEmptyObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                               Init<IntWrapper>(3), Init<IntWrapper>(1)};
+//   const List<IntWrapper> l = {IntWrapper(5), IntWrapper(7),
+//                               IntWrapper(3), IntWrapper(1)};
 
 //   // When/then
 //   EXPECT_EQ(Min(l)->Value(), 1);
@@ -1035,8 +1036,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, MaxNonEmptyObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                               Init<IntWrapper>(3), Init<IntWrapper>(1)};
+//   const List<IntWrapper> l = {IntWrapper(5), IntWrapper(7),
+//                               IntWrapper(3), IntWrapper(1)};
 
 //   // When/then
 //   EXPECT_EQ(Max(l)->Value(), 7);
@@ -1055,7 +1056,7 @@ TEST(List, AppendOneElement) {
 //   const List<IntWrapper> l;
 
 //   // When/then
-//   EXPECT_EQ(l.Count(Init<IntWrapper>(1)), 0);
+//   EXPECT_EQ(l.Count(IntWrapper(1)), 0);
 // }
 
 // TEST(List, CountZero) {
@@ -1068,11 +1069,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, CountZeroObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
-//   EXPECT_EQ(l.Count(Init<IntWrapper>(9)), 0);
+//   EXPECT_EQ(l.Count(IntWrapper(9)), 0);
 // }
 
 // TEST(List, CountNonZero) {
@@ -1085,12 +1086,12 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, CountNonZeroObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                               Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(1),
+//                               IntWrapper(7)};
 
 //   // When/then
-//   EXPECT_EQ(l.Count(Init<IntWrapper>(1)), 2);
+//   EXPECT_EQ(l.Count(IntWrapper(1)), 2);
 // }
 
 // TEST(List, SliceZeroStep) {
@@ -1103,9 +1104,9 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceZeroStepObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                               Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(1),
+//                               IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_THROW(l.Slice(0, 0, 0), ValueError);
@@ -1124,9 +1125,9 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceNegativeStepObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                               Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(1),
+//                               IntWrapper(7)};
 
 //   // When
 //   const auto actual = l.Slice(0, 1, -1);
@@ -1148,9 +1149,9 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceSameStartAndEndObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                               Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(1),
+//                               IntWrapper(7)};
 
 //   // When
 //   const auto actual = l.Slice(1, 1);
@@ -1175,14 +1176,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceSingleStepObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   const auto res = l.Slice(1, 3);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*res);
+//   const auto actual = as_vector<IntWrapper>(*res);
 //   const std::vector<IntType> expected = {3, 5};
 
 //   EXPECT_EQ(actual, expected);
@@ -1204,14 +1205,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceNotSingleStepNotEnoughObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   const auto res = l.Slice(1, 3, 4);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*res);
+//   const auto actual = as_vector<IntWrapper>(*res);
 //   const std::vector<IntType> expected = {3};
 
 //   EXPECT_EQ(actual, expected);
@@ -1233,15 +1234,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceNotSingleStepEnoughObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                               Init<IntWrapper>(9)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7),
+//                               IntWrapper(9)};
 
 //   // When
 //   const auto res = l.Slice(1, 5, 2);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*res);
+//   const auto actual = as_vector<IntWrapper>(*res);
 //   const std::vector<IntType> expected = {3, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1263,15 +1264,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceOutOfBoundsLeftObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                               Init<IntWrapper>(9)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7),
+//                               IntWrapper(9)};
 
 //   // When
 //   const auto res = l.Slice(-9, 4, 2);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*res);
+//   const auto actual = as_vector<IntWrapper>(*res);
 //   const std::vector<IntType> expected = {1, 5};
 
 //   EXPECT_EQ(actual, expected);
@@ -1293,15 +1294,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceOutOfBoundsRightObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                               Init<IntWrapper>(9)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7),
+//                               IntWrapper(9)};
 
 //   // When
 //   const auto res = l.Slice(0, 9, 2);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*res);
+//   const auto actual = as_vector<IntWrapper>(*res);
 //   const std::vector<IntType> expected = {1, 5, 9};
 
 //   EXPECT_EQ(actual, expected);
@@ -1323,15 +1324,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceNoArgsIsCopyObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                               Init<IntWrapper>(9)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7),
+//                               IntWrapper(9)};
 
 //   // When
 //   const auto res = l.Slice();
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*res);
+//   const auto actual = as_vector<IntWrapper>(*res);
 //   const std::vector<IntType> expected = {1, 3, 5, 7, 9};
 
 //   EXPECT_EQ(actual, expected);
@@ -1354,15 +1355,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceOperatorObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                               Init<IntWrapper>(9)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7),
+//                               IntWrapper(9)};
 
 //   // When
 //   const auto res = l[1, 5, 2];
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*res);
+//   const auto actual = as_vector<IntWrapper>(*res);
 //   const std::vector<IntType> expected = {3, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1384,15 +1385,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SliceOperatorWithNoArgsIsCopyObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                               Init<IntWrapper>(9)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7),
+//                               IntWrapper(9)};
 
 //   // When
 //   const auto res = l[];
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(*res);
+//   const auto actual = as_vector<IntWrapper>(*res);
 //   const std::vector<IntType> expected = {1, 3, 5, 7, 9};
 
 //   EXPECT_EQ(actual, expected);
@@ -1437,14 +1438,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReverseNonEmptyObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.Reverse();
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {7, 5, 3, 1};
 
 //   EXPECT_EQ(actual, expected);
@@ -1476,8 +1477,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, BoolNonEmptyObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_TRUE(__conversion::Bool(l));
@@ -1496,7 +1497,7 @@ TEST(List, AppendOneElement) {
 //   const List<IntWrapper> l;
 
 //   // When/then
-//   EXPECT_THROW(l.Index(Init<IntWrapper>(5)), ValueError);
+//   EXPECT_THROW(l.Index(IntWrapper(5)), ValueError);
 // }
 
 // TEST(List, IndexNonEmpty) {
@@ -1509,8 +1510,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, IndexNonEmptyObjectSame) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   const auto third_elem = l[2];
@@ -1519,11 +1520,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, IndexNonEmptyObjectNotSame) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
-//   EXPECT_THROW(l.Index(Init<IntWrapper>(5)), ValueError);
+//   EXPECT_THROW(l.Index(IntWrapper(5)), ValueError);
 // }
 
 // TEST(List, RemoveEmpty) {
@@ -1539,7 +1540,7 @@ TEST(List, AppendOneElement) {
 //   List<IntWrapper> l;
 
 //   // When/then
-//   EXPECT_THROW(l.Remove(Init<IntWrapper>(3)), ValueError);
+//   EXPECT_THROW(l.Remove(IntWrapper(3)), ValueError);
 // }
 
 // TEST(List, RemoveNotPresent) {
@@ -1552,11 +1553,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, RemoveNotPresentObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(5),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(5),
+//                         IntWrapper(7)};
 
 //   // When/then
-//   EXPECT_THROW(l.Remove(Init<IntWrapper>(3)), ValueError);
+//   EXPECT_THROW(l.Remove(IntWrapper(3)), ValueError);
 // }
 
 // TEST(List, RemovePresentOnce) {
@@ -1575,15 +1576,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, RemovePresentOnceObjectSame) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   const auto second_elem = l[1];
 //   l.Remove(second_elem);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1591,11 +1592,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, RemovePresentOnceObjectNotSame) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
-//   EXPECT_THROW(l.Remove(Init<IntWrapper>(3)), ValueError);
+//   EXPECT_THROW(l.Remove(IntWrapper(3)), ValueError);
 // }
 
 // TEST(List, RemovePresentMoreThanOnce) {
@@ -1614,16 +1615,16 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, RemovePresentMoreThanOnceObjectSame) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(3)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(3)};
 
 //   // When
 //   const auto second_elem = l[1];
 //   l.Remove(second_elem);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 5, 7, 3};
 
 //   EXPECT_EQ(actual, expected);
@@ -1631,16 +1632,16 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, RemovePresentMoreThanOnceObjectSameLast) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(3)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(3)};
 
 //   // When
 //   const auto last_elem = l[-1];
 //   l.Remove(last_elem);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1648,12 +1649,12 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, RemovePresentMoreThanOnceObjectNotSame) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(3)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(3)};
 
 //   // When
-//   EXPECT_THROW(l.Remove(Init<IntWrapper>(3)), ValueError);
+//   EXPECT_THROW(l.Remove(IntWrapper(3)), ValueError);
 // }
 
 // TEST(List, RemoveAtEnd) {
@@ -1672,15 +1673,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, RemoveAtEndObjectSame) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(5),
-//                         Init<IntWrapper>(7), Init<IntWrapper>(3)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(5),
+//                         IntWrapper(7), IntWrapper(3)};
 
 //   // When
 //   const auto last_elem = l[-1];
 //   l.Remove(last_elem);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1688,11 +1689,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, RemoveAtEndObjectNotSame) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(5),
-//                         Init<IntWrapper>(7), Init<IntWrapper>(3)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(5),
+//                         IntWrapper(7), IntWrapper(3)};
 
 //   // When/then
-//   EXPECT_THROW(l.Remove(Init<IntWrapper>(3)), ValueError);
+//   EXPECT_THROW(l.Remove(IntWrapper(3)), ValueError);
 // }
 
 // TEST(List, DeleteSliceZeroStep) {
@@ -1705,9 +1706,9 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, DeleteSliceZeroStepObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(1),
+//                         IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_THROW(l.DeleteSlice(0, 0, 0), ValueError);
@@ -1729,15 +1730,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, DeleteSliceNegativeStepObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(1),
+//                         IntWrapper(7)};
 
 //   // When
 //   l.DeleteSlice(0, 1, -1);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 1, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1759,15 +1760,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, DeleteSliceSameStartAndEndObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(1),
+//                         IntWrapper(7)};
 
 //   // When
 //   l.DeleteSlice(1, 1);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 1, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1789,14 +1790,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, DeleteSliceSingleStepObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.DeleteSlice(1, 3);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1818,14 +1819,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, DeleteSliceNotSingleStepNotEnoughObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.DeleteSlice(1, 3, 4);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1847,15 +1848,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, DeleteSliceNotSingleStepEnoughObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(9)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(9)};
 
 //   // When
 //   l.DeleteSlice(1, 5, 2);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 5, 9};
 
 //   EXPECT_EQ(actual, expected);
@@ -1877,15 +1878,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, DeleteSliceOutOfBoundsLeftObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(9)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(9)};
 
 //   // When
 //   l.DeleteSlice(-9, 4, 2);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {3, 7, 9};
 
 //   EXPECT_EQ(actual, expected);
@@ -1907,15 +1908,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, DeleteSliceOutOfBoundsRightObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(9)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(9)};
 
 //   // When
 //   l.DeleteSlice(0, 9, 2);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {3, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -1933,9 +1934,9 @@ TEST(List, AppendOneElement) {
 // }
 // TEST(List, DeleteSliceNoArgsIsClearObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(9)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(9)};
 
 //   // When
 //   l.DeleteSlice();
@@ -1955,11 +1956,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceZeroStepObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(7)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2), Init<IntWrapper>(4),
-//                                   Init<IntWrapper>(6)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(1),
+//                         IntWrapper(7)};
+//   const List<IntWrapper> other = {IntWrapper(2), IntWrapper(4),
+//                                   IntWrapper(6)};
 
 //   // When/then
 //   EXPECT_THROW(l.ReplaceSlice(other, 0, 0, 0), ValueError);
@@ -1982,17 +1983,17 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceNegativeStepObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(7)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2), Init<IntWrapper>(4),
-//                                   Init<IntWrapper>(6)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(1),
+//                         IntWrapper(7)};
+//   const List<IntWrapper> other = {IntWrapper(2), IntWrapper(4),
+//                                   IntWrapper(6)};
 
 //   // When
 //   l.ReplaceSlice(other, 0, 1, -1);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 1, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2015,17 +2016,17 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceSameStartAndEndObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(7)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2), Init<IntWrapper>(4),
-//                                   Init<IntWrapper>(6)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(1),
+//                         IntWrapper(7)};
+//   const List<IntWrapper> other = {IntWrapper(2), IntWrapper(4),
+//                                   IntWrapper(6)};
 
 //   // When
 //   l.ReplaceSlice(other, 1, 1);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 1, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2048,16 +2049,16 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceSingleStepMoreNewElemsObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2), Init<IntWrapper>(4),
-//                                   Init<IntWrapper>(6)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
+//   const List<IntWrapper> other = {IntWrapper(2), IntWrapper(4),
+//                                   IntWrapper(6)};
 
 //   // When
 //   l.ReplaceSlice(other, 1, 3);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 2, 4, 6, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2080,15 +2081,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceSingleStepLessNewElemsObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
+//   const List<IntWrapper> other = {IntWrapper(2)};
 
 //   // When
 //   l.ReplaceSlice(other, 1, 3);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 2, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2111,15 +2112,15 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceSingleStepSameNewElemsObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2), Init<IntWrapper>(4)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
+//   const List<IntWrapper> other = {IntWrapper(2), IntWrapper(4)};
 
 //   // When
 //   l.ReplaceSlice(other, 1, 3);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 2, 4, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2136,10 +2137,10 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceNotSingleStepNotSameNumElemsObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2), Init<IntWrapper>(4),
-//                                   Init<IntWrapper>(6)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
+//   const List<IntWrapper> other = {IntWrapper(2), IntWrapper(4),
+//                                   IntWrapper(6)};
 
 //   // When/then
 //   EXPECT_THROW(l.ReplaceSlice(other, 1, 3, 4), ValueError);
@@ -2162,16 +2163,16 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceNotSingleStepSameNumElemsObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(9)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2), Init<IntWrapper>(4)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(9)};
+//   const List<IntWrapper> other = {IntWrapper(2), IntWrapper(4)};
 
 //   // When
 //   l.ReplaceSlice(other, 1, 4, 2);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 2, 5, 4, 9};
 
 //   EXPECT_EQ(actual, expected);
@@ -2194,17 +2195,17 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, ReplaceSliceNoArgsIsCompleteReplacementObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(9)};
-//   const List<IntWrapper> other = {Init<IntWrapper>(2), Init<IntWrapper>(4),
-//                                   Init<IntWrapper>(6)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(9)};
+//   const List<IntWrapper> other = {IntWrapper(2), IntWrapper(4),
+//                                   IntWrapper(6)};
 
 //   // When
 //   l.ReplaceSlice(other);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {2, 4, 6};
 
 //   EXPECT_EQ(actual, expected);
@@ -2229,10 +2230,10 @@ TEST(List, AppendOneElement) {
 //   List<IntWrapper> l;
 
 //   // When
-//   l.Insert(0, Init<IntWrapper>(5));
+//   l.Insert(0, IntWrapper(5));
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {5};
 
 //   EXPECT_EQ(actual, expected);
@@ -2254,14 +2255,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, InsertIntoNonEmptyObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(7)};
 
 //   // When
-//   l.Insert(1, Init<IntWrapper>(5));
+//   l.Insert(1, IntWrapper(5));
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 5, 3, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2283,14 +2284,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, InsertIntoNonEmptyBeyondLeftBoundObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(7)};
 
 //   // When
-//   l.Insert(-100, Init<IntWrapper>(5));
+//   l.Insert(-100, IntWrapper(5));
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {5, 1, 3, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2312,14 +2313,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, InsertIntoNonEmptyBeyondRightBoundObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(7)};
 
 //   // When
-//   l.Insert(100, Init<IntWrapper>(5));
+//   l.Insert(100, IntWrapper(5));
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 7, 5};
 
 //   EXPECT_EQ(actual, expected);
@@ -2341,14 +2342,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, InsertIntoNonEmptyAtLeftBoundObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(7)};
 
 //   // When
-//   l.Insert(0, Init<IntWrapper>(5));
+//   l.Insert(0, IntWrapper(5));
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {5, 1, 3, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2370,14 +2371,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, InsertIntoNonEmptyBeforeRightBoundObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(7)};
 
 //   // When
-//   l.Insert(-1, Init<IntWrapper>(5));
+//   l.Insert(-1, IntWrapper(5));
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2399,14 +2400,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, InsertIntoNonEmptyAtRightBoundObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(7)};
 
 //   // When
-//   l.Insert(3, Init<IntWrapper>(5));
+//   l.Insert(3, IntWrapper(5));
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 7, 5};
 
 //   EXPECT_EQ(actual, expected);
@@ -2444,14 +2445,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, PopLastObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.Pop();
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 5};
 
 //   EXPECT_EQ(actual, expected);
@@ -2473,14 +2474,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, PopFrontObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.Pop(0);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2502,14 +2503,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, PopMiddleObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.Pop(1);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 5, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2531,14 +2532,14 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, PopNegativeObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When
 //   l.Pop(-2);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 3, 7};
 
 //   EXPECT_EQ(actual, expected);
@@ -2554,8 +2555,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, PopOutOfBoundsLeftObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_THROW(l.Pop(-100), IndexError);
@@ -2571,8 +2572,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, PopOutOfBoundsRightObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_THROW(l.Pop(100), IndexError);
@@ -2596,9 +2597,9 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, NativeIterationObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const auto expected = as_vector<IntWrapper, IntType>(l);
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
+//   const auto expected = as_vector<IntWrapper>(l);
 
 //   // When
 //   std::vector<IntType> actual;
@@ -2630,9 +2631,9 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, IteratorIterationObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const auto expected = as_vector<IntWrapper, IntType>(l);
+//   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7)};
+//   const auto expected = as_vector<IntWrapper>(l);
 //   const auto it = Iter(l);
 
 //   // When
@@ -2658,10 +2659,10 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, EqualitySameObjectObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const List<IntWrapper> copy = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                                  Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
+//   const List<IntWrapper> copy = {IntWrapper(1), IntWrapper(3),
+//                                  IntWrapper(5), IntWrapper(7)};
 //   ASSERT_NE(&l, &copy);
 
 //   // When/then
@@ -2680,10 +2681,10 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, NativeEqualitySameObjectObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const List<IntWrapper> copy = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                                  Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
+//   const List<IntWrapper> copy = {IntWrapper(1), IntWrapper(3),
+//                                  IntWrapper(5), IntWrapper(7)};
 //   ASSERT_NE(&l, &copy);
 
 //   // When/then
@@ -2702,10 +2703,10 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, NativeInEqualitySameObjectObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   const List<IntWrapper> copy = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                                  Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
+//   const List<IntWrapper> copy = {IntWrapper(1), IntWrapper(3),
+//                                  IntWrapper(5), IntWrapper(7)};
 //   ASSERT_NE(&l, &copy);
 
 //   // When/then
@@ -2730,11 +2731,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, EqualityDifferentObjectObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   List<IntWrapper> m = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(9)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
+//   List<IntWrapper> m = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(9)};
 //   ASSERT_NE(&l, &m);
 
 //   // When/then
@@ -2765,11 +2766,11 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, NativeEqualityAndInequalityDifferentObjectObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
-//   List<IntWrapper> m = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(5), Init<IntWrapper>(7),
-//                         Init<IntWrapper>(9)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
+//   List<IntWrapper> m = {IntWrapper(1), IntWrapper(3),
+//                         IntWrapper(5), IntWrapper(7),
+//                         IntWrapper(9)};
 //   ASSERT_NE(&l, &m);
 
 //   // When/then
@@ -2793,8 +2794,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, EqualityDifferentTypeObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 //   const List<FloatWrapper> m = {
 //       Init<FloatWrapper>(1.0), Init<FloatWrapper>(3.0),
 //       Init<FloatWrapper>(5.0), Init<FloatWrapper>(7.0)};
@@ -2814,8 +2815,8 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, NativeEqualityDifferentTypeObject) {
 //   // If
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 //   const List<FloatWrapper> m = {
 //       Init<FloatWrapper>(1.0), Init<FloatWrapper>(3.0),
 //       Init<FloatWrapper>(5.0), Init<FloatWrapper>(7.0)};
@@ -2852,8 +2853,8 @@ TEST(List, AppendOneElement) {
 //   // If
 //   IntWrapper::ResetId();
 
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_EQ(AsStr(l),
@@ -2893,8 +2894,8 @@ TEST(List, AppendOneElement) {
 //   // If
 //   IntWrapper::ResetId();
 
-//   const List<IntWrapper> l = {Init<IntWrapper>(1), Init<IntWrapper>(3),
-//                               Init<IntWrapper>(5), Init<IntWrapper>(7)};
+//   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3),
+//                               IntWrapper(5), IntWrapper(7)};
 
 //   // When/then
 //   EXPECT_EQ(Repr(l),
@@ -2924,9 +2925,9 @@ TEST(List, AppendOneElement) {
 //   // If
 //   IntWrapper::ResetId();
 
-//   List<IntWrapper> l = {Init<IntWrapper>(7), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(1), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(5)};
+//   List<IntWrapper> l = {IntWrapper(7), IntWrapper(3),
+//                         IntWrapper(1), IntWrapper(1),
+//                         IntWrapper(5)};
 
 //   // When
 //   l.Sort();
@@ -2935,7 +2936,7 @@ TEST(List, AppendOneElement) {
 //   const std::vector<IntType> expected_values = {1, 1, 3, 5, 7};
 //   const std::vector<size_t> expected_ids = {2, 3, 1, 4, 0};
 
-//   const auto actual_values = as_vector<IntWrapper, IntType>(l);
+//   const auto actual_values = as_vector<IntWrapper>(l);
 //   std::vector<size_t> actual_ids;
 
 //   for (const auto& elem : l) {
@@ -2964,9 +2965,9 @@ TEST(List, AppendOneElement) {
 //   // If
 //   IntWrapper::ResetId();
 
-//   List<IntWrapper> l = {Init<IntWrapper>(7), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(1), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(5)};
+//   List<IntWrapper> l = {IntWrapper(7), IntWrapper(3),
+//                         IntWrapper(1), IntWrapper(1),
+//                         IntWrapper(5)};
 
 //   // When
 //   l.Sort(true);
@@ -2975,7 +2976,7 @@ TEST(List, AppendOneElement) {
 //   const std::vector<IntType> expected_values = {7, 5, 3, 1, 1};
 //   const std::vector<size_t> expected_ids = {0, 4, 1, 2, 3};
 
-//   const auto actual_values = as_vector<IntWrapper, IntType>(l);
+//   const auto actual_values = as_vector<IntWrapper>(l);
 //   std::vector<size_t> actual_ids;
 
 //   for (const auto& elem : l) {
@@ -3007,9 +3008,9 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SortWithKeyObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(7), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(1), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(5)};
+//   List<IntWrapper> l = {IntWrapper(7), IntWrapper(3),
+//                         IntWrapper(1), IntWrapper(1),
+//                         IntWrapper(5)};
 
 //   // This effectively inverts the sort
 //   const auto key = [](Const<IntWrapper> i) -> FloatType {
@@ -3020,7 +3021,7 @@ TEST(List, AppendOneElement) {
 //   l.Sort(key);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {7, 5, 3, 1, 1};
 
 //   EXPECT_EQ(actual, expected);
@@ -3047,9 +3048,9 @@ TEST(List, AppendOneElement) {
 
 // TEST(List, SortWithKeyAndReverseObject) {
 //   // If
-//   List<IntWrapper> l = {Init<IntWrapper>(7), Init<IntWrapper>(3),
-//                         Init<IntWrapper>(1), Init<IntWrapper>(1),
-//                         Init<IntWrapper>(5)};
+//   List<IntWrapper> l = {IntWrapper(7), IntWrapper(3),
+//                         IntWrapper(1), IntWrapper(1),
+//                         IntWrapper(5)};
 
 //   // This effectively inverts the sort, but the reverse reverses it again
 //   const auto key = [](Const<IntWrapper> i) -> FloatType {
@@ -3060,7 +3061,7 @@ TEST(List, AppendOneElement) {
 //   l.Sort(key, true);
 
 //   // Then
-//   const auto actual = as_vector<IntWrapper, IntType>(l);
+//   const auto actual = as_vector<IntWrapper>(l);
 //   const std::vector<IntType> expected = {1, 1, 3, 5, 7};
 
 //   EXPECT_EQ(actual, expected);

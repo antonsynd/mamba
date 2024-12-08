@@ -8,6 +8,7 @@
 
 #include "mamba/builtins/__concepts/subclass.hpp"
 #include "mamba/builtins/__types/object.hpp"
+#include "mamba/builtins/__utils/log.hpp"
 #include "mamba/builtins/error.hpp"
 
 namespace mamba::builtins {
@@ -42,22 +43,32 @@ class Iterator : public __types::Object {
   /// @note Internally, this constructs capturing lambdas to invoke the
   /// relevant iterator methods (dereference and sentinel detection).
   template <std::forward_iterator It>
-  Iterator(std::shared_ptr<It> begin, std::shared_ptr<It> end)
-      : data_(std::make_shared<Data>([begin, end]() -> value_type {
-          if (begin == end) {
-            throw StopIteration();
-          }
+  Iterator(It begin, It end)
+      : data_(std::make_shared<Data>(
+            [it = std::move(begin),
+             end = std::move(end)]() mutable -> value_type {
+              log::Debug() << "Invoke next function in iterator";
 
-          auto res = **begin;
-          ++(*begin);
-          return res;
-        })) {}
+              if (it == end) {
+                log::Debug() << "Stop iteration being thrown in iterator";
+                throw StopIteration();
+              }
+
+              auto res = *it;
+              log::Debug() << "Next value " << static_cast<int>(res);
+
+              ++it;
+              return res;
+            })) {}
 
   virtual ~Iterator() = default;
 
   virtual __types::Str __Repr__() const override { return "Iterator"; }
 
-  virtual self __Iter__() const { return *this; }
+  virtual self __Iter__() const {
+    log::Debug() << "Create iterator copy";
+    return *this;
+  }
 
   virtual value_type __Next__() { return data_->next_func_(); }
 
@@ -156,6 +167,7 @@ class IteratorFacade : public std::input_iterator_tag {
   /// @note Only pre-increment is supported. Post-increment requires
   /// deep-copying of the underlying which is not trivial.
   self& operator++() {
+    log::Debug() << "advance iterable facade";
     Advance();
     return *this;
   }

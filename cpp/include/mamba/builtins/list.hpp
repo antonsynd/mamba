@@ -18,6 +18,7 @@
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
+#include "mamba/builtins/__utils/log.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/repr.hpp"
@@ -66,14 +67,20 @@ class List : public __types::Object {
     bool no_stop_iteration = true;
     auto it = iterable.__Iter__();
 
+    log::Error() << "Enter iterable constructor";
+
     while (no_stop_iteration) {
       try {
+        log::Error() << "Append";
         Append(it.__Next__());
       } catch (StopIteration) {
+        log::Error() << "Stop iteration";
         no_stop_iteration = false;
         break;
       }
     }
+
+    log::Error() << "Exit iterable constructor";
   }
 
   /// @brief Creates a list from an initializer list (list literal).
@@ -535,9 +542,8 @@ class List : public __types::Object {
   /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
   details::ListIterator<value_type> __Iter__() const {
-    return details::ListIterator<value_type>(
-        std::make_shared<iterator>(data_->v_.begin()),
-        std::make_shared<iterator>(data_->v_.end()));
+    return details::ListIterator<value_type>(data_->v_.begin(),
+                                             data_->v_.end());
   }
 
   /// @brief Native support for C++ for..in loops.
@@ -840,7 +846,7 @@ class ListIterator : public Iterator<T> {
   using self = ListIterator<value_type>;
   using base = Iterator<value_type>;
 
-  ListIterator(std::shared_ptr<iterator> it, std::shared_ptr<iterator> end)
+  ListIterator(iterator it, iterator end)
       : base(std::move(it), std::move(end)) {}
 
   ~ListIterator() override = default;

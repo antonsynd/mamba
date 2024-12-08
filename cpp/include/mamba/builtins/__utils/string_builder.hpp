@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <sstream>
 #include <string>
 
@@ -8,6 +9,9 @@ namespace mamba::builtins {
 namespace details {
 
 struct Flush {};
+
+template <typename T>
+concept NotFlush = !std::derived_from<T, Flush>;
 
 class StringBuilder {
  public:
@@ -21,9 +25,9 @@ class StringBuilder {
     return res;
   }
 
-  template <typename T>
-  self& operator<<(T&& t) {
-    oss_ << std::forward<T>(t);
+  template <NotFlush T>
+  self& operator<<(const T& t) {
+    oss_ << t;
 
     return *this;
   }
