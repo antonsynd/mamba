@@ -22,6 +22,10 @@ struct Wrapper : public builtins::Object {
   static void ResetId() { global_id_ = 0; }
   static std::size_t GetNextId() { return global_id_++; }
 
+  /// @note Mainly to satisfy contexts (e.g. std::vector.reserve()) where the
+  /// default constructor needs to be invoked to reserve space.
+  Wrapper() : data_(std::make_shared<Data>(value_type(), GetNextId())) {}
+
   explicit Wrapper(value_type value)
       : data_(std::make_shared<Data>(value, GetNextId())) {}
 
@@ -55,14 +59,12 @@ struct Wrapper : public builtins::Object {
     return data_->v_ < other.data_->v_;
   }
 
-  // Normally, these shouldn't be needed because of the global operator==()
-  // definition in operators.hpp, but because this class has multiple implicit
+  // Normally, these shouldn't be needed because of the global operator
+  // definitions in operators.hpp, but because this class has multiple implicit
   // conversions (value_type, and bool), it's necessary to help the compiler
-  // avoid the ambiguity when invoking operator==() globally.
+  // avoid the ambiguity.
   bool operator==(const self& other) const { return __Eq__(other); }
-
   bool operator!=(const self& other) const { return !(*this == other); }
-
   bool operator<(const self& other) const { return __Lt__(other); }
 
  private:

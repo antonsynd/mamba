@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
@@ -36,6 +37,10 @@ class Str final {
   Bool __Eq__(const Str& other) const { return data_->s_ == other.data_->s_; }
 
   Int __Len__() const { return data_->s_.size(); }
+
+  /// @note For easy C++ comparison to strings.
+  bool operator==(const std::string_view sv) const { return data_->s_ == sv; }
+  bool operator!=(const std::string_view sv) const { return !(*this == sv); }
 
  private:
   class Data {
