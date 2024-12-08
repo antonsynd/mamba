@@ -18,9 +18,9 @@
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
-#include "mamba/builtins/__utils/log.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
+#include "mamba/builtins/operators.hpp"
 #include "mamba/builtins/repr.hpp"
 
 namespace mamba::builtins {
@@ -67,20 +67,14 @@ class List : public __types::Object {
     bool no_stop_iteration = true;
     auto it = iterable.__Iter__();
 
-    log::Error() << "Enter iterable constructor";
-
     while (no_stop_iteration) {
       try {
-        log::Error() << "Append";
         Append(it.__Next__());
       } catch (StopIteration) {
-        log::Error() << "Stop iteration";
         no_stop_iteration = false;
         break;
       }
     }
-
-    log::Error() << "Exit iterable constructor";
   }
 
   /// @brief Creates a list from an initializer list (list literal).
@@ -133,19 +127,22 @@ class List : public __types::Object {
   /// @code list.clear()
   void Clear() { data_->v_.clear(); }
 
-  /// @brief Creates a shallow copy of the list.
+  /// @brief Creates a shallow copy of the list. Shallow here means that any
+  /// objects stored within are not deeply copied (only references), but the
+  /// internal data container of the lists are different instances.
   /// @code list.copy()
   self Copy() const {
-    // Invoke copy constructor with shallow copy of internal data.
-    return *this;
+    // TODO: It's actually a problem you cannot pass a List to itself without
+    // invoking the C++ copy constructor. Might need to think about this.
+    return self(this->__Iter__());
   }
 
   /// @brief Extends this list with the elements of @p other.
   /// @code list.extend(list)
   void Extend(const self& other) {
-    data_->v_.reserve(data_->v_.size() + other->data_->v_.size());
+    data_->v_.reserve(data_->v_.size() + other.data_->v_.size());
 
-    std::copy(other->data_->v_.cbegin(), other->data_->v_.cend(),
+    std::copy(other.data_->v_.cbegin(), other.data_->v_.cend(),
               std::back_inserter(data_->v_));
   }
 
@@ -421,14 +418,14 @@ class List : public __types::Object {
   /// any element at that position to the right. @p idx is clamped to the
   /// length of the list.
   /// @code list.insert(idx, x)
-  void Insert(__types::Int idx, __memory::Mut<value_type> elem) {
+  void Insert(__types::Int idx, __memory::Own<value_type> elem) {
     const auto size_t_idx = NormalizeOrClampIndex(idx);
 
     if (size_t_idx == data_->v_.size()) {
-      data_->v_.emplace_back(elem);
+      data_->v_.emplace_back(__memory::Move(elem));
     } else {
       const auto it = GetIterator(size_t_idx);
-      data_->v_.insert(it, elem);
+      data_->v_.insert(it, __memory::Move(elem));
     }
   }
 

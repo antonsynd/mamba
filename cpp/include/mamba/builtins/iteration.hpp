@@ -8,7 +8,6 @@
 
 #include "mamba/builtins/__concepts/subclass.hpp"
 #include "mamba/builtins/__types/object.hpp"
-#include "mamba/builtins/__utils/log.hpp"
 #include "mamba/builtins/error.hpp"
 
 namespace mamba::builtins {
@@ -47,17 +46,13 @@ class Iterator : public __types::Object {
       : data_(std::make_shared<Data>(
             [it = std::move(begin),
              end = std::move(end)]() mutable -> value_type {
-              log::Debug() << "Invoke next function in iterator";
-
               if (it == end) {
-                log::Debug() << "Stop iteration being thrown in iterator";
                 throw StopIteration();
               }
 
               auto res = *it;
-              log::Debug() << "Next value " << static_cast<int>(res);
-
               ++it;
+
               return res;
             })) {}
 
@@ -65,10 +60,7 @@ class Iterator : public __types::Object {
 
   virtual __types::Str __Repr__() const override { return "Iterator"; }
 
-  virtual self __Iter__() const {
-    log::Debug() << "Create iterator copy";
-    return *this;
-  }
+  virtual self __Iter__() const { return *this; }
 
   virtual value_type __Next__() { return data_->next_func_(); }
 
@@ -167,7 +159,6 @@ class IteratorFacade : public std::input_iterator_tag {
   /// @note Only pre-increment is supported. Post-increment requires
   /// deep-copying of the underlying which is not trivial.
   self& operator++() {
-    log::Debug() << "advance iterable facade";
     Advance();
     return *this;
   }

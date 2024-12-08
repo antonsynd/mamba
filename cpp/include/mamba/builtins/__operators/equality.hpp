@@ -13,7 +13,9 @@ bool operator==(const T& lhs, const T& rhs) {
 }
 
 // If T doesn't have __Eq__(), then equality means identity
-template <mamba::builtins::__concepts::ObjectLike T>
+template <typename T>
+  requires(!mamba::builtins::__concepts::EquatableObject<T> &&
+           mamba::builtins::__concepts::ObjectLike<T>)
 bool operator==(const T& lhs, const T& rhs) {
   return lhs.__Id__() == rhs.__Id__();
 }
