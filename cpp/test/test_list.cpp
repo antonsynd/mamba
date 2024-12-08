@@ -254,7 +254,7 @@ TEST(List, ContainsNotActuallyIn) {
   EXPECT_FALSE(Contains(l, 4));
 }
 
-TEST(List, ContainsNotActuallyInObject) {
+TEST(List, ContainsNotActuallyInObjectByEquality) {
   // If
   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
                               IntWrapper(7)};
@@ -264,7 +264,17 @@ TEST(List, ContainsNotActuallyInObject) {
 }
 
 TEST(List, ContainsNotActuallyInObjectByIdentity) {
-  // TODO
+  // If
+  const List<IntIdentityWrapper> l = {
+      IntIdentityWrapper(1), IntIdentityWrapper(3), IntIdentityWrapper(5),
+      IntIdentityWrapper(7)};
+
+  const IntIdentityWrapper i{3};
+
+  ASSERT_FALSE(__operators::identity::Is(i, l[1]));
+
+  // When/then
+  EXPECT_FALSE(Contains(l, i));
 }
 
 TEST(List, ContainsActuallyIn) {
@@ -275,18 +285,31 @@ TEST(List, ContainsActuallyIn) {
   EXPECT_TRUE(Contains(l, 5));
 }
 
-TEST(List, ContainsActuallyInObject) {
+TEST(List, ContainsActuallyInObjectByEquality) {
   // If
   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
                               IntWrapper(7)};
 
+  const IntWrapper i{5};
+
+  ASSERT_FALSE(__operators::identity::Is(i, l[2]));
+
   // When/then
-  // Wrapper compares by equality, not identity
-  EXPECT_TRUE(Contains(l, IntWrapper(5)));
+  EXPECT_TRUE(Contains(l, i));
 }
 
 TEST(List, ContainsActuallyInObjectByIdentity) {
-  // TODO
+  // If
+  const List<IntIdentityWrapper> l = {
+      IntIdentityWrapper(1), IntIdentityWrapper(3), IntIdentityWrapper(5),
+      IntIdentityWrapper(7)};
+
+  const auto i = l[1];
+
+  ASSERT_TRUE(__operators::identity::Is(i, l[1]));
+
+  // When/then
+  EXPECT_TRUE(Contains(l, i));
 }
 
 TEST(List, ClearEmpty) {
@@ -1449,23 +1472,56 @@ TEST(List, IndexNonEmpty) {
   EXPECT_EQ(l.Index(5), 2);
 }
 
-TEST(List, IndexNonEmptyObjectSame) {
+TEST(List, IndexNonEmptyObjectEqual) {
   // If
   const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
                               IntWrapper(7)};
 
+  const IntWrapper i{5};
+
+  ASSERT_FALSE(__operators::identity::Is(i, l[2]));
+
   // When/then
-  const auto third_elem = l[2];
-  EXPECT_EQ(l.Index(third_elem), 2);
+  EXPECT_EQ(l.Index(i), 2);
+}
+
+TEST(List, IndexNonEmptyObjectNotEqual) {
+  // If
+  const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
+                              IntWrapper(7)};
+
+  const IntWrapper i{4};
+
+  // When/then
+  EXPECT_THROW(l.Index(i), ValueError);
+}
+
+TEST(List, IndexNonEmptyObjectSame) {
+  // If
+  const List<IntIdentityWrapper> l = {
+      IntIdentityWrapper(1), IntIdentityWrapper(3), IntIdentityWrapper(5),
+      IntIdentityWrapper(7)};
+
+  const auto i = l[2];
+
+  ASSERT_TRUE(__operators::identity::Is(i, l[2]));
+
+  // When/then
+  EXPECT_EQ(l.Index(i), 2);
 }
 
 TEST(List, IndexNonEmptyObjectNotSame) {
   // If
-  const List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
-                              IntWrapper(7)};
+  const List<IntIdentityWrapper> l = {
+      IntIdentityWrapper(1), IntIdentityWrapper(3), IntIdentityWrapper(5),
+      IntIdentityWrapper(7)};
+
+  const IntIdentityWrapper i{5};
+
+  ASSERT_FALSE(__operators::identity::Is(i, l[2]));
 
   // When/then
-  EXPECT_THROW(l.Index(IntWrapper(5)), ValueError);
+  EXPECT_THROW(l.Index(i), ValueError);
 }
 
 TEST(List, RemoveEmpty) {
@@ -1514,7 +1570,7 @@ TEST(List, RemovePresentOnce) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, RemovePresentOnceObjectSame) {
+TEST(List, RemovePresentOnceObjectEqual) {
   // If
   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
                         IntWrapper(7)};
@@ -1530,13 +1586,28 @@ TEST(List, RemovePresentOnceObjectSame) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, RemovePresentOnceObjectNotSame) {
+TEST(List, RemovePresentOnceObjectNotEqual) {
   // If
   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
                         IntWrapper(7)};
 
+  const IntWrapper i{4};
+
   // When/then
-  EXPECT_THROW(l.Remove(IntWrapper(3)), ValueError);
+  EXPECT_THROW(l.Remove(i), ValueError);
+}
+
+TEST(List, RemovePresentOnceObjectNotSame) {
+  // If
+  List<IntIdentityWrapper> l = {IntIdentityWrapper(1), IntIdentityWrapper(3),
+                                IntIdentityWrapper(5), IntIdentityWrapper(7)};
+
+  const IntIdentityWrapper i{3};
+
+  ASSERT_FALSE(__operators::identity::Is(i, l[1]));
+
+  // When/then
+  EXPECT_THROW(l.Remove(IntIdentityWrapper(3)), ValueError);
 }
 
 TEST(List, RemovePresentMoreThanOnce) {
@@ -2719,7 +2790,7 @@ TEST(List, AsStrEmpty) {
   const List<IntType> l;
 
   // When/then
-  EXPECT_EQ(__conversion::Str(l), "[]");
+  EXPECT_EQ(static_cast<std::string>(__conversion::Str(l)), "[]");
 }
 
 TEST(List, AsStrEmptyObject) {
@@ -2727,7 +2798,7 @@ TEST(List, AsStrEmptyObject) {
   const List<IntWrapper> l;
 
   // When/then
-  EXPECT_EQ(__conversion::Str(l), "[]");
+  EXPECT_EQ(static_cast<std::string>(__conversion::Str(l)), "[]");
 }
 
 TEST(List, AsStrNotEmpty) {
@@ -2735,7 +2806,7 @@ TEST(List, AsStrNotEmpty) {
   const List<IntType> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_EQ(__conversion::Str(l), "[1, 3, 5, 7]");
+  EXPECT_EQ(static_cast<std::string>(__conversion::Str(l)), "[1, 3, 5, 7]");
 }
 
 TEST(List, AsStrNotEmptyObject) {
@@ -2746,7 +2817,7 @@ TEST(List, AsStrNotEmptyObject) {
                               IntWrapper(7)};
 
   // When/then
-  EXPECT_EQ(__conversion::Str(l),
+  EXPECT_EQ(static_cast<std::string>(__conversion::Str(l)),
             "["
             "[Wrapper(value=1, id=0)], "
             "[Wrapper(value=3, id=1)], "
@@ -2760,7 +2831,7 @@ TEST(List, ReprEmpty) {
   const List<IntType> l;
 
   // When/then
-  EXPECT_EQ(Repr(l), "[]");
+  EXPECT_EQ(static_cast<std::string>(Repr(l)), "[]");
 }
 
 TEST(List, ReprEmptyObject) {
@@ -2768,7 +2839,7 @@ TEST(List, ReprEmptyObject) {
   const List<IntWrapper> l;
 
   // When/then
-  EXPECT_EQ(Repr(l), "[]");
+  EXPECT_EQ(static_cast<std::string>(Repr(l)), "[]");
 }
 
 TEST(List, ReprNotEmpty) {
@@ -2776,7 +2847,7 @@ TEST(List, ReprNotEmpty) {
   const List<IntType> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_EQ(Repr(l), "[1, 3, 5, 7]");
+  EXPECT_EQ(static_cast<std::string>(Repr(l)), "[1, 3, 5, 7]");
 }
 
 TEST(List, ReprNotEmptyObject) {
@@ -2787,7 +2858,7 @@ TEST(List, ReprNotEmptyObject) {
                               IntWrapper(7)};
 
   // When/then
-  EXPECT_EQ(Repr(l),
+  EXPECT_EQ(static_cast<std::string>(Repr(l)),
             "["
             "[Wrapper(value=1, id=0)], "
             "[Wrapper(value=3, id=1)], "

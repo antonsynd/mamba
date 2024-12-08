@@ -13,11 +13,18 @@
 
 namespace mamba::__test {
 
-template <builtins::__concepts::Value T>
+enum class EqualityMethod : int {
+  kValueEquality = 0,
+  kIdentity = 1,
+};
+
+template <builtins::__concepts::Value T,
+          EqualityMethod EM = EqualityMethod::kValueEquality>
 struct Wrapper : public builtins::Object {
  public:
   using value_type = T;
-  using self = Wrapper<value_type>;
+  static constexpr auto equality_method = EM;
+  using self = Wrapper<value_type, equality_method>;
 
   static void ResetId() { global_id_ = 0; }
   static std::size_t GetNextId() { return global_id_++; }
@@ -52,7 +59,11 @@ struct Wrapper : public builtins::Object {
   builtins::BoolType __Bool__() const override { return true; }
 
   builtins::BoolType __Eq__(const self& other) const {
-    return data_->v_ == other.data_->v_;
+    if constexpr (self::equality_method == EqualityMethod::kValueEquality) {
+      return data_->v_ == other.data_->v_;
+    } else {
+      return data_.get() == other.data_.get();
+    }
   }
 
   builtins::BoolType __Lt__(const self& other) const {
@@ -79,7 +90,13 @@ struct Wrapper : public builtins::Object {
   std::shared_ptr<Data> data_;
 };
 
+template <builtins::__concepts::Value T>
+using IdentityWrapper = Wrapper<T, EqualityMethod::kIdentity>;
+
 using IntWrapper = Wrapper<builtins::IntType>;
 using FloatWrapper = Wrapper<builtins::FloatType>;
+
+using IntIdentityWrapper = IdentityWrapper<builtins::IntType>;
+using FloatIdentityWrapper = IdentityWrapper<builtins::FloatType>;
 
 }  // namespace mamba::__test
