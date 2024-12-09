@@ -563,8 +563,11 @@ class List : public __types::Object {
       return std::equal(data_->v_.begin(), data_->v_.end(),
                         other.data_->v_.begin(), other.data_->v_.end(),
                         [](const auto a, const auto b) { return a == b; });
+    } else if constexpr (__concepts::EquatableObject<value_type>) {
+      return std::equal(data_->v_.begin(), data_->v_.end(),
+                        other.data_->v_.begin(), other.data_->v_.end(),
+                        [](const auto a, const auto b) { return a.__Eq__(b); });
     } else {
-      // Non-value elements are checked for identity
       return std::equal(
           data_->v_.begin(), data_->v_.end(), other.data_->v_.begin(),
           other.data_->v_.end(),
