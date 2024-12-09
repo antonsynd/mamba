@@ -25,6 +25,10 @@ class Object {
 
   // For C++ implicit conversion to bool
   virtual operator bool() const { return __Bool__(); }
+
+  // For C++ code generation, facilitating the identity operator `is` like so:
+  // ~a == ~b where a and b are objects, not values.
+  virtual BigInt operator~() const { return __Id__(); }
 };
 
 }  // namespace mamba::builtins::__types
