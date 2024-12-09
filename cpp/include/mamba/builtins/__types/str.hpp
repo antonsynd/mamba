@@ -7,12 +7,13 @@
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/int.hpp"
+#include "mamba/builtins/__types/object.hpp"
 
 namespace mamba::builtins::__types {
 
 // TODO: Make it Unicode friendly
 /// @note Str objects behave like objects but are treated as values.
-class Str final {
+class Str final : public Object {
  public:
   Str() : data_(std::make_shared<Data>()) {};
   Str(const char* s) : data_(std::make_shared<Data>(s)) {}
@@ -20,13 +21,13 @@ class Str final {
 
   operator std::string() const { return data_->s_; }
 
-  BigInt __Id__() const { return reinterpret_cast<BigInt>(data_.get()); }
+  BigInt __Id__() const override {
+    return reinterpret_cast<BigInt>(data_.get());
+  }
 
-  Bool __Bool__() const { return !data_->s_.empty(); }
+  Bool __Bool__() const override { return !data_->s_.empty(); }
 
-  operator bool() const { return __Bool__(); }
-
-  Str __Repr__() const {
+  Str __Repr__() const override {
     // Effectively a deep copy
     return Str(data_->s_);
   }

@@ -8,6 +8,7 @@
 #include "gtest/gtest.h"  // for Test, Message
 
 #include "mamba/__test/value_wrapper.hpp"
+#include "mamba/builtins.hpp"
 #include "mamba/builtins/__concepts/object_like.hpp"  // for ObjectLike
 #include "mamba/builtins/__concepts/value.hpp"        // for Value
 #include "mamba/builtins/__conversion/str.hpp"        // for Str

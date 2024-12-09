@@ -44,10 +44,12 @@ constexpr None kNone;
 }  // namespace mamba::builtins::__types
 
 // Reverse (in)equality operators for commutivity
-constexpr bool operator==(std::nullopt_t, mamba::builtins::__types::None) {
+constexpr inline bool operator==(std::nullopt_t,
+                                 mamba::builtins::__types::None) {
   return true;
 }
-constexpr bool operator!=(std::nullopt_t, mamba::builtins::__types::None) {
+constexpr inline bool operator!=(std::nullopt_t,
+                                 mamba::builtins::__types::None) {
   return false;
 }
 

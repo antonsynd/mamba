@@ -2,9 +2,11 @@
 
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
-#include "mamba/builtins/__types/str.hpp"
 
 namespace mamba::builtins::__types {
+
+// Forward-declaration
+class Str;
 
 class Object {
  public:

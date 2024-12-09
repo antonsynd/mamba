@@ -10,3 +10,5 @@ namespace mamba::builtins {
 using BigIntType = __types::BigInt;
 
 }  // namespace mamba::builtins
+
+// IWYU pragma: private

@@ -5,7 +5,6 @@
 
 namespace mamba::builtins::__conversion {
 
-template <typename T>
 inline __types::Bool Bool(__types::None) {
   return false;
 }
