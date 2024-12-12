@@ -223,6 +223,10 @@ class List : public details::Object {
     return data_->v_[*idx_opt];
   }
 
+  /// @brief C++ equality overload for comparison with other lists.
+  bool operator==(const self& other) const { return __Eq__(other); }
+  bool operator!=(const self& other) const { return !(*this == other); }
+
   /// @brief Returns the number of elements in the list.
   /// @code len(list)
   details::Int __Len__() const { return data_->v_.size(); }

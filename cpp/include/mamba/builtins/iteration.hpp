@@ -76,10 +76,6 @@ class Iterator : public details::Object {
     return __Id__() == other.__Id__();
   }
 
-  virtual details::Bool __Ne__(const self& other) const {
-    return !__Eq__(other);
-  }
-
   // Native C++ iteration support
   iterator begin() const { return iterator(*this); }
   iterator end() const { return iterator(*this, true); }

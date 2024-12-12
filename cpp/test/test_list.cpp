@@ -2750,7 +2750,6 @@ TEST(List, NativeEqualityAndInequalityDifferentObject) {
   // If
   const List<IntType> l = {1, 3, 5, 7};
   List<IntType> m = {1, 3, 5, 7, 9};
-  ASSERT_NE(&l, &m);
 
   // When/then
   EXPECT_NE(l, m);
@@ -2768,7 +2767,6 @@ TEST(List, NativeEqualityAndInequalityDifferentObjectObject) {
                               IntWrapper(7)};
   List<IntWrapper> m = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
                         IntWrapper(7), IntWrapper(9)};
-  ASSERT_NE(&l, &m);
 
   // When/then
   EXPECT_NE(l, m);
@@ -2786,7 +2784,7 @@ TEST(List, NativeEqualityDifferentType) {
   const List<FloatType> m = {1.0, 3.0, 5.0, 7.0};
 
   // When/then
-  ASSERT_NE(l, m);
+  EXPECT_NE(l, m);
 }
 
 TEST(List, NativeEqualityDifferentTypeObject) {
@@ -2797,7 +2795,7 @@ TEST(List, NativeEqualityDifferentTypeObject) {
                                 FloatWrapper(5.0), FloatWrapper(7.0)};
 
   // When/then
-  ASSERT_NE(l, m);
+  EXPECT_NE(l, m);
 }
 
 TEST(List, AsStrEmpty) {

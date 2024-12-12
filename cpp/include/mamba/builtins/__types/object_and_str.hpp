@@ -39,6 +39,9 @@ class Object {
   // For C++ implicit conversion to bool
   virtual operator bool() const { return __Bool__(); }
 
+  virtual bool operator==(const self& other) const { return __Eq__(other); }
+  virtual bool operator!=(const self& other) const { return !(*this == other); }
+
   // For C++ code generation, facilitating the identity operator `is` like so:
   // ~a == ~b where a and b are objects, not values.
   virtual BigInt operator~() const { return __Id__(); }
@@ -75,6 +78,10 @@ class Str final : public Object {
   /// @note For easy C++ comparison to strings.
   bool operator==(const std::string_view sv) const { return data_->s_ == sv; }
   bool operator!=(const std::string_view sv) const { return !(*this == sv); }
+
+  /// @brief C++ equality overload with other strings.
+  bool operator==(const Str& other) const { return __Eq__(other); }
+  bool operator!=(const Str& other) const { return !(*this == other); }
 
  private:
   class Data {
