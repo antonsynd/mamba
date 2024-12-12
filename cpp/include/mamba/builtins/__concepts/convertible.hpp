@@ -10,40 +10,38 @@
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/str.hpp"
 
-namespace mamba::builtins::__concepts {
+namespace mamba::builtins::details {
 
 template <typename T>
 concept BoolConvertibleObject = requires(const T t) {
-  { t.__Bool__() } -> std::same_as<__types::Bool>;
+  { t.__Bool__() } -> std::same_as<Bool>;
 };
 
 template <typename T>
 concept BytesConvertibleObject = requires(const T t) {
-  { t.__Bytes__() } -> std::same_as<__types::Bytes>;
+  { t.__Bytes__() } -> std::same_as<Bytes>;
 };
 
 template <typename T>
 concept ComplexConvertibleObject = requires(const T t) {
-  { t.__Complex__() } -> std::same_as<__types::Complex>;
+  { t.__Complex__() } -> std::same_as<Complex>;
 };
 
 template <typename T>
 concept FloatConvertibleObject = requires(const T t) {
-  { t.__Float__() } -> std::same_as<__types::Float>;
+  { t.__Float__() } -> std::same_as<Float>;
 };
 
 template <typename T>
 concept IntConvertibleObject = requires(const T t) {
-  { t.__Int__() } -> std::same_as<__types::Int>;
+  { t.__Int__() } -> std::same_as<Int>;
 };
 
 template <typename T>
 concept StrConvertibleObject = requires(const T t) {
-  { t.__Str__() } -> std::same_as<__types::Str>;
+  { t.__Str__() } -> std::same_as<Str>;
 };
 
-/// @brief A type that can be converted to a Bool. For generic programming
-/// with Bool().
 template <typename T>
 concept BoolConvertible = Value<T> || BoolConvertibleObject<T>;
 
@@ -62,6 +60,6 @@ concept IntConvertible = Value<T> || IntConvertibleObject<T>;
 template <typename T>
 concept StrConvertible = Value<T> || StrConvertibleObject<T>;
 
-}  // namespace mamba::builtins::__concepts
+}  // namespace mamba::builtins::details
 
 // IWYU pragma: private

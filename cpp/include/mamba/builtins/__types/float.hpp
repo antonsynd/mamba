@@ -4,7 +4,7 @@
 #include <stdfloat>
 #endif  // __cplusplus >= 202302L
 
-namespace mamba::builtins::__types {
+namespace mamba::builtins::details {
 
 #if __cplusplus >= 202302L
 using Float = std::float64_t;
@@ -12,6 +12,6 @@ using Float = std::float64_t;
 using Float = double;
 #endif  // __cplusplus >= 202302L
 
-}  // namespace mamba::builtins::__types
+}  // namespace mamba::builtins::details
 
 // IWYU pragma: private

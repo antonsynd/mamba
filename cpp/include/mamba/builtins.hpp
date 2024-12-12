@@ -1,12 +1,17 @@
 #pragma once
 
-#include "mamba/builtins/big_int.hpp"    // IWYU: export
-#include "mamba/builtins/bool.hpp"       // IWYU: export
-#include "mamba/builtins/error.hpp"      // IWYU: export
-#include "mamba/builtins/float.hpp"      // IWYU: export
-#include "mamba/builtins/int.hpp"        // IWYU: export
-#include "mamba/builtins/list.hpp"       // IWYU: export
-#include "mamba/builtins/object.hpp"     // IWYU: export
-#include "mamba/builtins/operators.hpp"  // IWYU: export
-#include "mamba/builtins/repr.hpp"       // IWYU: export
-#include "mamba/builtins/str.hpp"        // IWYU: export
+#include "mamba/builtins/__bool__.hpp"   // IWYU pragma: export
+#include "mamba/builtins/__str__.hpp"    // IWYU pragma: export
+#include "mamba/builtins/error.hpp"      // IWYU pragma: export
+#include "mamba/builtins/iteration.hpp"  // IWYU pragma: export
+#include "mamba/builtins/list.hpp"       // IWYU pragma: export
+#include "mamba/builtins/operators.hpp"  // IWYU pragma: export
+#include "mamba/builtins/repr.hpp"       // IWYU pragma: export
+#include "mamba/builtins/sequence.hpp"   // IWYU pragma: export
+#include "mamba/builtins/types.hpp"      // IWYU pragma: export
+
+namespace mamba {
+
+using namespace mamba::builtins;
+
+}  // namespace mamba

@@ -12,7 +12,6 @@
 #include <vector>
 
 #include "mamba/builtins/__concepts/orderable.hpp"
-#include "mamba/builtins/__conversion/str.hpp"
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/int.hpp"
@@ -31,14 +30,14 @@ template <typename T>
 class ListIterator;
 
 template <typename F, typename K>
-concept ListSortKey = requires(const F& key_func, __memory::Const<K> k) {
-  { key_func(k) } -> __concepts::LessThanComparable;
+concept ListSortKey = requires(const F& key_func, details::Const<K> k) {
+  { key_func(k) } -> details::LessThanComparable;
 };
 
 }  // namespace details
 
-template <__concepts::LessThanComparable T>
-class List : public __types::Object {
+template <details::LessThanComparable T>
+class List : public details::Object {
  public:
   using value_type = T;
 
@@ -52,7 +51,7 @@ class List : public __types::Object {
   using iterator = storage::iterator;
   using const_iterator = storage::const_iterator;
 
-  static constexpr auto kEndIndex = std::numeric_limits<__types::Int>::min();
+  static constexpr auto kEndIndex = std::numeric_limits<details::Int>::min();
 
   /// @brief Creates an empty list.
   /// @code list()
@@ -62,7 +61,7 @@ class List : public __types::Object {
   /// are copied.
   /// @code list(Iterable)
   template <typename It>
-    requires __concepts::IterableOf<It, value_type>
+    requires details::IterableOf<It, value_type>
   List(const It& iterable) : data_(std::make_shared<Data>()) {
     bool no_stop_iteration = true;
     auto it = iterable.__Iter__();
@@ -83,7 +82,7 @@ class List : public __types::Object {
       : data_(std::make_shared<Data>()) {
     data_->v_.reserve(elements.size());
 
-    if constexpr (__concepts::Value<value_type>) {
+    if constexpr (details::Value<value_type>) {
       std::copy(elements.begin(), elements.end(),
                 std::back_inserter(data_->v_));
     } else {
@@ -118,7 +117,7 @@ class List : public __types::Object {
 
   /// @brief Returns whether @p elem is in the list. O(n).
   /// @code elem in list
-  __types::Bool __Contains__(__memory::Const<value_type> elem) const {
+  details::Bool __Contains__(details::Const<value_type> elem) const {
     return std::find(data_->v_.cbegin(), data_->v_.cend(), elem) !=
            data_->v_.cend();
   }
@@ -164,7 +163,7 @@ class List : public __types::Object {
 
   /// @brief Returns a copy of this list with its elements repeated @p i times.
   /// @code list * i
-  self operator*(__types::Int i) const {
+  self operator*(details::Int i) const {
     self res;
 
     if (i <= 0) {
@@ -182,7 +181,7 @@ class List : public __types::Object {
 
   /// @brief Repeats this list's elements @p i - 1 times.
   /// @code list *= i
-  void operator*=(__types::Int i) {
+  void operator*=(details::Int i) {
     if (i == 1) {
       return;
     } else if (i < 1) {
@@ -204,7 +203,7 @@ class List : public __types::Object {
   /// throws IndexError. @p idx supports negative indices counting from the
   /// last elements.
   /// @code list[idx] (= elem)
-  reference operator[](__types::Int idx) {
+  reference operator[](details::Int idx) {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -214,7 +213,7 @@ class List : public __types::Object {
     return data_->v_[*idx_opt];
   }
 
-  const_reference operator[](__types::Int idx) const {
+  const_reference operator[](details::Int idx) const {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -226,7 +225,7 @@ class List : public __types::Object {
 
   /// @brief Returns the number of elements in the list.
   /// @code len(list)
-  __types::Int __Len__() const { return data_->v_.size(); }
+  details::Int __Len__() const { return data_->v_.size(); }
 
   /// @brief Returns the smallest element in the list. If the list is empty,
   /// throws ValueError.
@@ -236,7 +235,7 @@ class List : public __types::Object {
       throw ValueError("Min() arg is an empty sequence");
     }
 
-    // if constexpr (__concepts::Value<value_type>) {
+    // if constexpr (details::Value<value_type>) {
     return *std::min_element(data_->v_.cbegin(), data_->v_.cend());
     // } else {
     //   return *std::min_element(
@@ -253,7 +252,7 @@ class List : public __types::Object {
       throw ValueError("Max() arg is an empty sequence");
     }
 
-    // if constexpr (__concepts::Value<value_type>) {
+    // if constexpr (details::Value<value_type>) {
     return *std::max_element(data_->v_.cbegin(), data_->v_.cend());
     // } else {
     //   return *std::max_element(
@@ -264,10 +263,10 @@ class List : public __types::Object {
 
   /// @brief Returns the number of times @p elem is present in the list.
   /// @code list.count(x)
-  __types::Int Count(__memory::Const<value_type> elem) const {
+  details::Int Count(details::Const<value_type> elem) const {
     return std::count_if(
         data_->v_.cbegin(), data_->v_.cend(),
-        [elem](__memory::Const<value_type> val) { return val == elem; });
+        [elem](details::Const<value_type> val) { return val == elem; });
   }
 
   /// @brief Returns the elements in the list such that the elements' indices
@@ -276,9 +275,9 @@ class List : public __types::Object {
   /// If @p step is negative, then the returned list is empty. If @p step is
   /// 0, then this throws ValueError.
   /// @code list[i:j:k]
-  self Slice(__types::Int start = 0,
-             __types::Int end = kEndIndex,
-             __types::Int step = 1) const {
+  self Slice(details::Int start = 0,
+             details::Int end = kEndIndex,
+             details::Int step = 1) const {
     self res;
 
     auto slice_params_opt = TryGetNormalizedSliceParams(start, end, step);
@@ -325,9 +324,9 @@ class List : public __types::Object {
   }
 
 #if __cplusplus >= 202302L
-  self operator[](__types::Int start = 0,
-                  __types::Int end = kEndIndex,
-                  __types::Int step = 1) const {
+  self operator[](details::Int start = 0,
+                  details::Int end = kEndIndex,
+                  details::Int step = 1) const {
     return Slice(start, end, step);
   }
 #endif  // __cplusplus >= 202302L
@@ -335,9 +334,9 @@ class List : public __types::Object {
   /// @brief Deletes the elements in the given slice. See Slice() for the
   /// behavior of the parameters.
   /// @code del list[i:j(:k)]
-  void DeleteSlice(__types::Int start = 0,
-                   __types::Int end = kEndIndex,
-                   __types::Int step = 1) {
+  void DeleteSlice(details::Int start = 0,
+                   details::Int end = kEndIndex,
+                   details::Int step = 1) {
     auto slice_params_opt = TryGetNormalizedSliceParams(start, end, step);
 
     if (!slice_params_opt) {
@@ -366,9 +365,9 @@ class List : public __types::Object {
   /// slice, otherwise a ValueError will be thrown.
   /// @code list[i:j:k] = other
   void ReplaceSlice(const self& other,
-                    __types::Int start = 0,
-                    __types::Int end = kEndIndex,
-                    __types::Int step = 1) {
+                    details::Int start = 0,
+                    details::Int end = kEndIndex,
+                    details::Int step = 1) {
     auto slice_params_opt = TryGetNormalizedSliceParams(start, end, step);
 
     if (!slice_params_opt) {
@@ -388,8 +387,8 @@ class List : public __types::Object {
   /// If @p start is negative, it is clamped to 0. If @p start is greater than
   /// the last index in the list, then it throws ValueError.
   /// @code list.index(i, (j))
-  __types::Int Index(__memory::Const<value_type> elem,
-                     __types::Int start = 0) const {
+  details::Int Index(details::Const<value_type> elem,
+                     details::Int start = 0) const {
     return Index(elem, start, data_->v_.size());
   }
 
@@ -400,12 +399,12 @@ class List : public __types::Object {
   /// then it throws ValueError. If @p end is greater than the last index in
   /// the list, it is clamped to the length of the list.
   /// @code list.index(i, j, k)
-  __types::Int Index(__memory::Const<value_type> elem,
-                     __types::Int start,
-                     __types::Int end) const {
+  details::Int Index(details::Const<value_type> elem,
+                     details::Int start,
+                     details::Int end) const {
     end = ClampIndex(end);
 
-    for (__types::Int idx = ClampIndex(start); idx < end; ++idx) {
+    for (details::Int idx = ClampIndex(start); idx < end; ++idx) {
       if (data_->v_[idx] == elem) {
         return idx;
       }
@@ -418,21 +417,21 @@ class List : public __types::Object {
   /// any element at that position to the right. @p idx is clamped to the
   /// length of the list.
   /// @code list.insert(idx, x)
-  void Insert(__types::Int idx, __memory::Own<value_type> elem) {
+  void Insert(details::Int idx, details::Own<value_type> elem) {
     const auto size_t_idx = NormalizeOrClampIndex(idx);
 
     if (size_t_idx == data_->v_.size()) {
-      data_->v_.emplace_back(__memory::Move(elem));
+      data_->v_.emplace_back(details::Move(elem));
     } else {
       const auto it = GetIterator(size_t_idx);
-      data_->v_.insert(it, __memory::Move(elem));
+      data_->v_.insert(it, details::Move(elem));
     }
   }
 
   /// @brief Removes the element at @p idx and returns it. If @p idx is out of
   /// bounds, then throws IndexError.
   /// @code list.pop(idx)
-  value_type Pop(__types::Int idx = -1) {
+  value_type Pop(details::Int idx = -1) {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -458,14 +457,14 @@ class List : public __types::Object {
   /// are shifted to make the list contiguous. If the list is empty or
   /// @p elem does not occur in the list, throws ValueError.
   /// @code list.remove(elem)
-  void Remove(__memory::Const<value_type> elem) {
+  void Remove(details::Const<value_type> elem) {
     if (data_->v_.empty()) {
       throw ValueError("List.Remove(x): x not in list");
     }
 
     auto it = data_->v_.end();
 
-    // if constexpr (__concepts::Value<value_type>) {
+    // if constexpr (details::Value<value_type>) {
     it = std::find(data_->v_.begin(), data_->v_.end(), elem);
     // } else {
     //   it = std::find_if(data_->v_.begin(), data_->v_.end(),
@@ -493,7 +492,7 @@ class List : public __types::Object {
   /// elements guaranteed to be preserved. Each element is compared using
   /// the less-than operator.
   /// @code sort(list, reverse)
-  void Sort(__types::Bool reverse = false) {
+  void Sort(details::Bool reverse = false) {
     if (data_->v_.empty()) {
       return;
     }
@@ -516,7 +515,7 @@ class List : public __types::Object {
   /// @code sort(list, key, reverse)
   template <typename K>
     requires details::ListSortKey<K, value_type>
-  void Sort(const K& key, __types::Bool reverse = false) {
+  void Sort(const K& key, details::Bool reverse = false) {
     if (data_->v_.empty()) {
       return;
     }
@@ -552,18 +551,18 @@ class List : public __types::Object {
   const_iterator cend() const { return data_->v_.cend(); }
 
   /// @code bool(list)
-  __types::Bool __Bool__() const override { return !data_->v_.empty(); }
+  details::Bool __Bool__() const override { return !data_->v_.empty(); }
 
   /// @brief Returns true if this and @p other contain the same elements, and
   /// false otherwise.
   /// @code list == other
-  __types::Bool __Eq__(const self& other) const {
-    if constexpr (__concepts::Value<value_type>) {
+  details::Bool __Eq__(const self& other) const {
+    if constexpr (details::Value<value_type>) {
       // Value elements are checked for equality
       return std::equal(data_->v_.begin(), data_->v_.end(),
                         other.data_->v_.begin(), other.data_->v_.end(),
                         [](const auto a, const auto b) { return a == b; });
-    } else if constexpr (__concepts::EquatableObject<value_type>) {
+    } else if constexpr (details::EquatableObject<value_type>) {
       return std::equal(data_->v_.begin(), data_->v_.end(),
                         other.data_->v_.begin(), other.data_->v_.end(),
                         [](const auto a, const auto b) { return a.__Eq__(b); });
@@ -577,7 +576,7 @@ class List : public __types::Object {
 
   /// @brief Returns the string representation of the list.
   /// @code str(list)
-  __types::Str __Str__() const override {
+  details::Str __Str__() const override {
     std::ostringstream oss;
 
     oss << "[";
@@ -586,10 +585,10 @@ class List : public __types::Object {
       const auto last = data_->v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << __conversion::Str(data_->v_[i]) << ", ";
+        oss << Str(data_->v_[i]) << ", ";
       }
 
-      oss << __conversion::Str(data_->v_[last]);
+      oss << Str(data_->v_[last]);
     }
 
     oss << "]";
@@ -599,7 +598,7 @@ class List : public __types::Object {
 
   /// @brief Returns the representation of the list.
   /// @code repr(list)
-  __types::Str __Repr__() const override {
+  details::Str __Repr__() const override {
     std::ostringstream oss;
 
     oss << "[";
@@ -619,12 +618,12 @@ class List : public __types::Object {
     return oss.str();
   }
 
-  __types::BigInt __Id__() const override {
-    return reinterpret_cast<__types::BigInt>(data_.get());
+  details::BigInt __Id__() const override {
+    return reinterpret_cast<details::BigInt>(data_.get());
   }
 
  private:
-  size_t ClampIndex(__types::Int idx) const {
+  size_t ClampIndex(details::Int idx) const {
     if (idx < 0) {
       return 0;
     } else if (idx > data_->v_.size()) {
@@ -642,7 +641,7 @@ class List : public __types::Object {
     return (length + step - 1) / step;
   }
 
-  std::optional<size_t> TryGetNormalizedIndex(__types::Int idx) const {
+  std::optional<size_t> TryGetNormalizedIndex(details::Int idx) const {
     if (idx < 0) {
       idx += data_->v_.size();
     }
@@ -654,7 +653,7 @@ class List : public __types::Object {
     return static_cast<size_t>(idx);
   }
 
-  size_t NormalizeOrClampIndex(__types::Int idx) const {
+  size_t NormalizeOrClampIndex(details::Int idx) const {
     return TryGetNormalizedIndex(idx).value_or(ClampIndex(idx));
   }
 
@@ -665,9 +664,9 @@ class List : public __types::Object {
   }
 
   std::optional<std::pair<size_t, size_t>> TryGetNormalizedSliceIndices(
-      __types::Int start,
-      __types::Int end,
-      __types::Int step) const {
+      details::Int start,
+      details::Int end,
+      details::Int step) const {
     // Zero step is invalid
     if (step == 0) {
       throw ValueError("slice step cannot be zero");
@@ -704,9 +703,9 @@ class List : public __types::Object {
   };
 
   std::optional<SliceParams<const_iterator>> TryGetNormalizedSliceParams(
-      __types::Int start,
-      __types::Int end,
-      __types::Int step) const {
+      details::Int start,
+      details::Int end,
+      details::Int step) const {
     const auto indices_opt = TryGetNormalizedSliceIndices(start, end, step);
 
     if (!indices_opt) {
@@ -722,9 +721,9 @@ class List : public __types::Object {
   }
 
   std::optional<SliceParams<iterator>> TryGetNormalizedSliceParams(
-      __types::Int start,
-      __types::Int end,
-      __types::Int step) {
+      details::Int start,
+      details::Int end,
+      details::Int step) {
     const auto indices_opt = TryGetNormalizedSliceIndices(start, end, step);
 
     if (!indices_opt) {
@@ -859,7 +858,7 @@ class ListIterator : public Iterator<T> {
     return self(std::forward<Args>(args)...);
   }
 
-  __types::Str __Repr__() const override { return "ListIterator"; }
+  details::Str __Repr__() const override { return "ListIterator"; }
 };
 
 }  // namespace details

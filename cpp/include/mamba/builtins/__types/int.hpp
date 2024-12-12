@@ -2,10 +2,10 @@
 
 #include <cstdint>
 
-namespace mamba::builtins::__types {
+namespace mamba::builtins::details {
 
 using Int = std::int_least32_t;
 
-}  // namespace mamba::builtins::__types
+}  // namespace mamba::builtins::details
 
 // IWYU pragma: private

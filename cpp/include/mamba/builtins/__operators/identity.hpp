@@ -1,40 +1,42 @@
 #pragma once
 
+#include <optional>
+
 #include "mamba/builtins/__concepts/value.hpp"
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/none.hpp"
+#include "mamba/builtins/__types/object.hpp"
 
-namespace mamba::builtins::__operators::identity {
+namespace mamba::builtins {
 
 // Values are identical if they have the same value
-template <__concepts::Value T>
-__types::Bool Is(const T lhs, const T rhs) {
+template <details::Value T>
+details::Bool Is(const T lhs, const T rhs) {
   return lhs == rhs;
 }
 
-// Non-values are identical if they have the same id (implementation detail:
+// Objects are identical if they have the same id (implementation detail:
 // which is their memory address)
-template <__concepts::NotValue T>
-__types::Bool Is(const T& lhs, const T& rhs) {
-  return lhs.__Id__() == rhs.__Id__();
+details::Bool Is(const details::Object& lhs, const details::Object& rhs) {
+  return ~lhs == ~rhs;
 }
 
 // Specialization for None type, only None is identical to None
 template <typename T>
-__types::Bool Is(__memory::Const<T>, __types::None) {
-  return false;
+details::Bool Is(const std::optional<T>& lhs, details::None) {
+  return !lhs;
 }
 
 template <typename T>
-__types::Bool Is(__types::None, __memory::Const<T>) {
-  return false;
+details::Bool Is(details::None, const std::optional<T>& rhs) {
+  return !rhs;
 }
 
-__types::Bool Is(__types::None, __types::None) {
+details::Bool Is(details::None, details::None) {
   return true;
 }
 
-}  // namespace mamba::builtins::__operators::identity
+}  // namespace mamba::builtins
 
 // IWYU pragma: private

@@ -8,18 +8,18 @@
 #include "mamba/builtins/__types/float.hpp"
 #include "mamba/builtins/__types/int.hpp"
 
-namespace mamba::builtins::__concepts {
+namespace mamba::builtins::details {
 
 template <typename T>
-concept Value = std::same_as<std::decay_t<T>, __types::Int> ||
-                std::same_as<std::decay_t<T>, __types::BigInt> ||
-                std::same_as<std::decay_t<T>, __types::Float> ||
-                std::same_as<std::decay_t<T>, __types::Bool> ||
-                std::same_as<std::decay_t<T>, __types::Complex>;
+concept Value = std::same_as<std::decay_t<T>, Int> ||
+                std::same_as<std::decay_t<T>, BigInt> ||
+                std::same_as<std::decay_t<T>, Float> ||
+                std::same_as<std::decay_t<T>, Bool> ||
+                std::same_as<std::decay_t<T>, Complex>;
 
 template <typename T>
 concept NotValue = !Value<T>;
 
-}  // namespace mamba::builtins::__concepts
+}  // namespace mamba::builtins::details
 
 // IWYU pragma: private

@@ -5,7 +5,7 @@
 
 #include "mamba/builtins/__utils/string_builder.hpp"
 
-namespace mamba::builtins::log {
+namespace mamba::builtins::details {
 
 namespace details {
 
@@ -51,4 +51,4 @@ details::StringBuilderWrapper Info() {
   return details::StringBuilderWrapper(std::cout);
 }
 
-}  // namespace mamba::builtins::log
+}  // namespace mamba::builtins::details

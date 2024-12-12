@@ -4,12 +4,7 @@
 #include <utility>
 
 #include "mamba/builtins/__concepts/value.hpp"
-#include "mamba/builtins/big_int.hpp"
-#include "mamba/builtins/bool.hpp"
-#include "mamba/builtins/float.hpp"
-#include "mamba/builtins/int.hpp"
-#include "mamba/builtins/object.hpp"
-#include "mamba/builtins/str.hpp"
+#include "mamba/builtins/types.hpp"
 
 namespace mamba::__test {
 
@@ -18,9 +13,9 @@ enum class EqualityMethod : int {
   kIdentity = 1,
 };
 
-template <builtins::__concepts::Value T,
+template <builtins::details::Value T,
           EqualityMethod EM = EqualityMethod::kValueEquality>
-struct Wrapper : public builtins::Object {
+struct Wrapper : public builtins::ObjectType {
  public:
   using value_type = T;
   static constexpr auto equality_method = EM;
@@ -90,7 +85,7 @@ struct Wrapper : public builtins::Object {
   std::shared_ptr<Data> data_;
 };
 
-template <builtins::__concepts::Value T>
+template <builtins::details::Value T>
 using IdentityWrapper = Wrapper<T, EqualityMethod::kIdentity>;
 
 using IntWrapper = Wrapper<builtins::IntType>;

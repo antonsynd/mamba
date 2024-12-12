@@ -14,27 +14,27 @@
 
 namespace mamba::builtins {
 
-details::Str Repr(const details::Object& t) {
+details::Str Str(const details::Object& t) {
   return t.__Str__();
 }
 
-details::Str Repr(details::BigInt i) {
+details::Str Str(details::BigInt i) {
   return std::to_string(i);
 }
 
-details::Str Repr(details::Bool b) {
+details::Str Str(details::Bool b) {
   return b ? "True" : "False";
 }
 
-details::Str Repr(details::Float f) {
+details::Str Str(details::Float f) {
   return std::to_string(f);
 }
 
-details::Str Repr(details::Int i) {
+details::Str Str(details::Int i) {
   return std::to_string(i);
 }
 
-details::Str Repr(details::None) {
+details::Str Str(details::None) {
   return "None";
 }
 

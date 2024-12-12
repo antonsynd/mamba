@@ -1,34 +1,14 @@
 #include <cstddef>  // for size_t
-#include <memory>   // for allocator, make...
-#include <sstream>  // for basic_ostringst...
-#include <string>   // for char_traits
-#include <utility>  // for forward
+#include <string>   // for basic_string, string
 #include <vector>   // for vector
 
-#include "gtest/gtest.h"  // for Test, Message
+#include "gtest/gtest.h"  // for Test, Message, TestPartResult
 
-#include "mamba/__test/value_wrapper.hpp"
-#include "mamba/builtins.hpp"
-#include "mamba/builtins/__concepts/object_like.hpp"  // for ObjectLike
-#include "mamba/builtins/__concepts/value.hpp"        // for Value
-#include "mamba/builtins/__conversion/str.hpp"        // for Str
-#include "mamba/builtins/__memory/args.hpp"           // for __memory
-#include "mamba/builtins/big_int.hpp"                 // for BigIntType
-#include "mamba/builtins/bool.hpp"                    // for BoolType
-#include "mamba/builtins/float.hpp"                   // for FloatType
-#include "mamba/builtins/int.hpp"                     // for IntType
-#include "mamba/builtins/iteration.hpp"               // for Iterator, Iter
-#include "mamba/builtins/list.hpp"                    // for List
-#include "mamba/builtins/object.hpp"                  // for Object
-#include "mamba/builtins/operators.hpp"               // for operator==
-#include "mamba/builtins/repr.hpp"                    // for Repr
-#include "mamba/builtins/sequence.hpp"                // for Len, Sequence
-#include "mamba/builtins/str.hpp"                     // for StrType
+#include "mamba/__test/value_wrapper.hpp"  // for IntWrapper, Wrapper, IntId...
+#include "mamba/builtins.hpp"              // for List, IntType, Len, Iterator
 
 namespace mamba::builtins::test {
 
-using namespace mamba::builtins::__memory;
-using namespace mamba::builtins::__concepts;
 using namespace mamba::__test;
 
 namespace {
@@ -46,24 +26,14 @@ std::vector<IntType> as_vector(const List<T>& l) {
 
 }  // anonymous namespace
 
-TEST(List, ValueListIsObjectLike) {
-  // If/when/then
-  static_assert(ObjectLike<List<IntType>>);
-}
-
-TEST(List, ObjectListIsObjectLike) {
-  // If/when/then
-  static_assert(ObjectLike<List<IntWrapper>>);
-}
-
 TEST(List, ValueListIsSequence) {
   // If/when/then
-  static_assert(Sequence<List<IntType>>);
+  static_assert(details::Sequence<List<IntType>>);
 }
 
 TEST(List, ObjectListIsSequence) {
   // If/when/then
-  static_assert(Sequence<List<IntWrapper>>);
+  static_assert(details::Sequence<List<IntWrapper>>);
 }
 
 TEST(List, EmptyConstructor) {
@@ -272,7 +242,7 @@ TEST(List, ContainsNotActuallyInObjectByIdentity) {
 
   const IntIdentityWrapper i{3};
 
-  ASSERT_FALSE(__operators::identity::Is(i, l[1]));
+  ASSERT_NE(~i, ~l[1]);
 
   // When/then
   EXPECT_FALSE(Contains(l, i));
@@ -293,7 +263,7 @@ TEST(List, ContainsActuallyInObjectByEquality) {
 
   const IntWrapper i{5};
 
-  ASSERT_FALSE(__operators::identity::Is(i, l[2]));
+  ASSERT_NE(~i, ~l[2]);
 
   // When/then
   EXPECT_TRUE(Contains(l, i));
@@ -307,7 +277,7 @@ TEST(List, ContainsActuallyInObjectByIdentity) {
 
   const auto i = l[1];
 
-  ASSERT_TRUE(__operators::identity::Is(i, l[1]));
+  ASSERT_EQ(~i, ~l[1]);
 
   // When/then
   EXPECT_TRUE(Contains(l, i));
@@ -1421,7 +1391,7 @@ TEST(List, BoolEmpty) {
   const List<IntType> l;
 
   // When/then
-  EXPECT_FALSE(__conversion::Bool(l));
+  EXPECT_FALSE(Bool(l));
 }
 
 TEST(List, BoolEmptyObject) {
@@ -1429,7 +1399,7 @@ TEST(List, BoolEmptyObject) {
   const List<IntWrapper> l;
 
   // When/then
-  EXPECT_FALSE(__conversion::Bool(l));
+  EXPECT_FALSE(Bool(l));
 }
 
 TEST(List, BoolNonEmpty) {
@@ -1437,7 +1407,7 @@ TEST(List, BoolNonEmpty) {
   const List<IntType> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_TRUE(__conversion::Bool(l));
+  EXPECT_TRUE(Bool(l));
 }
 
 TEST(List, BoolNonEmptyObject) {
@@ -1446,7 +1416,7 @@ TEST(List, BoolNonEmptyObject) {
                               IntWrapper(7)};
 
   // When/then
-  EXPECT_TRUE(__conversion::Bool(l));
+  EXPECT_TRUE(Bool(l));
 }
 
 TEST(List, IndexEmpty) {
@@ -1480,7 +1450,7 @@ TEST(List, IndexNonEmptyObjectEqual) {
 
   const IntWrapper i{5};
 
-  ASSERT_FALSE(__operators::identity::Is(i, l[2]));
+  ASSERT_NE(~i, ~l[2]);
 
   // When/then
   EXPECT_EQ(l.Index(i), 2);
@@ -1505,7 +1475,7 @@ TEST(List, IndexNonEmptyObjectSame) {
 
   const auto i = l[2];
 
-  ASSERT_TRUE(__operators::identity::Is(i, l[2]));
+  ASSERT_EQ(~i, ~l[2]);
 
   // When/then
   EXPECT_EQ(l.Index(i), 2);
@@ -1519,7 +1489,7 @@ TEST(List, IndexNonEmptyObjectNotSame) {
 
   const IntIdentityWrapper i{5};
 
-  ASSERT_FALSE(__operators::identity::Is(i, l[2]));
+  ASSERT_NE(~i, ~l[2]);
 
   // When/then
   EXPECT_THROW(l.Index(i), ValueError);
@@ -1605,7 +1575,7 @@ TEST(List, RemovePresentOnceObjectNotSame) {
 
   const IntIdentityWrapper i{3};
 
-  ASSERT_FALSE(__operators::identity::Is(i, l[1]));
+  ASSERT_NE(~i, ~l[1]);
 
   // When/then
   EXPECT_THROW(l.Remove(IntIdentityWrapper(3)), ValueError);
@@ -1641,7 +1611,7 @@ TEST(List, RemovePresentMoreThanOnceObjectSame) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, RemovePresentMoreThanOnceObjectSameLast) {
+TEST(List, RemovePresentMoreThanOnceObjectEqualityLast) {
   // If
   List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
                         IntWrapper(7), IntWrapper(3)};
@@ -1652,18 +1622,39 @@ TEST(List, RemovePresentMoreThanOnceObjectSameLast) {
 
   // Then
   const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {1, 5, 7, 3};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, RemovePresentMoreThanOnceObjectIdentityLast) {
+  // If
+  List<IntIdentityWrapper> l = {IntIdentityWrapper(1), IntIdentityWrapper(3),
+                                IntIdentityWrapper(5), IntIdentityWrapper(7),
+                                IntIdentityWrapper(3)};
+
+  // When
+  const auto last_elem = l[-1];
+
+  ASSERT_NE(~last_elem, ~l[1]);
+
+  l.Remove(last_elem);
+
+  // Then
+  const auto actual = as_vector<IntIdentityWrapper>(l);
   const std::vector<IntType> expected = {1, 3, 5, 7};
 
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, RemovePresentMoreThanOnceObjectNotSame) {
+TEST(List, RemovePresentMoreThanOnceObjectIdentityNotSame) {
   // If
-  List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
-                        IntWrapper(7), IntWrapper(3)};
+  List<IntIdentityWrapper> l = {IntIdentityWrapper(1), IntIdentityWrapper(3),
+                                IntIdentityWrapper(5), IntIdentityWrapper(7),
+                                IntIdentityWrapper(3)};
 
   // When
-  EXPECT_THROW(l.Remove(IntWrapper(3)), ValueError);
+  EXPECT_THROW(l.Remove(IntIdentityWrapper(3)), ValueError);
 }
 
 TEST(List, RemoveAtEnd) {
@@ -1696,13 +1687,36 @@ TEST(List, RemoveAtEndObjectSame) {
   EXPECT_EQ(actual, expected);
 }
 
-TEST(List, RemoveAtEndObjectNotSame) {
+TEST(List, RemoveAtEndObjectEqualityNotSame) {
   // If
   List<IntWrapper> l = {IntWrapper(1), IntWrapper(5), IntWrapper(7),
                         IntWrapper(3)};
 
+  // When
+  const auto i = IntWrapper(3);
+
+  ASSERT_NE(~i, ~l[-1]);
+
+  l.Remove(i);
+
+  // Then
+  const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {1, 5, 7};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, RemoveAtEndObjectIdentityNotSame) {
+  // If
+  List<IntIdentityWrapper> l = {IntIdentityWrapper(1), IntIdentityWrapper(5),
+                                IntIdentityWrapper(7), IntIdentityWrapper(3)};
+
+  const IntIdentityWrapper i{3};
+
+  ASSERT_NE(~i, ~l[-1]);
+
   // When/then
-  EXPECT_THROW(l.Remove(IntWrapper(3)), ValueError);
+  EXPECT_THROW(l.Remove(i), ValueError);
 }
 
 TEST(List, DeleteSliceZeroStep) {
@@ -2791,7 +2805,7 @@ TEST(List, AsStrEmpty) {
   const List<IntType> l;
 
   // When/then
-  EXPECT_EQ(static_cast<std::string>(__conversion::Str(l)), "[]");
+  EXPECT_EQ(static_cast<std::string>(Str(l)), "[]");
 }
 
 TEST(List, AsStrEmptyObject) {
@@ -2799,7 +2813,7 @@ TEST(List, AsStrEmptyObject) {
   const List<IntWrapper> l;
 
   // When/then
-  EXPECT_EQ(static_cast<std::string>(__conversion::Str(l)), "[]");
+  EXPECT_EQ(static_cast<std::string>(Str(l)), "[]");
 }
 
 TEST(List, AsStrNotEmpty) {
@@ -2807,7 +2821,7 @@ TEST(List, AsStrNotEmpty) {
   const List<IntType> l = {1, 3, 5, 7};
 
   // When/then
-  EXPECT_EQ(static_cast<std::string>(__conversion::Str(l)), "[1, 3, 5, 7]");
+  EXPECT_EQ(static_cast<std::string>(Str(l)), "[1, 3, 5, 7]");
 }
 
 TEST(List, AsStrNotEmptyObject) {
@@ -2818,7 +2832,7 @@ TEST(List, AsStrNotEmptyObject) {
                               IntWrapper(7)};
 
   // When/then
-  EXPECT_EQ(static_cast<std::string>(__conversion::Str(l)),
+  EXPECT_EQ(static_cast<std::string>(Str(l)),
             "["
             "[Wrapper(value=1, id=0)], "
             "[Wrapper(value=3, id=1)], "

@@ -20,7 +20,7 @@
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/repr.hpp"
 
-namespace mamba::builtins::__types {
+namespace mamba::builtins::details {
 namespace details {
 
 // Forward declaration
@@ -370,4 +370,5 @@ class SetIteratorBase
 
 }  // namespace details
 
-}  // namespace mamba::builtins::__types
+}  // namespace mamba::builtins::details
+// IWYU pragma: private

@@ -2,6 +2,6 @@
 
 #include <tuple>
 
-namespace mamba::builtins::__types {}  // namespace mamba::builtins::__types
+namespace mamba::builtins::details {}  // namespace mamba::builtins::details
 
 // IWYU pragma: private

@@ -3,9 +3,9 @@
 #include <optional>
 #include <type_traits>
 
-#include "mamba/builtins/__concepts/value.hpp"
+#include "mamba/builtins/__types/big_int.hpp"
 
-namespace mamba::builtins::__types {
+namespace mamba::builtins::details {
 
 struct None {
  public:
@@ -41,25 +41,25 @@ struct None {
 /// @brief Constant.
 constexpr None kNone;
 
-}  // namespace mamba::builtins::__types
+}  // namespace mamba::builtins::details
 
 // Reverse (in)equality operators for commutivity
 constexpr inline bool operator==(std::nullopt_t,
-                                 mamba::builtins::__types::None) {
+                                 mamba::builtins::details::None) {
   return true;
 }
 constexpr inline bool operator!=(std::nullopt_t,
-                                 mamba::builtins::__types::None) {
+                                 mamba::builtins::details::None) {
   return false;
 }
 
 template <typename T>
-bool operator==(const std::optional<T>& other, mamba::builtins::__types::None) {
+bool operator==(const std::optional<T>& other, mamba::builtins::details::None) {
   return !other;
 }
 
 template <typename T>
-bool operator!=(const std::optional<T>& other, mamba::builtins::__types::None) {
+bool operator!=(const std::optional<T>& other, mamba::builtins::details::None) {
   return !!other;
 }
 

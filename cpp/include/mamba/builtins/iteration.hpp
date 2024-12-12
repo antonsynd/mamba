@@ -21,7 +21,7 @@ class IteratorFacade;
 
 /// @brief Base class for all iterators.
 template <typename T>
-class Iterator : public __types::Object {
+class Iterator : public details::Object {
  public:
   using value_type = T;
   using iterator = details::IteratorFacade<value_type>;
@@ -58,25 +58,25 @@ class Iterator : public __types::Object {
 
   virtual ~Iterator() = default;
 
-  virtual __types::Str __Repr__() const override { return "Iterator"; }
+  virtual details::Str __Repr__() const override { return "Iterator"; }
 
   virtual self __Iter__() const { return *this; }
 
   virtual value_type __Next__() { return data_->next_func_(); }
 
-  virtual __types::BigInt __Id__() const override {
-    return reinterpret_cast<__types::BigInt>(data_.get());
+  virtual details::BigInt __Id__() const override {
+    return reinterpret_cast<details::BigInt>(data_.get());
   }
 
-  constexpr __types::Bool __Bool__() const override { return true; }
+  constexpr details::Bool __Bool__() const override { return true; }
 
   /// @brief Returns true if this and @p other are the same iterators.
   /// @code iterator == other
-  virtual __types::Bool __Eq__(const self& other) const {
+  virtual details::Bool __Eq__(const self& other) const {
     return __Id__() == other.__Id__();
   }
 
-  virtual __types::Bool __Ne__(const self& other) const {
+  virtual details::Bool __Ne__(const self& other) const {
     return !__Eq__(other);
   }
 
@@ -93,7 +93,7 @@ class Iterator : public __types::Object {
   std::shared_ptr<Data> data_;
 };
 
-namespace __concepts {
+namespace details {
 
 template <typename T>
 concept IsIterator = requires(const T t) {
@@ -113,26 +113,22 @@ concept IterableOf = requires(const T iterable) {
 template <typename T>
 concept Iterable = IterableOf<T, typename T::value_type>;
 
-}  // namespace __concepts
-
-namespace details {
-
 /// @brief Simple convenience alias.
-template <__concepts::Iterable T>
+template <Iterable T>
 using IterableValueType = typename T::value_type;
 
 /// @brief Simple convenience alias.
-template <__concepts::Iterable T>
+template <Iterable T>
 using IterableIteratorType = Iterator<IterableValueType<T>>;
 
 }  // namespace details
 
-template <__concepts::IsIterator T>
+template <details::IsIterator T>
 typename T::value_type Next(T& it) {
   return it.__Next__();
 }
 
-template <__concepts::Iterable T>
+template <details::Iterable T>
 Iterator<typename T::value_type> Iter(const T& it) {
   return it.__Iter__();
 }

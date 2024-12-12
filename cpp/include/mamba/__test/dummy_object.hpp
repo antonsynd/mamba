@@ -3,15 +3,11 @@
 #include <memory>
 #include <utility>
 
-#include "mamba/builtins/__concepts/value.hpp"
-#include "mamba/builtins/big_int.hpp"
-#include "mamba/builtins/bool.hpp"
-#include "mamba/builtins/object.hpp"
-#include "mamba/builtins/str.hpp"
+#include "mamba/builtins/types.hpp"
 
 namespace mamba::__test {
 
-struct DummyObject : public builtins::Object {
+struct DummyObject : public builtins::ObjectType {
  public:
   using self = DummyObject;
 

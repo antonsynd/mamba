@@ -5,16 +5,16 @@
 #include "mamba/builtins/__concepts/value.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 
-namespace mamba::builtins::__concepts {
+namespace mamba::builtins::details {
 
 template <typename T>
 concept EquatableObject = requires(const T lhs, const T& rhs) {
-  { lhs.__Eq__(rhs) } -> std::same_as<__types::Bool>;
+  { lhs.__Eq__(rhs) } -> std::same_as<Bool>;
 };
 
 template <typename T>
 concept InequatableObject = requires(const T lhs, const T& rhs) {
-  { lhs.__Ne__(rhs) } -> std::same_as<__types::Bool>;
+  { lhs.__Ne__(rhs) } -> std::same_as<Bool>;
 };
 
 template <typename T>
@@ -23,6 +23,6 @@ concept Equatable = Value<T> || EquatableObject<T>;
 template <typename T>
 concept Inequatable = Value<T> || InequatableObject<T>;
 
-}  // namespace mamba::builtins::__concepts
+}  // namespace mamba::builtins::details
 
 // IWYU pragma: private

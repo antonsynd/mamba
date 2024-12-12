@@ -7,21 +7,21 @@
 #include "mamba/builtins/__types/bool.hpp"
 
 // Generic overload invoking __Eq__() dunder method
-template <mamba::builtins::__concepts::EquatableObject T>
+template <mamba::builtins::details::EquatableObject T>
 bool operator==(const T& lhs, const T& rhs) {
   return lhs.__Eq__(rhs);
 }
 
 // If T doesn't have __Eq__(), then equality means identity
 template <typename T>
-  requires(!mamba::builtins::__concepts::EquatableObject<T> &&
-           mamba::builtins::__concepts::ObjectLike<T>)
+  requires(!mamba::builtins::details::EquatableObject<T> &&
+           mamba::builtins::details::ObjectLike<T>)
 bool operator==(const T& lhs, const T& rhs) {
   return lhs.__Id__() == rhs.__Id__();
 }
 
 // Specialization of != if __Ne__() is defined
-template <mamba::builtins::__concepts::InequatableObject T>
+template <mamba::builtins::details::InequatableObject T>
 bool operator!=(const T& lhs, const T& rhs) {
   return lhs.__Ne__(rhs);
 }
