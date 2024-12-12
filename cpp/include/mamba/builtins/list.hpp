@@ -17,6 +17,7 @@
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
+#include "mamba/builtins/__utils/log.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/operators.hpp"
@@ -30,8 +31,8 @@ template <typename T>
 class ListIterator;
 
 template <typename F, typename K>
-concept ListSortKey = requires(const F& key_func, details::Const<K> k) {
-  { key_func(k) } -> details::LessThanComparable;
+concept ListSortKey = requires(const F& key_func, Const<K> k) {
+  { key_func(k) } -> LessThanComparable;
 };
 
 }  // namespace details
@@ -224,8 +225,15 @@ class List : public details::Object {
   }
 
   /// @brief C++ equality overload for comparison with other lists.
-  bool operator==(const self& other) const { return __Eq__(other); }
-  bool operator!=(const self& other) const { return !(*this == other); }
+  bool operator==(const self& other) const {
+    details::Error() << "list equality";
+    return __Eq__(other);
+  }
+
+  bool operator!=(const self& other) const {
+    details::Error() << "list inequality";
+    return !(*this == other);
+  }
 
   /// @brief Returns the number of elements in the list.
   /// @code len(list)
@@ -862,7 +870,7 @@ class ListIterator : public Iterator<T> {
     return self(std::forward<Args>(args)...);
   }
 
-  details::Str __Repr__() const override { return "ListIterator"; }
+  Str __Repr__() const override { return "ListIterator"; }
 };
 
 }  // namespace details

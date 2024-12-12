@@ -19,10 +19,10 @@ concept HasSequenceMethods = requires(const T sequence, Const<U> elem) {
 };
 
 template <typename T, typename U>
-concept SequenceOf = details::IterableOf<T, U> && HasSequenceMethods<T, U>;
+concept SequenceOf = IterableOf<T, U> && HasSequenceMethods<T, U>;
 
 template <typename T>
-concept Sequence = details::SequenceOf<T, typename T::value_type>;
+concept Sequence = SequenceOf<T, typename T::value_type>;
 
 }  // namespace details
 

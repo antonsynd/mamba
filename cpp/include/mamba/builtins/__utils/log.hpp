@@ -35,19 +35,19 @@ class StringBuilderWrapper {
 
 }  // namespace details
 
-details::StringBuilderWrapper Error() {
+inline details::StringBuilderWrapper Error() {
   return details::StringBuilderWrapper(std::cerr);
 }
 
-details::StringBuilderWrapper Warning() {
+inline details::StringBuilderWrapper Warning() {
   return details::StringBuilderWrapper(std::cerr);
 }
 
-details::StringBuilderWrapper Debug() {
+inline details::StringBuilderWrapper Debug() {
   return details::StringBuilderWrapper(std::cerr);
 }
 
-details::StringBuilderWrapper Info() {
+inline details::StringBuilderWrapper Info() {
   return details::StringBuilderWrapper(std::cout);
 }
 

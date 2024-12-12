@@ -34,10 +34,8 @@ class StringBuilder {
   std::ostringstream oss_;
 };
 
-using Flush = details::Flush;
-
-details::StringBuilder stringify() {
-  return details::StringBuilder();
+inline StringBuilder stringify() {
+  return StringBuilder();
 }
 
 }  // namespace mamba::builtins::details

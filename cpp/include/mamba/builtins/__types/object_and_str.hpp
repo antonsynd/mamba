@@ -7,6 +7,7 @@
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/int.hpp"
+#include "mamba/builtins/__utils/log.hpp"
 
 namespace mamba::builtins::details {
 
@@ -39,8 +40,15 @@ class Object {
   // For C++ implicit conversion to bool
   virtual operator bool() const { return __Bool__(); }
 
-  virtual bool operator==(const self& other) const { return __Eq__(other); }
-  virtual bool operator!=(const self& other) const { return !(*this == other); }
+  virtual bool operator==(const self& other) const {
+    mamba::builtins::details::Error() << "object equality";
+    return __Eq__(other);
+  }
+
+  virtual bool operator!=(const self& other) const {
+    mamba::builtins::details::Error() << "object inequality";
+    return !this->operator==(other);
+  }
 
   // For C++ code generation, facilitating the identity operator `is` like so:
   // ~a == ~b where a and b are objects, not values.
