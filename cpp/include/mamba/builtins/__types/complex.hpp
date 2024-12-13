@@ -5,7 +5,7 @@
 
 namespace mamba::builtins::details {
 
-struct Complex {
+struct Complex final {
  public:
   Int Real() const { return real_; }
   Int Imag() const { return imag_; }

@@ -13,15 +13,7 @@ concept FormattableObject = requires(const T t) {
 };
 
 template <typename T>
-concept RepresentableObject = requires(const T t) {
-  { t.__Repr__() } -> std::same_as<Str>;
-};
-
-template <typename T>
 concept Formattable = Value<T> || FormattableObject<T>;
-
-template <typename T>
-concept Representable = Value<T> || RepresentableObject<T>;
 
 }  // namespace mamba::builtins::details
 

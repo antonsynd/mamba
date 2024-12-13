@@ -32,6 +32,7 @@ class Object {
   virtual Bool __Bool__() const = 0;
 
   virtual Bool __Eq__(const self& other) const {
+    mamba::builtins::details::Error() << "object __eq__";
     return __Id__() == other.__Id__();
   }
 
@@ -87,7 +88,7 @@ class Str final : public Object {
   bool operator==(const std::string_view sv) const { return data_->s_ == sv; }
   bool operator!=(const std::string_view sv) const { return !(*this == sv); }
 
-  /// @brief C++ equality overload with other strings.
+  /// @brief C++ equality overload with other Mamba strings.
   bool operator==(const Str& other) const { return __Eq__(other); }
   bool operator!=(const Str& other) const { return !(*this == other); }
 

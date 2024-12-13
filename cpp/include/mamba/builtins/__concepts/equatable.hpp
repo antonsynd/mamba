@@ -8,17 +8,9 @@
 namespace mamba::builtins::details {
 
 template <typename T>
-concept EquatableObject = requires(const T lhs, const T& rhs) {
-  { lhs.__Eq__(rhs) } -> std::same_as<Bool>;
-};
-
-template <typename T>
 concept InequatableObject = requires(const T lhs, const T& rhs) {
   { lhs.__Ne__(rhs) } -> std::same_as<Bool>;
 };
-
-template <typename T>
-concept Equatable = Value<T> || EquatableObject<T>;
 
 template <typename T>
 concept Inequatable = Value<T> || InequatableObject<T>;

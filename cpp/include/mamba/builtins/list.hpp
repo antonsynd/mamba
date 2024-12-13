@@ -38,7 +38,7 @@ concept ListSortKey = requires(const F& key_func, Const<K> k) {
 }  // namespace details
 
 template <details::LessThanComparable T>
-class List : public details::Object {
+class List final : public details::Object {
  public:
   using value_type = T;
 
@@ -569,21 +569,10 @@ class List : public details::Object {
   /// false otherwise.
   /// @code list == other
   details::Bool __Eq__(const self& other) const {
-    if constexpr (details::Value<value_type>) {
-      // Value elements are checked for equality
-      return std::equal(data_->v_.begin(), data_->v_.end(),
-                        other.data_->v_.begin(), other.data_->v_.end(),
-                        [](const auto a, const auto b) { return a == b; });
-    } else if constexpr (details::EquatableObject<value_type>) {
-      return std::equal(data_->v_.begin(), data_->v_.end(),
-                        other.data_->v_.begin(), other.data_->v_.end(),
-                        [](const auto a, const auto b) { return a.__Eq__(b); });
-    } else {
-      return std::equal(
-          data_->v_.begin(), data_->v_.end(), other.data_->v_.begin(),
-          other.data_->v_.end(),
-          [](const auto a, const auto b) { return a.__Id__() == b.__Id__(); });
-    }
+    mamba::builtins::details::Error() << "list __eq__";
+    return std::equal(data_->v_.begin(), data_->v_.end(),
+                      other.data_->v_.begin(), other.data_->v_.end(),
+                      [](const auto a, const auto b) { return a == b; });
   }
 
   /// @brief Returns the string representation of the list.

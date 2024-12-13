@@ -8,9 +8,7 @@ bool operator<=(const T& lhs, const T& rhs) {
   return lhs.__Le__(rhs);
 }
 
-template <typename T>
-  requires mamba::builtins::details::LessThanComparableObject<T> &&
-           mamba::builtins::details::EquatableObject<T>
+template <mamba::builtins::details::LessThanComparableObject T>
 bool operator<=(const T& lhs, const T& rhs) {
   return lhs.__Lt__(rhs) || lhs.__Eq__(rhs);
 }

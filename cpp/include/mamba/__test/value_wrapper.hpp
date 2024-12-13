@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "mamba/builtins/__concepts/value.hpp"
+#include "mamba/builtins/__utils/log.hpp"
 #include "mamba/builtins/types.hpp"
 
 namespace mamba::__test {
@@ -54,6 +55,7 @@ struct Wrapper : public builtins::ObjectType {
   builtins::BoolType __Bool__() const override { return true; }
 
   builtins::BoolType __Eq__(const self& other) const {
+    builtins::details::Error() << "value wrapper __eq__";
     if constexpr (self::equality_method == EqualityMethod::kValueEquality) {
       return data_->v_ == other.data_->v_;
     } else {
@@ -69,8 +71,14 @@ struct Wrapper : public builtins::ObjectType {
   // definitions in operators.hpp, but because this class has multiple implicit
   // conversions (value_type, and bool), it's necessary to help the compiler
   // avoid the ambiguity.
-  bool operator==(const self& other) const { return __Eq__(other); }
-  bool operator!=(const self& other) const { return !(*this == other); }
+  bool operator==(const self& other) const {
+    builtins::details::Error() << "value wrapper ==";
+    return __Eq__(other);
+  }
+  bool operator!=(const self& other) const {
+    builtins::details::Error() << "value wrapper !=";
+    return !(*this == other);
+  }
   bool operator<(const self& other) const { return __Lt__(other); }
 
  private:
