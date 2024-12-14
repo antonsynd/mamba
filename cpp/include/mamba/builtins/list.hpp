@@ -240,13 +240,7 @@ class List final : public details::Object {
       throw ValueError("Min() arg is an empty sequence");
     }
 
-    // if constexpr (details::Value<value_type>) {
     return *std::min_element(data_->v_.cbegin(), data_->v_.cend());
-    // } else {
-    //   return *std::min_element(
-    //       data_->v_.cbegin(), data_->v_.cend(),
-    //       [](const auto a, const auto b) { return a < b; });
-    // }
   }
 
   /// @brief Returns the biggest element in the list. If the list is empty,
@@ -257,13 +251,7 @@ class List final : public details::Object {
       throw ValueError("Max() arg is an empty sequence");
     }
 
-    // if constexpr (details::Value<value_type>) {
     return *std::max_element(data_->v_.cbegin(), data_->v_.cend());
-    // } else {
-    //   return *std::max_element(
-    //       data_->v_.cbegin(), data_->v_.cend(),
-    //       [](const auto a, const auto b) { return a < *b; });
-    // }
   }
 
   /// @brief Returns the number of times @p elem is present in the list.
@@ -467,14 +455,7 @@ class List final : public details::Object {
       throw ValueError("List.Remove(x): x not in list");
     }
 
-    auto it = data_->v_.end();
-
-    // if constexpr (details::Value<value_type>) {
-    it = std::find(data_->v_.begin(), data_->v_.end(), elem);
-    // } else {
-    //   it = std::find_if(data_->v_.begin(), data_->v_.end(),
-    //                     [&elem](const auto v) { return elem == v; });
-    // }
+    auto it = std::find(data_->v_.begin(), data_->v_.end(), elem);
 
     if (it == data_->v_.end()) {
       throw ValueError("List.Remove(x): x not in list");

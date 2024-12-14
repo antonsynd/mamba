@@ -6,6 +6,7 @@
 
 #include "mamba/__test/value_wrapper.hpp"  // for IntWrapper, Wrapper, IntId...
 #include "mamba/builtins.hpp"              // for List, IntType, Len, Iterator
+#include "mamba/builtins/__memory/args.hpp"  // for Const
 
 namespace mamba::builtins::test {
 
@@ -2880,160 +2881,160 @@ TEST(List, ReprNotEmptyObject) {
             "]");
 }
 
-// TEST(List, Sort) {
-//   // If
-//   List<IntType> l = {7, 3, 1, 1, 5};
+TEST(List, Sort) {
+  // If
+  List<IntType> l = {7, 3, 1, 1, 5};
 
-//   // When
-//   l.Sort();
+  // When
+  l.Sort();
 
-//   // Then
-//   const auto actual = as_vector(l);
-//   const std::vector<IntType> expected = {1, 1, 3, 5, 7};
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<IntType> expected = {1, 1, 3, 5, 7};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, SortStableObject) {
-//   // If
-//   IntWrapper::ResetId();
+TEST(List, SortStableObject) {
+  // If
+  IntWrapper::ResetId();
 
-//   List<IntWrapper> l = {IntWrapper(7), IntWrapper(3), IntWrapper(1),
-//                         IntWrapper(1), IntWrapper(5)};
+  List<IntWrapper> l = {IntWrapper(7), IntWrapper(3), IntWrapper(1),
+                        IntWrapper(1), IntWrapper(5)};
 
-//   // When
-//   l.Sort();
+  // When
+  l.Sort();
 
-//   // Then
-//   const std::vector<IntType> expected_values = {1, 1, 3, 5, 7};
-//   const std::vector<size_t> expected_ids = {2, 3, 1, 4, 0};
+  // Then
+  const std::vector<IntType> expected_values = {1, 1, 3, 5, 7};
+  const std::vector<size_t> expected_ids = {2, 3, 1, 4, 0};
 
-//   const auto actual_values = as_vector<IntWrapper>(l);
-//   std::vector<size_t> actual_ids;
+  const auto actual_values = as_vector<IntWrapper>(l);
+  std::vector<size_t> actual_ids;
 
-//   for (const auto& elem : l) {
-//     actual_ids.emplace_back(elem.Id());
-//   }
+  for (const auto& elem : l) {
+    actual_ids.emplace_back(elem.Id());
+  }
 
-//   EXPECT_EQ(actual_values, expected_values);
-//   EXPECT_EQ(actual_ids, expected_ids);
-// }
+  EXPECT_EQ(actual_values, expected_values);
+  EXPECT_EQ(actual_ids, expected_ids);
+}
 
-// TEST(List, SortReverse) {
-//   // If
-//   List<IntType> l = {7, 3, 1, 1, 5};
+TEST(List, SortReverse) {
+  // If
+  List<IntType> l = {7, 3, 1, 1, 5};
 
-//   // When
-//   l.Sort(true);
+  // When
+  l.Sort(true);
 
-//   // Then
-//   const auto actual = as_vector(l);
-//   const std::vector<IntType> expected = {7, 5, 3, 1, 1};
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<IntType> expected = {7, 5, 3, 1, 1};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, SortReverseStableObject) {
-//   // If
-//   IntWrapper::ResetId();
+TEST(List, SortReverseStableObject) {
+  // If
+  IntWrapper::ResetId();
 
-//   List<IntWrapper> l = {IntWrapper(7), IntWrapper(3), IntWrapper(1),
-//                         IntWrapper(1), IntWrapper(5)};
+  List<IntWrapper> l = {IntWrapper(7), IntWrapper(3), IntWrapper(1),
+                        IntWrapper(1), IntWrapper(5)};
 
-//   // When
-//   l.Sort(true);
+  // When
+  l.Sort(true);
 
-//   // Then
-//   const std::vector<IntType> expected_values = {7, 5, 3, 1, 1};
-//   const std::vector<size_t> expected_ids = {0, 4, 1, 2, 3};
+  // Then
+  const std::vector<IntType> expected_values = {7, 5, 3, 1, 1};
+  const std::vector<size_t> expected_ids = {0, 4, 1, 2, 3};
 
-//   const auto actual_values = as_vector<IntWrapper>(l);
-//   std::vector<size_t> actual_ids;
+  const auto actual_values = as_vector<IntWrapper>(l);
+  std::vector<size_t> actual_ids;
 
-//   for (const auto& elem : l) {
-//     actual_ids.emplace_back(elem.Id());
-//   }
+  for (const auto& elem : l) {
+    actual_ids.emplace_back(elem.Id());
+  }
 
-//   EXPECT_EQ(actual_values, expected_values);
-//   EXPECT_EQ(actual_ids, expected_ids);
-// }
+  EXPECT_EQ(actual_values, expected_values);
+  EXPECT_EQ(actual_ids, expected_ids);
+}
 
-// TEST(List, SortWithKey) {
-//   // If
-//   List<IntType> l = {7, 3, 1, 1, 5};
+TEST(List, SortWithKey) {
+  // If
+  List<IntType> l = {7, 3, 1, 1, 5};
 
-//   // This effectively inverts the sort
-//   const auto key = [](const IntType i) -> FloatType {
-//     return 1.0 / static_cast<FloatType>(i);
-//   };
+  // This effectively inverts the sort
+  const auto key = [](const IntType i) -> FloatType {
+    return 1.0 / static_cast<FloatType>(i);
+  };
 
-//   // When
-//   l.Sort(key);
+  // When
+  l.Sort(key);
 
-//   // Then
-//   const auto actual = as_vector(l);
-//   const std::vector<IntType> expected = {7, 5, 3, 1, 1};
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<IntType> expected = {7, 5, 3, 1, 1};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, SortWithKeyObject) {
-//   // If
-//   List<IntWrapper> l = {IntWrapper(7), IntWrapper(3), IntWrapper(1),
-//                         IntWrapper(1), IntWrapper(5)};
+TEST(List, SortWithKeyObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper(7), IntWrapper(3), IntWrapper(1),
+                        IntWrapper(1), IntWrapper(5)};
 
-//   // This effectively inverts the sort
-//   const auto key = [](Const<IntWrapper> i) -> FloatType {
-//     return 1.0 / static_cast<FloatType>(i.Value());
-//   };
+  // This effectively inverts the sort
+  const auto key = [](details::Const<IntWrapper> i) -> FloatType {
+    return 1.0 / static_cast<FloatType>(i.Value());
+  };
 
-//   // When
-//   l.Sort(key);
+  // When
+  l.Sort(key);
 
-//   // Then
-//   const auto actual = as_vector<IntWrapper>(l);
-//   const std::vector<IntType> expected = {7, 5, 3, 1, 1};
+  // Then
+  const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {7, 5, 3, 1, 1};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, SortWithKeyAndReverse) {
-//   // If
-//   List<IntType> l = {7, 3, 1, 1, 5};
+TEST(List, SortWithKeyAndReverse) {
+  // If
+  List<IntType> l = {7, 3, 1, 1, 5};
 
-//   // This effectively inverts the sort, but the reverse reverses it again
-//   const auto key = [](const IntType i) -> FloatType {
-//     return 1.0 / static_cast<FloatType>(i);
-//   };
+  // This effectively inverts the sort, but the reverse reverses it again
+  const auto key = [](const IntType i) -> FloatType {
+    return 1.0 / static_cast<FloatType>(i);
+  };
 
-//   // When
-//   l.Sort(key, true);
+  // When
+  l.Sort(key, true);
 
-//   // Then
-//   const auto actual = as_vector(l);
-//   const std::vector<IntType> expected = {1, 1, 3, 5, 7};
+  // Then
+  const auto actual = as_vector(l);
+  const std::vector<IntType> expected = {1, 1, 3, 5, 7};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
-// TEST(List, SortWithKeyAndReverseObject) {
-//   // If
-//   List<IntWrapper> l = {IntWrapper(7), IntWrapper(3), IntWrapper(1),
-//                         IntWrapper(1), IntWrapper(5)};
+TEST(List, SortWithKeyAndReverseObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper(7), IntWrapper(3), IntWrapper(1),
+                        IntWrapper(1), IntWrapper(5)};
 
-//   // This effectively inverts the sort, but the reverse reverses it again
-//   const auto key = [](Const<IntWrapper> i) -> FloatType {
-//     return 1.0 / static_cast<FloatType>(i.Value());
-//   };
+  // This effectively inverts the sort, but the reverse reverses it again
+  const auto key = [](details::Const<IntWrapper> i) -> FloatType {
+    return 1.0 / static_cast<FloatType>(i.Value());
+  };
 
-//   // When
-//   l.Sort(key, true);
+  // When
+  l.Sort(key, true);
 
-//   // Then
-//   const auto actual = as_vector<IntWrapper>(l);
-//   const std::vector<IntType> expected = {1, 1, 3, 5, 7};
+  // Then
+  const auto actual = as_vector<IntWrapper>(l);
+  const std::vector<IntType> expected = {1, 1, 3, 5, 7};
 
-//   EXPECT_EQ(actual, expected);
-// }
+  EXPECT_EQ(actual, expected);
+}
 
 }  // namespace mamba::builtins::test
