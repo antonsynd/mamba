@@ -51,6 +51,8 @@ class List final : public details::Object {
 
   using iterator = storage::iterator;
   using const_iterator = storage::const_iterator;
+  using reverse_iterator = storage::reverse_iterator;
+  using const_reverse_iterator = storage::const_reverse_iterator;
 
   static constexpr auto kEndIndex = std::numeric_limits<details::Int>::min();
 
@@ -149,11 +151,14 @@ class List final : public details::Object {
   /// @brief Extends this list with the elements of @p other.
   /// @code list += other
   void operator+=(const self& other) { Extend(other); }
+  void __Iadd__(const self& other) { Extend(other); }
 
   /// @brief Concatenates this list with @p other returning the result as a new
   /// list.
   /// @code list + other
-  self operator+(const self& other) const {
+  self operator+(const self& other) const { return __Add__(other); }
+
+  self __Add__(const self& other) const {
     self res;
 
     res.Extend(*this);
@@ -164,7 +169,9 @@ class List final : public details::Object {
 
   /// @brief Returns a copy of this list with its elements repeated @p i times.
   /// @code list * i
-  self operator*(details::Int i) const {
+  self operator*(details::Int i) const { return __Mul__(i); }
+
+  self __Mul__(details::Int i) const {
     self res;
 
     if (i <= 0) {
@@ -182,7 +189,9 @@ class List final : public details::Object {
 
   /// @brief Repeats this list's elements @p i - 1 times.
   /// @code list *= i
-  void operator*=(details::Int i) {
+  void operator*=(details::Int i) { return __Rmul__(i); }
+
+  void __Rmul__(details::Int i) {
     if (i == 1) {
       return;
     } else if (i < 1) {
@@ -204,7 +213,7 @@ class List final : public details::Object {
   /// throws IndexError. @p idx supports negative indices counting from the
   /// last elements.
   /// @code list[idx] (= elem)
-  reference __GetItem__()(details::Int idx) {
+  reference __GetItem__(details::Int idx) {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -216,7 +225,7 @@ class List final : public details::Object {
 
   reference operator[](details::Int idx) { return __GetItem__(idx); }
 
-  const_reference __GetItem__()(details::Int idx) const {
+  const_reference __GetItem__(details::Int idx) const {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -833,12 +842,16 @@ class ListIterator : public Iterator<T> {
  public:
   using value_type = T;
   using iterator = List<value_type>::iterator;
+  using reverse_iterator = List<value_type>::reverse_iterator;
 
   /// @brief Mamba-specific
   using self = ListIterator<value_type>;
   using base = Iterator<value_type>;
 
   ListIterator(iterator it, iterator end)
+      : base(std::move(it), std::move(end)) {}
+
+  ListIterator(reverse_iterator it, reverse_iterator end)
       : base(std::move(it), std::move(end)) {}
 
   ~ListIterator() override = default;

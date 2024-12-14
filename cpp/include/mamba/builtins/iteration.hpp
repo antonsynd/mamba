@@ -112,6 +112,11 @@ concept IterableOf = requires(const T iterable) {
 template <typename T>
 concept Iterable = IterableOf<T, typename T::value_type>;
 
+template <typename T>
+concept Reversable = Iterable<T> && requires(T iterable) {
+  { iterable.__Reversed__() } -> IteratorOf<typename T::value_type>;
+};
+
 /// @brief Simple convenience alias.
 template <Iterable T>
 using IterableValueType = typename T::value_type;
@@ -130,6 +135,11 @@ typename T::value_type Next(T& it) {
 template <details::Iterable T>
 Iterator<typename T::value_type> Iter(const T& it) {
   return it.__Iter__();
+}
+
+template <details::Reversable T>
+Iterator<typename T::value_type> Reverse(const T& it) {
+  return it.__Reversed__();
 }
 
 namespace details {

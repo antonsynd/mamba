@@ -1387,6 +1387,61 @@ TEST(List, ReverseNonEmptyObject) {
   EXPECT_EQ(actual, expected);
 }
 
+TEST(List, ReversedEmpty) {
+  // If
+  List<IntType> l;
+
+  // When
+  auto reversed = Reverse(l);
+  const List<IntType> reversed_list(reversed);
+
+  // Then
+  EXPECT_EQ(Len(reversed_list), 0);
+}
+
+TEST(List, ReversedEmptyObject) {
+  // If
+  List<IntWrapper> l;
+
+  // When
+  auto reversed = Reverse(l);
+  const List<IntWrapper> reversed_list(reversed);
+
+  // Then
+  EXPECT_EQ(Len(reversed_list), 0);
+}
+
+TEST(List, ReversedNonEmpty) {
+  // If
+  List<IntType> l = {1, 3, 5, 7};
+
+  // When
+  auto reversed = Reverse(l);
+  const List<IntType> reversed_list(reversed);
+
+  // Then
+  const auto actual = as_vector(reversed_list);
+  const std::vector<IntType> expected = {7, 5, 3, 1};
+
+  EXPECT_EQ(actual, expected);
+}
+
+TEST(List, ReversedNonEmptyObject) {
+  // If
+  List<IntWrapper> l = {IntWrapper(1), IntWrapper(3), IntWrapper(5),
+                        IntWrapper(7)};
+
+  // When
+  auto reversed = Reverse(l);
+  const List<IntWrapper> reversed_list(reversed);
+
+  // Then
+  const auto actual = as_vector<IntWrapper>(reversed_list);
+  const std::vector<IntType> expected = {7, 5, 3, 1};
+
+  EXPECT_EQ(actual, expected);
+}
+
 TEST(List, BoolEmpty) {
   // If
   const List<IntType> l;
