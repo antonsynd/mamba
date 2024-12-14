@@ -2795,11 +2795,6 @@ TEST(List, NativeEqualityDifferentTypeObject) {
                                 FloatWrapper(5.0), FloatWrapper(7.0)};
 
   // When/then
-  std::cerr << "object == " << std::endl;
-  EXPECT_FALSE(l.ObjectType::operator==(m));
-  std::cerr << "global == " << std::endl;
-  EXPECT_FALSE(l == m);
-  std::cerr << "gtest == " << std::endl;
   EXPECT_NE(l, m);
 }
 

@@ -7,7 +7,6 @@
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/int.hpp"
-#include "mamba/builtins/__utils/log.hpp"
 
 namespace mamba::builtins::details {
 
@@ -32,27 +31,24 @@ class Object {
   virtual Bool __Bool__() const = 0;
 
   virtual Bool __Eq__(const self& other) const {
-    mamba::builtins::details::Error() << "object __eq__";
     return __Id__() == other.__Id__();
   }
 
   virtual BigInt __Id__() const = 0;
 
-  // For C++ implicit conversion to bool
-  virtual operator bool() const { return __Bool__(); }
+  /// @note For C++ conversion to bool
+  /// It needs to be explicit to avoid the C++ compiler from choosing to convert
+  /// to bool when doing equality checks.
+  virtual explicit operator bool() const { return __Bool__(); }
 
-  virtual bool operator==(const self& other) const {
-    mamba::builtins::details::Error() << "object equality";
-    return __Eq__(other);
-  }
-
+  virtual bool operator==(const self& other) const { return __Eq__(other); }
   virtual bool operator!=(const self& other) const {
-    mamba::builtins::details::Error() << "object inequality";
     return !this->operator==(other);
   }
 
-  // For C++ code generation, facilitating the identity operator `is` like so:
-  // ~a == ~b where a and b are objects, not values.
+  /// @note For C++ code generation, facilitating the identity operator `is`
+  /// like so:
+  /// ~a == ~b where a and b are objects, not values.
   virtual BigInt operator~() const { return __Id__(); }
 };
 
@@ -91,6 +87,11 @@ class Str final : public Object {
   /// @brief C++ equality overload with other Mamba strings.
   bool operator==(const Str& other) const { return __Eq__(other); }
   bool operator!=(const Str& other) const { return !(*this == other); }
+
+  // Bring in superclass member functions for which there are overloads here
+  using Object::operator==;
+  using Object::operator!=;
+  using Object::__Eq__;
 
  private:
   class Data {

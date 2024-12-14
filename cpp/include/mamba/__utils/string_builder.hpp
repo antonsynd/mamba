@@ -4,7 +4,8 @@
 #include <sstream>
 #include <string>
 
-namespace mamba::builtins::details {
+namespace mamba::__utils {
+namespace details {
 
 struct Flush {};
 
@@ -34,8 +35,12 @@ class StringBuilder {
   std::ostringstream oss_;
 };
 
-inline StringBuilder stringify() {
-  return StringBuilder();
+}  // namespace details
+
+using Flush = details::Flush;
+
+inline details::StringBuilder stringify() {
+  return details::StringBuilder();
 }
 
-}  // namespace mamba::builtins::details
+}  // namespace mamba::__utils

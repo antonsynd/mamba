@@ -8,6 +8,7 @@
 #include <memory>
 #include <optional>
 #include <sstream>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -17,7 +18,6 @@
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
-#include "mamba/builtins/__utils/log.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/operators.hpp"
@@ -225,15 +225,8 @@ class List final : public details::Object {
   }
 
   /// @brief C++ equality overload for comparison with other lists.
-  bool operator==(const self& other) const {
-    details::Error() << "list equality";
-    return __Eq__(other);
-  }
-
-  bool operator!=(const self& other) const {
-    details::Error() << "list inequality";
-    return !(*this == other);
-  }
+  bool operator==(const self& other) const { return __Eq__(other); }
+  bool operator!=(const self& other) const { return !(*this == other); }
 
   /// @brief Returns the number of elements in the list.
   /// @code len(list)
@@ -569,7 +562,6 @@ class List final : public details::Object {
   /// false otherwise.
   /// @code list == other
   details::Bool __Eq__(const self& other) const {
-    mamba::builtins::details::Error() << "list __eq__";
     return std::equal(data_->v_.begin(), data_->v_.end(),
                       other.data_->v_.begin(), other.data_->v_.end(),
                       [](const auto a, const auto b) { return a == b; });
@@ -586,10 +578,10 @@ class List final : public details::Object {
       const auto last = data_->v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << Str(data_->v_[i]) << ", ";
+        oss << static_cast<std::string>(Str(data_->v_[i])) << ", ";
       }
 
-      oss << Str(data_->v_[last]);
+      oss << static_cast<std::string>(Str(data_->v_[last]));
     }
 
     oss << "]";
@@ -608,10 +600,10 @@ class List final : public details::Object {
       const auto last = data_->v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << Repr(data_->v_[i]) << ", ";
+        oss << static_cast<std::string>(Repr(data_->v_[i])) << ", ";
       }
 
-      oss << Repr(data_->v_[last]);
+      oss << static_cast<std::string>(Repr(data_->v_[last]));
     }
 
     oss << "]";
@@ -622,6 +614,11 @@ class List final : public details::Object {
   details::BigInt __Id__() const override {
     return reinterpret_cast<details::BigInt>(data_.get());
   }
+
+  // Bring in superclass member functions for which there are overloads here
+  using Object::operator==;
+  using Object::operator!=;
+  using Object::__Eq__;
 
  private:
   size_t ClampIndex(details::Int idx) const {

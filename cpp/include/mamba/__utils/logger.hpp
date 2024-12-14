@@ -3,10 +3,9 @@
 #include <iostream>
 #include <ostream>
 
-#include "mamba/builtins/__utils/string_builder.hpp"
+#include "mamba/__utils/string_builder.hpp"
 
-namespace mamba::builtins::details {
-
+namespace mamba::__utils {
 namespace details {
 
 class StringBuilderWrapper {
@@ -22,7 +21,7 @@ class StringBuilderWrapper {
   StringBuilderWrapper& operator=(const StringBuilderWrapper&) = delete;
   StringBuilderWrapper& operator=(StringBuilderWrapper&&) = delete;
 
-  template <builtins::details::NotFlush T>
+  template <details::NotFlush T>
   StringBuilderWrapper& operator<<(const T& t) {
     builder_ << t;
     return *this;
@@ -30,25 +29,30 @@ class StringBuilderWrapper {
 
  private:
   std::ostream& stream_;
-  builtins::details::StringBuilder builder_;
+  details::StringBuilder builder_;
 };
 
 }  // namespace details
 
-inline details::StringBuilderWrapper Error() {
-  return details::StringBuilderWrapper(std::cerr);
-}
+struct Logger {
+ public:
+  Logger() = delete;
 
-inline details::StringBuilderWrapper Warning() {
-  return details::StringBuilderWrapper(std::cerr);
-}
+  inline static details::StringBuilderWrapper Error() {
+    return details::StringBuilderWrapper(std::cerr);
+  }
 
-inline details::StringBuilderWrapper Debug() {
-  return details::StringBuilderWrapper(std::cerr);
-}
+  inline static details::StringBuilderWrapper Warning() {
+    return details::StringBuilderWrapper(std::cerr);
+  }
 
-inline details::StringBuilderWrapper Info() {
-  return details::StringBuilderWrapper(std::cout);
-}
+  inline static details::StringBuilderWrapper Debug() {
+    return details::StringBuilderWrapper(std::cout);
+  }
 
-}  // namespace mamba::builtins::details
+  inline static details::StringBuilderWrapper Info() {
+    return details::StringBuilderWrapper(std::cout);
+  }
+};
+
+}  // namespace mamba::__utils
