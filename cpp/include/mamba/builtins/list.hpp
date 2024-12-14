@@ -204,7 +204,19 @@ class List final : public details::Object {
   /// throws IndexError. @p idx supports negative indices counting from the
   /// last elements.
   /// @code list[idx] (= elem)
-  reference operator[](details::Int idx) {
+  reference __GetItem__()(details::Int idx) {
+    const auto idx_opt = TryGetNormalizedIndex(idx);
+
+    if (!idx_opt) {
+      throw IndexError("list index out of range");
+    }
+
+    return data_->v_[*idx_opt];
+  }
+
+  reference operator[](details::Int idx) { return __GetItem__(idx); }
+
+  const_reference __GetItem__()(details::Int idx) const {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
@@ -215,13 +227,7 @@ class List final : public details::Object {
   }
 
   const_reference operator[](details::Int idx) const {
-    const auto idx_opt = TryGetNormalizedIndex(idx);
-
-    if (!idx_opt) {
-      throw IndexError("list index out of range");
-    }
-
-    return data_->v_[*idx_opt];
+    return __GetItem__(idx);
   }
 
   /// @brief C++ equality overload for comparison with other lists.
@@ -465,6 +471,7 @@ class List final : public details::Object {
   }
 
   /// @brief Reverse the list in place.
+  /// @deprecated Use list.__reversed__() instead.
   /// @code reverse(list)
   void Reverse() {
     if (data_->v_.empty()) {
@@ -472,6 +479,13 @@ class List final : public details::Object {
     }
 
     std::reverse(data_->v_.begin(), data_->v_.end());
+  }
+
+  /// @brief Creates a reversed iterator.
+  /// @code list.__reversed__()
+  details::ListIterator<value_type> __Reversed__() const {
+    return details::ListIterator<value_type>(data_->v_.rbegin(),
+                                             data_->v_.rend());
   }
 
   /// @brief Sorts the list in-place, with the order of equal-comparing

@@ -9,18 +9,23 @@
 #include <unordered_set>
 #include <utility>
 
+#include "mamba/builtins/__concepts/orderable.hpp"
+#include "mamba/builtins/__memory/args.hpp"
+#include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/int.hpp"
+#include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
+#include "mamba/builtins/operators.hpp"
 #include "mamba/builtins/repr.hpp"
 
 namespace mamba::builtins::details {
 namespace details {
 
 // Forward declaration
-template <__concepts::Entity T>
-class SetIteratorBase;
+template <typename T>
+class SetIterator;
 
 }  // namespace details
 
