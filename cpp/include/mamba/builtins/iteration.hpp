@@ -80,6 +80,9 @@ class Iterator : public details::Object {
   iterator begin() const { return iterator(*this); }
   iterator end() const { return iterator(*this, true); }
 
+  // Bring in superclass member functions for which there are overloads here
+  using details::Object::__Eq__;
+
  private:
   class Data {
    public:

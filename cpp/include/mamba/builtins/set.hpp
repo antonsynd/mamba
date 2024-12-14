@@ -9,23 +9,17 @@
 #include <unordered_set>
 #include <utility>
 
-#include "mamba/builtins/__types/int.hpp"
-#include "mamba/builtins/__types/str.hpp"
-#include "mamba/builtins/error.hpp"
-#include "mamba/builtins/iteration.hpp"
-#include "mamba/builtins/repr.hpp"
-
 namespace mamba::builtins {
 namespace details {
 
 // Forward declaration
-template <__concepts::Entity T>
+template <typename T>
 class SetIterator;
 
 }  // namespace details
 
-template <__concepts::Entity T>
-class Set : public std::enable_shared_from_this<Set<T>> {
+template <typename T>
+class Set : public details::MutableSet<T> {
  public:
   /// @note Mamba-specific
   using element = T;
@@ -378,7 +372,7 @@ class Set : public std::enable_shared_from_this<Set<T>> {
 
 namespace details {
 
-template <__concepts::Entity T>
+template <typename T>
 class SetIterator : public Iterator<T>,
                     public std::enable_shared_from_this<SetIterator<T>> {
  public:

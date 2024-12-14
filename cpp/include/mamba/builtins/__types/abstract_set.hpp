@@ -9,13 +9,8 @@
 #include <unordered_set>
 #include <utility>
 
-#include "mamba/__concepts/entity.hpp"
-#include "mamba/__memory/handle.hpp"
-#include "mamba/__memory/managed.hpp"
-#include "mamba/__memory/read_only.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/str.hpp"
-#include "mamba/builtins/as_str.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/repr.hpp"
@@ -31,7 +26,7 @@ class SetIteratorBase;
 
 /// Curiously recurring template
 template <__concepts::Entity T, typename Derived>
-class SetBase : public std::enable_shared_from_this<Derived<T>> {
+class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
  public:
   /// @note Mamba-specific
   using element = T;
@@ -53,14 +48,14 @@ class SetBase : public std::enable_shared_from_this<Derived<T>> {
 
   /// @brief Creates an empty set.
   /// @code set()
-  SetBase() {}
+  AbstractSet() {}
 
   /// @brief Creates a set from the elements in @p it. Value types
   /// are copied.
   /// @code set(Iterable)
   template <typename It>
     requires __concepts::TypedIterable<It, element>
-  explicit SetBase(It& iterable) {
+  explicit AbstractSet(It& iterable) {
     bool no_stop_iteration = true;
     auto it = iterable.Iter();
 
@@ -77,12 +72,12 @@ class SetBase : public std::enable_shared_from_this<Derived<T>> {
   /// @brief Creates a set with the provided variadic arguments.
   /// @code set(...)
   template <typename... Args>
-  SetBase(Args... rest) {
+  AbstractSet(Args... rest) {
     (Add(std::forward<Args>(rest)), ...);
   }
 
   /// @brief Creates a set from an initializer list.
-  SetBase(std::initializer_list<value_type> elements) {
+  AbstractSet(std::initializer_list<value_type> elements) {
     s_.reserve(elements.size());
 
     if constexpr (__memory::Handle<value_type>) {
@@ -321,7 +316,7 @@ class SetIteratorBase
   using element = T;
 
   using value_type = __memory::managed_t<element>;
-  using iterator = SetBase<element>::iterator;
+  using iterator = AbstractSet<element>::iterator;
 
   /// @brief Mamba-specific
   using self = SetIteratorBase<element>;

@@ -7,9 +7,9 @@
 namespace mamba::builtins::details {
 
 #if __cplusplus >= 202302L
-using Float = std::float32_t;
+using Double = std::float64_t;
 #else   // __cplusplus >= 202302L
-using Float = float;
+using Double = double;
 #endif  // __cplusplus >= 202302L
 
 }  // namespace mamba::builtins::details

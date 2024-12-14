@@ -3,14 +3,21 @@
 #include <concepts>
 
 #include "mamba/builtins/__concepts/value.hpp"
+#include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/bytes.hpp"
 #include "mamba/builtins/__types/complex.hpp"
+#include "mamba/builtins/__types/double.hpp"
 #include "mamba/builtins/__types/float.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/str.hpp"
 
 namespace mamba::builtins::details {
+
+template <typename T>
+concept BigIntConvertibleObject = requires(const T t) {
+  { t.__BigInt__() } -> std::same_as<BigInt>;
+};
 
 template <typename T>
 concept BoolConvertibleObject = requires(const T t) {
@@ -25,6 +32,11 @@ concept BytesConvertibleObject = requires(const T t) {
 template <typename T>
 concept ComplexConvertibleObject = requires(const T t) {
   { t.__Complex__() } -> std::same_as<Complex>;
+};
+
+template <typename T>
+concept DoubleConvertibleObject = requires(const T t) {
+  { t.__Double__() } -> std::same_as<Double>;
 };
 
 template <typename T>
@@ -43,6 +55,9 @@ concept StrConvertibleObject = requires(const T t) {
 };
 
 template <typename T>
+concept BigIntConvertible = Value<T> || BigIntConvertibleObject<T>;
+
+template <typename T>
 concept BoolConvertible = Value<T> || BoolConvertibleObject<T>;
 
 template <typename T>
@@ -50,6 +65,9 @@ concept BytesConvertible = Value<T> || BytesConvertibleObject<T>;
 
 template <typename T>
 concept ComplexConvertible = Value<T> || ComplexConvertibleObject<T>;
+
+template <typename T>
+concept DoubleConvertible = Value<T> || DoubleConvertibleObject<T>;
 
 template <typename T>
 concept FloatConvertible = Value<T> || FloatConvertibleObject<T>;
