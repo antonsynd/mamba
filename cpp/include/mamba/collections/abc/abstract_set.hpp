@@ -9,7 +9,9 @@
 #include <unordered_set>
 #include <utility>
 
+#include "mamba/builtins/__concepts/hashable.hpp"
 #include "mamba/builtins/__concepts/orderable.hpp"
+#include "mamba/builtins/__concepts/value.hpp"
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/int.hpp"
@@ -20,7 +22,7 @@
 #include "mamba/builtins/operators.hpp"
 #include "mamba/builtins/repr.hpp"
 
-namespace mamba::builtins::details {
+namespace mamba::collections::abc {
 namespace details {
 
 // Forward declaration
@@ -30,43 +32,38 @@ class SetIterator;
 }  // namespace details
 
 /// Curiously recurring template
-template <__concepts::Entity T, typename Derived>
-class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
+template <builtins::details::Hashable T>
+class AbstractSet : public details::Object {
  public:
-  /// @note Mamba-specific
-  using element = T;
+  using value_type = T;
 
-  using key_type = __memory::managed_t<element>;
-  using value_type = key_type;
+  /// @note Mamba-specific
+  using self = AbstractSet<value_type>;
+  using storage = std::unordered_set<value_type>;
+
+  using key_type = value_type;
   using reference = value_type&;
   using const_reference = const value_type&;
-
-  /// @note Mamba-specific
-  using storage = std::unordered_set<value_type>;
 
   using iterator = storage::iterator;
   using const_iterator = storage::const_iterator;
 
-  /// @note Mamba-specific
-  using self = Derived<element>;
-  using handle = __memory::handle_t<self>;
-
   /// @brief Creates an empty set.
   /// @code set()
-  AbstractSet() {}
+  AbstractSet() : data_(std::make_shared<Data>()) {}
 
   /// @brief Creates a set from the elements in @p it. Value types
   /// are copied.
   /// @code set(Iterable)
   template <typename It>
-    requires __concepts::TypedIterable<It, element>
-  explicit AbstractSet(It& iterable) {
+    requires builtins::details::IterableOf<It, value_type>
+  List(const It& iterable) : data_(std::make_shared<Data>()) {
     bool no_stop_iteration = true;
-    auto it = iterable.Iter();
+    auto it = iterable.__Iter__();
 
     while (no_stop_iteration) {
       try {
-        Add(Next(*it));
+        Add(it.__Next__());
       } catch (StopIteration) {
         no_stop_iteration = false;
         break;
@@ -74,30 +71,25 @@ class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
     }
   }
 
-  /// @brief Creates a set with the provided variadic arguments.
-  /// @code set(...)
-  template <typename... Args>
-  AbstractSet(Args... rest) {
-    (Add(std::forward<Args>(rest)), ...);
-  }
-
   /// @brief Creates a set from an initializer list.
+  /// @code {...}
   AbstractSet(std::initializer_list<value_type> elements) {
-    s_.reserve(elements.size());
+    data_->s_.reserve(elements.size());
 
-    if constexpr (__memory::Handle<value_type>) {
+    if constexpr (builtins::details::Value<value_type>) {
+      std::copy(elements.begin(), elements.end(),
+                std::back_inserter(data_->s_));
+    } else {
       std::copy(std::make_move_iterator(elements.begin()),
                 std::make_move_iterator(elements.end()),
-                std::back_inserter(s_));
-    } else {
-      std::copy(elements.begin(), elements.end(), std::back_inserter(s_));
+                std::back_inserter(data_->s_));
     }
   }
 
   /// @brief Returns whether @p elem is in the set. O(1).
   /// @code elem in set
   __types::Bool In(__memory::ReadOnly<element> elem) const {
-    return s_.count(elem);
+    return data_->s_.count(elem);
   }
 
   /// @brief Creates a shallow copy of the set.
@@ -109,11 +101,11 @@ class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
 
   /// @brief Returns the number of elements in the set.
   /// @code len(set)
-  __types::Int Len() const { return s_.size(); }
+  __types::Int Len() const { return data_->s_.size(); }
 
   /// @code set.isdisjoint(other)
   __types::Bool IsDisjoint(const handle& other) const {
-    return Intersection(other)->s_.empty();
+    return Intersection(other)->data_->s_.empty();
   }
 
   /// @code set.issubset(other)
@@ -169,19 +161,20 @@ class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
   /// @brief Returns an iterator to this set.
   /// @code set.__iter__()
   __memory::handle_t<Iterator<element>> Iter() {
-    return details::SetIteratorBase<element>::Init(s_.begin(), s_.end());
+    return details::SetIteratorBase<element>::Init(data_->s_.begin(),
+                                                   data_->s_.end());
   }
 
   /// @brief Native support for C++ for..in loops.
-  iterator begin() { return s_.begin(); }
-  iterator end() { return s_.end(); }
-  const_iterator begin() const { return s_.cbegin(); }
-  const_iterator end() const { return s_.cend(); }
-  const_iterator cbegin() const { return s_.cbegin(); }
-  const_iterator cend() const { return s_.cend(); }
+  iterator begin() { return data_->s_.begin(); }
+  iterator end() { return data_->s_.end(); }
+  const_iterator begin() const { return data_->s_.cbegin(); }
+  const_iterator end() const { return data_->s_.cend(); }
+  const_iterator cbegin() const { return data_->s_.cbegin(); }
+  const_iterator cend() const { return data_->s_.cend(); }
 
   /// @code bool(set)
-  __types::Bool AsBool() const { return !s_.empty(); }
+  __types::Bool AsBool() const { return !data_->s_.empty(); }
 
   /// @brief Implicit conversion to Bool (C++ bool) for conditionals.
   /// @code if set:
@@ -202,10 +195,11 @@ class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
   __types::Bool Eq(const self& other) const {
     if constexpr (__concepts::Object<element>) {
       return std::equal(
-          s_.begin(), s_.end(), other.s_.begin(), other.s_.end(),
+          data_->s_.begin(), data_->s_.end(), other.data_->s_.begin(),
+          other.data_->s_.end(),
           [](const auto a, const auto b) { return operators::Eq(*a, *b); });
     } else {
-      return s_ == other.s_;
+      return data_->s_ == other.data_->s_;
     }
   }
 
@@ -252,14 +246,14 @@ class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
 
     oss << prefix;
 
-    if (!s_.empty()) {
-      const auto last = s_.size() - 1;
+    if (!data_->s_.empty()) {
+      const auto last = data_->s_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << builtins::AsStr(s_[i]) << ", ";
+        oss << builtins::AsStr(data_->s_[i]) << ", ";
       }
 
-      oss << builtins::AsStr(s_[last]);
+      oss << builtins::AsStr(data_->s_[last]);
     }
 
     oss << suffix;
@@ -275,14 +269,14 @@ class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
 
     oss << prefix << "{";
 
-    if (!s_.empty()) {
-      const auto last = s_.size() - 1;
+    if (!data_->s_.empty()) {
+      const auto last = data_->s_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << builtins::Repr(s_[i]) << ", ";
+        oss << builtins::Repr(data_->s_[i]) << ", ";
       }
 
-      oss << builtins::Repr(s_[last]);
+      oss << builtins::Repr(data_->s_[last]);
     }
 
     oss << "}" << suffix;
@@ -291,31 +285,34 @@ class AbstractSet : public std::enable_shared_from_this<Derived<T>> {
   }
 
   std::optional<iterator> TryFind(__memory::ReadOnly<element> elem) {
-    if (s_.empty()) {
+    if (data_->s_.empty()) {
       return std::nullopt;
     }
 
-    auto it = s_.end();
+    auto it = data_->s_.end();
 
     if constexpr (__concepts::Object<element>) {
-      it = std::find_if(s_.begin(), s_.end(),
+      it = std::find_if(data_->s_.begin(), data_->s_.end(),
                         [&elem](const auto v) { return elem == v; });
     } else {
-      it = std::find(s_.begin(), s_.end(), elem);
+      it = std::find(data_->s_.begin(), data_->s_.end(), elem);
     }
 
     return it;
   }
 
-  storage s_;
+  class Data {
+   public:
+    storage data_->s_;
+  };
+
+  std::shared_ptr<Data> data_;
 };
 
 namespace details {
 
-template <__concepts::Entity T>
-class SetIteratorBase
-    : public Iterator<T>,
-      public std::enable_shared_from_this<SetIteratorBase<T>> {
+template <typename T>
+class SetIteratorBase : public Iterator<T> {
  public:
   /// @brief Mamba-specific
   using element = T;
@@ -370,5 +367,4 @@ class SetIteratorBase
 
 }  // namespace details
 
-}  // namespace mamba::builtins::details
-// IWYU pragma: private
+}  // namespace mamba::collections::abc
