@@ -8,6 +8,7 @@
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/int.hpp"
+#include "mamba/builtins/__types/traits.hpp"
 
 namespace mamba::builtins::details {
 
@@ -26,16 +27,9 @@ class Object {
 
   /// @note Mamba-specific, to emit class name in default implementations of
   /// __Str__() and __Repr__()
-  virtual Str __Name__() const { return "Object"; }
-
-  virtual Str __Repr__() const {
-    std::ostringstream oss;
-
-    oss << "<" << __Name__() << " object at " << __utils::print_hex(__Id__())
-        << ">";
-
-    return oss.str();
-  }
+  // NOTE: Implemented below
+  virtual Str __Name__() const;
+  virtual Str __Repr__() const;
 
   // NOTE: Implemented below
   virtual Str __Str__() const;
@@ -119,14 +113,37 @@ class Str final : public Object {
   std::shared_ptr<Data> data_;
 };
 
+inline std::ostream& operator<<(std::ostream& oss, const Str& s) {
+  oss << static_cast<std::string>(s);
+  return oss;
+}
+
+inline Str Object::__Name__() const {
+  return "object";
+}
+
+inline Str Object::__Repr__() const {
+  std::ostringstream oss;
+
+  oss << "<" << __Name__() << " object at " << __utils::print_hex(__Id__())
+      << ">";
+
+  return oss.str();
+}
+
 inline Str Object::__Str__() const {
   return __Repr__();
 }
 
-std::ostream& operator<<(std::ostream& oss, const Str& s) {
-  oss << static_cast<std::string>(s);
-  return oss;
-}
+template <>
+struct Traits<Object> {
+  static constexpr std::string_view kName = "object";
+};
+
+template <>
+struct Traits<Str> {
+  static constexpr std::string_view kName = "str";
+};
 
 }  // namespace mamba::builtins::details
 

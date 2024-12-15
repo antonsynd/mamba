@@ -1,10 +1,12 @@
 #pragma once
 
 #include <cmath>
+#include <string_view>
 
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/double.hpp"
 #include "mamba/builtins/__types/str.hpp"
+#include "mamba/builtins/__types/traits.hpp"
 
 namespace mamba::builtins::details {
 
@@ -47,6 +49,11 @@ struct Complex final {
  private:
   Double real_;
   Double imag_;
+};
+
+template <>
+struct Traits<Complex> {
+  static constexpr std::string_view kName = "complex";
 };
 
 }  // namespace mamba::builtins::details

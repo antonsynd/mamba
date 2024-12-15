@@ -1,9 +1,11 @@
 #pragma once
 
 #include <optional>
+#include <string_view>
 #include <type_traits>
 
 #include "mamba/builtins/__types/big_int.hpp"
+#include "mamba/builtins/__types/traits.hpp"
 
 namespace mamba::builtins::details {
 
@@ -40,6 +42,11 @@ struct None {
 
 /// @brief Constant.
 constexpr None kNone;
+
+template <>
+struct Traits<None> {
+  static constexpr std::string_view kName = "None";
+};
 
 }  // namespace mamba::builtins::details
 

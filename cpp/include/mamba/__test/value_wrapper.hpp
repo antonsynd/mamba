@@ -1,12 +1,16 @@
 #pragma once
 
 #include <memory>
+#include <sstream>
+#include <string_view>
 #include <utility>
 
 #include "mamba/builtins/__concepts/value.hpp"
+#include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/types.hpp"
 
-namespace mamba::__test {
+namespace mamba {
+namespace __test {
 
 enum class EqualityMethod : int {
   kValueEquality = 0,
@@ -65,6 +69,14 @@ struct Wrapper : public builtins::ObjectType {
     return data_->v_ < other.data_->v_;
   }
 
+  builtins::StrType __Name__() const override {
+    std::ostringstream oss;
+
+    oss << "Wrapper[" << builtins::details::Traits<value_type>::kName << "]";
+
+    return oss.str();
+  }
+
   // Normally, these shouldn't be needed because of the global operator
   // definitions in operators.hpp, but because this class has multiple implicit
   // conversions (value_type, and bool), it's necessary to help the compiler
@@ -99,4 +111,15 @@ using FloatWrapper = Wrapper<builtins::FloatType>;
 using IntIdentityWrapper = IdentityWrapper<builtins::IntType>;
 using FloatIdentityWrapper = IdentityWrapper<builtins::FloatType>;
 
-}  // namespace mamba::__test
+}  // namespace __test
+
+namespace builtins::details {
+
+template <typename T, __test::EqualityMethod EM>
+struct Traits<__test::Wrapper<T, EM>> {
+  static constexpr std::string_view kName = "Wrapper";
+};
+
+}  // namespace builtins::details
+
+}  // namespace mamba

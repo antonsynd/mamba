@@ -4,10 +4,13 @@
 #include <iterator>
 #include <memory>
 #include <optional>
+#include <sstream>
+#include <string_view>
 #include <type_traits>
 
 #include "mamba/builtins/__concepts/subclass.hpp"
 #include "mamba/builtins/__types/object.hpp"
+#include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/error.hpp"
 
 namespace mamba::builtins {
@@ -58,8 +61,6 @@ class Iterator : public details::Object {
 
   virtual ~Iterator() = default;
 
-  virtual details::Str __Repr__() const override { return "Iterator"; }
-
   virtual self __Iter__() const { return *this; }
 
   virtual value_type __Next__() { return data_->next_func_(); }
@@ -74,6 +75,14 @@ class Iterator : public details::Object {
   /// @code iterator == other
   virtual details::Bool __Eq__(const self& other) const {
     return __Id__() == other.__Id__();
+  }
+
+  details::Str __Name__() const override {
+    std::ostringstream oss;
+
+    oss << "Iterator[" << details::Traits<value_type>::kName << "]";
+
+    return oss.str();
   }
 
   // Native C++ iteration support
@@ -93,6 +102,11 @@ class Iterator : public details::Object {
 };
 
 namespace details {
+
+template <typename T>
+struct Traits<Iterator<T>> {
+  static constexpr std::string_view kName = "Iterator";
+};
 
 template <typename T>
 concept IsIterator = requires(const T t) {

@@ -6,23 +6,25 @@
 #include <memory>
 #include <optional>
 #include <sstream>
+#include <string_view>
 #include <unordered_set>
 #include <utility>
 
 #include "mamba/builtins/__concepts/hashable.hpp"
-#include "mamba/builtins/__concepts/orderable.hpp"
 #include "mamba/builtins/__concepts/value.hpp"
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
+#include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/operators.hpp"
 #include "mamba/builtins/repr.hpp"
 
-namespace mamba::collections::abc {
+namespace mamba {
+namespace collections::abc {
 namespace details {
 
 // Forward declaration
@@ -93,9 +95,18 @@ class AbstractSet : public details::Object {
     return data_->s_.count(elem);
   }
 
+  Str __Name__() const override {
+    std::ostringstream oss;
+
+    oss << "AbstractSet[" << builtins::details::Traits<value_type>::kName
+        << "]";
+
+    return oss.str();
+  }
+
   /// @brief Creates a shallow copy of the set.
   /// @code set.copy()
-  handle Copy() const {
+  self Copy() const {
     // TODO: It's actually a problem you cannot pass a List to itself without
     // invoking the C++ copy constructor. Might need to think about this.
     return self(this->__Iter__());
@@ -120,7 +131,9 @@ class AbstractSet : public details::Object {
   /// @code set.issubset(other)
   template <typename It>
     requires builtins::details::IterableOf<It, value_type>
-  builtins::details::Bool IsSubset(It& other) const {}
+  builtins::details::Bool IsSubset(It& other) const {
+    return false;
+  }
 
   /// @code set.__lteq__(other)
   builtins::details::Bool __LtEq__(const self& other) const {
@@ -159,21 +172,21 @@ class AbstractSet : public details::Object {
   /// @code set > other
   bool operator>(void other) const { return Gt(other); }
 
-  handle Union(void other) const {}
-  handle operator|(void other) const { return Union(other); }
+  self Union(void other) const {}
+  self operator|(void other) const { return Union(other); }
 
-  handle Intersection(void other) const {}
-  handle operator&(void other) const { return Intersection(other); }
+  self Intersection(void other) const {}
+  self operator&(void other) const { return Intersection(other); }
 
-  handle Difference(void other) const {}
-  handle operator-(void other) const { return Difference(other); }
+  self Difference(void other) const {}
+  self operator-(void other) const { return Difference(other); }
 
-  handle SymmetricDifference(void other) const {}
-  handle operator^(void other) const { return SymmetricDifference(other); }
+  self SymmetricDifference(void other) const {}
+  self operator^(void other) const { return SymmetricDifference(other); }
 
   /// @brief Returns an iterator to this set.
   /// @code set.__iter__()
-  __memory::handle_t<Iterator<value_type>> Iter() {
+  Iterator<value_type> Iter() {
     return details::SetIteratorBase<value_type>(data_->s_.begin(),
                                                 data_->s_.end());
   }
@@ -266,7 +279,8 @@ class AbstractSet : public details::Object {
     return oss.str();
   }
 
-  std::optional<iterator> TryFind(builtins::details::Const<value_type> elem) {
+  std::optional<iterator> TryFind(
+      builtins::details::Const<value_type> elem) const {
     if (data_->s_.empty()) {
       return std::nullopt;
     }
@@ -275,6 +289,9 @@ class AbstractSet : public details::Object {
                         [&elem](const auto v) { return elem == v; });
   }
 
+  std::shared_ptr<Data> Data_() { return data_; }
+
+ private:
   class Data {
    public:
     storage data_->s_;
@@ -283,22 +300,33 @@ class AbstractSet : public details::Object {
   std::shared_ptr<Data> data_;
 };
 
-namespace details {
+}  // namespace collections::abc
+
+namespace builtins::details {
 
 template <typename T>
-class SetIteratorBase : public Iterator<T> {
+struct Traits<collections::abc::AbstractSet<T>> {
+  static constexpr std::string_view kName = "AbstractSet";
+};
+
+}  // namespace builtins::details
+
+namespace collections::abc::details {
+
+template <typename T>
+class SetIterator : public Iterator<T> {
  public:
   using value_type = T;
   using iterator = AbstractSet<value_type>::iterator;
 
   /// @brief Mamba-specific
-  using self = SetIteratorBase<value_type>;
+  using self = SetIterator<value_type>;
   using base = Iterator<value_type>;
 
-  SetIteratorBase(iterator it, iterator end)
+  SetIterator(iterator it, iterator end)
       : base(std::move(it), std::move(end)) {}
 
-  ~SetIteratorBase() override = default;
+  ~SetIterator() override = default;
 
   /// @brief Generic constructor forwarding arguments to actual constructor
   /// methods.
@@ -309,11 +337,23 @@ class SetIteratorBase : public Iterator<T> {
   }
 
   Str __Name__() const override {
-    // TODO: Need traits from set
-    return "SetIterator";
+    std::ostringstream oss;
+
+    oss << "SetIterator[" << builtins::details::Traits<value_type>::kName
+        << "]";
+
+    return oss.str();
   }
 };
 
-}  // namespace details
+}  // namespace collections::abc::details
 
-}  // namespace mamba::collections::abc
+namespace builtins::details {
+
+template <typename T>
+struct Traits<collections::abc::details::SetIterator<T>> {
+  static constexpr std::string_view kName = "SetIterator";
+};
+
+}  // namespace builtins::details
+}  // namespace mamba

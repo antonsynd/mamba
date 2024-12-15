@@ -1,10 +1,18 @@
 #pragma once
 
 #include <cstdint>
+#include <string_view>
+
+#include "mamba/builtins/__types/traits.hpp"
 
 namespace mamba::builtins::details {
 
 using BigInt = std::int_least64_t;
+
+template <>
+struct Traits<BigInt> {
+  static constexpr std::string_view kName = "bigint";
+};
 
 }  // namespace mamba::builtins::details
 

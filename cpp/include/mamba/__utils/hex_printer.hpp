@@ -18,7 +18,7 @@ struct HexPrinter {
   builtins::details::BigInt i_;
 };
 
-std::ostream& operator<<(std::ostream& oss, const HexPrinter& hp) {
+inline std::ostream& operator<<(std::ostream& oss, const HexPrinter& hp) {
   oss << std::hex << std::setfill('0') << std::setw(16) << hp.Value()
       << std::dec;
 
@@ -27,7 +27,7 @@ std::ostream& operator<<(std::ostream& oss, const HexPrinter& hp) {
 
 }  // namespace details
 
-details::HexPrinter print_hex(builtins::details::BigInt i) {
+inline details::HexPrinter print_hex(builtins::details::BigInt i) {
   return details::HexPrinter(i);
 }
 

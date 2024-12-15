@@ -573,9 +573,12 @@ class List final : public details::Object {
                       [](const auto a, const auto b) { return a == b; });
   }
 
-  Str __Name__() const override {
-    // TODO: Need traits
-    return "list";
+  details::Str __Name__() const override {
+    std::ostringstream oss;
+
+    oss << "list[" << details::Traits<value_type>::kName << "]";
+
+    return oss.str();
   }
 
   /// @brief Returns the string representation of the list.
@@ -845,6 +848,11 @@ class List final : public details::Object {
 namespace details {
 
 template <typename T>
+struct Traits<List<T>> {
+  static constexpr std::string_view kName = "list";
+};
+
+template <typename T>
 class ListIterator : public Iterator<T> {
  public:
   using value_type = T;
@@ -872,9 +880,17 @@ class ListIterator : public Iterator<T> {
   }
 
   Str __Name__() const override {
-    // TODO: Need traits from list
-    return "ListIterator";
+    std::ostringstream oss;
+
+    oss << "ListIterator[" << details::Traits<value_type>::kName << "]";
+
+    return oss.str();
   }
+};
+
+template <typename T>
+struct Traits<ListIterator<T>> {
+  static constexpr std::string_view kName = "ListIterator";
 };
 
 }  // namespace details
