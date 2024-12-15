@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <concepts>
 #include <initializer_list>
+#include <iomanip>
 #include <iterator>
 #include <limits>
 #include <memory>
@@ -12,6 +13,7 @@
 #include <utility>
 #include <vector>
 
+#include "mamba/__utils/hex_printer.hpp"
 #include "mamba/builtins/__concepts/orderable.hpp"
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/big_int.hpp"
@@ -571,6 +573,11 @@ class List final : public details::Object {
                       [](const auto a, const auto b) { return a == b; });
   }
 
+  Str __Name__() const override {
+    // TODO: Need traits
+    return "list";
+  }
+
   /// @brief Returns the string representation of the list.
   /// @code str(list)
   details::Str __Str__() const override {
@@ -864,7 +871,10 @@ class ListIterator : public Iterator<T> {
     return self(std::forward<Args>(args)...);
   }
 
-  Str __Repr__() const override { return "ListIterator"; }
+  Str __Name__() const override {
+    // TODO: Need traits from list
+    return "ListIterator";
+  }
 };
 
 }  // namespace details

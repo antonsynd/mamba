@@ -31,6 +31,8 @@ class StringBuilder {
     return *this;
   }
 
+  operator std::string() const { return oss_.str(); }
+
  private:
   std::ostringstream oss_;
 };

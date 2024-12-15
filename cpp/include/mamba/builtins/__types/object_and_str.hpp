@@ -4,6 +4,7 @@
 #include <string>
 #include <string_view>
 
+#include "mamba/__utils/hex_printer.hpp"
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/int.hpp"
@@ -23,7 +24,18 @@ class Object {
 
   virtual ~Object() = default;
 
-  virtual Str __Repr__() const = 0;
+  /// @note Mamba-specific, to emit class name in default implementations of
+  /// __Str__() and __Repr__()
+  virtual Str __Name__() const { return "Object"; }
+
+  virtual Str __Repr__() const {
+    std::ostringstream oss;
+
+    oss << "<" << __Name__() << " object at " << __utils::print_hex(__Id__())
+        << ">";
+
+    return oss.str();
+  }
 
   // NOTE: Implemented below
   virtual Str __Str__() const;
@@ -61,6 +73,8 @@ class Str final : public Object {
   Str(std::string s) : data_(std::make_shared<Data>(std::move(s))) {}
 
   operator std::string() const { return data_->s_; }
+
+  Str __Name__() const override { return "string"; }
 
   BigInt __Id__() const override {
     return reinterpret_cast<BigInt>(data_.get());
@@ -107,6 +121,11 @@ class Str final : public Object {
 
 inline Str Object::__Str__() const {
   return __Repr__();
+}
+
+std::ostream& operator<<(std::ostream& oss, const Str& s) {
+  oss << static_cast<std::string>(s);
+  return oss;
 }
 
 }  // namespace mamba::builtins::details
