@@ -109,9 +109,8 @@ struct Traits<Iterator<T>> {
 };
 
 template <typename T>
-concept IsIterator = requires(const T t) {
-  { T::value_type };
-} && SubclassOf<T, Iterator<typename T::value_type>>;
+concept IsIterator = requires { typename T::value_type; } &&
+                     SubclassOf<T, Iterator<typename T::value_type>>;
 
 template <typename T, typename U>
 concept IteratorOf = IsIterator<T> || requires(T iterator) {

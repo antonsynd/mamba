@@ -5,8 +5,9 @@
 
 namespace mamba::builtins::details {
 
-template <typename T, typename U>
-concept SubclassOf = std::same_as<T, U> || std::is_base_of_v<T, U>;
+template <typename Derived, typename Base>
+concept SubclassOf =
+    std::same_as<Derived, Base> || std::is_base_of_v<Base, Derived>;
 
 }  // namespace mamba::builtins::details
 

@@ -1,6 +1,7 @@
-#include <cstddef>  // for size_t
-#include <string>   // for basic_string, string
-#include <vector>   // for vector
+#include <cstddef>      // for size_t
+#include <string>       // for basic_string, string
+#include <type_traits>  // for invoke_result_t
+#include <vector>       // for vector
 
 #include "gtest/gtest.h"  // for Test, Message, TestPartResult
 
@@ -27,14 +28,48 @@ std::vector<IntType> as_vector(const List<T>& l) {
 
 }  // anonymous namespace
 
+TEST(List, ValueListIsIterable) {
+  // If/when/then
+  static_assert(details::Iterable<List<IntType>>);
+  static_assert(details::IterableOf<List<IntType>, IntType>);
+}
+
+TEST(List, ObjectListIsIterable) {
+  // If/when/then
+  static_assert(details::Iterable<List<IntWrapper>>);
+  static_assert(details::IterableOf<List<IntWrapper>, IntWrapper>);
+}
+
 TEST(List, ValueListIsSequence) {
   // If/when/then
   static_assert(details::Sequence<List<IntType>>);
+  static_assert(details::SequenceOf<List<IntType>, IntType>);
 }
 
 TEST(List, ObjectListIsSequence) {
   // If/when/then
   static_assert(details::Sequence<List<IntWrapper>>);
+  static_assert(details::SequenceOf<List<IntWrapper>, IntWrapper>);
+}
+
+TEST(List, ValueListIterIsIteratorAndIterable) {
+  // If/when/then
+  using iter_t =
+      std::invoke_result_t<decltype(&List<IntType>::__Iter__), List<IntType>>;
+  static_assert(details::Iterable<iter_t>);
+  static_assert(details::IsIterator<iter_t>);
+  static_assert(details::IteratorOf<iter_t, IntWrapper>);
+  static_assert(details::IterableOf<iter_t, IntType>);
+}
+
+TEST(List, ObjectListIterIsIteratorAndIterable) {
+  // If/when/then
+  using iter_t = std::invoke_result_t<decltype(&List<IntWrapper>::__Iter__),
+                                      List<IntWrapper>>;
+  static_assert(details::Iterable<iter_t>);
+  static_assert(details::IsIterator<iter_t>);
+  static_assert(details::IteratorOf<iter_t, IntWrapper>);
+  static_assert(details::IterableOf<iter_t, IntWrapper>);
 }
 
 TEST(List, EmptyConstructor) {
