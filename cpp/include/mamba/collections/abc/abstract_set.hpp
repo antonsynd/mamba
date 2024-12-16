@@ -60,16 +60,8 @@ class AbstractSet : public details::Object {
   template <typename It>
     requires builtins::details::IterableOf<It, value_type>
   List(const It& iterable) : data_(std::make_shared<Data>()) {
-    bool no_stop_iteration = true;
-    auto it = iterable.__Iter__();
-
-    while (no_stop_iteration) {
-      try {
-        Add(it.__Next__());
-      } catch (StopIteration) {
-        no_stop_iteration = false;
-        break;
-      }
+    for (auto elem : iterable.__Iter__()) {
+      Add(elem);
     }
   }
 
@@ -167,22 +159,30 @@ class AbstractSet : public details::Object {
   }
 
   /// @code set >= other
-  bool operator>=(void other) const { return GtEq(other); }
+  bool operator>=(const self& other) const { return GtEq(other); }
 
   /// @code set > other
-  bool operator>(void other) const { return Gt(other); }
+  bool operator>(const self& other) const { return Gt(other); }
 
   self Union(void other) const {}
-  self operator|(void other) const { return Union(other); }
+  self operator|(const self& other) const { return Union(other); }
 
-  self Intersection(void other) const {}
-  self operator&(void other) const { return Intersection(other); }
+  template <typename It>
+    requires builtins::details::IterableOf<It, value_type>
+  self Intersection(const It& other) const {
+    self res;
+    auto it = other.__Iter__();
+
+    return res;
+  }
+
+  self operator&(const self& other) const { return Intersection(other); }
 
   self Difference(void other) const {}
-  self operator-(void other) const { return Difference(other); }
+  self operator-(const self& other) const { return Difference(other); }
 
   self SymmetricDifference(void other) const {}
-  self operator^(void other) const { return SymmetricDifference(other); }
+  self operator^(const self& other) const { return SymmetricDifference(other); }
 
   /// @brief Returns an iterator to this set.
   /// @code set.__iter__()

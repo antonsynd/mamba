@@ -172,7 +172,9 @@ class IteratorFacade : public std::input_iterator_tag {
   /// of @p it is shared with the original by virtue of being a shallow copy.
   explicit IteratorFacade(iterator it, bool at_end = false)
       : it_(it), current_value_(std::nullopt) {
-    UncheckedAdvance();
+    if (!at_end) {
+      UncheckedAdvance();
+    }
   }
 
   /// @note Only pre-increment is supported. Post-increment requires
@@ -182,8 +184,15 @@ class IteratorFacade : public std::input_iterator_tag {
     return *this;
   }
 
+  self operator++(int) {
+    auto res = *this;
+    ++(*this);
+
+    return res;
+  }
+
   value_type operator*() {
-    if (current_value_) {
+    if (!current_value_) {
       throw ValueError(
           "Mamba-internal error: Cannot dereference an iterator that has "
           "already thrown StopIterator.");

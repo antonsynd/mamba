@@ -68,16 +68,8 @@ class List final : public details::Object {
   template <typename It>
     requires details::IterableOf<It, value_type>
   List(const It& iterable) : data_(std::make_shared<Data>()) {
-    bool no_stop_iteration = true;
-    auto it = iterable.__Iter__();
-
-    while (no_stop_iteration) {
-      try {
-        Append(it.__Next__());
-      } catch (StopIteration) {
-        no_stop_iteration = false;
-        break;
-      }
+    for (auto elem : iterable.__Iter__()) {
+      Append(elem);
     }
   }
 
