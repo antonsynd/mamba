@@ -2676,7 +2676,7 @@ TEST(List, IteratorIteration) {
   // When
   std::vector<IntType> actual;
 
-  for (const auto elem : l) {
+  for (const auto elem : it) {
     actual.emplace_back(elem);
   }
 
@@ -2694,7 +2694,7 @@ TEST(List, IteratorIterationObject) {
   // When
   std::vector<IntType> actual;
 
-  for (const auto elem : l) {
+  for (const auto elem : it) {
     actual.emplace_back(elem.Value());
   }
 
