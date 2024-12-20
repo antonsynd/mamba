@@ -10,10 +10,8 @@ namespace details {
 
 class StringBuilderWrapper {
  public:
-  StringBuilderWrapper(std::ostream& stream)
-      : stream_(stream), builder_(stringify()) {}
-
-  ~StringBuilderWrapper() { stream_ << (builder_ << "\n" << Flush()); }
+  StringBuilderWrapper(std::ostream& stream);
+  ~StringBuilderWrapper();
 
   StringBuilderWrapper(const StringBuilderWrapper&) = delete;
   StringBuilderWrapper(StringBuilderWrapper&&) = delete;
@@ -38,21 +36,10 @@ struct Logger {
  public:
   Logger() = delete;
 
-  inline static details::StringBuilderWrapper Error() {
-    return details::StringBuilderWrapper(std::cerr);
-  }
-
-  inline static details::StringBuilderWrapper Warning() {
-    return details::StringBuilderWrapper(std::cerr);
-  }
-
-  inline static details::StringBuilderWrapper Debug() {
-    return details::StringBuilderWrapper(std::cout);
-  }
-
-  inline static details::StringBuilderWrapper Info() {
-    return details::StringBuilderWrapper(std::cout);
-  }
+  static details::StringBuilderWrapper Error();
+  static details::StringBuilderWrapper Warning();
+  static details::StringBuilderWrapper Debug();
+  static details::StringBuilderWrapper Info();
 };
 
 }  // namespace mamba::__utils

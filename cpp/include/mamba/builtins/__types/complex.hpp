@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <sstream>
 #include <string_view>
 
 #include "mamba/builtins/__types/bool.hpp"

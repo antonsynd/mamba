@@ -16,13 +16,7 @@ class StringBuilder {
  public:
   using self = StringBuilder;
 
-  std::string operator<<(const Flush&) {
-    auto res = oss_.str();
-
-    oss_.clear();
-
-    return res;
-  }
+  std::string operator<<(const Flush&);
 
   template <NotFlush T>
   self& operator<<(const T& t) {
@@ -31,7 +25,7 @@ class StringBuilder {
     return *this;
   }
 
-  operator std::string() const { return oss_.str(); }
+  operator std::string() const;
 
  private:
   std::ostringstream oss_;
@@ -41,8 +35,6 @@ class StringBuilder {
 
 using Flush = details::Flush;
 
-inline details::StringBuilder stringify() {
-  return details::StringBuilder();
-}
+details::StringBuilder stringify();
 
 }  // namespace mamba::__utils
