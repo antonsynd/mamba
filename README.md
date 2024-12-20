@@ -31,15 +31,3 @@ but right now, for best results, use `clang`.
 ```sh
 chiri pkg release
 ```
-
-## Statically-typed subset of Python
-
-| Feature | Supported? | Notes |
-| --- | --- | --- |
-| `dict[K, V]` | TODO | All keys must be of the same type `K` and all values must be of type `V` |
-| `float` | `Yes` | N/A |
-| `int` | `Yes` | N/A |
-| `list[T]` | `Yes` | All elements must be of the same type `T` |
-| `set[T]` | TODO | All elements must be of the same type `T` |
-| `str` | TODO | N/A |
-| `tuple[...]` | TODO | N/A |
