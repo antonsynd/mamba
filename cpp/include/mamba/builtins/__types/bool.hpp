@@ -6,9 +6,10 @@
 
 namespace mamba::builtins::details {
 
+/// @brief A boolean.
 /// @note This goes against the Python specification which says bool is an
-/// integer. This is to ensure we can write separate builtin functions for
-/// Int and Bool.
+/// integer. This is to ensure we can write overload built-in functions for
+/// both Int and Bool.
 using Bool = bool;
 
 template <>

@@ -5,6 +5,7 @@
 #include "mamba/builtins/__types/complex.hpp"  // IWYU pragma: export
 #include "mamba/builtins/__types/double.hpp"   // IWYU pragma: export
 #include "mamba/builtins/__types/float.hpp"    // IWYU pragma: export
+#include "mamba/builtins/__types/int.hpp"      // IWYU pragma: export
 #include "mamba/builtins/__types/none.hpp"     // IWYU pragma: export
 #include "mamba/builtins/__types/object.hpp"   // IWYU pragma: export
 #include "mamba/builtins/__types/str.hpp"      // IWYU pragma: export

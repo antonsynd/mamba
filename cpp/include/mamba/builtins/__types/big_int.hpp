@@ -7,6 +7,7 @@
 
 namespace mamba::builtins::details {
 
+/// @brief A new type in Mamba corresponding to C++ long int or Rust i64.
 using BigInt = std::int_least64_t;
 
 template <>

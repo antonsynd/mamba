@@ -8,3 +8,5 @@ struct Traits {
 };
 
 }  // namespace mamba::builtins::details
+
+// IWYU pragma: private

@@ -1,12 +1,15 @@
 #pragma once
 
-#include <memory>
-#include <string>
+#include <memory>       // for shared_ptr
+#include <ostream>      // for ostream
+#include <string>       // for string, basic_string
+#include <string_view>  // for basic_string_view, str...
+#include <utility>      // for move
 
-#include "mamba/builtins/__types/big_int.hpp"
-#include "mamba/builtins/__types/bool.hpp"
-#include "mamba/builtins/__types/int.hpp"
-#include "mamba/builtins/__types/object.hpp"
+#include "mamba/builtins/__types/big_int.hpp"  // for BigInt
+#include "mamba/builtins/__types/bool.hpp"     // for Bool
+#include "mamba/builtins/__types/int.hpp"      // for Int
+#include "mamba/builtins/__types/object.hpp"   // for Object
 #include "mamba/builtins/__types/traits.hpp"
 
 namespace mamba::builtins::details {

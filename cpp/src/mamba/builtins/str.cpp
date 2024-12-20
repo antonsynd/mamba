@@ -6,7 +6,6 @@
 #include <string_view>
 
 #include "mamba/builtins/__types/big_int.hpp"
-#include "mamba/builtins/__types/object.hpp"
 
 namespace mamba::builtins::details {
 

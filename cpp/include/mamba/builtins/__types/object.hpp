@@ -1,7 +1,9 @@
 #pragma once
 
-#include "mamba/builtins/__types/big_int.hpp"
-#include "mamba/builtins/__types/bool.hpp"
+#include <string_view>  // for basic_string_view, str...
+
+#include "mamba/builtins/__types/big_int.hpp"  // for BigInt
+#include "mamba/builtins/__types/bool.hpp"     // for Bool
 #include "mamba/builtins/__types/traits.hpp"
 
 namespace mamba::builtins::details {
@@ -21,8 +23,9 @@ class Object {
   /// and __Str__(). Should be overridden in subclasses.
   virtual Str __Name__() const;
 
-  /// @brief Returns the representation of this object.
-  /// @code rerp(object)
+  /// @brief Returns the representation of this object. By default, it is
+  /// the evaluation of f"{__Name__()} object at {__Id__():#018x}".
+  /// @code repr(object)
   virtual Str __Repr__() const;
 
   /// @brief Returns the string conversion of this object. By default, it is
@@ -32,12 +35,13 @@ class Object {
 
   /// @brief Returns the bool conversion of this object. By default, it always
   /// returns True.
+  /// @code bool(object)
   virtual Bool __Bool__() const;
 
   /// @brief Returns whether this object is equivalent (but not necessarily
   /// identical) to @p other. By default, it compares the __Id__() of both
   /// objects. Thus, for different subclasses of objects, this should always
-  /// evaluate to false unless a more specific override is specified.
+  /// evaluate to false unless a more specific overload is specified.
   virtual Bool __Eq__(const self& other) const;
 
   /// @brief Returns the unique id of this object. Must be overridden by
