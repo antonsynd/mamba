@@ -62,6 +62,18 @@ class List final : public details::Object {
   /// @code list()
   List() : data_(std::make_shared<Data>()) {}
 
+  /// @brief Creates a list with the same elements as @p other. Value types
+  /// are copied.
+  /// @code list(list)
+  /// @note This is also the C++ copy constructor.
+  List(const self& other) : data_(std::make_shared<Data>()) { Extend(other); }
+
+  /// @note Rule of 5
+  List(self&& other) : data_(std::move(other.data_)) {};
+  ~List() = default;
+  self& operator=(const self& other) { data_ = other.data_; }
+  self& operator=(self&& other) { data_ = std::move(other.data_); }
+
   /// @brief Creates a list with the same elements as @p it. Value types
   /// are copied.
   /// @code list(Iterable)
@@ -127,11 +139,7 @@ class List final : public details::Object {
   /// objects stored within are not deeply copied (only references), but the
   /// internal data container of the lists are different instances.
   /// @code list.copy()
-  self Copy() const {
-    // TODO: It's actually a problem you cannot pass a List to itself without
-    // invoking the C++ copy constructor. Might need to think about this.
-    return self(this->__Iter__());
-  }
+  self Copy() const { return self(*this); }
 
   /// @brief Extends this list with the elements of @p other.
   /// @code list.extend(list)
@@ -183,9 +191,9 @@ class List final : public details::Object {
 
   /// @brief Repeats this list's elements @p i - 1 times.
   /// @code list *= i
-  void operator*=(details::Int i) { return __Rmul__(i); }
+  void operator*=(details::Int i) { return __Imul__(i); }
 
-  void __Rmul__(details::Int i) {
+  void __Imul__(details::Int i) {
     if (i == 1) {
       return;
     } else if (i < 1) {

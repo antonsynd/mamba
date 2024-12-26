@@ -54,12 +54,27 @@ class AbstractSet : public details::Object {
   /// @code set()
   AbstractSet() : data_(std::make_shared<Data>()) {}
 
+  /// @brief Creates a set from the elements in @p other. Value types
+  /// are copied.
+  /// @code set(set)
+  /// @note This is the C++ copy constructor.
+  AbstractSet(const self& other) : data_(std::make_shared<Data>()) {
+    std::copy(other.data_->s_.begin(), other.data->s_.end(),
+              std::back_inserter(data_->s_));
+  }
+
+  /// @note Rule of 5
+  AbstractSet(self&& other) : data_(std::move(other.data_)) {}
+  ~AbstractSet() = default;
+  self& operator=(const self& other) { data_ = other.data_; }
+  self& operator=(self&& other) { data_ = std::move(other.data_); }
+
   /// @brief Creates a set from the elements in @p it. Value types
   /// are copied.
   /// @code set(Iterable)
   template <typename It>
     requires builtins::details::IterableOf<It, value_type>
-  List(const It& iterable) : data_(std::make_shared<Data>()) {
+  AbstractSet(const It& iterable) : data_(std::make_shared<Data>()) {
     for (auto elem : iterable.__Iter__()) {
       Add(elem);
     }
@@ -98,33 +113,57 @@ class AbstractSet : public details::Object {
 
   /// @brief Creates a shallow copy of the set.
   /// @code set.copy()
-  self Copy() const {
-    // TODO: It's actually a problem you cannot pass a List to itself without
-    // invoking the C++ copy constructor. Might need to think about this.
-    return self(this->__Iter__());
-  }
+  self Copy() const { return self(*this); }
 
   /// @brief Returns an iterator to this set.
   /// @code set.__iter__()
-  details::SetBaseIterator<value_type> __Iter__() const {
-    return details::SetBaseIterator<value_type>(data_->s_.begin(),
-                                                data_->s_.end());
+  details::SetIterator<value_type> __Iter__() const {
+    return details::SetIterator<value_type>(data_->s_.begin(), data_->s_.end());
   }
 
   /// @brief Returns the number of elements in the set.
   /// @code len(set)
   builtins::details::Int __Len__() const { return data_->s_.size(); }
 
+  /// @note Specialization for sets.
+  self Intersection(const self& other) const {
+    self res;
+
+    std::copy_if(other.data_->s_.begin(), other.data_->s_.end(),
+                 std::back_inserter(res.data_->s_),
+                 [](auto&& elem) { return __Contains__(elem); });
+
+    return res;
+  }
+
+  template <typename It>
+    requires builtins::details::IterableOf<It, value_type>
+  self Intersection(const It& other) const {
+    self res;
+
+    for (const auto& elem : other.__Iter__()) {
+      if (__Contains__(elem)) {
+        res.Add(elem);
+      }
+    }
+
+    return res;
+  }
+
+  self operator&(const self& other) const { return Intersection(other); }
+
   /// @code set.isdisjoint(other)
   builtins::details::Bool IsDisjoint(const self& other) const {
+    // TODO: It is possible to avoid creating the set underneath
     return Intersection(other)->data_->s_.empty();
   }
 
   /// @code set.issubset(other)
   template <typename It>
     requires builtins::details::IterableOf<It, value_type>
-  builtins::details::Bool IsSubset(It& other) const {
-    return false;
+  builtins::details::Bool IsSubset(const It& other) const {
+    // TODO: It is possible to avoid creating the set underneath
+    return __Len__() == Intersection(other).__Len__();
   }
 
   /// @code set.__lteq__(other)
@@ -137,6 +176,7 @@ class AbstractSet : public details::Object {
 
   /// @code set.__lt__(other)
   builtins::details::Bool __Lt__(const self& other) const {
+    // TODO: It is possible to avoid creating the set underneath
     return __LtEq__(other) && !__Eq__(other);
   }
 
@@ -146,7 +186,9 @@ class AbstractSet : public details::Object {
   /// @code set.issuperset(other)
   template <typename It>
     requires builtins::details::IterableOf<It, value_type>
-  builtins::details::Bool IsSuperset(It& other) const {}
+  builtins::details::Bool IsSuperset(const It& other) const {
+    return other.__LtEq__(*this);
+  }
 
   /// @code set.__gteq__(other)
   builtins::details::Bool __GtEq__(const self& other) const {
@@ -164,32 +206,20 @@ class AbstractSet : public details::Object {
   /// @code set > other
   bool operator>(const self& other) const { return Gt(other); }
 
-  self Union(void other) const {}
+  template <typename It>
+    requires builtins::details::IterableOf<It, value_type>
+  self Union(const It& other) const {}
   self operator|(const self& other) const { return Union(other); }
 
   template <typename It>
     requires builtins::details::IterableOf<It, value_type>
-  self Intersection(const It& other) const {
-    self res;
-    auto it = other.__Iter__();
-
-    return res;
-  }
-
-  self operator&(const self& other) const { return Intersection(other); }
-
-  self Difference(void other) const {}
+  self Difference(const It& other) const {}
   self operator-(const self& other) const { return Difference(other); }
 
-  self SymmetricDifference(void other) const {}
+  template <typename It>
+    requires builtins::details::IterableOf<It, value_type>
+  self SymmetricDifference(const It& other) const {}
   self operator^(const self& other) const { return SymmetricDifference(other); }
-
-  /// @brief Returns an iterator to this set.
-  /// @code set.__iter__()
-  Iterator<value_type> Iter() {
-    return details::SetIteratorBase<value_type>(data_->s_.begin(),
-                                                data_->s_.end());
-  }
 
   /// @brief Native support for C++ for..in loops.
   iterator begin() { return data_->s_.begin(); }
@@ -277,6 +307,10 @@ class AbstractSet : public details::Object {
     oss << "}" << suffix;
 
     return oss.str();
+  }
+
+  void Add(value_type&& elem) {
+    data_->s_.emplace_back(std::forward<value_type>(elem));
   }
 
   std::optional<iterator> TryFind(
