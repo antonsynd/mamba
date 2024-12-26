@@ -75,8 +75,8 @@ class AbstractSet : public details::Object {
   template <typename It>
     requires builtins::details::IterableOf<It, value_type>
   AbstractSet(const It& iterable) : data_(std::make_shared<Data>()) {
-    for (auto elem : iterable.__Iter__()) {
-      Add(elem);
+    for (builtins::details::Own<value_type> elem : iterable.__Iter__()) {
+      Add(std::forward<value_type>(elem));
     }
   }
 
@@ -129,9 +129,10 @@ class AbstractSet : public details::Object {
   self Intersection(const self& other) const {
     self res;
 
-    std::copy_if(other.data_->s_.begin(), other.data_->s_.end(),
-                 std::back_inserter(res.data_->s_),
-                 [](auto&& elem) { return __Contains__(elem); });
+    std::copy_if(
+        other.data_->s_.begin(), other.data_->s_.end(),
+        std::back_inserter(res.data_->s_),
+        [](details::Const<value_type> elem) { return __Contains__(elem); });
 
     return res;
   }
@@ -141,7 +142,7 @@ class AbstractSet : public details::Object {
   self Intersection(const It& other) const {
     self res;
 
-    for (const auto& elem : other.__Iter__()) {
+    for (builtins::details::Const<value_type> elem : other.__Iter__()) {
       if (__Contains__(elem)) {
         res.Add(elem);
       }
@@ -152,18 +153,58 @@ class AbstractSet : public details::Object {
 
   self operator&(const self& other) const { return Intersection(other); }
 
-  /// @code set.isdisjoint(other)
   builtins::details::Bool IsDisjoint(const self& other) const {
-    // TODO: It is possible to avoid creating the set underneath
-    return Intersection(other)->data_->s_.empty();
+    return std::none_of(other.data_->s_.begin(), other.data_->s_.end(),
+                        [this](builtins::details::Const<value_type> elem) {
+                          return __Contains__(elem);
+                        });
+  }
+
+  /// @code set.isdisjoint(other)
+  template <typename It>
+    requires builtins::details::IterableOf<It, value_type>
+  builtins::details::Bool IsDisjoint(const It& other) const {
+    for (builtins::details::Const<value_type> elem : other.__Iter__()) {
+      if (__Contains__(elem)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  builtins::details::Bool IsSubset(const self& other) const {
+    // A set is always a subset of itself
+    if (__Id__() == other.__Id__()) {
+      return true;
+    }
+
+    // A set cannot be a subset of a smaller set
+    if (__Len__() > other.__Len__()) {
+      return false;
+    }
+
+    return std::all_of(data_->s_.begin(), data_->s_.end(),
+                       [this](builtins::details::Const<value_type> elem) {
+                         other.__Contains__(elem);
+                       });
   }
 
   /// @code set.issubset(other)
   template <typename It>
     requires builtins::details::IterableOf<It, value_type>
   builtins::details::Bool IsSubset(const It& other) const {
-    // TODO: It is possible to avoid creating the set underneath
-    return __Len__() == Intersection(other).__Len__();
+    auto missing_elements = __Len__();
+
+    for (builtins::details::Const<value_type> elem : other.__Iter__()) {
+      if (__Contains__(elem)) {
+        --missing_elements;
+      }
+    }
+
+    // If this is a subset of other, then all of this one's elements must be
+    // in other
+    return missing_elements == 0;
   }
 
   /// @code set.__lteq__(other)
@@ -174,10 +215,26 @@ class AbstractSet : public details::Object {
   /// @code set <= other
   bool operator<=(const self& other) const { return __LtEq__(other); }
 
+  /// @brief This determines if this set is a proper subset of @p other.
   /// @code set.__lt__(other)
   builtins::details::Bool __Lt__(const self& other) const {
-    // TODO: It is possible to avoid creating the set underneath
-    return __LtEq__(other) && !__Eq__(other);
+    // A set is not a proper subset of itself
+    if (__Id__() == other.__Id__()) {
+      return false;
+    }
+
+    // A set cannot be a proper subset of a smaller or equal sized set
+    if (__Len__() >= other.__Len__()) {
+      return false;
+    }
+
+    // Because we eliminate the possibility of @p other being of equal length
+    // to this set, then all we have to do is establish that this set's elements
+    // are in @p other
+    return std::all_of(data_->s_.begin(), data_->s_.end(),
+                       [this](builtins::details::Const<value_type> elem) {
+                         other.__Contains__(elem);
+                       });
   }
 
   /// @code set < other
@@ -238,7 +295,8 @@ class AbstractSet : public details::Object {
   builtins::details::Bool __Eq__(const self& other) const {
     return std::equal(data_->s_.begin(), data_->s_.end(),
                       other.data_->s_.begin(), other.data_->s_.end(),
-                      [](const auto a, const auto b) { return a == b; });
+                      [](details::Const<value_type> a,
+                         details::Const<value_type> b) { return a == b; });
   }
 
   /// @brief Native support for C++ == and != operators.
@@ -249,6 +307,8 @@ class AbstractSet : public details::Object {
   using builtins::details::Object::operator==;
   using builtins::details::Object::operator!=;
   using builtins::details::Object::__Eq__;
+
+  explicit operator bool() const override { return __Len__() != 0; }
 
   builtins::details::BigInt __Id__() const override {
     return reinterpret_cast<builtins::details::BigInt>(data_.get());
@@ -319,8 +379,9 @@ class AbstractSet : public details::Object {
       return std::nullopt;
     }
 
-    return std::find_if(data_->s_.begin(), data_->s_.end(),
-                        [&elem](const auto v) { return elem == v; });
+    return std::find_if(
+        data_->s_.begin(), data_->s_.end(),
+        [&elem](builtins::details::Const<value_type> v) { return elem == v; });
   }
 
   std::shared_ptr<Data> Data_() { return data_; }

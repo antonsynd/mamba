@@ -15,7 +15,7 @@ using Const = std::conditional_t<Value<T>, const T, const T&>;
 /// @note Non-values are passed as lvalue refs to avoid unnecessary copying. The
 /// callee can always copy it internally anyway.
 template <typename T>
-using Mut = std::conditional_t<Value<T>, const T, T&>;
+using Mut = std::conditional_t<Value<T>, T&, T&>;
 
 /// @brief For use in mutable arguments where the callee must be owned.
 /// @note Non-values are passed as rvalue refs.

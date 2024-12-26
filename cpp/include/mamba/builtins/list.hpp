@@ -80,7 +80,7 @@ class List final : public details::Object {
   template <typename It>
     requires details::IterableOf<It, value_type>
   List(const It& iterable) : data_(std::make_shared<Data>()) {
-    for (auto elem : iterable.__Iter__()) {
+    for (builtins::details::Const<value_type> elem : iterable.__Iter__()) {
       Append(elem);
     }
   }
@@ -326,7 +326,7 @@ class List final : public details::Object {
     size_t i = 0;
 
     std::copy_if(start_it, end_it, std::back_inserter(res.data_->v_),
-                 [&i, size_t_step](const auto) -> bool {
+                 [&i, size_t_step](details::Const<value_type>) -> bool {
                    return i++ % size_t_step == 0;
                  });
 
@@ -358,14 +358,15 @@ class List final : public details::Object {
 
     size_t i = 0;
 
-    const auto erase_from_it = std::remove_if(
-        start_it, data_->v_.end(),
-        [&i, size_t_start, size_t_end, size_t_step](const auto) -> bool {
-          const auto remove =
-              i + size_t_start < size_t_end && i % size_t_step == 0;
-          ++i;
-          return remove;
-        });
+    const auto erase_from_it =
+        std::remove_if(start_it, data_->v_.end(),
+                       [&i, size_t_start, size_t_end,
+                        size_t_step](details::Const<value_type>) -> bool {
+                         const auto remove = i + size_t_start < size_t_end &&
+                                             i % size_t_step == 0;
+                         ++i;
+                         return remove;
+                       });
 
     data_->v_.erase(erase_from_it, data_->v_.end());
   }
@@ -511,12 +512,15 @@ class List final : public details::Object {
     if (reverse) {
       // We sort with the inverse of the comparison to make sure the sort
       // is stable, rather than reverse the results afterwards
-      std::sort(
-          data_->v_.begin(), data_->v_.end(),
-          [](const auto a, const auto b) { return !(a < b || !(b < a)); });
+      std::sort(data_->v_.begin(), data_->v_.end(),
+                [](details::Const<value_type> a, details::Const<value_type> b) {
+                  return !(a < b || !(b < a));
+                });
     } else {
       std::sort(data_->v_.begin(), data_->v_.end(),
-                [](const auto a, const auto b) { return a < b; });
+                [](details::Const<value_type> a, details::Const<value_type> b) {
+                  return a < b;
+                });
     }
   }
 
@@ -534,15 +538,19 @@ class List final : public details::Object {
     if (reverse) {
       // We sort with the inverse of the comparison to make sure the sort
       // is stable, rather than reverse the results afterwards
-      std::sort(data_->v_.begin(), data_->v_.end(),
-                [&key](const auto a, const auto b) {
-                  const auto ka = key(a);
-                  const auto kb = key(b);
-                  return !(ka < kb || !(kb < ka));
-                });
+      std::sort(
+          data_->v_.begin(), data_->v_.end(),
+          [&key](details::Const<value_type> a, details::Const<value_type> b) {
+            const auto ka = key(a);
+            const auto kb = key(b);
+            return !(ka < kb || !(kb < ka));
+          });
     } else {
-      std::sort(data_->v_.begin(), data_->v_.end(),
-                [&key](const auto a, const auto b) { return key(a) < key(b); });
+      std::sort(
+          data_->v_.begin(), data_->v_.end(),
+          [&key](details::Const<value_type> a, details::Const<value_type> b) {
+            return key(a) < key(b);
+          });
     }
   }
 
@@ -570,7 +578,8 @@ class List final : public details::Object {
   details::Bool __Eq__(const self& other) const {
     return std::equal(data_->v_.begin(), data_->v_.end(),
                       other.data_->v_.begin(), other.data_->v_.end(),
-                      [](const auto a, const auto b) { return a == b; });
+                      [](details::Const<value_type> a,
+                         details::Const<value_type> b) { return a == b; });
   }
 
   details::Str __Name__() const override {
@@ -821,20 +830,21 @@ class List final : public details::Object {
     auto other_it = other.data_->v_.begin();
     const auto other_end = other.data_->v_.end();
 
-    std::for_each(start_it, end_it,
-                  [&idx, step, &other_it, &other_end](auto& elem) {
-                    if (other_it == other_end) {
-                      // Shouldn't happen, but here as a fail-safe
-                      return;
-                    }
+    std::for_each(
+        start_it, end_it,
+        [&idx, step, &other_it, &other_end](details::Mut<value_type> elem) {
+          if (other_it == other_end) {
+            // Shouldn't happen, but here as a fail-safe
+            return;
+          }
 
-                    if (idx % step == 0) {
-                      elem = *other_it;
-                      ++other_it;
-                    }
+          if (idx % step == 0) {
+            elem = *other_it;
+            ++other_it;
+          }
 
-                    ++idx;
-                  });
+          ++idx;
+        });
   }
 
   class Data {
