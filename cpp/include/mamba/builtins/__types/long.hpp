@@ -7,11 +7,12 @@
 
 namespace mamba::builtins::details {
 
-using Int = std::int32_t;
+/// @brief A new type in Mamba corresponding to C++ long long int or Rust i64.
+using Long = std::int64_t;
 
 template <>
-struct Traits<Int> {
-  static constexpr std::string_view kName = "int";
+struct Traits<Long> {
+  static constexpr std::string_view kName = "long";
 };
 
 }  // namespace mamba::builtins::details

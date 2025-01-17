@@ -7,11 +7,12 @@
 
 namespace mamba::builtins::details {
 
-using Int = std::int32_t;
+/// @brief A new type in Mamba for an signed 8-bit integer.
+using SByte = std::int8_t;
 
 template <>
-struct Traits<Int> {
-  static constexpr std::string_view kName = "int";
+struct Traits<SByte> {
+  static constexpr std::string_view kName = "sbyte";
 };
 
 }  // namespace mamba::builtins::details

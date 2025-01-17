@@ -7,11 +7,12 @@
 
 namespace mamba::builtins::details {
 
-using Int = std::int32_t;
+/// @brief A new type in Mamba corresponding to C++ size_t or Rust usize.
+using Size = std::size_t;
 
 template <>
-struct Traits<Int> {
-  static constexpr std::string_view kName = "int";
+struct Traits<Size> {
+  static constexpr std::string_view kName = "size";
 };
 
 }  // namespace mamba::builtins::details

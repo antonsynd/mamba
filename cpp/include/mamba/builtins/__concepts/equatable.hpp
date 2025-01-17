@@ -2,18 +2,14 @@
 
 #include <concepts>
 
-#include "mamba/builtins/__concepts/value.hpp"
-#include "mamba/builtins/__types/bool.hpp"
+#include "mamba/builtins/__memory/args.hpp"
 
 namespace mamba::builtins::details {
 
 template <typename T>
-concept InequatableObject = requires(const T lhs, const T& rhs) {
-  { lhs.__Ne__(rhs) } -> std::same_as<Bool>;
+concept Inequatable = requires(const T lhs, const T& rhs) {
+  { Unwrap(lhs) != Unwrap(rhs) } -> std::same_as<bool>;
 };
-
-template <typename T>
-concept Inequatable = Value<T> || InequatableObject<T>;
 
 }  // namespace mamba::builtins::details
 

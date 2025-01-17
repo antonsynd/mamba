@@ -1,65 +1,102 @@
 #pragma once
 
-#include <memory>       // for shared_ptr
 #include <ostream>      // for ostream
-#include <string>       // for string, basic_string
-#include <string_view>  // for basic_string_view, str...
+#include <string>       // for basic_string, string
+#include <string_view>  // for basic_string_view
 #include <utility>      // for move
 
-#include "mamba/builtins/__types/big_int.hpp"  // for BigInt
-#include "mamba/builtins/__types/bool.hpp"     // for Bool
-#include "mamba/builtins/__types/int.hpp"      // for Int
-#include "mamba/builtins/__types/object.hpp"   // for Object
+#include "mamba/__utils/string_builder.hpp"        // for stringify, StringB...
+#include "mamba/builtins/__concepts/optional.hpp"  // for Optional
+#include "mamba/builtins/__types/bool.hpp"         // for Bool
+#include "mamba/builtins/__types/byte.hpp"         // for Byte
+#include "mamba/builtins/__types/decimal.hpp"      // for Decimal
+#include "mamba/builtins/__types/double.hpp"       // for Double
+#include "mamba/builtins/__types/float.hpp"        // for Float
+#include "mamba/builtins/__types/int.hpp"          // for Int
+#include "mamba/builtins/__types/long.hpp"         // for Long
+#include "mamba/builtins/__types/none.hpp"         // for None
+#include "mamba/builtins/__types/object.hpp"       // for Object
+#include "mamba/builtins/__types/sbyte.hpp"        // for SByte
+#include "mamba/builtins/__types/short.hpp"        // for Short
+#include "mamba/builtins/__types/size.hpp"         // for Size
 #include "mamba/builtins/__types/traits.hpp"
+#include "mamba/builtins/__types/uint.hpp"    // for UInt
+#include "mamba/builtins/__types/ulong.hpp"   // for ULong
+#include "mamba/builtins/__types/ushort.hpp"  // for UShort
 
 namespace mamba::builtins::details {
 
 class Str final : public Object {
  public:
   Str();
+
+  // All implicit on purpose, to be able to treat Str() as a global conversion
+  // function.
   Str(const char* s);
   Str(std::string s);
 
-  operator std::string() const;
+  Str(const bool b);
+  Str(const Bool b);
+  Str(const Byte b);
+  Str(const Decimal d);
+  Str(const Double d);
+  Str(const Float f);
+  Str(const Int i);
+  Str(const Long l);
+  Str(const None);
+  Str(const SByte s);
+  Str(const Short f);
+  Str(const Size s);
+  Str(const UInt u);
+  Str(const UShort u);
+  Str(const ULong u);
 
-  Str __Name__() const override;
+  /// @brief Optional<T> returns the string representation of the payload or
+  /// "None".
+  template <Optional T>
+  Str(const T o) {
+    if (o.has_value()) {
+      std::string s = __utils::stringify() << "Optional[" << Str(o) << "]";
+      data_.s_ = std::move(s);
+    } else {
+      data_.s_ = "None";
+    }
+  }
 
-  BigInt __Id__() const override;
-
-  Bool __Bool__() const override;
+  operator Bool() const;
 
   Str __Repr__() const override;
 
-  /// @note This is a new copy.
-  Str __Str__() const override;
-
-  Bool __Eq__(const Str& other) const;
-
   Int __Len__() const;
+
+  bool operator==(const Str& other) const;
+  bool operator!=(const Str& other) const;
 
   /// @note For easy C++ comparison to strings.
   bool operator==(const std::string_view sv) const;
   bool operator!=(const std::string_view sv) const;
 
-  /// @brief C++ equality overload with other Mamba strings.
-  bool operator==(const Str& other) const;
-  bool operator!=(const Str& other) const;
+  operator std::string() const;
 
   // Bring in superclass member functions for which there are overloads here
   using Object::operator==;
   using Object::operator!=;
-  using Object::__Eq__;
 
  private:
+  static Str __Name__();
+
   class Data {
    public:
     Data() = default;
     explicit Data(std::string s) : s_(std::move(s)) {}
 
+    bool operator==(const Data& other) const { return s_ == other.s_; }
+    bool operator!=(const Data& other) const { return !(*this == other); }
+
     std::string s_;
   };
 
-  std::shared_ptr<Data> data_;
+  Data data_;
 };
 
 std::ostream& operator<<(std::ostream& oss, const Str& s);

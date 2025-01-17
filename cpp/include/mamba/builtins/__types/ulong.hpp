@@ -7,12 +7,13 @@
 
 namespace mamba::builtins::details {
 
-/// @brief A new type in Mamba corresponding to C++ long int or Rust i64.
-using BigInt = std::int_least64_t;
+/// @brief A new type in Mamba corresponding to C++ unsigned long long int or
+/// Rust u64.
+using ULong = std::uint64_t;
 
 template <>
-struct Traits<BigInt> {
-  static constexpr std::string_view kName = "bigint";
+struct Traits<ULong> {
+  static constexpr std::string_view kName = "ulong";
 };
 
 }  // namespace mamba::builtins::details

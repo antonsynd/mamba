@@ -1,8 +1,6 @@
 #pragma once
 
-#include "mamba/builtins/__bool__.hpp"  // IWYU pragma: export
-#include "mamba/builtins/__str__.hpp"   // IWYU pragma: export
-#include "mamba/builtins/error.hpp"     // IWYU pragma: export
+#include "mamba/builtins/error.hpp"  // IWYU pragma: export
 // #include "mamba/builtins/frozen_set.hpp"  // IWYU pragma: export
 #include "mamba/builtins/iteration.hpp"  // IWYU pragma: export
 #include "mamba/builtins/list.hpp"       // IWYU pragma: export

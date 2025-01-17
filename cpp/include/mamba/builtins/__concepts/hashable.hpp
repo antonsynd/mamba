@@ -2,18 +2,15 @@
 
 #include <concepts>
 
-#include "mamba/builtins/__concepts/value.hpp"
-#include "mamba/builtins/__types/big_int.hpp"
+#include "mamba/builtins/__memory/args.hpp"
+#include "mamba/builtins/__types/size.hpp"
 
 namespace mamba::builtins::details {
 
 template <typename T>
-concept HashableObject = requires(const T t) {
-  { t.__Hash__() } -> std::same_as<BigInt>;
+concept Hashable = requires(const T t) {
+  { Unwrap(t).__Hash__() } -> std::same_as<Size>;
 };
-
-template <typename T>
-concept Hashable = Value<T> || HashableObject<T>;
 
 }  // namespace mamba::builtins::details
 

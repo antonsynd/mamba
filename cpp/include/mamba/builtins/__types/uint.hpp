@@ -7,11 +7,11 @@
 
 namespace mamba::builtins::details {
 
-using Int = std::int32_t;
+using UInt = std::uint32_t;
 
 template <>
-struct Traits<Int> {
-  static constexpr std::string_view kName = "int";
+struct Traits<UInt> {
+  static constexpr std::string_view kName = "uint";
 };
 
 }  // namespace mamba::builtins::details

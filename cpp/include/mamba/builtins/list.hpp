@@ -16,7 +16,6 @@
 #include "mamba/__utils/hex_printer.hpp"
 #include "mamba/builtins/__concepts/orderable.hpp"
 #include "mamba/builtins/__memory/args.hpp"
-#include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
@@ -33,7 +32,7 @@ template <typename T>
 class ListIterator;
 
 template <typename F, typename K>
-concept ListSortKey = requires(const F& key_func, Const<K> k) {
+concept ListSortKey = requires(const F& key_func, const K& k) {
   { key_func(k) } -> LessThanComparable;
 };
 
@@ -60,16 +59,16 @@ class List final : public details::Object {
 
   /// @brief Creates an empty list.
   /// @code list()
-  List() : data_(std::make_shared<Data>()) {}
+  List() {}
 
   /// @brief Creates a list with the same elements as @p other. Value types
   /// are copied.
   /// @code list(list)
   /// @note This is also the C++ copy constructor.
-  List(const self& other) : data_(std::make_shared<Data>()) { Extend(other); }
+  List(const self& other) { Extend(other); }
 
   /// @note Rule of 5
-  List(self&& other) : data_(std::move(other.data_)) {};
+  List(self&& other) {};
   ~List() = default;
   self& operator=(const self& other) { data_ = other.data_; }
   self& operator=(self&& other) { data_ = std::move(other.data_); }
@@ -79,33 +78,27 @@ class List final : public details::Object {
   /// @code list(Iterable)
   template <typename It>
     requires details::IterableOf<It, value_type>
-  List(const It& iterable) : data_(std::make_shared<Data>()) {
-    for (builtins::details::Const<value_type> elem : iterable.__Iter__()) {
+  List(const It& iterable) {
+    for (builtins::const value_type& elem : iterable.__Iter__()) {
       Append(elem);
     }
   }
 
   /// @brief Creates a list from an initializer list (list literal).
   /// @code [...]
-  List(std::initializer_list<value_type> elements)
-      : data_(std::make_shared<Data>()) {
-    data_->v_.reserve(elements.size());
+  List(std::initializer_list<value_type> elements) {
+    data_.v_.reserve(elements.size());
 
-    if constexpr (details::Value<value_type>) {
-      std::copy(elements.begin(), elements.end(),
-                std::back_inserter(data_->v_));
-    } else {
-      std::copy(std::make_move_iterator(elements.begin()),
-                std::make_move_iterator(elements.end()),
-                std::back_inserter(data_->v_));
-    }
+    std::copy(std::make_move_iterator(elements.begin()),
+              std::make_move_iterator(elements.end()),
+              std::back_inserter(data_.v_));
   }
 
   /// @brief Creates a list with the provided variadic arguments.
   /// @code list(...)
   template <typename... Args>
     requires(std::same_as<std::decay_t<Args>, value_type> && ...)
-  List(Args&&... rest) : data_(std::make_shared<Data>()) {
+  List(Args&&... rest) {
     Append(std::forward<Args>(rest)...);
   }
 
@@ -121,19 +114,19 @@ class List final : public details::Object {
   /// @code list.append(...)
   template <typename... Args>
   void Append(Args&&... rest) {
-    (data_->v_.emplace_back(std::forward<Args>(rest)), ...);
+    (data_.v_.emplace_back(std::forward<Args>(rest)), ...);
   }
 
   /// @brief Returns whether @p elem is in the list. O(n).
   /// @code elem in list
-  details::Bool __Contains__(details::Const<value_type> elem) const {
-    return std::find(data_->v_.cbegin(), data_->v_.cend(), elem) !=
-           data_->v_.cend();
+  bool __Contains__(const value_type& elem) const {
+    return std::find(data_.v_.cbegin(), data_.v_.cend(), elem) !=
+           data_.v_.cend();
   }
 
   /// @brief Clears the elements of the list.
   /// @code list.clear()
-  void Clear() { data_->v_.clear(); }
+  void Clear() { data_.v_.clear(); }
 
   /// @brief Creates a shallow copy of the list. Shallow here means that any
   /// objects stored within are not deeply copied (only references), but the
@@ -144,23 +137,20 @@ class List final : public details::Object {
   /// @brief Extends this list with the elements of @p other.
   /// @code list.extend(list)
   void Extend(const self& other) {
-    data_->v_.reserve(data_->v_.size() + other.data_->v_.size());
+    data_.v_.reserve(data_.v_.size() + other.data_.v_.size());
 
-    std::copy(other.data_->v_.cbegin(), other.data_->v_.cend(),
-              std::back_inserter(data_->v_));
+    std::copy(other.data_.v_.cbegin(), other.data_.v_.cend(),
+              std::back_inserter(data_.v_));
   }
 
   /// @brief Extends this list with the elements of @p other.
   /// @code list += other
   void operator+=(const self& other) { Extend(other); }
-  void __Iadd__(const self& other) { Extend(other); }
 
   /// @brief Concatenates this list with @p other returning the result as a new
   /// list.
   /// @code list + other
-  self operator+(const self& other) const { return __Add__(other); }
-
-  self __Add__(const self& other) const {
+  self operator+(const self& other) const {
     self res;
 
     res.Extend(*this);
@@ -171,16 +161,14 @@ class List final : public details::Object {
 
   /// @brief Returns a copy of this list with its elements repeated @p i times.
   /// @code list * i
-  self operator*(details::Int i) const { return __Mul__(i); }
-
-  self __Mul__(details::Int i) const {
+  self operator*(details::Int i) const {
     self res;
 
     if (i <= 0) {
       return res;
     }
 
-    res.data_->v_.reserve(data_->v_.size() * i);
+    res.data_.v_.reserve(data_.v_.size() * i);
 
     for (; i > 0; --i) {
       res.Extend(*this);
@@ -191,22 +179,20 @@ class List final : public details::Object {
 
   /// @brief Repeats this list's elements @p i - 1 times.
   /// @code list *= i
-  void operator*=(details::Int i) { return __Imul__(i); }
-
-  void __Imul__(details::Int i) {
+  void operator*=(details::Int i) {
     if (i == 1) {
       return;
     } else if (i < 1) {
-      data_->v_.clear();
+      data_.v_.clear();
       return;
     }
 
-    data_->v_.reserve(data_->v_.size() * i);
-    const auto end_index = data_->v_.size();
+    data_.v_.reserve(data_.v_.size() * i);
+    const auto end_index = data_.v_.size();
 
     for (; i > 1; --i) {
       for (size_t j = 0; j < end_index; ++j) {
-        data_->v_.emplace_back(data_->v_[j]);
+        data_.v_.emplace_back(data_.v_[j]);
       }
     }
   }
@@ -215,68 +201,62 @@ class List final : public details::Object {
   /// throws IndexError. @p idx supports negative indices counting from the
   /// last elements.
   /// @code list[idx] (= elem)
-  reference __GetItem__(details::Int idx) {
+  reference operator[](details::Int idx) {
     const auto idx_opt = TryGetNormalizedIndex(idx);
 
     if (!idx_opt) {
       throw IndexError("list index out of range");
     }
 
-    return data_->v_[*idx_opt];
-  }
-
-  reference operator[](details::Int idx) { return __GetItem__(idx); }
-
-  const_reference __GetItem__(details::Int idx) const {
-    const auto idx_opt = TryGetNormalizedIndex(idx);
-
-    if (!idx_opt) {
-      throw IndexError("list index out of range");
-    }
-
-    return data_->v_[*idx_opt];
+    return data_.v_[*idx_opt];
   }
 
   const_reference operator[](details::Int idx) const {
-    return __GetItem__(idx);
+    const auto idx_opt = TryGetNormalizedIndex(idx);
+
+    if (!idx_opt) {
+      throw IndexError("list index out of range");
+    }
+
+    return data_.v_[*idx_opt];
   }
 
-  /// @brief C++ equality overload for comparison with other lists.
-  bool operator==(const self& other) const { return __Eq__(other); }
+  /// @brief Returns true if this list and @p other have the same elements
+  /// as obtained through the equality operator (not identity).
+  bool operator==(const self& other) const { return data_ == other.data_; }
   bool operator!=(const self& other) const { return !(*this == other); }
 
   /// @brief Returns the number of elements in the list.
   /// @code len(list)
-  details::Int __Len__() const { return data_->v_.size(); }
+  details::Int __Len__() const { return data_.v_.size(); }
 
   /// @brief Returns the smallest element in the list. If the list is empty,
   /// throws ValueError.
   /// @code min(list)
   value_type Min() const {
-    if (data_->v_.empty()) {
+    if (data_.v_.empty()) {
       throw ValueError("Min() arg is an empty sequence");
     }
 
-    return *std::min_element(data_->v_.cbegin(), data_->v_.cend());
+    return *std::min_element(data_.v_.cbegin(), data_.v_.cend());
   }
 
   /// @brief Returns the biggest element in the list. If the list is empty,
   /// throws ValueError.
   /// @code max(list)
   value_type Max() const {
-    if (data_->v_.empty()) {
+    if (data_.v_.empty()) {
       throw ValueError("Max() arg is an empty sequence");
     }
 
-    return *std::max_element(data_->v_.cbegin(), data_->v_.cend());
+    return *std::max_element(data_.v_.cbegin(), data_.v_.cend());
   }
 
   /// @brief Returns the number of times @p elem is present in the list.
   /// @code list.count(x)
-  details::Int Count(details::Const<value_type> elem) const {
-    return std::count_if(
-        data_->v_.cbegin(), data_->v_.cend(),
-        [elem](details::Const<value_type> val) { return val == elem; });
+  details::Int Count(const value_type& elem) const {
+    return std::count_if(data_.v_.cbegin(), data_.v_.cend(),
+                         [elem](const value_type& val) { return val == elem; });
   }
 
   /// @brief Returns the elements in the list such that the elements' indices
@@ -302,31 +282,31 @@ class List final : public details::Object {
 
     // Simple range copy
     if (size_t_step == 1) {
-      res.data_->v_.reserve(size_t_end - size_t_start);
+      res.data_.v_.reserve(size_t_end - size_t_start);
 
       // Need to recalculate in case reserve() invalidated the pre-calculated
       // iterators
-      const auto start_it = data_->v_.begin() + size_t_start;
-      const auto end_it = data_->v_.begin() + size_t_end;
+      const auto start_it = data_.v_.begin() + size_t_start;
+      const auto end_it = data_.v_.begin() + size_t_end;
 
-      std::copy(start_it, end_it, std::back_inserter(res.data_->v_));
+      std::copy(start_it, end_it, std::back_inserter(res.data_.v_));
 
       return res;
     }
 
     // Stepped range copy
-    res.data_->v_.reserve(
+    res.data_.v_.reserve(
         GetNumberOfElementsInSlice(size_t_start, size_t_end, size_t_step));
 
     // Need to recalculate in case reserve() invalidated the pre-calculated
     // iterators
-    const auto start_it = data_->v_.begin() + size_t_start;
-    const auto end_it = data_->v_.begin() + size_t_end;
+    const auto start_it = data_.v_.begin() + size_t_start;
+    const auto end_it = data_.v_.begin() + size_t_end;
 
     size_t i = 0;
 
-    std::copy_if(start_it, end_it, std::back_inserter(res.data_->v_),
-                 [&i, size_t_step](details::Const<value_type>) -> bool {
+    std::copy_if(start_it, end_it, std::back_inserter(res.data_.v_),
+                 [&i, size_t_step](const value_type&) -> bool {
                    return i++ % size_t_step == 0;
                  });
 
@@ -358,17 +338,16 @@ class List final : public details::Object {
 
     size_t i = 0;
 
-    const auto erase_from_it =
-        std::remove_if(start_it, data_->v_.end(),
-                       [&i, size_t_start, size_t_end,
-                        size_t_step](details::Const<value_type>) -> bool {
-                         const auto remove = i + size_t_start < size_t_end &&
-                                             i % size_t_step == 0;
-                         ++i;
-                         return remove;
-                       });
+    const auto erase_from_it = std::remove_if(
+        start_it, data_.v_.end(),
+        [&i, size_t_start, size_t_end, size_t_step](const value_type&) -> bool {
+          const auto remove =
+              i + size_t_start < size_t_end && i % size_t_step == 0;
+          ++i;
+          return remove;
+        });
 
-    data_->v_.erase(erase_from_it, data_->v_.end());
+    data_.v_.erase(erase_from_it, data_.v_.end());
   }
 
   /// @brief Replaces the given slice with the elements of @p other. If @p step
@@ -398,9 +377,8 @@ class List final : public details::Object {
   /// If @p start is negative, it is clamped to 0. If @p start is greater than
   /// the last index in the list, then it throws ValueError.
   /// @code list.index(i, (j))
-  details::Int Index(details::Const<value_type> elem,
-                     details::Int start = 0) const {
-    return Index(elem, start, data_->v_.size());
+  details::Int Index(const value_type& elem, details::Int start = 0) const {
+    return Index(elem, start, data_.v_.size());
   }
 
   /// @brief Returns the index of @p elem in the list, starting the search from
@@ -410,13 +388,13 @@ class List final : public details::Object {
   /// then it throws ValueError. If @p end is greater than the last index in
   /// the list, it is clamped to the length of the list.
   /// @code list.index(i, j, k)
-  details::Int Index(details::Const<value_type> elem,
+  details::Int Index(const value_type& elem,
                      details::Int start,
                      details::Int end) const {
     end = ClampIndex(end);
 
     for (details::Int idx = ClampIndex(start); idx < end; ++idx) {
-      if (data_->v_[idx] == elem) {
+      if (data_.v_[idx] == elem) {
         return idx;
       }
     }
@@ -428,14 +406,14 @@ class List final : public details::Object {
   /// any element at that position to the right. @p idx is clamped to the
   /// length of the list.
   /// @code list.insert(idx, x)
-  void Insert(details::Int idx, details::Own<value_type> elem) {
+  void Insert(details::Int idx, value_type&& elem) {
     const auto size_t_idx = NormalizeOrClampIndex(idx);
 
-    if (size_t_idx == data_->v_.size()) {
-      data_->v_.emplace_back(details::Move(elem));
+    if (size_t_idx == data_.v_.size()) {
+      data_.v_.emplace_back(std::forward<value_type>(elem));
     } else {
       const auto it = GetIterator(size_t_idx);
-      data_->v_.insert(it, details::Move(elem));
+      data_.v_.insert(it, std::forward<value_type>(elem));
     }
   }
 
@@ -453,12 +431,12 @@ class List final : public details::Object {
     const auto it = GetIterator(size_t_idx);
     auto elem = *it;
 
-    if (size_t_idx == data_->v_.size() - 1) {
+    if (size_t_idx == data_.v_.size() - 1) {
       // Trivial case, pop from the back
-      data_->v_.pop_back();
+      data_.v_.pop_back();
     } else {
       // Erase an element from the start or middle
-      data_->v_.erase(it);
+      data_.v_.erase(it);
     }
 
     return elem;
@@ -468,59 +446,57 @@ class List final : public details::Object {
   /// are shifted to make the list contiguous. If the list is empty or
   /// @p elem does not occur in the list, throws ValueError.
   /// @code list.remove(elem)
-  void Remove(details::Const<value_type> elem) {
-    if (data_->v_.empty()) {
+  void Remove(const value_type& elem) {
+    if (data_.v_.empty()) {
       throw ValueError("List.Remove(x): x not in list");
     }
 
-    auto it = std::find(data_->v_.begin(), data_->v_.end(), elem);
+    auto it = std::find(data_.v_.begin(), data_.v_.end(), elem);
 
-    if (it == data_->v_.end()) {
+    if (it == data_.v_.end()) {
       throw ValueError("List.Remove(x): x not in list");
     }
 
-    data_->v_.erase(it);
+    data_.v_.erase(it);
   }
 
   /// @brief Reverse the list in place.
   /// @deprecated Use list.__reversed__() instead.
   /// @code reverse(list)
   void Reverse() {
-    if (data_->v_.empty()) {
+    if (data_.v_.empty()) {
       return;
     }
 
-    std::reverse(data_->v_.begin(), data_->v_.end());
+    std::reverse(data_.v_.begin(), data_.v_.end());
   }
 
   /// @brief Creates a reversed iterator.
   /// @code list.__reversed__()
   details::ListIterator<value_type> __Reversed__() const {
-    return details::ListIterator<value_type>(data_->v_.rbegin(),
-                                             data_->v_.rend());
+    return details::ListIterator<value_type>(data_.v_.rbegin(),
+                                             data_.v_.rend());
   }
 
   /// @brief Sorts the list in-place, with the order of equal-comparing
   /// elements guaranteed to be preserved. Each element is compared using
   /// the less-than operator.
   /// @code sort(list, reverse)
-  void Sort(details::Bool reverse = false) {
-    if (data_->v_.empty()) {
+  void Sort(bool reverse = false) {
+    if (data_.v_.empty()) {
       return;
     }
 
     if (reverse) {
       // We sort with the inverse of the comparison to make sure the sort
       // is stable, rather than reverse the results afterwards
-      std::sort(data_->v_.begin(), data_->v_.end(),
-                [](details::Const<value_type> a, details::Const<value_type> b) {
+      std::sort(data_.v_.begin(), data_.v_.end(),
+                [](const value_type& a, const value_type& b) {
                   return !(a < b || !(b < a));
                 });
     } else {
-      std::sort(data_->v_.begin(), data_->v_.end(),
-                [](details::Const<value_type> a, details::Const<value_type> b) {
-                  return a < b;
-                });
+      std::sort(data_.v_.begin(), data_.v_.end(),
+                [](const value_type& a, const value_type& b) { return a < b; });
     }
   }
 
@@ -530,57 +506,44 @@ class List final : public details::Object {
   /// @code sort(list, key, reverse)
   template <typename K>
     requires details::ListSortKey<K, value_type>
-  void Sort(const K& key, details::Bool reverse = false) {
-    if (data_->v_.empty()) {
+  void Sort(const K& key, bool reverse = false) {
+    if (data_.v_.empty()) {
       return;
     }
 
     if (reverse) {
       // We sort with the inverse of the comparison to make sure the sort
       // is stable, rather than reverse the results afterwards
-      std::sort(
-          data_->v_.begin(), data_->v_.end(),
-          [&key](details::Const<value_type> a, details::Const<value_type> b) {
-            const auto ka = key(a);
-            const auto kb = key(b);
-            return !(ka < kb || !(kb < ka));
-          });
+      std::sort(data_.v_.begin(), data_.v_.end(),
+                [&key](const value_type& a, const value_type& b) {
+                  const auto ka = key(a);
+                  const auto kb = key(b);
+                  return !(ka < kb || !(kb < ka));
+                });
     } else {
-      std::sort(
-          data_->v_.begin(), data_->v_.end(),
-          [&key](details::Const<value_type> a, details::Const<value_type> b) {
-            return key(a) < key(b);
-          });
+      std::sort(data_.v_.begin(), data_.v_.end(),
+                [&key](const value_type& a, const value_type& b) {
+                  return key(a) < key(b);
+                });
     }
   }
 
   /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
   details::ListIterator<value_type> __Iter__() const {
-    return details::ListIterator<value_type>(data_->v_.begin(),
-                                             data_->v_.end());
+    return details::ListIterator<value_type>(data_.v_.begin(), data_.v_.end());
   }
 
   /// @brief Native support for C++ for..in loops.
-  iterator begin() { return data_->v_.begin(); }
-  iterator end() { return data_->v_.end(); }
-  const_iterator begin() const { return data_->v_.cbegin(); }
-  const_iterator end() const { return data_->v_.cend(); }
-  const_iterator cbegin() const { return data_->v_.cbegin(); }
-  const_iterator cend() const { return data_->v_.cend(); }
+  iterator begin() { return data_.v_.begin(); }
+  iterator end() { return data_.v_.end(); }
+  const_iterator begin() const { return data_.v_.cbegin(); }
+  const_iterator end() const { return data_.v_.cend(); }
+  const_iterator cbegin() const { return data_.v_.cbegin(); }
+  const_iterator cend() const { return data_.v_.cend(); }
 
   /// @code bool(list)
-  details::Bool __Bool__() const override { return !data_->v_.empty(); }
-
-  /// @brief Returns true if this and @p other contain the same elements, and
-  /// false otherwise.
-  /// @code list == other
-  details::Bool __Eq__(const self& other) const {
-    return std::equal(data_->v_.begin(), data_->v_.end(),
-                      other.data_->v_.begin(), other.data_->v_.end(),
-                      [](details::Const<value_type> a,
-                         details::Const<value_type> b) { return a == b; });
-  }
+  operator details::Bool() const override { return !data_.v_.empty(); }
 
   details::Str __Name__() const override {
     std::ostringstream oss;
@@ -592,19 +555,19 @@ class List final : public details::Object {
 
   /// @brief Returns the string representation of the list.
   /// @code str(list)
-  details::Str __Str__() const override {
+  operator details::Str() const override {
     std::ostringstream oss;
 
     oss << "[";
 
-    if (!data_->v_.empty()) {
-      const auto last = data_->v_.size() - 1;
+    if (!data_.v_.empty()) {
+      const auto last = data_.v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << static_cast<std::string>(Str(data_->v_[i])) << ", ";
+        oss << static_cast<std::string>(Str(data_.v_[i])) << ", ";
       }
 
-      oss << static_cast<std::string>(Str(data_->v_[last]));
+      oss << static_cast<std::string>(Str(data_.v_[last]));
     }
 
     oss << "]";
@@ -619,14 +582,14 @@ class List final : public details::Object {
 
     oss << "[";
 
-    if (!data_->v_.empty()) {
-      const auto last = data_->v_.size() - 1;
+    if (!data_.v_.empty()) {
+      const auto last = data_.v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << static_cast<std::string>(Repr(data_->v_[i])) << ", ";
+        oss << static_cast<std::string>(Repr(data_.v_[i])) << ", ";
       }
 
-      oss << static_cast<std::string>(Repr(data_->v_[last]));
+      oss << static_cast<std::string>(Repr(data_.v_[last]));
     }
 
     oss << "]";
@@ -634,21 +597,16 @@ class List final : public details::Object {
     return oss.str();
   }
 
-  details::BigInt __Id__() const override {
-    return reinterpret_cast<details::BigInt>(data_.get());
-  }
-
   // Bring in superclass member functions for which there are overloads here
   using Object::operator==;
   using Object::operator!=;
-  using Object::__Eq__;
 
  private:
   size_t ClampIndex(details::Int idx) const {
     if (idx < 0) {
       return 0;
-    } else if (idx > data_->v_.size()) {
-      return data_->v_.size();
+    } else if (idx > data_.v_.size()) {
+      return data_.v_.size();
     }
 
     return static_cast<size_t>(idx);
@@ -664,10 +622,10 @@ class List final : public details::Object {
 
   std::optional<size_t> TryGetNormalizedIndex(details::Int idx) const {
     if (idx < 0) {
-      idx += data_->v_.size();
+      idx += data_.v_.size();
     }
 
-    if (idx < 0 || idx >= data_->v_.size()) {
+    if (idx < 0 || idx >= data_.v_.size()) {
       return std::nullopt;
     }
 
@@ -678,10 +636,10 @@ class List final : public details::Object {
     return TryGetNormalizedIndex(idx).value_or(ClampIndex(idx));
   }
 
-  iterator GetIterator(size_t idx) { return data_->v_.begin() + idx; }
+  iterator GetIterator(size_t idx) { return data_.v_.begin() + idx; }
 
   const_iterator GetIterator(size_t idx) const {
-    return data_->v_.cbegin() + idx;
+    return data_.v_.cbegin() + idx;
   }
 
   std::optional<std::pair<size_t, size_t>> TryGetNormalizedSliceIndices(
@@ -701,9 +659,9 @@ class List final : public details::Object {
     start = TryGetNormalizedIndex(start).value_or(0);
 
     if (end == kEndIndex) {
-      end = data_->v_.size();
+      end = data_.v_.size();
     } else {
-      end = TryGetNormalizedIndex(end).value_or(data_->v_.size());
+      end = TryGetNormalizedIndex(end).value_or(data_.v_.size());
     }
 
     // Start beyond end is no-op
@@ -766,7 +724,7 @@ class List final : public details::Object {
     const auto end = slice_params.end;
 
     const auto num_old_elems = end - start;
-    const auto num_new_elems = other.data_->v_.size();
+    const auto num_new_elems = other.data_.v_.size();
 
     if (num_old_elems < num_new_elems) {
       ReplaceSliceSingleStepExpanding(other, start, num_old_elems,
@@ -776,7 +734,7 @@ class List final : public details::Object {
                                      num_new_elems);
     } else {
       // Trivial case, replace 1-to-1
-      std::copy(other.data_->v_.begin(), other.data_->v_.end(), start_it);
+      std::copy(other.data_.v_.begin(), other.data_.v_.end(), start_it);
     }
   }
 
@@ -785,18 +743,18 @@ class List final : public details::Object {
                                        size_t num_old_elems,
                                        size_t num_new_elems) {
     const auto num_extra_elems = num_new_elems - num_old_elems;
-    data_->v_.resize(data_->v_.size() + num_extra_elems);
+    data_.v_.resize(data_.v_.size() + num_extra_elems);
 
     // Recalculate the start iterator in case the resize() call
     // invalidated it
-    const auto start_it = data_->v_.begin() + start;
+    const auto start_it = data_.v_.begin() + start;
 
     // Shift elements from the starting position to make room for the
     // incoming ones
-    std::shift_right(start_it, data_->v_.end(), num_extra_elems);
+    std::shift_right(start_it, data_.v_.end(), num_extra_elems);
 
     // Copy into the desired range
-    std::copy(other.data_->v_.begin(), other.data_->v_.end(), start_it);
+    std::copy(other.data_.v_.begin(), other.data_.v_.end(), start_it);
   }
 
   void ReplaceSliceSingleStepReducing(const self& other,
@@ -807,11 +765,11 @@ class List final : public details::Object {
 
     // Copy into desired range
     start_it =
-        std::copy(other.data_->v_.begin(), other.data_->v_.end(), start_it);
+        std::copy(other.data_.v_.begin(), other.data_.v_.end(), start_it);
     const auto end_it = start_it + num_elems_to_remove;
 
     // Erase leftover elements
-    data_->v_.erase(start_it, end_it);
+    data_.v_.erase(start_it, end_it);
   }
 
   void ReplaceSliceMultiStep(const self& other,
@@ -819,7 +777,7 @@ class List final : public details::Object {
     const auto [start, end, step, start_it, end_it] = std::move(slice_params);
     const auto num_old_elems = GetNumberOfElementsInSlice(start, end, step);
 
-    if (other.data_->v_.size() != num_old_elems) {
+    if (other.data_.v_.size() != num_old_elems) {
       throw ValueError(
           "ValueError: attempt to assign sequence of size {} to extended "
           "slice "
@@ -827,32 +785,40 @@ class List final : public details::Object {
     }
 
     size_t idx = 0;
-    auto other_it = other.data_->v_.begin();
-    const auto other_end = other.data_->v_.end();
+    auto other_it = other.data_.v_.begin();
+    const auto other_end = other.data_.v_.end();
 
-    std::for_each(
-        start_it, end_it,
-        [&idx, step, &other_it, &other_end](details::Mut<value_type> elem) {
-          if (other_it == other_end) {
-            // Shouldn't happen, but here as a fail-safe
-            return;
-          }
+    std::for_each(start_it, end_it,
+                  [&idx, step, &other_it, &other_end](value_type& elem) {
+                    if (other_it == other_end) {
+                      // Shouldn't happen, but here as a fail-safe
+                      return;
+                    }
 
-          if (idx % step == 0) {
-            elem = *other_it;
-            ++other_it;
-          }
+                    if (idx % step == 0) {
+                      elem = *other_it;
+                      ++other_it;
+                    }
 
-          ++idx;
-        });
+                    ++idx;
+                  });
   }
 
   class Data {
    public:
+    bool operator==(const Data& other) const {
+      return std::equal(data_->v_.begin(), data_->v_.end(),
+                        other.data_->v_.begin(), other.data_->v_.end(),
+                        [](const value_type& a, const value_type& b) {
+                          return Unwrap(a) == Unwrap(b);
+                        });
+    }
+    bool operator!=(const Data& other) const { return !(*this == other); }
+
     storage v_;
   };
 
-  std::shared_ptr<Data> data_;
+  Data data_;
 };
 
 namespace details {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mamba/builtins/__types/abstract_set.hpp"
+#include "mamba/collections/abc/abstract_set.hpp"
 
 namespace mamba::builtins {
 

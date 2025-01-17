@@ -7,11 +7,13 @@
 
 namespace mamba::builtins::details {
 
-using Int = std::int32_t;
+/// @brief A new type in Mamba corresponding to C++ unsigned short int or Rust
+/// u16.
+using UShort = std::uint16_t;
 
 template <>
-struct Traits<Int> {
-  static constexpr std::string_view kName = "int";
+struct Traits<UShort> {
+  static constexpr std::string_view kName = "ushort";
 };
 
 }  // namespace mamba::builtins::details

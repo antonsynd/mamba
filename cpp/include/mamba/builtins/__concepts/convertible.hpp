@@ -2,8 +2,6 @@
 
 #include <concepts>
 
-#include "mamba/builtins/__concepts/value.hpp"
-#include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/bool.hpp"
 #include "mamba/builtins/__types/bytes.hpp"
 #include "mamba/builtins/__types/complex.hpp"
@@ -14,10 +12,10 @@
 
 namespace mamba::builtins::details {
 
-template <typename T>
-concept BigIntConvertibleObject = requires(const T t) {
-  { t.__BigInt__() } -> std::same_as<BigInt>;
-};
+// template <typename T>
+// concept BigIntConvertibleObject = requires(const T t) {
+//   { t.__BigInt__() } -> std::same_as<BigInt>;
+// };
 
 template <typename T>
 concept BoolConvertibleObject = requires(const T t) {

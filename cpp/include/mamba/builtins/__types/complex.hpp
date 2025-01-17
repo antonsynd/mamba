@@ -23,20 +23,17 @@ struct Complex final {
   /// @brief Returns the imaginary part of this complex number.
   Double Imag() const;
 
-  /// @brief Returns whether this number is equal to another.
-  Bool __Eq__(const self& other) const;
-
   /// @brief Returns true if any part of this number is non-zero. Returns false
   /// if both components are zero. Effectively, as long as the magnitude is
   /// non-zero, then this returns true.
-  Bool __Bool__() const;
+  operator Bool() const;
 
   /// @brief Returns the representation of this number.
   Str __Repr__() const;
 
   /// @brief Returns the string conversion of this number. It is the same as
   /// __Repr__().
-  Str __Str__() const;
+  operator Str() const;
 
   /// @brief Returns the magnitude of this number.
   Double __Abs__() const;
@@ -152,14 +149,8 @@ struct Complex final {
   // self& operator^=(const Float f);
   // self& operator^=(const Double d);
 
-  /// @note For C++ code generation. Uses __Eq__() underneath.
   bool operator==(const self& other) const;
   bool operator!=(const self& other) const;
-
-  /// @note For C++ conversion to bool. It needs to be explicit to avoid the
-  /// C++ compiler from choosing to convert to bool when doing equality checks
-  /// with the global operator==().
-  explicit operator bool() const;
 
  private:
   Double real_;

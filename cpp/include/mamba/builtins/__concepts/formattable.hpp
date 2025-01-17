@@ -2,14 +2,14 @@
 
 #include <concepts>
 
-#include "mamba/builtins/__concepts/value.hpp"
+#include "mamba/builtins/__concepts/types.hpp"
 #include "mamba/builtins/__types/str.hpp"
 
 namespace mamba::builtins::details {
 
 template <typename T>
 concept FormattableObject = requires(const T t) {
-  { t.__Format__() } -> std::same_as<Str>;
+  { Unwrap(t).__Format__() } -> std::same_as<Str>;
 };
 
 template <typename T>

@@ -17,11 +17,7 @@ Double Complex::Imag() const {
   return imag_;
 }
 
-Bool Complex::__Eq__(const Complex& other) const {
-  return real_ == other.real_ && imag_ == other.imag_;
-}
-
-Bool Complex::__Bool__() const {
+Complex::operator Bool() const {
   return real_ != 0 && imag_ != 0;
 }
 
@@ -39,7 +35,7 @@ Str Complex::__Repr__() const {
   return oss.str();
 }
 
-Str Complex::__Str__() const {
+Complex::operator Str() const {
   return __Repr__();
 }
 
@@ -47,13 +43,10 @@ Double Complex::__Abs__() const {
   return std::hypot(real_, imag_);
 }
 
-Complex::operator bool() const {
-  return __Bool__();
+bool Complex::operator==(const Complex& other) const {
+  return real_ == other.real_ && imag_ == other.imag_;
 }
 
-bool Complex::operator==(const Complex& other) const {
-  return __Eq__(other);
-}
 bool Complex::operator!=(const Complex& other) const {
   return !(*this == other);
 }

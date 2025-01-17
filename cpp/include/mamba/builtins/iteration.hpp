@@ -8,6 +8,7 @@
 #include <string_view>
 #include <type_traits>
 
+#include "mamba/__utils/string_builder.hpp"
 #include "mamba/builtins/__concepts/subclass.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/traits.hpp"
@@ -35,8 +36,7 @@ class Iterator : public details::Object {
 
   /// @brief Constructs this iterator with a custom lambda that should be
   /// equivalent to a __Next__() invocation.
-  explicit Iterator(next_function_t next_func)
-      : data_(std::make_shared<Data>(std::move(next_func))) {}
+  explicit Iterator(next_function_t next_func) : data_(std::move(next_func)) {}
 
   /// @brief Constructs this iterator over standard C++ forward iterators
   /// which must be have a lifetime at least as long as this iterator, which
@@ -46,28 +46,23 @@ class Iterator : public details::Object {
   /// relevant iterator methods (dereference and sentinel detection).
   template <std::forward_iterator It>
   Iterator(It begin, It end)
-      : data_(std::make_shared<Data>(
-            [it = std::move(begin),
-             end = std::move(end)]() mutable -> value_type {
-              if (it == end) {
-                throw StopIteration();
-              }
+      : data_([it = std::move(begin),
+               end = std::move(end)]() mutable -> value_type {
+          if (it == end) {
+            throw StopIteration();
+          }
 
-              auto res = *it;
-              ++it;
+          auto res = *it;
+          ++it;
 
-              return res;
-            })) {}
+          return res;
+        }) {}
 
   virtual ~Iterator() = default;
 
   virtual self __Iter__() const { return *this; }
 
   virtual value_type __Next__() { return data_->next_func_(); }
-
-  virtual details::BigInt __Id__() const override {
-    return reinterpret_cast<details::BigInt>(data_.get());
-  }
 
   constexpr details::Bool __Bool__() const override { return true; }
 
@@ -77,12 +72,9 @@ class Iterator : public details::Object {
     return __Id__() == other.__Id__();
   }
 
-  details::Str __Name__() const override {
-    std::ostringstream oss;
-
-    oss << "Iterator[" << details::Traits<value_type>::kName << "]";
-
-    return oss.str();
+  static details::Str __Name__() {
+    return __utils::stringify()
+           << "Iterator[" << details::Traits<value_type>::kName << "]";
   }
 
   // Native C++ iteration support
@@ -95,10 +87,15 @@ class Iterator : public details::Object {
  private:
   class Data {
    public:
+    bool operator==(const Data& other) const {
+      return next_func_ == other.next_func_;
+    }
+    bool operator!=(const Data& other) const { return !(*this == other); }
+
     next_function_t next_func_;
   };
 
-  std::shared_ptr<Data> data_;
+  Data data_;
 };
 
 namespace details {
