@@ -26,55 +26,66 @@ in a C++ `std::any` and must be explicitly cast to the expected type.
 
 | Mamba | Python 3 analog | C++20 interop | Supported | Notes |
 | --- | --- | --- | --- | --- |
-| `bigint` | `int` | `std::int_least64_t` | Yes | 64-bit signed integer |
 | `bool` | `bool` | `bool` | Yes | - |
-| `byte` | `int` | - | Not yet | 8-bit unsigned integer |
+| `byte` | `int` | `std::uint8_t` | Yes | 8-bit unsigned integer |
 | `bytearray` | `bytearray` | - | Not yet | - |
 | `bytes` | `bytes` | - | Not yet | - |
 | `complex` | `complex` | - | Partial | - |
+| `decimal` | `float` | `std::float128_t` | Yes | 128-bit float |
 | `dict[K, V]` | `dict[K, V]` | - | Not yet | Specifically `collections.OrderedDict[K, V]` |
 | `double` | `float` | `std::float64_t` | Yes | 64-bit float |
 | `float` | `float` | `std::float32_t` | Yes | 32-bit float |
 | `frozenset[T]` | `frozenset[T]` | - | Partial | - |
-| `int` | `int` | `std::int_least32_t` | Yes | 32-bit signed integer |
+| `int` | `int` | `std::int32_t` | Yes | 32-bit signed integer |
 | `list[T]` | `list[T]` | Convertible to `std::vector<T>` | Yes | - |
+| `long` | `int` | `std::int64_t` | Yes | 64-bit signed integer |
 | `None` | `None` | Bidi-convertible with `std::nullopt_t` | Yes | - |
 | `object` | `object` | N/A | Yes | Abstract base class of all non-value types |
 | `Optional[T]` | `Optional[T]` | `std::optional<T>` | Not yet | - |
+| `sbyte` | `int` | `std::int8_t` | Yes | 8-bit signed integer |
 | `set[T]` | `set[T]` | - | Partial | - |
+| `short` | `int` | `std::int16_t` | Yes | 16-bit signed integer |
+| `size` | `int` | `std::size_t` | Yes | An unsigned integer typically the size of a pointer on the target platform |
 | `str` | `str` | Bidi-convertible with `std::string` | Partial | Underlyingly always UTF-16 |
 | `tuple[...]` | `tuple[...]` | - | Not yet | - |
+| `uint` | `int` | `std::uint32_t` | Yes | 64-bit signed integer |
+| `ulong` | `int` | `std::uint64_t` | Yes | 32-bit signed integer |
+| `ushort` | `int` | `std::uint16_t` | Yes | 16-bit signed integer |
 
-#### 1.1.1. Values and non-values (objects)
+#### 1.1.1. Value and reference types
 
-With the exception of the `None` type, the built-in types are divided into
-value and non-value (object) types.
+The built-in types are divided into value and reference types.
 
 | Type | Type category | Notes |
 | --- | --- | --- |
-| `bigint` | Value | - |
 | `bool` | Value | - |
-| `bytearray` | Object | - |
+| `byte` | Value | - |
+| `bytearray` | Reference | - |
 | `bytes` | Value | - |
 | `complex` | Value | - |
-| `dict[K, V]` | Object | - |
+| `decimal` | Value | - |
+| `dict[K, V]` | Reference | - |
 | `double` | Value | - |
 | `float` | Value | - |
-| `frozenset[T]` | Object | - |
-| `list[T]` | Object | - |
-| `None` | N/A | - |
-| `object` | Object | - |
-| `Optional[T]` | N/A | - |
-| `set[T]` | Object | - |
+| `frozenset[T]` | Reference | - |
+| `list[T]` | Reference | - |
+| `long` | Value | - |
+| `None` | Value` | - |
+| `object` | Reference | - |
+| `Optional[T]` | Reference | - |
+| `sbyte` | Value | - |
+| `set[T]` | Reference | - |
+| `short` | Value | - |
+| `size` | Value | - |
 | `str` | Value | - |
 | `tuple[...]` | Value | - |
+| `uint` | Value | - |
+| `ulong` | Value | - |
+| `ushort` | Value | - |
 
-Value types are internally passed by value (copy), whereas non-value (object)
-types are passed by reference (technically lvalue references over
-a `std::shared_ptr` to internal data).
-
-The `None` type does not fit into either of these paradigms and only exists to
-mean the absence of a payload of type `T` in an `Optional[T]`.
+Value types are internally passed by value (copy), whereas reference types
+are encapsulated in a `std::shared_ptr<T>` and are effectively passed by
+reference.
 
 ### 1.2. Functions
 
