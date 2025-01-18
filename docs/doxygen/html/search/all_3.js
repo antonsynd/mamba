@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['complex_0',['Complex',['../structmamba_1_1builtins_1_1details_1_1_complex.html',1,'mamba::builtins::details']]]
+  ['capitalize_0',['Capitalize',['../classmamba_1_1builtins_1_1details_1_1_str.html#a28ca9c238c2bc7a83bfc0509af5f7307',1,'mamba::builtins::details::Str']]],
+  ['complex_1',['Complex',['../structmamba_1_1builtins_1_1details_1_1_complex.html',1,'mamba::builtins::details']]]
 ];

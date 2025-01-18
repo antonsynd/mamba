@@ -23,7 +23,11 @@ Str::Str() = default;
 
 Str::Str(const char* s) : data_(s) {}
 
+Str::Str(const char* s, std::size_t len) : data_(s, len) {}
+
 Str::Str(std::string s) : data_(std::move(s)) {}
+
+Str::Str(const std::string_view s) : data_(s) {}
 
 Str::Str(const bool b) : data_(b ? "True" : "False") {}
 
@@ -56,6 +60,10 @@ Str::Str(const ULong u) : data_(std::to_string(u)) {}
 Str::Str(const UShort u) : data_(std::to_string(u)) {}
 
 Str::operator std::string() const {
+  return data_.s_;
+}
+
+Str::operator std::string_view() const {
   return data_.s_;
 }
 
@@ -93,8 +101,12 @@ bool Str::operator!=(const std::string_view sv) const {
   return !(*this == sv);
 }
 
+Str operator""_str(const char* s, std::size_t len) {
+  return Str(s, len);
+}
+
 std::ostream& operator<<(std::ostream& oss, const Str& s) {
-  oss << static_cast<std::string>(s);
+  oss << static_cast<std::string_view>(s);
   return oss;
 }
 
