@@ -9,6 +9,7 @@
 #include <type_traits>
 
 #include "mamba/__utils/string_builder.hpp"
+#include "mamba/builtins/__concepts/subclass.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/error.hpp"
