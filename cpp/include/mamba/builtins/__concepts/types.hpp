@@ -12,6 +12,8 @@ namespace mamba::builtins::details {
 /// @brief All primitive types are value types, including None and Optional<T>
 template <typename T>
 concept Value =
+    std::same_as<std::decay_t<T>, bool> ||
+    std::same_as<std::decay_t<T>, Bool> ||
     std::same_as<std::decay_t<T>, Byte> ||
     // std::same_as<std::decay_t<T>, Complex> ||
     std::same_as<std::decay_t<T>, Double> ||

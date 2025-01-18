@@ -11,8 +11,8 @@ namespace mamba::builtins {
 namespace details {
 
 template <typename T, typename U>
-concept HasSequenceMethods = requires(const T sequence, Const<U> elem) {
-  { sequence.__Contains__(elem) } -> std::same_as<Bool>;
+concept HasSequenceMethods = requires(const T sequence, const U& elem) {
+  { sequence.__Contains__(elem) } -> std::same_as<bool>;
   { sequence.__Len__() } -> std::same_as<Int>;
   { sequence.Max() } -> std::same_as<U>;
   { sequence.Min() } -> std::same_as<U>;
@@ -45,8 +45,12 @@ details::SequenceValueType<T> Max(const T& sequence) {
 }
 
 template <details::Sequence T>
-details::Bool Contains(const T& sequence,
-                       details::Const<details::SequenceValueType<T>> value) {
+bool In(const details::SequenceValueType<T>& value, const T& sequence) {
+  return sequence.__Contains__(value);
+}
+
+template <details::Sequence T>
+bool Contains(const T& sequence, const details::SequenceValueType<T>& value) {
   return sequence.__Contains__(value);
 }
 

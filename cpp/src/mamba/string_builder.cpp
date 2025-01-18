@@ -3,6 +3,8 @@
 #include <sstream>
 #include <string>
 
+#include "mamba/builtins/__types/str.hpp"
+
 namespace mamba::__utils {
 namespace details {
 
@@ -15,6 +17,10 @@ std::string StringBuilder::operator<<(const Flush&) {
 }
 
 StringBuilder::operator std::string() const {
+  return oss_.str();
+}
+
+StringBuilder::operator builtins::details::Str() const {
   return oss_.str();
 }
 

@@ -2,12 +2,12 @@
 
 #include "gtest/gtest.h"  // for Test, Message, CmpHelperNE
 
-#include "mamba/__test/value_wrapper.hpp"  // for Wrapper
-#include "mamba/builtins/types.hpp"        // for IntType
+#include "mamba/builtins/types.hpp"  // for IntType
+#include "value_wrapper.hpp"         // for Wrapper
 
 namespace mamba::builtins::test {
 
-using namespace __test;
+using namespace mamba::test;
 
 TEST(Operators, ValueEqualityAndInequality) {
   // If

@@ -26,7 +26,8 @@ class Object {
   virtual operator Str() const;
 
   /// @brief Returns whether this object is equivalent (but not necessarily
-  /// identical) to @p other. By default, it memory address of both objects.
+  /// identical) to @p other. By default, it checks the memory address of
+  /// both objects.
   virtual bool operator==(const Object& other) const;
   virtual bool operator!=(const Object& other) const;
 

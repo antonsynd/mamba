@@ -13,5 +13,7 @@
 namespace mamba {
 
 using namespace mamba::builtins;
+using mamba::details::Bool;
+using mamba::details::Str;
 
 }  // namespace mamba

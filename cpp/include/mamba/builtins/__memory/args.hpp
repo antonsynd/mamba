@@ -7,6 +7,9 @@
 namespace mamba::builtins::details {
 
 template <typename T>
+using Wrap = std::conditional_t<Value<T>, T, std::shared_ptr<T>>;
+
+template <typename T>
 auto Unwrap(T&& t) {
   if constexpr (Reference<T>) {
     return std::forward<T::element_type>(*t);

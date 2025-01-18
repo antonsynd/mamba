@@ -3,15 +3,16 @@
 #include <type_traits>  // for invoke_result_t
 #include <vector>       // for vector
 
-#include "gtest/gtest.h"  // for Test, Message, TestPartResult
+#include "gtest/gtest.h"  // for Test, Message, TestPartRe...
 
-#include "mamba/__test/value_wrapper.hpp"  // for IntWrapper, Wrapper, IntId...
-#include "mamba/builtins.hpp"              // for List, IntType, Len, Iterator
-#include "mamba/builtins/__memory/args.hpp"  // for Const
+#include "mamba/builtins.hpp"               // for List, IntType, Len, Iterator
+#include "mamba/builtins/__types/bool.hpp"  // for Bool
+#include "mamba/builtins/__types/str.hpp"   // for Str
+#include "value_wrapper.hpp"                // for IntWrapper, Wrapper, IntI...
 
 namespace mamba::builtins::test {
 
-using namespace mamba::__test;
+using namespace mamba::test;
 
 namespace {
 
@@ -278,7 +279,7 @@ TEST(List, ContainsNotActuallyInObjectByIdentity) {
 
   const IntIdentityWrapper i{3};
 
-  ASSERT_NE(~i, ~l[1]);
+  ASSERT_NE(&i, &l[1]);
 
   // When/then
   EXPECT_FALSE(Contains(l, i));
@@ -299,7 +300,7 @@ TEST(List, ContainsActuallyInObjectByEquality) {
 
   const IntWrapper i{5};
 
-  ASSERT_NE(~i, ~l[2]);
+  ASSERT_NE(&i, &l[2]);
 
   // When/then
   EXPECT_TRUE(Contains(l, i));
@@ -313,7 +314,7 @@ TEST(List, ContainsActuallyInObjectByIdentity) {
 
   const auto i = l[1];
 
-  ASSERT_EQ(~i, ~l[1]);
+  ASSERT_EQ(&i, &l[1]);
 
   // When/then
   EXPECT_TRUE(Contains(l, i));
@@ -1541,7 +1542,7 @@ TEST(List, IndexNonEmptyObjectEqual) {
 
   const IntWrapper i{5};
 
-  ASSERT_NE(~i, ~l[2]);
+  ASSERT_NE(&i, &l[2]);
 
   // When/then
   EXPECT_EQ(l.Index(i), 2);
@@ -1566,7 +1567,7 @@ TEST(List, IndexNonEmptyObjectSame) {
 
   const auto i = l[2];
 
-  ASSERT_EQ(~i, ~l[2]);
+  ASSERT_EQ(&i, &l[2]);
 
   // When/then
   EXPECT_EQ(l.Index(i), 2);
@@ -1580,7 +1581,7 @@ TEST(List, IndexNonEmptyObjectNotSame) {
 
   const IntIdentityWrapper i{5};
 
-  ASSERT_NE(~i, ~l[2]);
+  ASSERT_NE(&i, &l[2]);
 
   // When/then
   EXPECT_THROW(l.Index(i), ValueError);
@@ -1666,7 +1667,7 @@ TEST(List, RemovePresentOnceObjectNotSame) {
 
   const IntIdentityWrapper i{3};
 
-  ASSERT_NE(~i, ~l[1]);
+  ASSERT_NE(&i, &l[1]);
 
   // When/then
   EXPECT_THROW(l.Remove(IntIdentityWrapper(3)), ValueError);
@@ -1727,7 +1728,7 @@ TEST(List, RemovePresentMoreThanOnceObjectIdentityLast) {
   // When
   const auto last_elem = l[-1];
 
-  ASSERT_NE(~last_elem, ~l[1]);
+  ASSERT_NE(&last_elem, &l[1]);
 
   l.Remove(last_elem);
 
@@ -1786,7 +1787,7 @@ TEST(List, RemoveAtEndObjectEqualityNotSame) {
   // When
   const auto i = IntWrapper(3);
 
-  ASSERT_NE(~i, ~l[-1]);
+  ASSERT_NE(&i, &l[-1]);
 
   l.Remove(i);
 
@@ -1804,7 +1805,7 @@ TEST(List, RemoveAtEndObjectIdentityNotSame) {
 
   const IntIdentityWrapper i{3};
 
-  ASSERT_NE(~i, ~l[-1]);
+  ASSERT_NE(&i, &l[-1]);
 
   // When/then
   EXPECT_THROW(l.Remove(i), ValueError);
@@ -2744,7 +2745,7 @@ TEST(List, EqualitySameObject) {
   ASSERT_NE(&l, &copy);
 
   // When/then
-  EXPECT_TRUE(l.__Eq__(copy));
+  EXPECT_EQ(l, copy);
 }
 
 TEST(List, EqualitySameObjectObject) {
@@ -2756,7 +2757,7 @@ TEST(List, EqualitySameObjectObject) {
   ASSERT_NE(&l, &copy);
 
   // When/then
-  EXPECT_TRUE(l.__Eq__(copy));
+  EXPECT_EQ(l, copy);
 }
 
 TEST(List, NativeEqualitySameObject) {
@@ -2810,13 +2811,13 @@ TEST(List, EqualityDifferentObject) {
   ASSERT_NE(&l, &m);
 
   // When/then
-  EXPECT_FALSE(l.__Eq__(m));
+  EXPECT_NE(l, m);
 
   // When
   m.Pop();
 
   // Then
-  EXPECT_TRUE(l.__Eq__(m));
+  EXPECT_EQ(l, m);
 }
 
 TEST(List, EqualityDifferentObjectObject) {
@@ -2828,13 +2829,13 @@ TEST(List, EqualityDifferentObjectObject) {
   ASSERT_NE(&l, &m);
 
   // When/then
-  EXPECT_FALSE(l.__Eq__(m));
+  EXPECT_NE(l, m);
 
   // When
   m.Pop();
 
   // Then
-  EXPECT_TRUE(l.__Eq__(m));
+  EXPECT_EQ(l, m);
 }
 
 TEST(List, NativeEqualityAndInequalityDifferentObject) {
@@ -3074,7 +3075,7 @@ TEST(List, SortWithKeyObject) {
                         IntWrapper(1), IntWrapper(5)};
 
   // This effectively inverts the sort
-  const auto key = [](details::Const<IntWrapper> i) -> FloatType {
+  const auto key = [](const IntWrapper& i) -> FloatType {
     return 1.0 / static_cast<FloatType>(i.Value());
   };
 
@@ -3113,7 +3114,7 @@ TEST(List, SortWithKeyAndReverseObject) {
                         IntWrapper(1), IntWrapper(5)};
 
   // This effectively inverts the sort, but the reverse reverses it again
-  const auto key = [](details::Const<IntWrapper> i) -> FloatType {
+  const auto key = [](const IntWrapper& i) -> FloatType {
     return 1.0 / static_cast<FloatType>(i.Value());
   };
 

@@ -1,9 +1,10 @@
 #include "mamba/__utils/logger.hpp"
 
-#include <iostream>
-#include <ostream>
+#include <iostream>  // for cerr, cout
+#include <ostream>   // for ostream
+#include <string>    // for basic_string
 
-#include "mamba/__utils/string_builder.hpp"
+#include "mamba/__utils/string_builder.hpp"  // for Flush, stringify, String...
 
 namespace mamba::__utils {
 namespace details {

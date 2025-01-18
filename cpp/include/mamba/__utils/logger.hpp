@@ -1,9 +1,8 @@
 #pragma once
 
-#include <iostream>
-#include <ostream>
+#include <ostream>  // for ostream
 
-#include "mamba/__utils/string_builder.hpp"
+#include "mamba/__utils/string_builder.hpp"  // for NotFlush, StringBuilder
 
 namespace mamba::__utils {
 namespace details {

@@ -1,11 +1,11 @@
 #pragma once
 
 #include <ostream>      // for ostream
+#include <sstream>      // for ostream
 #include <string>       // for basic_string, string
 #include <string_view>  // for basic_string_view
 #include <utility>      // for move
 
-#include "mamba/__utils/string_builder.hpp"        // for stringify, StringB...
 #include "mamba/builtins/__concepts/optional.hpp"  // for Optional
 #include "mamba/builtins/__types/bool.hpp"         // for Bool
 #include "mamba/builtins/__types/byte.hpp"         // for Byte
@@ -25,6 +25,11 @@
 #include "mamba/builtins/__types/ushort.hpp"  // for UShort
 
 namespace mamba::builtins::details {
+
+// Forward-declaration
+class Str;
+
+std::ostream& operator<<(std::ostream& oss, const Str& s);
 
 class Str final : public Object {
  public:
@@ -56,8 +61,9 @@ class Str final : public Object {
   template <Optional T>
   Str(const T o) {
     if (o.has_value()) {
-      std::string s = __utils::stringify() << "Optional[" << Str(o) << "]";
-      data_.s_ = std::move(s);
+      std::ostringstream oss;
+      oss << "Optional[" << Str(o) << "]";
+      data_.s_ = oss.str();
     } else {
       data_.s_ = "None";
     }
@@ -98,8 +104,6 @@ class Str final : public Object {
 
   Data data_;
 };
-
-std::ostream& operator<<(std::ostream& oss, const Str& s);
 
 template <>
 struct Traits<Str> {

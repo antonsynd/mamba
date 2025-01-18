@@ -9,7 +9,6 @@
 #include <type_traits>
 
 #include "mamba/__utils/string_builder.hpp"
-#include "mamba/builtins/__concepts/subclass.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/error.hpp"
@@ -62,15 +61,7 @@ class Iterator : public details::Object {
 
   virtual self __Iter__() const { return *this; }
 
-  virtual value_type __Next__() { return data_->next_func_(); }
-
-  constexpr details::Bool __Bool__() const override { return true; }
-
-  /// @brief Returns true if this and @p other are the same iterators.
-  /// @code iterator == other
-  virtual details::Bool __Eq__(const self& other) const {
-    return __Id__() == other.__Id__();
-  }
+  virtual value_type __Next__() { return data_.next_func_(); }
 
   static details::Str __Name__() {
     return __utils::stringify()
@@ -80,9 +71,6 @@ class Iterator : public details::Object {
   // Native C++ iteration support
   iterator begin() const { return iterator(*this); }
   iterator end() const { return iterator(*this, true); }
-
-  // Bring in superclass member functions for which there are overloads here
-  using details::Object::__Eq__;
 
  private:
   class Data {

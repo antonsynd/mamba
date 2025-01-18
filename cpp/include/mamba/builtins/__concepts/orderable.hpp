@@ -23,7 +23,7 @@ concept LessThanComparable = requires(const T lhs, const T rhs) {
 
 template <typename T>
 concept LessThanOrEqualComparable = requires(const T lhs, const T rhs) {
-  { Unwrap(lhs) <= Unwrap(rhs); } -> std::same_as<bool>;
+  { Unwrap(lhs) <= Unwrap(rhs) } -> std::same_as<bool>;
 };
 
 }  // namespace mamba::builtins::details

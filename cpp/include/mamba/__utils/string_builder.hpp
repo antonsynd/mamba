@@ -4,6 +4,8 @@
 #include <sstream>
 #include <string>
 
+#include "mamba/builtins/__types/str.hpp"
+
 namespace mamba::__utils {
 namespace details {
 
@@ -26,6 +28,7 @@ class StringBuilder {
   }
 
   operator std::string() const;
+  operator builtins::details::Str() const;
 
  private:
   std::ostringstream oss_;

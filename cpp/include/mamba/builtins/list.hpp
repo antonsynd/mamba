@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "mamba/__utils/hex_printer.hpp"
+#include "mamba/__utils/string_builder.hpp"
 #include "mamba/builtins/__concepts/orderable.hpp"
 #include "mamba/builtins/__memory/args.hpp"
 #include "mamba/builtins/__types/int.hpp"
@@ -79,7 +80,7 @@ class List final : public details::Object {
   template <typename It>
     requires details::IterableOf<It, value_type>
   List(const It& iterable) {
-    for (builtins::const value_type& elem : iterable.__Iter__()) {
+    for (const value_type& elem : iterable.__Iter__()) {
       Append(elem);
     }
   }
@@ -543,14 +544,11 @@ class List final : public details::Object {
   const_iterator cend() const { return data_.v_.cend(); }
 
   /// @code bool(list)
-  operator details::Bool() const override { return !data_.v_.empty(); }
+  operator details::Bool() const { return !data_.v_.empty(); }
 
-  details::Str __Name__() const override {
-    std::ostringstream oss;
-
-    oss << "list[" << details::Traits<value_type>::kName << "]";
-
-    return oss.str();
+  static details::Str __Name__() {
+    return __utils::stringify()
+           << "list[" << details::Traits<value_type>::kName << "]";
   }
 
   /// @brief Returns the string representation of the list.
@@ -564,10 +562,10 @@ class List final : public details::Object {
       const auto last = data_.v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << static_cast<std::string>(Str(data_.v_[i])) << ", ";
+        oss << details::Str(data_.v_[i]) << ", ";
       }
 
-      oss << static_cast<std::string>(Str(data_.v_[last]));
+      oss << details::Str(data_.v_[last]);
     }
 
     oss << "]";
@@ -586,10 +584,10 @@ class List final : public details::Object {
       const auto last = data_.v_.size() - 1;
 
       for (size_t i = 0; i < last; ++i) {
-        oss << static_cast<std::string>(Repr(data_.v_[i])) << ", ";
+        oss << Repr(data_.v_[i]) << ", ";
       }
 
-      oss << static_cast<std::string>(Repr(data_.v_[last]));
+      oss << Repr(data_.v_[last]);
     }
 
     oss << "]";
@@ -807,10 +805,9 @@ class List final : public details::Object {
   class Data {
    public:
     bool operator==(const Data& other) const {
-      return std::equal(data_->v_.begin(), data_->v_.end(),
-                        other.data_->v_.begin(), other.data_->v_.end(),
+      return std::equal(v_.begin(), v_.end(), other.v_.begin(), other.v_.end(),
                         [](const value_type& a, const value_type& b) {
-                          return Unwrap(a) == Unwrap(b);
+                          return details::Unwrap(a) == details::Unwrap(b);
                         });
     }
     bool operator!=(const Data& other) const { return !(*this == other); }
@@ -818,7 +815,8 @@ class List final : public details::Object {
     storage v_;
   };
 
-  Data data_;
+  // Internal elements are mutable, even if the list itself is not.
+  mutable Data data_;
 };
 
 namespace details {
@@ -855,12 +853,9 @@ class ListIterator : public Iterator<T> {
     return self(std::forward<Args>(args)...);
   }
 
-  Str __Name__() const override {
-    std::ostringstream oss;
-
-    oss << "ListIterator[" << details::Traits<value_type>::kName << "]";
-
-    return oss.str();
+  static Str __Name__() {
+    return __utils::stringify()
+           << "ListIterator[" << details::Traits<value_type>::kName << "]";
   }
 };
 
