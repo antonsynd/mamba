@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string_view>  // for basic_string_view, str...
-#include "mamba/builtins/__concepts/optional.hpp"
+#include "mamba/builtins/__meta/optional.hpp"
 #include "mamba/builtins/__types/byte.hpp"     // for Byte
 #include "mamba/builtins/__types/decimal.hpp"  // for Decimal
 #include "mamba/builtins/__types/double.hpp"   // for Double
@@ -19,7 +19,14 @@
 
 namespace mamba::builtins::details {
 
-/// @brief A boolean.
+/// @brief A proxy for the Pythonic `bool` type. In general, all Mamba APIs
+/// that interact with bools should return the C++ `bool` type. This proxy
+/// is meant to provide both an implicit conversion target via `operator Bool()`
+/// on implementing classes, and the builtin conversion function `Bool()`.
+/// The implicit conversion target is to avoid having implicit conversion
+/// `operator bool()` be performed when trying to equate differing types, which
+/// would yield incorrect results if there is an overload for `operator==()`.
+///
 /// @note This goes against the Python specification which says bool is an
 /// integer. This is to ensure we can write overload built-in functions for
 /// both Int and Bool.
@@ -47,11 +54,16 @@ struct Bool final {
     b_ = !!o;
   }
 
+  // Converting constructor from Str is not defined here because it would
+  // cause a circular reference, since Str itself has implicit conversion to
+  // Bool in str.hpp.
+
   bool operator==(const Bool& other) const;
   bool operator!=(const Bool& other) const;
 
   // Note: Conversion to Str is defined in str.hpp via implicit conversion to
-  // C++ bool.
+  // C++ bool to avoid circular references since Str itself has implicit
+  // conversion to Bool.
   operator bool() const;
   operator Byte() const;
   operator Decimal() const;
@@ -72,7 +84,6 @@ struct Bool final {
 
 template <>
 struct Traits<Bool> {
-  // using delegate_type = BoolDelegate;
   static constexpr std::string_view kName = "bool";
 };
 

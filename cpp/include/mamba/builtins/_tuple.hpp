@@ -11,11 +11,11 @@
 #include <utility>
 #include <vector>
 
-#include "mamba/__concepts/comparable.hpp"
-#include "mamba/__concepts/entity.hpp"
-#include "mamba/__memory/handle.hpp"
-#include "mamba/__memory/managed.hpp"
-#include "mamba/__memory/read_only.hpp"
+#include "mamba/__meta/comparable.hpp"
+#include "mamba/__meta/entity.hpp"
+#include "mamba/__meta/handle.hpp"
+#include "mamba/__meta/managed.hpp"
+#include "mamba/__meta/read_only.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/str.hpp"
 #include "mamba/builtins/as_str.hpp"
@@ -37,7 +37,7 @@ concept Homogenous = (std::same_as<T, Args> && ...);
 // concept Heterogeneous = !Homogenous<Args...>;
 
 // Forward declaration
-template <__concepts::Entity T>
+template <__meta::Entity T>
 class TupleIterator;
 
 }  // namespace details
@@ -54,14 +54,14 @@ class TupleIterator;
 
 // Could be base class of List<T>
 template <typename T, typename... Elems>
-  requires details::Homogenous<T, Elems...> && __concepts::Entity<T> &&
-           __concepts::LessThanComparable<T>
+  requires details::Homogenous<T, Elems...> && __meta::Entity<T> &&
+           __meta::LessThanComparable<T>
 class Tuple : public std::enable_shared_from_this<Tuple<T>> {
  public:
   /// @note Mamba-specific
   using element = T;
 
-  using value = __memory::managed_t<element>;
+  using value = __meta::managed_t<element>;
   using reference = value&;
   using const_reference = const value&;
 
@@ -73,7 +73,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   /// @note Mamba-specific
   using self = Tuple<element>;
-  using handle = __memory::handle_t<self>;
+  using handle = __meta::handle_t<self>;
 
   static constexpr auto kEndIndex = std::numeric_limits<__types::Int>::min();
 
@@ -85,7 +85,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   /// are copied.
   /// @code tuple(Iterable)
   template <typename It>
-    requires __concepts::TypedIterable<It, element>
+    requires __meta::TypedIterable<It, element>
   explicit Tuple(It& iterable) {
     bool no_stop_iteration = true;
     auto it = iterable.Iter();
@@ -112,7 +112,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   Tuple(std::initializer_list<value> elements) {
     v_.reserve(elements.size());
 
-    if constexpr (__memory::Handle<value>) {
+    if constexpr (__meta::Handle<value>) {
       std::copy(std::make_move_iterator(elements.begin()),
                 std::make_move_iterator(elements.end()),
                 std::back_inserter(v_));
@@ -126,12 +126,12 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   /// @code Tuple.__init__()
   template <typename... Args>
   static handle __Init(Args&&... args) {
-    return __memory::Init<self>(std::forward<Args>(args)...);
+    return __meta::Init<self>(std::forward<Args>(args)...);
   }
 
   /// @brief Returns whether @p elem is in the tuple. O(n).
   /// @code elem in tuple
-  __types::Bool __Contains(__memory::ReadOnly<element> elem) const {
+  __types::Bool __Contains(__meta::ReadOnly<element> elem) const {
     return std::find(v_.cbegin(), v_.cend(), elem) != v_.cend();
   }
 
@@ -194,7 +194,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
       throw ValueError("Min() arg is an empty sequence");
     }
 
-    if constexpr (__concepts::Object<element>) {
+    if constexpr (__meta::Object<element>) {
       return *std::min_element(
           v_.cbegin(), v_.cend(),
           [](const auto a, const auto b) { return operators::Lt(*a, *b); });
@@ -211,7 +211,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
       throw ValueError("Max() arg is an empty sequence");
     }
 
-    if constexpr (__concepts::Object<element>) {
+    if constexpr (__meta::Object<element>) {
       return *std::max_element(
           v_.cbegin(), v_.cend(),
           [](const auto a, const auto b) { return operators::Lt(*a, *b); });
@@ -222,9 +222,9 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   /// @brief Returns the number of times @p elem is present in the tuple.
   /// @code tuple.count(x)
-  __types::Int Count(__memory::ReadOnly<element> elem) const {
+  __types::Int Count(__meta::ReadOnly<element> elem) const {
     return std::count_if(v_.cbegin(), v_.cend(),
-                         [elem](__memory::ReadOnly<element> val) {
+                         [elem](__meta::ReadOnly<element> val) {
                            return operators::Eq(val, elem);
                          });
   }
@@ -296,7 +296,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   /// If @p start is negative, it is clamped to 0. If @p start is greater than
   /// the last index in the tuple, then it throws ValueError.
   /// @code tuple.index(i, (j))
-  __types::Int Index(__memory::ReadOnly<element> elem,
+  __types::Int Index(__meta::ReadOnly<element> elem,
                      __types::Int start = 0) const {
     return Index(elem, start, v_.size());
   }
@@ -308,7 +308,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   /// then it throws ValueError. If @p end is greater than the last index in
   /// the tuple, it is clamped to the length of the tuple.
   /// @code tuple.index(i, j, k)
-  __types::Int Index(__memory::ReadOnly<element> elem,
+  __types::Int Index(__meta::ReadOnly<element> elem,
                      __types::Int start,
                      __types::Int end) const {
     end = ClampIndex(end);
@@ -324,7 +324,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
   /// @brief Returns an iterator to this tuple.
   /// @code tuple.__iter__()
-  __memory::handle_t<Iterator<element>> __Iter() {
+  __meta::handle_t<Iterator<element>> __Iter() {
     return details::TupleIterator<element>::__Init(v_.begin(), v_.end());
   }
 
@@ -356,7 +356,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
   /// @code tuple == other
   template <>
   __types::Bool __Eq(const self& other) const {
-    if constexpr (__concepts::Object<element>) {
+    if constexpr (__meta::Object<element>) {
       return std::equal(
           v_.begin(), v_.end(), other.v_.begin(), other.v_.end(),
           [](const auto a, const auto b) { return operators::Eq(*a, *b); });
@@ -438,7 +438,7 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
  private:
   /// @brief Appends @p elem to the end of the tuple.
   /// @code tuple.append(elem)
-  void Append(__memory::ReadOnly<element> elem) { v_.emplace_back(elem); }
+  void Append(__meta::ReadOnly<element> elem) { v_.emplace_back(elem); }
 
   /// @brief Appends variadic args @p rest to the end of the tuple.
   /// @code tuple.append(...)
@@ -565,19 +565,19 @@ class Tuple : public std::enable_shared_from_this<Tuple<T>> {
 
 namespace details {
 
-template <__concepts::Entity T>
+template <__meta::Entity T>
 class TupleIterator : public Iterator<T>,
                       public std::enable_shared_from_this<TupleIterator<T>> {
  public:
   /// @brief Mamba-specific
   using element = T;
 
-  using value_type = __memory::managed_t<element>;
+  using value_type = __meta::managed_t<element>;
   using iterator = Tuple<element>::iterator;
 
   /// @brief Mamba-specific
   using self = TupleIterator<element>;
-  using handle = __memory::handle_t<self>;
+  using handle = __meta::handle_t<self>;
 
   TupleIterator(iterator it, iterator end)
       : it_(std::move(it)), end_(std::move(end)) {}
@@ -589,10 +589,10 @@ class TupleIterator : public Iterator<T>,
   /// @code TupleIterator.__init__()
   template <typename... Args>
   static handle __Init(Args&&... args) {
-    return __memory::Init<self>(std::forward<Args>(args)...);
+    return __meta::Init<self>(std::forward<Args>(args)...);
   }
 
-  __memory::handle_t<Iterator<element>> __Iter() override {
+  __meta::handle_t<Iterator<element>> __Iter() override {
     return std::enable_shared_from_this<self>::shared_from_this();
   }
 

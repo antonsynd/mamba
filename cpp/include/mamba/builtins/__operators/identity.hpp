@@ -1,18 +1,20 @@
 #pragma once
 
-#include "mamba/builtins/__concepts/types.hpp"
+#include "mamba/builtins/__meta/types.hpp"
 #include "mamba/builtins/__types/none.hpp"
 
 namespace mamba::builtins {
 
-/// @brief Values are identical if they have the same value, and references are
-/// identical if their pointers are the same
+/// @overload
+/// @brief Returns `true `Values are identical if they have the same value, and
+/// references are identical if their pointers are the same.
 template <typename T>
 bool Is(const T& lhs, const T& rhs) {
   return lhs == rhs;
 }
 
-// Specialization for None type, only None is identical to None
+/// @overload
+/// @brief Specialization for None type, only None is identical to None
 template <details::Optional T>
 bool Is(const T& lhs, details::None) {
   return !lhs;

@@ -25,11 +25,14 @@ def main() -> None:
         install(args=args, rest=rest)
     elif command == "format":
         format(args=args, rest=rest)
+    elif command == "document":
+        document(args=args, rest=rest)
     elif command == "release":
         format(args=args, rest=rest)
         build(args=args, rest=rest)
         test(args=args, rest=rest)
         memcheck(args=args, rest=rest)
+        document(args=args, rest=rest)
         install(args=args, rest=rest)
     elif command == "test":
         test(args=args, rest=rest)
@@ -49,6 +52,7 @@ def create_parser() -> argparse.ArgumentParser:
     clean_parser = subparsers.add_parser("clean")
     install_parser = subparsers.add_parser("install")
     format_parser = subparsers.add_parser("format")
+    document_parser = subparsers.add_parser("document")
     release_parser = subparsers.add_parser("release")
     test_parser = subparsers.add_parser("test")
     memcheck_parser = subparsers.add_parser("memcheck")
@@ -94,6 +98,10 @@ def memcheck(args: argparse.Namespace, rest: Sequence[str]) -> None:
     # except subprocess.CalledProcessError as e:
     #     print(f"Encountered error {e}", file=sys.stderr)
     #     sys.exit(1)
+
+
+def document(args: argparse.Namespace, rest: Sequence[str]) -> None:
+    subprocess.run(args=["doxygen", str(CPP_DIR / "Doxyfile")], cwd=CPP_DIR)
 
 
 def format(args: argparse.Namespace, rest: Sequence[str]) -> None:

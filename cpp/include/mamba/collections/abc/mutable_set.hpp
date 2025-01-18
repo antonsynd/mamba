@@ -2,7 +2,7 @@
 
 #include <string_view>
 
-#include "mamba/builtins/__concepts/hashable.hpp"
+#include "mamba/builtins/__meta/hashable.hpp"
 #include "mamba/builtins/__types/traits.hpp"
 #include "mamba/collections/abc/abstract_set.hpp"
 
@@ -34,7 +34,7 @@ class MutableSet : public AbstractSet<T> {
   /// @brief Removes @p elem from the set. If the set is empty or
   /// @p elem does not occur in the set, throws KeyError.
   /// @code set.remove(elem)
-  void Remove(__memory::ReadOnly<element> elem) {
+  void Remove(__meta::ReadOnly<element> elem) {
     auto it_opt = TryFind(elem);
 
     if (!it_opt) {
@@ -47,7 +47,7 @@ class MutableSet : public AbstractSet<T> {
   /// @brief Removes @p elem from the set. If the set is empty or
   /// @p elem does not occur in the set, does nothing.
   /// @code set.remove(elem)
-  void Discard(__memory::ReadOnly<element> elem) {
+  void Discard(__meta::ReadOnly<element> elem) {
     auto it_opt = TryFind(elem);
 
     if (it_opt) {

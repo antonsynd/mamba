@@ -59,11 +59,12 @@ Str::operator std::string() const {
   return data_.s_;
 }
 
-Str Str::__Name__() {
-  return "string";
+Str::operator Bool() const {
+  // Uses explicit conversion to bool
+  return static_cast<bool>(*this);
 }
 
-Str::operator Bool() const {
+Str::operator bool() const {
   return !data_.s_.empty();
 }
 

@@ -9,7 +9,7 @@
 #include <type_traits>
 
 #include "mamba/__utils/string_builder.hpp"
-#include "mamba/builtins/__concepts/subclass.hpp"
+#include "mamba/builtins/__meta/subclass.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/error.hpp"
@@ -27,8 +27,8 @@ class IteratorFacade;
 template <typename T>
 class Iterator : public details::Object {
  public:
-  using value_type = T;
-  using iterator = details::IteratorFacade<value_type>;
+  using value_type = details::Managed<T>;
+  using iterator = details::IteratorFacade<details::Raw<value_type>>;
 
   /// @brief Mamba-specific
   using self = Iterator<value_type>;
@@ -147,11 +147,11 @@ namespace details {
 template <typename T>
 class IteratorFacade : public std::input_iterator_tag {
  public:
-  using value_type = T;
+  using value_type = Handle<T>;
 
   /// @note Mamba-specific
   using self = IteratorFacade<value_type>;
-  using iterator = Iterator<value_type>;
+  using iterator = Iterator<Raw<value_type>>;
 
   /// @brief Constructs a C++ wrapper for a Mamba iterator. The internal state
   /// of @p it is shared with the original by virtue of being a shallow copy.

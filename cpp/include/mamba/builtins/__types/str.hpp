@@ -6,19 +6,19 @@
 #include <string_view>  // for basic_string_view
 #include <utility>      // for move
 
-#include "mamba/builtins/__concepts/optional.hpp"  // for Optional
-#include "mamba/builtins/__types/bool.hpp"         // for Bool
-#include "mamba/builtins/__types/byte.hpp"         // for Byte
-#include "mamba/builtins/__types/decimal.hpp"      // for Decimal
-#include "mamba/builtins/__types/double.hpp"       // for Double
-#include "mamba/builtins/__types/float.hpp"        // for Float
-#include "mamba/builtins/__types/int.hpp"          // for Int
-#include "mamba/builtins/__types/long.hpp"         // for Long
-#include "mamba/builtins/__types/none.hpp"         // for None
-#include "mamba/builtins/__types/object.hpp"       // for Object
-#include "mamba/builtins/__types/sbyte.hpp"        // for SByte
-#include "mamba/builtins/__types/short.hpp"        // for Short
-#include "mamba/builtins/__types/size.hpp"         // for Size
+#include "mamba/builtins/__meta/optional.hpp"  // for Optional
+#include "mamba/builtins/__types/bool.hpp"     // for Bool
+#include "mamba/builtins/__types/byte.hpp"     // for Byte
+#include "mamba/builtins/__types/decimal.hpp"  // for Decimal
+#include "mamba/builtins/__types/double.hpp"   // for Double
+#include "mamba/builtins/__types/float.hpp"    // for Float
+#include "mamba/builtins/__types/int.hpp"      // for Int
+#include "mamba/builtins/__types/long.hpp"     // for Long
+#include "mamba/builtins/__types/none.hpp"     // for None
+#include "mamba/builtins/__types/object.hpp"   // for Object
+#include "mamba/builtins/__types/sbyte.hpp"    // for SByte
+#include "mamba/builtins/__types/short.hpp"    // for Short
+#include "mamba/builtins/__types/size.hpp"     // for Size
 #include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/__types/uint.hpp"    // for UInt
 #include "mamba/builtins/__types/ulong.hpp"   // for ULong
@@ -29,9 +29,17 @@ namespace mamba::builtins::details {
 // Forward-declaration
 class Str;
 
+/// @brief Convenience overload for outputting to `std::cout`/`std::cerr` or
+/// `std::ostringstream`.
 std::ostream& operator<<(std::ostream& oss, const Str& s);
 
-class Str final : public Object {
+/// @brief A class representing a Pythonic `str` type. It is bidi-convertible
+/// with `std::string`. It is generally immutable unless if mutated through
+/// `operator=()` and `operator+=()`.
+///
+/// The constructors for this class also provides the Pythonic `str()`
+/// conversion function from various builtin types.
+class Str final {
  public:
   Str();
 
@@ -69,9 +77,14 @@ class Str final : public Object {
     }
   }
 
+  /// @brief Implicit conversion to Bool. We don't support implicit conversion
+  /// to bool because it would cause equality operators between different
+  /// types to fallback to bool conversion, which yields the incorrect
+  /// result in many cases.
   operator Bool() const;
+  explicit operator bool() const;
 
-  Str __Repr__() const override;
+  Str __Repr__() const;
 
   Int __Len__() const;
 
@@ -84,13 +97,7 @@ class Str final : public Object {
 
   operator std::string() const;
 
-  // Bring in superclass member functions for which there are overloads here
-  using Object::operator==;
-  using Object::operator!=;
-
  private:
-  static Str __Name__();
-
   class Data {
    public:
     Data() = default;
@@ -102,7 +109,7 @@ class Str final : public Object {
     std::string s_;
   };
 
-  Data data_;
+  mutable Data data_;
 };
 
 template <>

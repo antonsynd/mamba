@@ -5,7 +5,7 @@
 #include <utility>
 
 #include "mamba/__utils/string_builder.hpp"
-#include "mamba/builtins/__concepts/types.hpp"
+#include "mamba/builtins/__meta/types.hpp"
 #include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/types.hpp"
 

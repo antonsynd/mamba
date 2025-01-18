@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <utility>
 
-#include "mamba/builtins/__concepts/hashable.hpp"
+#include "mamba/builtins/__meta/hashable.hpp"
 #include "mamba/collections/abc/mutable_set.hpp"
 
 namespace mamba::builtins {

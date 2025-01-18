@@ -15,8 +15,8 @@
 
 #include "mamba/__utils/hex_printer.hpp"
 #include "mamba/__utils/string_builder.hpp"
-#include "mamba/builtins/__concepts/orderable.hpp"
-#include "mamba/builtins/__memory/args.hpp"
+#include "mamba/builtins/__meta/args.hpp"
+#include "mamba/builtins/__meta/orderable.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"

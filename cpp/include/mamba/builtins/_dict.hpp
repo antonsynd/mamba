@@ -5,22 +5,22 @@
 #include <optional>
 #include <unordered_map>
 
-#include "mamba/builtins/__memory/const.hpp"
+#include "mamba/builtins/__meta/const.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/error.hpp"
 #include "mamba/builtins/list.hpp"
 
 namespace mamba::builtins {
 
-template <__concepts::Entity K, __concepts::Entity V>
+template <__meta::Entity K, __meta::Entity V>
 class Dict : public std::enable_shared_from_this<Dict<K, V>> {
  public:
   /// @note Mamba-specific
   using key_element = K;
   using mapped_element = V;
 
-  using key_type = __memory::managed_t<key_element>;
-  using mapped_type = __memory::managed_t<mapped_element>;
+  using key_type = __meta::managed_t<key_element>;
+  using mapped_type = __meta::managed_t<mapped_element>;
   using value_type = std::pair<const key_type, mapped_type>;
   using reference = value_type&;
   using const_reference = const value_type&;
@@ -33,7 +33,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   /// @note Mamba-specific
   using self = Dict<key_element, mapped_element>;
-  using handle = __memory::handle_t<self>;
+  using handle = __meta::handle_t<self>;
 
   /// @brief Creates an empty dict.
   /// @code dict()
@@ -53,11 +53,11 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
   /// @code Dict.__init__()
   template <typename... Args>
   static handle Init(Args&&... args) {
-    return __memory::Init<self>(std::forward<Args>(args)...);
+    return __meta::Init<self>(std::forward<Args>(args)...);
   }
 
-  __memory::handle_t<List<key_element>> AsList() {
-    auto l = __memory::Init<List<key_element>>();
+  __meta::handle_t<List<key_element>> AsList() {
+    auto l = __meta::Init<List<key_element>>();
 
     for (const auto it : m_) {
       l.Append(it->first);
@@ -68,7 +68,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   __types::Int __Len() const { return m_.size(); }
 
-  mapped_type& operator[](__memory::ReadOnly<key_element> key) {
+  mapped_type& operator[](__meta::ReadOnly<key_element> key) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -79,7 +79,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return it->second;
   }
 
-  const mapped_type& operator[](__memory::ReadOnly<key_element> key) const {
+  const mapped_type& operator[](__meta::ReadOnly<key_element> key) const {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -90,11 +90,11 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     return it->second;
   }
 
-  virtual mapped_type Missing(__memory::ReadOnly<key_element> key) {
+  virtual mapped_type Missing(__meta::ReadOnly<key_element> key) {
     throw ValueError("");
   }
 
-  void DeleteKey(__memory::ReadOnly<key_element> key) {
+  void DeleteKey(__meta::ReadOnly<key_element> key) {
     auto it = m_.find(key);
 
     if (it == m_.end()) {
@@ -103,7 +103,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
     }
   }
 
-  __types::Bool __Contains(__memory::ReadOnly<key_element> key) const {
+  __types::Bool __Contains(__meta::ReadOnly<key_element> key) const {
     return m_.contains(key);
   }
 
@@ -119,7 +119,7 @@ class Dict : public std::enable_shared_from_this<Dict<K, V>> {
 
   // static FromKeys();
 
-  mapped_type Get(__memory::ReadOnly<key_element> key,
+  mapped_type Get(__meta::ReadOnly<key_element> key,
                   mapped_type default_value) {
     auto it = m_.find(key);
 

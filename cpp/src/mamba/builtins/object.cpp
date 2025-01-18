@@ -9,21 +9,17 @@
 
 namespace mamba::builtins::details {
 
-Str Object::__Name__() {
-  return "object";
-}
-
-Str Object::__ReprImpl__(Str name) const {
+Str Object::__ReprImpl__(std::string name) const {
   std::ostringstream oss;
 
-  oss << "<" << name << " object at "
+  oss << "<" << std::move(name) << " object at "
       << __utils::print_hex(reinterpret_cast<Size>(this)) << ">";
 
   return oss.str();
 }
 
 Str Object::__Repr__() const {
-  return __ReprImpl__(__Name__());
+  return __ReprImpl__("object");
 }
 
 Object::operator Str() const {

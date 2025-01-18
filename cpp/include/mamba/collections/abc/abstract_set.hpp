@@ -10,9 +10,9 @@
 #include <unordered_set>
 #include <utility>
 
-#include "mamba/builtins/__concepts/hashable.hpp"
-#include "mamba/builtins/__concepts/value.hpp"
-#include "mamba/builtins/__memory/args.hpp"
+#include "mamba/builtins/__meta/args.hpp"
+#include "mamba/builtins/__meta/hashable.hpp"
+#include "mamba/builtins/__meta/value.hpp"
 #include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"

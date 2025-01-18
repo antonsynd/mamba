@@ -2,10 +2,10 @@
 
 #include <memory>  // for shared_ptr
 
-#include "mamba/__utils/string_builder.hpp"        // for stringify, StringB...
-#include "mamba/builtins/__concepts/optional.hpp"  // for Optional
-#include "mamba/builtins/__types/none.hpp"         // for kNone
-#include "mamba/builtins/types.hpp"                // for StrType, ObjectType
+#include "mamba/__utils/string_builder.hpp"    // for stringify, StringB...
+#include "mamba/builtins/__meta/optional.hpp"  // for Optional
+#include "mamba/builtins/__types/none.hpp"     // for kNone
+#include "mamba/builtins/types.hpp"            // for StrType, ObjectType
 
 namespace mamba::builtins {
 

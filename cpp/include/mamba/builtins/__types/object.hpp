@@ -32,12 +32,7 @@ class Object {
   virtual bool operator!=(const Object& other) const;
 
  protected:
-  Str __ReprImpl__(Str name) const;
-
- private:
-  /// @brief Emits the class name for the default implementations of __Repr__()
-  /// and __Str__(). Should be overridden in subclasses.
-  static Str __Name__();
+  Str __ReprImpl__(std::string name) const;
 };
 
 template <>
