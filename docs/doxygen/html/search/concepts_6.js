@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['optional_0',['Optional',['../conceptmamba_1_1builtins_1_1details_1_1_optional.html',1,'mamba::builtins::details']]]
+  ['notflush_0',['NotFlush',['../conceptmamba_1_1____utils_1_1details_1_1_not_flush.html',1,'mamba::__utils::details']]]
 ];

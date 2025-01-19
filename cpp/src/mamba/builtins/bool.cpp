@@ -4,6 +4,8 @@
 #include "mamba/builtins/__types/float.hpp"   // for Float
 #include "mamba/builtins/__types/int.hpp"     // for Int
 #include "mamba/builtins/__types/none.hpp"    // for None
+#include "mamba/builtins/__types/size.hpp"    // for Size
+#include "mamba/builtins/__types/ssize.hpp"   // for SSize
 
 namespace mamba::builtins::details {
 
@@ -30,6 +32,8 @@ Bool::Bool(const SByte s) : b_(s) {}
 Bool::Bool(const Short s) : b_(s) {}
 
 Bool::Bool(const Size s) : b_(s) {}
+
+Bool::Bool(const SSize s) : b_(s) {}
 
 Bool::Bool(const UInt u) : b_(u) {}
 
@@ -82,6 +86,10 @@ Bool::operator Short() const {
 }
 
 Bool::operator Size() const {
+  return 0;
+}
+
+Bool::operator SSize() const {
   return 0;
 }
 

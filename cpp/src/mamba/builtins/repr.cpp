@@ -43,11 +43,11 @@ StrType Repr(const NoneType n) {
 }
 
 StrType Repr(const ObjectType& o) {
-  return o.__Repr__();
+  return o.Repr();
 }
 
 StrType Repr(const std::shared_ptr<ObjectType>& o) {
-  return o->__Repr__();
+  return o->Repr();
 }
 
 StrType Repr(const SByteType s) {
@@ -59,6 +59,10 @@ StrType Repr(const ShortType s) {
 }
 
 StrType Repr(const SizeType s) {
+  return s;
+}
+
+StrType Repr(const SSizeType s) {
   return s;
 }
 

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Mamba: include/mamba/builtins/__types/value.hpp Source File</title>
+<title>Mamba: include/mamba/builtins/__meta/value.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -107,30 +107,37 @@ $(function(){initNavTree('value_8hpp_source.html',''); initResizable(true); });
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;mamba/builtins/__types/bool.hpp&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;mamba/builtins/__types/byte.hpp&quot;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">// #include &quot;mamba/builtins/__types/complex.hpp&quot;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;mamba/builtins/__types/double.hpp&quot;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;mamba/builtins/__types/float.hpp&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;mamba/builtins/__types/int.hpp&quot;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;mamba/builtins/__types/long.hpp&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;mamba/builtins/__types/none.hpp&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;mamba/builtins/__types/object.hpp&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;mamba/builtins/__types/sbyte.hpp&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;mamba/builtins/__types/short.hpp&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;mamba/builtins/__types/size.hpp&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;mamba/builtins/__types/str.hpp&quot;</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;mamba/builtins/__types/uint.hpp&quot;</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;mamba/builtins/__types/ulong.hpp&quot;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &quot;mamba/builtins/__types/ushort.hpp&quot;</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">// IWYU pragma: private</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;concepts&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;optional&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;mamba/builtins/__types/forward_declarations.hpp&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;mamba/builtins/__types/none.hpp&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>mamba::builtins::details {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">   14</a></span><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">IsValue</a> =</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    std::is_arithmetic_v&lt;T&gt; || std::same_as&lt;std::decay_t&lt;T&gt;, <a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a>&gt; ||</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    std::same_as&lt;std::decay_t&lt;T&gt;, <a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_complex.html">Complex</a>&gt; ||</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    std::same_as&lt;std::decay_t&lt;T&gt;, None&gt;;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_value.html">   20</a></span><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_value.html">IsNotValue</a> = !<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">IsValue&lt;T&gt;</a>;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>}  <span class="comment">// namespace mamba::builtins::details</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// IWYU pragma: private</span></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_not_value_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_not_value.html">mamba::builtins::details::IsNotValue</a></div><div class="ttdef"><b>Definition</b> value.hpp:20</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_value_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">mamba::builtins::details::IsValue</a></div><div class="ttdoc">All primitive types are value types, including None and Optional&lt;T&gt;</div><div class="ttdef"><b>Definition</b> value.hpp:14</div></div>
+<div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_bool_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_bool.html">mamba::builtins::details::Bool</a></div><div class="ttdoc">A proxy for the Pythonic bool type. In general, all Mamba APIs that interact with bools should return...</div><div class="ttdef"><b>Definition</b> bool.hpp:33</div></div>
+<div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_complex_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_complex.html">mamba::builtins::details::Complex</a></div><div class="ttdoc">A complex number.</div><div class="ttdef"><b>Definition</b> complex.hpp:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_96b8b3bd785e461bb3e1db96c71518e0.html">__types</a></li><li class="navelem"><b>value.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li><li class="navelem"><b>value.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

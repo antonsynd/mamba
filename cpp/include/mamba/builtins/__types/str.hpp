@@ -19,6 +19,7 @@
 #include "mamba/builtins/__types/sbyte.hpp"    // for SByte
 #include "mamba/builtins/__types/short.hpp"    // for Short
 #include "mamba/builtins/__types/size.hpp"     // for Size
+#include "mamba/builtins/__types/ssize.hpp"    // for SSize
 #include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/__types/uint.hpp"    // for UInt
 #include "mamba/builtins/__types/ulong.hpp"   // for ULong
@@ -38,9 +39,12 @@ Str operator""_str(const char* s, std::size_t len);
 
 /// @brief A class representing a Pythonic `str` type. It is bidi-convertible
 /// with `std::string`. It is generally immutable unless if mutated through
-/// `operator=()` and `operator+=()`. In general, any Mamba API that deals with
-/// strings should work with C++ `std::string` or `std::string_view` where
-/// possible and only use this `str` class when Pythonic APIs are required.
+/// `operator=()` and `operator+=()`.
+///
+/// In general, Mamba APIs that accept immutable string inputs should accept
+/// C++ `std::string_view` or `std::string` where possible and only use this
+/// class for return values. In-out string parameters don't make sense because
+/// this class is by definition immutable (with the exceptions noted above).
 ///
 /// The constructors for this class provide the Pythonic `str()` conversion
 /// function from various builtin types, mainly other numeric value types.
@@ -69,6 +73,7 @@ class Str final {
   Str(const SByte s);
   Str(const Short f);
   Str(const Size s);
+  Str(const SSize s);
   Str(const UInt u);
   Str(const UShort u);
   Str(const ULong u);
@@ -200,11 +205,11 @@ class Str final {
   explicit operator bool() const;
 
   /// @brief Returns a copy of the `str` itself.
-  Str __Repr__() const;
+  Str Repr() const;
 
   /// @brief Returns the length of the `str` in terms of Unicode codepoints.
   /// @todo Actually return codepoint count, not the byte count.
-  Int __Len__() const;
+  Int Len() const;
 
   /// @overload
   /// @brief Compares this `str` with @p other. They are equal if they have

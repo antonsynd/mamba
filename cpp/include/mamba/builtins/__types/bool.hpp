@@ -45,6 +45,7 @@ struct Bool final {
   Bool(const SByte s);
   Bool(const Short s);
   Bool(const Size s);
+  Bool(const SSize s);
   Bool(const UInt u);
   Bool(const ULong u);
   Bool(const UShort u);
@@ -74,6 +75,7 @@ struct Bool final {
   operator SByte() const;
   operator Short() const;
   operator Size() const;
+  operator SSize() const;
   operator UInt() const;
   operator ULong() const;
   operator UShort() const;

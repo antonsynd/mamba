@@ -4,6 +4,7 @@
 #include <string>       // for basic_string, to_string
 #include <string_view>  // for basic_string_view, ope...
 
+#include "mamba/builtins/__types/bool.hpp"     // for Bool
 #include "mamba/builtins/__types/byte.hpp"     // for Byte
 #include "mamba/builtins/__types/decimal.hpp"  // for Decimal
 #include "mamba/builtins/__types/double.hpp"   // for Double
@@ -13,6 +14,7 @@
 #include "mamba/builtins/__types/sbyte.hpp"    // for SByte
 #include "mamba/builtins/__types/short.hpp"    // for Short
 #include "mamba/builtins/__types/size.hpp"     // for Size
+#include "mamba/builtins/__types/ssize.hpp"    // for SSize
 #include "mamba/builtins/__types/uint.hpp"     // for UInt
 #include "mamba/builtins/__types/ulong.hpp"    // for ULong
 #include "mamba/builtins/__types/ushort.hpp"   // for UShort
@@ -53,6 +55,8 @@ Str::Str(const Short s) : data_(std::to_string(s)) {}
 
 Str::Str(const Size s) : data_(std::to_string(s)) {}
 
+Str::Str(const SSize s) : data_(std::to_string(s)) {}
+
 Str::Str(const UInt u) : data_(std::to_string(u)) {}
 
 Str::Str(const ULong u) : data_(std::to_string(u)) {}
@@ -76,12 +80,12 @@ Str::operator bool() const {
   return !data_.s_.empty();
 }
 
-Str Str::__Repr__() const {
+Str Str::Repr() const {
   // A copy
   return *this;
 }
 
-Int Str::__Len__() const {
+Int Str::Len() const {
   return data_.s_.size();
 }
 

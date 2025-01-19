@@ -30,6 +30,7 @@ var annotated_dup =
           [ "Traits< SByte >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_byte_01_4.html", null ],
           [ "Traits< Short >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_short_01_4.html", null ],
           [ "Traits< Size >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_size_01_4.html", null ],
+          [ "Traits< SSize >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_size_01_4.html", null ],
           [ "Traits< Str >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_str_01_4.html", null ],
           [ "Traits< UInt >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_int_01_4.html", null ],
           [ "Traits< ULong >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_long_01_4.html", null ],

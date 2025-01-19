@@ -14,8 +14,9 @@ var searchData=
   ['traits_3c_20sbyte_20_3e_11',['Traits&lt; SByte &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_byte_01_4.html',1,'mamba::builtins::details']]],
   ['traits_3c_20short_20_3e_12',['Traits&lt; Short &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_short_01_4.html',1,'mamba::builtins::details']]],
   ['traits_3c_20size_20_3e_13',['Traits&lt; Size &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_size_01_4.html',1,'mamba::builtins::details']]],
-  ['traits_3c_20str_20_3e_14',['Traits&lt; Str &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_str_01_4.html',1,'mamba::builtins::details']]],
-  ['traits_3c_20uint_20_3e_15',['Traits&lt; UInt &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_int_01_4.html',1,'mamba::builtins::details']]],
-  ['traits_3c_20ulong_20_3e_16',['Traits&lt; ULong &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_long_01_4.html',1,'mamba::builtins::details']]],
-  ['traits_3c_20ushort_20_3e_17',['Traits&lt; UShort &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_short_01_4.html',1,'mamba::builtins::details']]]
+  ['traits_3c_20ssize_20_3e_14',['Traits&lt; SSize &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_size_01_4.html',1,'mamba::builtins::details']]],
+  ['traits_3c_20str_20_3e_15',['Traits&lt; Str &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_str_01_4.html',1,'mamba::builtins::details']]],
+  ['traits_3c_20uint_20_3e_16',['Traits&lt; UInt &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_int_01_4.html',1,'mamba::builtins::details']]],
+  ['traits_3c_20ulong_20_3e_17',['Traits&lt; ULong &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_long_01_4.html',1,'mamba::builtins::details']]],
+  ['traits_3c_20ushort_20_3e_18',['Traits&lt; UShort &gt;',['../structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_short_01_4.html',1,'mamba::builtins::details']]]
 ];

@@ -21,7 +21,7 @@ Complex::operator Bool() const {
   return real_ != 0 && imag_ != 0;
 }
 
-Str Complex::__Repr__() const {
+Str Complex::Repr() const {
   std::ostringstream oss;
 
   oss << "(" << std::to_string(real_);
@@ -36,10 +36,10 @@ Str Complex::__Repr__() const {
 }
 
 Complex::operator Str() const {
-  return __Repr__();
+  return Repr();
 }
 
-Double Complex::__Abs__() const {
+Double Complex::Abs() const {
   return std::hypot(real_, imag_);
 }
 

@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['isiterator_0',['IsIterator',['../conceptmamba_1_1builtins_1_1details_1_1_is_iterator.html',1,'mamba::builtins::details']]],
-  ['iterable_1',['Iterable',['../conceptmamba_1_1builtins_1_1details_1_1_iterable.html',1,'mamba::builtins::details']]],
-  ['iterableof_2',['IterableOf',['../conceptmamba_1_1builtins_1_1details_1_1_iterable_of.html',1,'mamba::builtins::details']]],
-  ['iteratorof_3',['IteratorOf',['../conceptmamba_1_1builtins_1_1details_1_1_iterator_of.html',1,'mamba::builtins::details']]]
+  ['hashable_0',['Hashable',['../conceptmamba_1_1builtins_1_1details_1_1_hashable.html',1,'mamba::builtins::details']]],
+  ['hashableobject_1',['HashableObject',['../conceptmamba_1_1builtins_1_1details_1_1_hashable_object.html',1,'mamba::builtins::details']]],
+  ['hassequencemethods_2',['HasSequenceMethods',['../conceptmamba_1_1builtins_1_1details_1_1_has_sequence_methods.html',1,'mamba::builtins::details']]]
 ];

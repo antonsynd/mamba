@@ -9,7 +9,7 @@
 
 namespace mamba::builtins::details {
 
-Str Object::__ReprImpl__(std::string name) const {
+Str Object::_Repr(std::string name) const {
   std::ostringstream oss;
 
   oss << "<" << std::move(name) << " object at "
@@ -18,12 +18,12 @@ Str Object::__ReprImpl__(std::string name) const {
   return oss.str();
 }
 
-Str Object::__Repr__() const {
-  return __ReprImpl__("object");
+Str Object::Repr() const {
+  return _Repr("object");
 }
 
 Object::operator Str() const {
-  return __Repr__();
+  return Repr();
 }
 
 bool Object::operator==(const Object& other) const {

@@ -109,7 +109,7 @@ $(function(){initNavTree('classmamba_1_1builtins_1_1details_1_1_str.html',''); i
 </div><!--header-->
 <div class="contents">
 
-<p>A class representing a Pythonic <code>str</code> type. It is bidi-convertible with <code>std::string</code>. It is generally immutable unless if mutated through <code>operator=()</code> and <code>operator+=()</code>. In general, any Mamba API that deals with strings should work with C++ <code>std::string</code> or <code>std::string_view</code> where possible and only use this <code>str</code> class when Pythonic APIs are required.  
+<p>A class representing a Pythonic <code>str</code> type. It is bidi-convertible with <code>std::string</code>. It is generally immutable unless if mutated through <code>operator=()</code> and <code>operator+=()</code>.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="str_8hpp_source.html">str.hpp</a>&gt;</code></p>
@@ -168,6 +168,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adb2e38255c7bc47735fd32f1e7b7b4c5" id="r_adb2e38255c7bc47735fd32f1e7b7b4c5"><td class="memItemLeft" align="right" valign="top"><a id="adb2e38255c7bc47735fd32f1e7b7b4c5" name="adb2e38255c7bc47735fd32f1e7b7b4c5"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Str</b> (const Size s)</td></tr>
 <tr class="separator:adb2e38255c7bc47735fd32f1e7b7b4c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ad591ff27fba439d637ceca68670b62" id="r_a8ad591ff27fba439d637ceca68670b62"><td class="memItemLeft" align="right" valign="top"><a id="a8ad591ff27fba439d637ceca68670b62" name="a8ad591ff27fba439d637ceca68670b62"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Str</b> (const SSize s)</td></tr>
+<tr class="separator:a8ad591ff27fba439d637ceca68670b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1fd15274c89bb6ab53d6ddd519a344b7" id="r_a1fd15274c89bb6ab53d6ddd519a344b7"><td class="memItemLeft" align="right" valign="top"><a id="a1fd15274c89bb6ab53d6ddd519a344b7" name="a1fd15274c89bb6ab53d6ddd519a344b7"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Str</b> (const UInt u)</td></tr>
 <tr class="separator:a1fd15274c89bb6ab53d6ddd519a344b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -319,13 +322,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>IsUpper</b> () const<
 <tr class="memitem:af637fa917032be376524c60108bf008c" id="r_af637fa917032be376524c60108bf008c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af637fa917032be376524c60108bf008c">operator bool</a> () const</td></tr>
 <tr class="memdesc:af637fa917032be376524c60108bf008c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicit conversion to <code>bool</code> using the same semantics as <a class="el" href="#ab428975efd77a1e7c2e11a0558fc3f6c">operator Bool()</a>.  <br /></td></tr>
 <tr class="separator:af637fa917032be376524c60108bf008c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fba533ac4a6d79d2b418142d193e817" id="r_a7fba533ac4a6d79d2b418142d193e817"><td class="memItemLeft" align="right" valign="top"><a id="a7fba533ac4a6d79d2b418142d193e817" name="a7fba533ac4a6d79d2b418142d193e817"></a>
-<a class="el" href="classmamba_1_1builtins_1_1details_1_1_str.html">Str</a>&#160;</td><td class="memItemRight" valign="bottom"><b>__Repr__</b> () const</td></tr>
-<tr class="memdesc:a7fba533ac4a6d79d2b418142d193e817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the <code>str</code> itself. <br /></td></tr>
-<tr class="separator:a7fba533ac4a6d79d2b418142d193e817"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4990135e2875b015490c464d47e9fe74" id="r_a4990135e2875b015490c464d47e9fe74"><td class="memItemLeft" align="right" valign="top">Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4990135e2875b015490c464d47e9fe74">__Len__</a> () const</td></tr>
-<tr class="memdesc:a4990135e2875b015490c464d47e9fe74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the length of the <code>str</code> in terms of Unicode codepoints.  <br /></td></tr>
-<tr class="separator:a4990135e2875b015490c464d47e9fe74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11921933bcf2124af6df4276815df343" id="r_a11921933bcf2124af6df4276815df343"><td class="memItemLeft" align="right" valign="top"><a id="a11921933bcf2124af6df4276815df343" name="a11921933bcf2124af6df4276815df343"></a>
+<a class="el" href="classmamba_1_1builtins_1_1details_1_1_str.html">Str</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Repr</b> () const</td></tr>
+<tr class="memdesc:a11921933bcf2124af6df4276815df343"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a copy of the <code>str</code> itself. <br /></td></tr>
+<tr class="separator:a11921933bcf2124af6df4276815df343"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87a1c8c66664fa5feffda73907cd6a91" id="r_a87a1c8c66664fa5feffda73907cd6a91"><td class="memItemLeft" align="right" valign="top">Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87a1c8c66664fa5feffda73907cd6a91">Len</a> () const</td></tr>
+<tr class="memdesc:a87a1c8c66664fa5feffda73907cd6a91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the length of the <code>str</code> in terms of Unicode codepoints.  <br /></td></tr>
+<tr class="separator:a87a1c8c66664fa5feffda73907cd6a91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a122730d0980404c43706fdc4f2cc543b" id="r_a122730d0980404c43706fdc4f2cc543b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a122730d0980404c43706fdc4f2cc543b">operator==</a> (const <a class="el" href="classmamba_1_1builtins_1_1details_1_1_str.html">Str</a> &amp;other) const</td></tr>
 <tr class="memdesc:a122730d0980404c43706fdc4f2cc543b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares this <code>str</code> with <code class="param">other</code>. They are equal if they have the same byte content.  <br /></td></tr>
 <tr class="separator:a122730d0980404c43706fdc4f2cc543b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,7 +349,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <tr class="separator:af69a1af6872644c35649257c26d6c650"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A class representing a Pythonic <code>str</code> type. It is bidi-convertible with <code>std::string</code>. It is generally immutable unless if mutated through <code>operator=()</code> and <code>operator+=()</code>. In general, any Mamba API that deals with strings should work with C++ <code>std::string</code> or <code>std::string_view</code> where possible and only use this <code>str</code> class when Pythonic APIs are required. </p>
+<div class="textblock"><p>A class representing a Pythonic <code>str</code> type. It is bidi-convertible with <code>std::string</code>. It is generally immutable unless if mutated through <code>operator=()</code> and <code>operator+=()</code>. </p>
+<p>In general, Mamba APIs that accept immutable string inputs should accept C++ <code>std::string_view</code> or <code>std::string</code> where possible and only use this class for return values. In-out string parameters don't make sense because this class is by definition immutable (with the exceptions noted above).</p>
 <p>The constructors for this class provide the Pythonic <code>str()</code> conversion function from various builtin types, mainly other numeric value types. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad371964c47008c29fb54ab58a49db5c4" name="ad371964c47008c29fb54ab58a49db5c4"></a>
@@ -400,26 +404,6 @@ template&lt;Optional T&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4990135e2875b015490c464d47e9fe74" name="a4990135e2875b015490c464d47e9fe74"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4990135e2875b015490c464d47e9fe74">&#9670;&#160;</a></span>__Len__()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Int mamba::builtins::details::Str::__Len__ </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns the length of the <code>str</code> in terms of Unicode codepoints. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo</a></b></dt><dd>Actually return codepoint count, not the byte count. </dd></dl>
-
-</div>
-</div>
 <a id="a28ca9c238c2bc7a83bfc0509af5f7307" name="a28ca9c238c2bc7a83bfc0509af5f7307"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a28ca9c238c2bc7a83bfc0509af5f7307">&#9670;&#160;</a></span>Capitalize()</h2>
 
@@ -562,6 +546,26 @@ template&lt;typename... Args&gt; </div>
 </table>
 </div><div class="memdoc">
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo</a></b></dt><dd></dd></dl>
+
+</div>
+</div>
+<a id="a87a1c8c66664fa5feffda73907cd6a91" name="a87a1c8c66664fa5feffda73907cd6a91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87a1c8c66664fa5feffda73907cd6a91">&#9670;&#160;</a></span>Len()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Int mamba::builtins::details::Str::Len </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns the length of the <code>str</code> in terms of Unicode codepoints. </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo</a></b></dt><dd>Actually return codepoint count, not the byte count. </dd></dl>
 
 </div>
 </div>

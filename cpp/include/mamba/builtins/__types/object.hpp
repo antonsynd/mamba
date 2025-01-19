@@ -18,10 +18,10 @@ class Object {
   /// @brief Returns the representation of this object. By default, it is
   /// the evaluation of f"{__Name__()} object at {__Id__():#018x}".
   /// @code repr(object)
-  virtual Str __Repr__() const;
+  virtual Str Repr() const;
 
   /// @brief Returns the string conversion of this object. By default, it is
-  /// the same as __Repr__()
+  /// the same as @ref Repr().
   /// @code str(object)
   virtual operator Str() const;
 
@@ -32,7 +32,7 @@ class Object {
   virtual bool operator!=(const Object& other) const;
 
  protected:
-  Str __ReprImpl__(std::string name) const;
+  Str _Repr(std::string name) const;
 };
 
 template <>

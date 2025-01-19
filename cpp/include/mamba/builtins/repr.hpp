@@ -23,6 +23,7 @@ StrType Repr(const std::shared_ptr<ObjectType>& t);
 StrType Repr(const SByteType s);
 StrType Repr(const ShortType s);
 StrType Repr(const SizeType s);
+StrType Repr(const SSizeType s);
 StrType Repr(const UIntType u);
 StrType Repr(const ULongType u);
 StrType Repr(const UShortType u);

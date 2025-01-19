@@ -2,7 +2,7 @@
 
 #include <concepts>
 
-#include "mamba/builtins/__meta/args.hpp"
+#include "mamba/builtins/__meta/wrapped.hpp"
 
 namespace mamba::builtins::details {
 
