@@ -19,7 +19,7 @@ class Object : public std::enable_shared_from_this<Object> {
   virtual Size Id() const final;
 
   /// @brief Returns the representation of this object. By default, it is
-  /// the evaluation of f"{__Name__()} object at {__Id__():#018x}".
+  /// the evaluation of f"{Name()} object at {Id():#018x}".
   /// @code repr(object)
   virtual Str Repr() const;
 
@@ -32,7 +32,9 @@ class Object : public std::enable_shared_from_this<Object> {
   /// identical) to @p other. By default, it checks the memory address of
   /// both objects.
   virtual bool operator==(const Object& other) const;
+  virtual bool operator==(const std::shared_ptr<Object>& other) const;
   virtual bool operator!=(const Object& other) const;
+  virtual bool operator!=(const std::shared_ptr<Object>& other) const;
 
  protected:
   std::shared_ptr<Object> _GetRef();

@@ -52,7 +52,7 @@ struct Bool final {
 
   template <Optional T>
   Bool(const T& o) {
-    b_ = !!o;
+    b_ = Unwrap(o).has_value();
   }
 
   // Converting constructor from Str is not defined here because it would

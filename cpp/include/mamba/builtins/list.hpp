@@ -17,6 +17,8 @@
 #include "mamba/__utils/string_builder.hpp"
 #include "mamba/builtins/__meta/args.hpp"
 #include "mamba/builtins/__meta/orderable.hpp"
+#include "mamba/builtins/__meta/value.hpp"
+#include "mamba/builtins/__meta/wrapped.hpp"
 #include "mamba/builtins/__types/int.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
@@ -33,7 +35,7 @@ template <typename T>
 class ListIterator;
 
 template <typename F, typename K>
-concept ListSortKey = requires(const F& key_func, const K& k) {
+concept ListSortKey = requires(const F& key_func, const Wrapped<K>& k) {
   { key_func(k) } -> LessThanComparable;
 };
 
@@ -80,7 +82,7 @@ class List final : public details::Object {
   template <typename It>
     requires details::IterableOf<It, value_type>
   List(const It& iterable) {
-    for (const value_type& elem : iterable.__Iter__()) {
+    for (const value_type& elem : iterable.Iter()) {
       Append(elem);
     }
   }
@@ -105,9 +107,9 @@ class List final : public details::Object {
 
   /// @brief Generic constructor forwarding arguments to actual constructor
   /// methods.
-  /// @code List.__init__()
+  /// @code list.__init__()
   template <typename... Args>
-  static self __Init__(Args&&... args) {
+  static self Init(Args&&... args) {
     return self(std::forward<Args>(args)...);
   }
 
@@ -120,7 +122,7 @@ class List final : public details::Object {
 
   /// @brief Returns whether @p elem is in the list. O(n).
   /// @code elem in list
-  bool __Contains__(const value_type& elem) const {
+  bool Contains(const value_type& elem) const {
     return std::find(data_.v_.cbegin(), data_.v_.cend(), elem) !=
            data_.v_.cend();
   }
@@ -229,7 +231,7 @@ class List final : public details::Object {
 
   /// @brief Returns the number of elements in the list.
   /// @code len(list)
-  details::Int __Len__() const { return data_.v_.size(); }
+  details::Int Len() const { return data_.v_.size(); }
 
   /// @brief Returns the smallest element in the list. If the list is empty,
   /// throws ValueError.
@@ -461,20 +463,9 @@ class List final : public details::Object {
     data_.v_.erase(it);
   }
 
-  /// @brief Reverse the list in place.
-  /// @deprecated Use list.__reversed__() instead.
-  /// @code reverse(list)
-  void Reverse() {
-    if (data_.v_.empty()) {
-      return;
-    }
-
-    std::reverse(data_.v_.begin(), data_.v_.end());
-  }
-
   /// @brief Creates a reversed iterator.
-  /// @code list.__reversed__()
-  details::ListIterator<value_type> __Reversed__() const {
+  /// @code list.reversed()
+  details::ListIterator<value_type> Reversed() const {
     return details::ListIterator<value_type>(data_.v_.rbegin(),
                                              data_.v_.rend());
   }
@@ -531,7 +522,7 @@ class List final : public details::Object {
 
   /// @brief Returns an iterator to this list.
   /// @code list.__iter__()
-  details::ListIterator<value_type> __Iter__() const {
+  details::ListIterator<value_type> Iter() const {
     return details::ListIterator<value_type>(data_.v_.begin(), data_.v_.end());
   }
 
@@ -545,11 +536,6 @@ class List final : public details::Object {
 
   /// @code bool(list)
   operator details::Bool() const { return !data_.v_.empty(); }
-
-  static details::Str __Name__() {
-    return __utils::stringify()
-           << "list[" << details::Traits<value_type>::kName << "]";
-  }
 
   /// @brief Returns the string representation of the list.
   /// @code str(list)
@@ -575,7 +561,7 @@ class List final : public details::Object {
 
   /// @brief Returns the representation of the list.
   /// @code repr(list)
-  details::Str __Repr__() const override {
+  details::Str Repr() const override {
     std::ostringstream oss;
 
     oss << "[";
@@ -849,13 +835,8 @@ class ListIterator : public Iterator<T> {
   /// methods.
   /// @code ListIterator.__init__()
   template <typename... Args>
-  static self __Init__(Args&&... args) {
+  static self Init(Args&&... args) {
     return self(std::forward<Args>(args)...);
-  }
-
-  static Str __Name__() {
-    return __utils::stringify()
-           << "ListIterator[" << details::Traits<value_type>::kName << "]";
   }
 };
 

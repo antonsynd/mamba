@@ -2,10 +2,22 @@
 
 #include <string_view>  // for basic_string_view, stri...
 
-#include "mamba/builtins/__types/bool.hpp"    // for Bool
-#include "mamba/builtins/__types/double.hpp"  // for Double
-#include "mamba/builtins/__types/str.hpp"     // for Str
+#include "mamba/builtins/__types/bool.hpp"     // for Bool
+#include "mamba/builtins/__types/byte.hpp"     // for Bool
+#include "mamba/builtins/__types/decimal.hpp"  // for Bool
+#include "mamba/builtins/__types/double.hpp"   // for Double
+#include "mamba/builtins/__types/float.hpp"    // for Bool
+#include "mamba/builtins/__types/int.hpp"      // for Bool
+#include "mamba/builtins/__types/long.hpp"     // for Bool
+#include "mamba/builtins/__types/sbyte.hpp"    // for Bool
+#include "mamba/builtins/__types/short.hpp"    // for Bool
+#include "mamba/builtins/__types/size.hpp"     // for Bool
+#include "mamba/builtins/__types/ssize.hpp"    // for Bool
+#include "mamba/builtins/__types/str.hpp"      // for Str
 #include "mamba/builtins/__types/traits.hpp"
+#include "mamba/builtins/__types/uint.hpp"    // for Bool
+#include "mamba/builtins/__types/ulong.hpp"   // for Bool
+#include "mamba/builtins/__types/ushort.hpp"  // for Bool
 
 namespace mamba::builtins::details {
 
@@ -14,6 +26,9 @@ namespace mamba::builtins::details {
 /// one.
 struct Complex final {
  public:
+  explicit Complex(Double real = 0, Double imag = 0)
+      : real_(real), imag_(imag) {}
+
   /// @brief Returns the real part of this complex number.
   Double Real() const;
 
@@ -35,116 +50,155 @@ struct Complex final {
   /// @brief Returns the magnitude of this number.
   Double Abs() const;
 
-  // TODO: Implement arithmetic operators
-  // Complex __Add__(const Complex& other) const;
-  // Complex __Sub__(const Complex& other) const;
-  // Complex __Mul__(const Complex& other) const;
-  // Complex __TrueDiv__(const Complex& other) const;
-  // Complex __Pow__(const Complex& other) const;
+  Complex operator+(const Byte& b) const;
+  Complex operator+(const Complex& c) const;
+  Complex operator+(const Decimal d) const;
+  Complex operator+(const Double d) const;
+  Complex operator+(const Float f) const;
+  Complex operator+(const Int i) const;
+  Complex operator+(const Long l) const;
+  Complex operator+(const SByte& s) const;
+  Complex operator+(const Short s) const;
+  Complex operator+(const Size s) const;
+  Complex operator+(const SSize s) const;
+  Complex operator+(const UInt u) const;
+  Complex operator+(const ULong u) const;
+  Complex operator+(const UShort u) const;
 
-  // Complex __Add__(const Int i) const;
-  // Complex __Sub__(const Int i) const;
-  // Complex __Mul__(const Int i) const;
-  // Complex __TrueDiv__(const Int i) const;
-  // Complex __Pow__(const Int i) const;
+  Complex operator-(const Byte& b) const;
+  Complex operator-(const Complex& c) const;
+  Complex operator-(const Decimal d) const;
+  Complex operator-(const Double d) const;
+  Complex operator-(const Float f) const;
+  Complex operator-(const Int i) const;
+  Complex operator-(const Long l) const;
+  Complex operator-(const SByte& s) const;
+  Complex operator-(const Short s) const;
+  Complex operator-(const Size s) const;
+  Complex operator-(const SSize s) const;
+  Complex operator-(const UInt u) const;
+  Complex operator-(const ULong u) const;
+  Complex operator-(const UShort u) const;
 
-  // Complex __Add__(const BigInt i) const;
-  // Complex __Sub__(const BigInt i) const;
-  // Complex __Mul__(const BigInt i) const;
-  // Complex __TrueDiv__(const BigInt i) const;
-  // Complex __Pow__(const BigInt i) const;
+  Complex operator*(const Byte& b) const;
+  Complex operator*(const Complex& c) const;
+  Complex operator*(const Decimal d) const;
+  Complex operator*(const Double d) const;
+  Complex operator*(const Float f) const;
+  Complex operator*(const Int i) const;
+  Complex operator*(const Long l) const;
+  Complex operator*(const SByte& s) const;
+  Complex operator*(const Short s) const;
+  Complex operator*(const Size s) const;
+  Complex operator*(const SSize s) const;
+  Complex operator*(const UInt u) const;
+  Complex operator*(const ULong u) const;
+  Complex operator*(const UShort u) const;
 
-  // Complex __Add__(const Float f) const;
-  // Complex __Sub__(const Float f) const;
-  // Complex __Mul__(const Float f) const;
-  // Complex __TrueDiv__(const Float f) const;
-  // Complex __Pow__(const Float f) const;
+  Complex operator/(const Byte& b) const;
+  Complex operator/(const Complex& c) const;
+  Complex operator/(const Decimal d) const;
+  Complex operator/(const Double d) const;
+  Complex operator/(const Float f) const;
+  Complex operator/(const Int i) const;
+  Complex operator/(const Long l) const;
+  Complex operator/(const SByte& s) const;
+  Complex operator/(const Short s) const;
+  Complex operator/(const Size s) const;
+  Complex operator/(const SSize s) const;
+  Complex operator/(const UInt u) const;
+  Complex operator/(const ULong u) const;
+  Complex operator/(const UShort u) const;
 
-  // Complex __Add__(const Double d) const;
-  // Complex __Sub__(const Double d) const;
-  // Complex __Mul__(const Double d) const;
-  // Complex __TrueDiv__(const Double d) const;
-  // Complex __Pow__(const Double d) const;
+  Complex operator^(const Byte& b) const;
+  Complex operator^(const Complex& c) const;
+  Complex operator^(const Decimal d) const;
+  Complex operator^(const Double d) const;
+  Complex operator^(const Float f) const;
+  Complex operator^(const Int i) const;
+  Complex operator^(const Long l) const;
+  Complex operator^(const SByte& s) const;
+  Complex operator^(const Short s) const;
+  Complex operator^(const Size s) const;
+  Complex operator^(const SSize s) const;
+  Complex operator^(const UInt u) const;
+  Complex operator^(const ULong u) const;
+  Complex operator^(const UShort u) const;
 
-  // Complex __RAdd__(const Complex& other) const;
-  // Complex __RSub__(const Complex& other) const;
-  // Complex __RMul__(const Complex& other) const;
-  // Complex __RTrueDiv__(const Complex& other) const;
-  // Complex __RPow__(const Complex& other) const;
+  Complex& operator+=(const Byte& b);
+  Complex& operator+=(const Complex& c);
+  Complex& operator+=(const Decimal d);
+  Complex& operator+=(const Double d);
+  Complex& operator+=(const Float f);
+  Complex& operator+=(const Int i);
+  Complex& operator+=(const Long l);
+  Complex& operator+=(const SByte& s);
+  Complex& operator+=(const Short s);
+  Complex& operator+=(const Size s);
+  Complex& operator+=(const SSize s);
+  Complex& operator+=(const UInt u);
+  Complex& operator+=(const ULong u);
+  Complex& operator+=(const UShort u);
 
-  // Complex __RAdd__(const Int i) const;
-  // Complex __RSub__(const Int i) const;
-  // Complex __RMul__(const Int i) const;
-  // Complex __RTrueDiv__(const Int i) const;
-  // Complex __RPow__(const Int i) const;
+  Complex& operator-=(const Byte& b);
+  Complex& operator-=(const Complex& c);
+  Complex& operator-=(const Decimal d);
+  Complex& operator-=(const Double d);
+  Complex& operator-=(const Float f);
+  Complex& operator-=(const Int i);
+  Complex& operator-=(const Long l);
+  Complex& operator-=(const SByte& s);
+  Complex& operator-=(const Short s);
+  Complex& operator-=(const Size s);
+  Complex& operator-=(const SSize s);
+  Complex& operator-=(const UInt u);
+  Complex& operator-=(const ULong u);
+  Complex& operator-=(const UShort u);
 
-  // Complex __RAdd__(const BigInt i) const;
-  // Complex __RSub__(const BigInt i) const;
-  // Complex __RMul__(const BigInt i) const;
-  // Complex __RTrueDiv__(const BigInt i) const;
-  // Complex __RPow__(const BigInt i) const;
+  Complex& operator*=(const Byte& b);
+  Complex& operator*=(const Complex& c);
+  Complex& operator*=(const Decimal d);
+  Complex& operator*=(const Double d);
+  Complex& operator*=(const Float f);
+  Complex& operator*=(const Int i);
+  Complex& operator*=(const Long l);
+  Complex& operator*=(const SByte& s);
+  Complex& operator*=(const Short s);
+  Complex& operator*=(const Size s);
+  Complex& operator*=(const SSize s);
+  Complex& operator*=(const UInt u);
+  Complex& operator*=(const ULong u);
+  Complex& operator*=(const UShort u);
 
-  // Complex __RAdd__(const Float f) const;
-  // Complex __RSub__(const Float f) const;
-  // Complex __RMul__(const Float f) const;
-  // Complex __RTrueDiv__(const Float f) const;
-  // Complex __RPow__(const Float f) const;
+  Complex& operator/=(const Byte& b);
+  Complex& operator/=(const Complex& c);
+  Complex& operator/=(const Decimal d);
+  Complex& operator/=(const Double d);
+  Complex& operator/=(const Float f);
+  Complex& operator/=(const Int i);
+  Complex& operator/=(const Long l);
+  Complex& operator/=(const SByte& s);
+  Complex& operator/=(const Short s);
+  Complex& operator/=(const Size s);
+  Complex& operator/=(const SSize s);
+  Complex& operator/=(const UInt u);
+  Complex& operator/=(const ULong u);
+  Complex& operator/=(const UShort u);
 
-  // Complex __RAdd__(const Double d) const;
-  // Complex __RSub__(const Double d) const;
-  // Complex __RMul__(const Double d) const;
-  // Complex __RTrueDiv__(const Double d) const;
-  // Complex __RPow__(const Double d) const;
-
-  // Complex& __IAdd__(const Complex& other) const;
-  // Complex& __ISub__(const Complex& other) const;
-  // Complex& __IMul__(const Complex& other) const;
-  // Complex& __ITrueDiv__(const Complex& other) const;
-  // Complex& __IPow__(const Complex& other) const;
-
-  // Complex& __IAdd__(const Int i) const;
-  // Complex& __ISub__(const Int i) const;
-  // Complex& __IMul__(const Int i) const;
-  // Complex& __ITrueDiv__(const Int i) const;
-  // Complex& __IPow__(const Int i) const;
-
-  // Complex& __IAdd__(const BigInt i) const;
-  // Complex& __ISub__(const BigInt i) const;
-  // Complex& __IMul__(const BigInt i) const;
-  // Complex& __ITrueDiv__(const BigInt i) const;
-  // Complex& __IPow__(const BigInt i) const;
-
-  // Complex& __IAdd__(const Float f) const;
-  // Complex& __ISub__(const Float f) const;
-  // Complex& __IMul__(const Float f) const;
-  // Complex& __ITrueDiv__(const Float f) const;
-  // Complex& __IPow__(const Float f) const;
-
-  // Complex& __IAdd__(const Double d) const;
-  // Complex& __ISub__(const Double d) const;
-  // Complex& __IMul__(const Double d) const;
-  // Complex& __ITrueDiv__(const Double d) const;
-  // Complex& __IPow__(const Double d) const;
-
-  // Complex operator+(const Complex& other) const;
-  // Complex operator-(const Complex& other) const;
-  // Complex operator*(const Complex& other) const;
-  // Complex operator/(const Complex& other) const;
-
-  // Complex operator^(const Int i) const;
-  // Complex operator^(const BigInt i) const;
-  // Complex operator^(const Float f) const;
-  // Complex operator^(const Double d) const;
-
-  // Complex& operator+=(const Complex& other);
-  // Complex& operator-=(const Complex& other);
-  // Complex& operator*=(const Complex& other);
-  // Complex& operator/=(const Complex& other);
-
-  // Complex& operator^=(const Int i);
-  // Complex& operator^=(const BigInt i);
-  // Complex& operator^=(const Float f);
-  // Complex& operator^=(const Double d);
+  Complex& operator^=(const Byte& b);
+  Complex& operator^=(const Complex& c);
+  Complex& operator^=(const Decimal d);
+  Complex& operator^=(const Double d);
+  Complex& operator^=(const Float f);
+  Complex& operator^=(const Int i);
+  Complex& operator^=(const Long l);
+  Complex& operator^=(const SByte& s);
+  Complex& operator^=(const Short s);
+  Complex& operator^=(const Size s);
+  Complex& operator^=(const SSize s);
+  Complex& operator^=(const UInt u);
+  Complex& operator^=(const ULong u);
+  Complex& operator^=(const UShort u);
 
   bool operator==(const Complex& other) const;
   bool operator!=(const Complex& other) const;
@@ -158,6 +212,10 @@ template <>
 struct Traits<Complex> {
   static constexpr std::string_view kName = "complex";
 };
+
+Complex operator""_j(const char* s, const std::size_t len) {
+  return Complex(0, 0);
+}
 
 }  // namespace mamba::builtins::details
 

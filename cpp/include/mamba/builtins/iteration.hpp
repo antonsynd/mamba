@@ -60,14 +60,9 @@ class Iterator : public details::Object {
 
   virtual ~Iterator() = default;
 
-  virtual self __Iter__() const { return *this; }
+  virtual self Iter() const { return *this; }
 
-  virtual value_type __Next__() { return data_.next_func_(); }
-
-  static details::Str __Name__() {
-    return __utils::stringify()
-           << "Iterator[" << details::Traits<value_type>::kName << "]";
-  }
+  virtual value_type Next() { return data_.next_func_(); }
 
   // Native C++ iteration support
   iterator begin() const { return iterator(*this); }
@@ -128,17 +123,17 @@ using IterableIteratorType = Iterator<IterableValueType<T>>;
 
 template <details::IsIterator T>
 typename T::value_type Next(T& it) {
-  return it.__Next__();
+  return it.Next();
 }
 
 template <details::Iterable T>
 Iterator<typename T::value_type> Iter(const T& it) {
-  return it.__Iter__();
+  return it.Iter();
 }
 
 template <details::Reversable T>
 Iterator<typename T::value_type> Reverse(const T& it) {
-  return it.__Reversed__();
+  return it.Reversed();
 }
 
 namespace details {
