@@ -9,6 +9,10 @@
 
 namespace mamba::builtins::details {
 
+Size Object::Id() const {
+  return reinterpret_cast<Size>(this);
+}
+
 Str Object::_Repr(std::string name) const {
   std::ostringstream oss;
 
@@ -20,6 +24,10 @@ Str Object::_Repr(std::string name) const {
 
 Str Object::Repr() const {
   return _Repr("object");
+}
+
+std::shared_ptr<Object> Object::_GetRef() {
+  return shared_from_this();
 }
 
 Object::operator Str() const {

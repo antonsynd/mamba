@@ -11,7 +11,7 @@ namespace mamba::builtins::details {
 
 /// @brief A new type in Mamba corresponding to C++ `std::size_t` or Rust
 /// `usize`.
-using SSize = std::make_signed<size_t>::type;
+using SSize = std::make_signed<std::size_t>::type;
 
 /// @brief The maximum value of `Size`.
 constexpr SSize kSSizeMax = std::numeric_limits<SSize>::max();

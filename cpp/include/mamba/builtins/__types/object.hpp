@@ -1,19 +1,22 @@
 #pragma once
 
+#include <memory>
 #include <string_view>  // for basic_string_view, str...
 
 #include "mamba/builtins/__types/bool.hpp"  // for Bool
+#include "mamba/builtins/__types/forward_declarations.hpp"
+#include "mamba/builtins/__types/size.hpp"  // for Size
 #include "mamba/builtins/__types/traits.hpp"
 
 namespace mamba::builtins::details {
 
-/// @note Forward declaration
-class Str;
-
 /// @brief Abstract base class for all objects (non-values).
-class Object {
+class Object : public std::enable_shared_from_this<Object> {
  public:
   virtual ~Object() = default;
+
+  /// @brief Returns the id of this object, which is its memory address.
+  virtual Size Id() const final;
 
   /// @brief Returns the representation of this object. By default, it is
   /// the evaluation of f"{__Name__()} object at {__Id__():#018x}".
@@ -32,6 +35,8 @@ class Object {
   virtual bool operator!=(const Object& other) const;
 
  protected:
+  std::shared_ptr<Object> _GetRef();
+
   Str _Repr(std::string name) const;
 };
 

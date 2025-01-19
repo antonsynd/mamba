@@ -46,6 +46,7 @@ in a C++ `std::any` and must be explicitly cast to the expected type.
 | `set[T]` | `set[T]` | - | Partial | - |
 | `short` | `int` | `std::int16_t` | Yes | 16-bit signed integer |
 | `size` | `int` | `std::size_t` | Yes | An unsigned integer typically the size of a pointer on the target platform |
+| `ssize` | `int` | `std::make_signed<std::size_t>::type` | Yes | An signed integer typically the size of a pointer on the target platform |
 | `str` | `str` | Bidi-convertible with `std::string` | Partial | Underlyingly always UTF-16 |
 | `tuple[...]` | `tuple[...]` | - | Not yet | - |
 | `uint` | `int` | `std::uint32_t` | Yes | 64-bit signed integer |
@@ -77,6 +78,7 @@ The built-in types are divided into value and reference types.
 | `set[T]` | Reference | - |
 | `short` | Value | - |
 | `size` | Value | - |
+| `ssize` | Value | - |
 | `str` | Value | - |
 | `tuple[...]` | Value | - |
 | `uint` | Value | - |
@@ -91,27 +93,27 @@ reference.
 
 | Mamba | Python 3 analog | Supported | Notes |
 | --- | --- | --- | --- |
-| `bool(Any) -> bool` | `bool(Any)` | Yes | - |
-| `iter(Iterable[T]) -> Iterable[T]` | `iter(Iterable[T])` | Yes | - |
-| `len(Iterable[T]) -> int` | `len(Iterable[T])` | Yes | - |
-| `next(Iterator[T]) -> T` | `next(Iterator[T])` | Yes | - |
-| `print(...)` | `print(...)` | Not yet | - |
-| `repr(Any) -> str` | `repr(Any)` | Yes | - |
-| `str(Any) -> str` | `str(Any)` | Yes | - |
+| `Bool(Any) -> Bool` | `bool(Any)` | Yes | - |
+| `Iter(Iterable[T]) -> Iterable[T]` | `iter(Iterable[T])` | Yes | - |
+| `Len(Iterable[T]) -> Size` | `len(Iterable[T])` | Yes | - |
+| `Next(Iterator[T]) -> T` | `next(Iterator[T])` | Yes | - |
+| `Print(...)` | `print(...)` | Not yet | - |
+| `Repr(Any) -> Str` | `repr(Any)` | Yes | - |
+| `Str(Any) -> Str` | `str(Any)` | Yes | - |
 
 ### 1.3. Dunder methods
 
 | Mamba | Python 3 analog | Supported | Notes |
 | --- | --- | --- | --- |
-| `__bool__() -> bool` | `__bool__()` | Yes | - |
-| `__contains__() -> bool` | `__contains__()` | Yes | - |
-| `__id__() -> bigint` | `__id__()` | Yes | - |
-| `__int__() -> int` | `__int__()` | Yes | - |
-| `__iter__() -> Iterator[T]` | `__iter__()` | Yes | - |
-| `__len__() -> int` | `__len__()` | Yes | - |
-| `__next__() -> T` | `__next__()` | Yes | - |
-| `__repr__() -> str` | `__repr__()` | Yes | - |
-| `__str__() -> str` | `__str__()` | Yes | - |
+| `operator Bool() -> Bool` | `__bool__()` | Yes | - |
+| `Contains() -> Bool` | `__contains__()` | Yes | - |
+| `Id() -> Size` | `__id__()` | Yes | - |
+| `operator Int() -> int` | `__int__()` | Yes | - |
+| `Iter() -> Iterator[T]` | `__iter__()` | Yes | - |
+| `Len() -> Int` | `__len__()` | Yes | - |
+| `Next() -> T` | `__next__()` | Yes | - |
+| `Repr() -> Str` | `__repr__()` | Yes | - |
+| `operator Str() -> Str` | `__str__()` | Yes | - |
 
 ### 1.4. Operators
 
