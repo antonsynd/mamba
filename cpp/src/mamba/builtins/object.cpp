@@ -13,17 +13,17 @@ Size Object::Id() const {
   return reinterpret_cast<Size>(this);
 }
 
-Str Object::_Repr(std::string name) const {
+Str Object::_Repr(const std::string_view name) const {
   std::ostringstream oss;
 
-  oss << "<" << std::move(name) << " object at "
+  oss << "<" << name << " object at "
       << __utils::print_hex(reinterpret_cast<Size>(this)) << ">";
 
   return oss.str();
 }
 
 Str Object::Repr() const {
-  return _Repr("object");
+  return _Repr(Traits<Object>::kName);
 }
 
 std::shared_ptr<Object> Object::_GetRef() {
