@@ -50,14 +50,14 @@ struct Complex final {
   /// @brief Returns the magnitude of this number.
   Double Abs() const;
 
-  Complex operator+(const Byte& b) const;
+  Complex operator+(const Byte b) const;
   Complex operator+(const Complex& c) const;
   Complex operator+(const Decimal d) const;
   Complex operator+(const Double d) const;
   Complex operator+(const Float f) const;
   Complex operator+(const Int i) const;
   Complex operator+(const Long l) const;
-  Complex operator+(const SByte& s) const;
+  Complex operator+(const SByte s) const;
   Complex operator+(const Short s) const;
   Complex operator+(const Size s) const;
   Complex operator+(const SSize s) const;
@@ -65,14 +65,14 @@ struct Complex final {
   Complex operator+(const ULong u) const;
   Complex operator+(const UShort u) const;
 
-  Complex operator-(const Byte& b) const;
+  Complex operator-(const Byte b) const;
   Complex operator-(const Complex& c) const;
   Complex operator-(const Decimal d) const;
   Complex operator-(const Double d) const;
   Complex operator-(const Float f) const;
   Complex operator-(const Int i) const;
   Complex operator-(const Long l) const;
-  Complex operator-(const SByte& s) const;
+  Complex operator-(const SByte s) const;
   Complex operator-(const Short s) const;
   Complex operator-(const Size s) const;
   Complex operator-(const SSize s) const;
@@ -80,14 +80,14 @@ struct Complex final {
   Complex operator-(const ULong u) const;
   Complex operator-(const UShort u) const;
 
-  Complex operator*(const Byte& b) const;
+  Complex operator*(const Byte b) const;
   Complex operator*(const Complex& c) const;
   Complex operator*(const Decimal d) const;
   Complex operator*(const Double d) const;
   Complex operator*(const Float f) const;
   Complex operator*(const Int i) const;
   Complex operator*(const Long l) const;
-  Complex operator*(const SByte& s) const;
+  Complex operator*(const SByte s) const;
   Complex operator*(const Short s) const;
   Complex operator*(const Size s) const;
   Complex operator*(const SSize s) const;
@@ -95,14 +95,14 @@ struct Complex final {
   Complex operator*(const ULong u) const;
   Complex operator*(const UShort u) const;
 
-  Complex operator/(const Byte& b) const;
+  Complex operator/(const Byte b) const;
   Complex operator/(const Complex& c) const;
   Complex operator/(const Decimal d) const;
   Complex operator/(const Double d) const;
   Complex operator/(const Float f) const;
   Complex operator/(const Int i) const;
   Complex operator/(const Long l) const;
-  Complex operator/(const SByte& s) const;
+  Complex operator/(const SByte s) const;
   Complex operator/(const Short s) const;
   Complex operator/(const Size s) const;
   Complex operator/(const SSize s) const;
@@ -110,14 +110,14 @@ struct Complex final {
   Complex operator/(const ULong u) const;
   Complex operator/(const UShort u) const;
 
-  Complex operator^(const Byte& b) const;
+  Complex operator^(const Byte b) const;
   Complex operator^(const Complex& c) const;
   Complex operator^(const Decimal d) const;
   Complex operator^(const Double d) const;
   Complex operator^(const Float f) const;
   Complex operator^(const Int i) const;
   Complex operator^(const Long l) const;
-  Complex operator^(const SByte& s) const;
+  Complex operator^(const SByte s) const;
   Complex operator^(const Short s) const;
   Complex operator^(const Size s) const;
   Complex operator^(const SSize s) const;
@@ -125,14 +125,14 @@ struct Complex final {
   Complex operator^(const ULong u) const;
   Complex operator^(const UShort u) const;
 
-  Complex& operator+=(const Byte& b);
+  Complex& operator+=(const Byte b);
   Complex& operator+=(const Complex& c);
   Complex& operator+=(const Decimal d);
   Complex& operator+=(const Double d);
   Complex& operator+=(const Float f);
   Complex& operator+=(const Int i);
   Complex& operator+=(const Long l);
-  Complex& operator+=(const SByte& s);
+  Complex& operator+=(const SByte s);
   Complex& operator+=(const Short s);
   Complex& operator+=(const Size s);
   Complex& operator+=(const SSize s);
@@ -140,14 +140,14 @@ struct Complex final {
   Complex& operator+=(const ULong u);
   Complex& operator+=(const UShort u);
 
-  Complex& operator-=(const Byte& b);
+  Complex& operator-=(const Byte b);
   Complex& operator-=(const Complex& c);
   Complex& operator-=(const Decimal d);
   Complex& operator-=(const Double d);
   Complex& operator-=(const Float f);
   Complex& operator-=(const Int i);
   Complex& operator-=(const Long l);
-  Complex& operator-=(const SByte& s);
+  Complex& operator-=(const SByte s);
   Complex& operator-=(const Short s);
   Complex& operator-=(const Size s);
   Complex& operator-=(const SSize s);
@@ -155,14 +155,14 @@ struct Complex final {
   Complex& operator-=(const ULong u);
   Complex& operator-=(const UShort u);
 
-  Complex& operator*=(const Byte& b);
+  Complex& operator*=(const Byte b);
   Complex& operator*=(const Complex& c);
   Complex& operator*=(const Decimal d);
   Complex& operator*=(const Double d);
   Complex& operator*=(const Float f);
   Complex& operator*=(const Int i);
   Complex& operator*=(const Long l);
-  Complex& operator*=(const SByte& s);
+  Complex& operator*=(const SByte s);
   Complex& operator*=(const Short s);
   Complex& operator*=(const Size s);
   Complex& operator*=(const SSize s);
@@ -170,14 +170,14 @@ struct Complex final {
   Complex& operator*=(const ULong u);
   Complex& operator*=(const UShort u);
 
-  Complex& operator/=(const Byte& b);
+  Complex& operator/=(const Byte b);
   Complex& operator/=(const Complex& c);
   Complex& operator/=(const Decimal d);
   Complex& operator/=(const Double d);
   Complex& operator/=(const Float f);
   Complex& operator/=(const Int i);
   Complex& operator/=(const Long l);
-  Complex& operator/=(const SByte& s);
+  Complex& operator/=(const SByte s);
   Complex& operator/=(const Short s);
   Complex& operator/=(const Size s);
   Complex& operator/=(const SSize s);
@@ -185,14 +185,14 @@ struct Complex final {
   Complex& operator/=(const ULong u);
   Complex& operator/=(const UShort u);
 
-  Complex& operator^=(const Byte& b);
+  Complex& operator^=(const Byte b);
   Complex& operator^=(const Complex& c);
   Complex& operator^=(const Decimal d);
   Complex& operator^=(const Double d);
   Complex& operator^=(const Float f);
   Complex& operator^=(const Int i);
   Complex& operator^=(const Long l);
-  Complex& operator^=(const SByte& s);
+  Complex& operator^=(const SByte s);
   Complex& operator^=(const Short s);
   Complex& operator^=(const Size s);
   Complex& operator^=(const SSize s);
@@ -213,9 +213,7 @@ struct Traits<Complex> {
   static constexpr std::string_view kName = "complex";
 };
 
-Complex operator""_j(const char* s, const std::size_t len) {
-  return Complex(0, 0);
-}
+Complex operator""_j(const char* s, const std::size_t len);
 
 }  // namespace mamba::builtins::details
 

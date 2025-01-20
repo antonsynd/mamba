@@ -13,12 +13,16 @@ var annotated_dup =
       [ "builtins", null, [
         [ "details", null, [
           [ "Bool", "structmamba_1_1builtins_1_1details_1_1_bool.html", null ],
+          [ "ByteArray", "classmamba_1_1builtins_1_1details_1_1_byte_array.html", null ],
+          [ "Bytes", "classmamba_1_1builtins_1_1details_1_1_bytes.html", null ],
           [ "Complex", "structmamba_1_1builtins_1_1details_1_1_complex.html", "structmamba_1_1builtins_1_1details_1_1_complex" ],
           [ "IteratorFacade", "classmamba_1_1builtins_1_1details_1_1_iterator_facade.html", "classmamba_1_1builtins_1_1details_1_1_iterator_facade" ],
+          [ "Ref", "classmamba_1_1builtins_1_1details_1_1_ref.html", "classmamba_1_1builtins_1_1details_1_1_ref" ],
           [ "Str", "classmamba_1_1builtins_1_1details_1_1_str.html", "classmamba_1_1builtins_1_1details_1_1_str" ],
           [ "Traits", "structmamba_1_1builtins_1_1details_1_1_traits.html", null ],
           [ "Traits< Bool >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_bool_01_4.html", null ],
           [ "Traits< Byte >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_01_4.html", null ],
+          [ "Traits< ByteArray >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_array_01_4.html", null ],
           [ "Traits< Bytes >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_bytes_01_4.html", null ],
           [ "Traits< Complex >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_complex_01_4.html", null ],
           [ "Traits< Decimal >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_decimal_01_4.html", null ],

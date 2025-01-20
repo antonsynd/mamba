@@ -4,6 +4,8 @@ var hierarchy =
       [ "mamba::builtins::FrozenSet< T >", "classmamba_1_1builtins_1_1_frozen_set.html", null ]
     ] ],
     [ "mamba::builtins::details::Bool", "structmamba_1_1builtins_1_1details_1_1_bool.html", null ],
+    [ "mamba::builtins::details::ByteArray", "classmamba_1_1builtins_1_1details_1_1_byte_array.html", null ],
+    [ "mamba::builtins::details::Bytes", "classmamba_1_1builtins_1_1details_1_1_bytes.html", null ],
     [ "mamba::builtins::details::Complex", "structmamba_1_1builtins_1_1details_1_1_complex.html", null ],
     [ "mamba::__utils::details::Flush", "structmamba_1_1____utils_1_1details_1_1_flush.html", null ],
     [ "mamba::__utils::details::HexPrinter", "structmamba_1_1____utils_1_1details_1_1_hex_printer.html", null ],
@@ -19,6 +21,7 @@ var hierarchy =
       [ "mamba::builtins::Iterator< Raw< value_type > >", "classmamba_1_1builtins_1_1_iterator.html", null ],
       [ "mamba::builtins::Iterator< T >", "classmamba_1_1builtins_1_1_iterator.html", null ]
     ] ],
+    [ "mamba::builtins::details::Ref< T >", "classmamba_1_1builtins_1_1details_1_1_ref.html", null ],
     [ "std::runtime_error", null, [
       [ "mamba::builtins::AttributeError", "classmamba_1_1builtins_1_1_attribute_error.html", null ],
       [ "mamba::builtins::IndexError", "classmamba_1_1builtins_1_1_index_error.html", null ],
@@ -31,6 +34,7 @@ var hierarchy =
     [ "mamba::builtins::details::Traits< T >", "structmamba_1_1builtins_1_1details_1_1_traits.html", null ],
     [ "mamba::builtins::details::Traits< Bool >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_bool_01_4.html", null ],
     [ "mamba::builtins::details::Traits< Byte >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_01_4.html", null ],
+    [ "mamba::builtins::details::Traits< ByteArray >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_array_01_4.html", null ],
     [ "mamba::builtins::details::Traits< Bytes >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_bytes_01_4.html", null ],
     [ "mamba::builtins::details::Traits< Complex >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_complex_01_4.html", null ],
     [ "mamba::builtins::details::Traits< Decimal >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_decimal_01_4.html", null ],

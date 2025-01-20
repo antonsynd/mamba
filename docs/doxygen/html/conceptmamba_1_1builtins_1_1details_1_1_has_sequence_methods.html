@@ -108,8 +108,8 @@ $(function(){initNavTree('conceptmamba_1_1builtins_1_1details_1_1_has_sequence_m
 <h2 class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</div>
 <div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_has_sequence_methods.html">mamba::builtins::details::HasSequenceMethods</a> =  <span class="keyword">requires</span>(<span class="keyword">const</span> T sequence, <span class="keyword">const</span> U&amp; elem) {</div>
-<div class="line">  { sequence.__Contains__(elem) } -&gt; std::same_as&lt;bool&gt;;</div>
-<div class="line">  { sequence.__Len__() } -&gt; std::same_as&lt;Int&gt;;</div>
+<div class="line">  { sequence.Contains(elem) } -&gt; std::same_as&lt;bool&gt;;</div>
+<div class="line">  { sequence.Len() } -&gt; std::same_as&lt;Int&gt;;</div>
 <div class="line">  { sequence.Max() } -&gt; std::same_as&lt;U&gt;;</div>
 <div class="line">  { sequence.Min() } -&gt; std::same_as&lt;U&gt;;</div>
 <div class="line">}</div>

@@ -106,7 +106,7 @@ $(function(){initNavTree('conceptmamba_1_1builtins_1_1details_1_1_is_value.html'
 </div><!--header-->
 <div class="contents">
 
-<p>All primitive types are value types, including None and Optional&lt;T&gt;  
+<p>All arithmetic types, <code>bool</code>, <code>Bool</code>, <code>Complex</code>, and <code>None</code> are value types.  
 <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="value_8hpp_source.html">value.hpp</a>&gt;</code></p>
@@ -116,11 +116,11 @@ $(function(){initNavTree('conceptmamba_1_1builtins_1_1details_1_1_is_value.html'
 <div class="line">    std::is_arithmetic_v&lt;T&gt; || std::same_as&lt;std::decay_t&lt;T&gt;, <a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a>&gt; ||</div>
 <div class="line">    std::same_as&lt;std::decay_t&lt;T&gt;, <a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_complex.html">Complex</a>&gt; ||</div>
 <div class="line">    std::same_as&lt;std::decay_t&lt;T&gt;, None&gt;</div>
-<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_value_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">mamba::builtins::details::IsValue</a></div><div class="ttdoc">All primitive types are value types, including None and Optional&lt;T&gt;</div><div class="ttdef"><b>Definition</b> value.hpp:14</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_value_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">mamba::builtins::details::IsValue</a></div><div class="ttdoc">All arithmetic types, bool, Bool, Complex, and None are value types.</div><div class="ttdef"><b>Definition</b> value.hpp:15</div></div>
 <div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_bool_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_bool.html">mamba::builtins::details::Bool</a></div><div class="ttdoc">A proxy for the Pythonic bool type. In general, all Mamba APIs that interact with bools should return...</div><div class="ttdef"><b>Definition</b> bool.hpp:33</div></div>
-<div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_complex_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_complex.html">mamba::builtins::details::Complex</a></div><div class="ttdoc">A complex number.</div><div class="ttdef"><b>Definition</b> complex.hpp:15</div></div>
+<div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_complex_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_complex.html">mamba::builtins::details::Complex</a></div><div class="ttdoc">A complex number.</div><div class="ttdef"><b>Definition</b> complex.hpp:27</div></div>
 </div><!-- fragment --><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>All primitive types are value types, including None and Optional&lt;T&gt; </p>
+<div class="textblock"><p>All arithmetic types, <code>bool</code>, <code>Bool</code>, <code>Complex</code>, and <code>None</code> are value types. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -55,7 +55,7 @@ Double Complex::Abs() const {
   return std::hypot(real_, imag_);
 }
 
-Complex Complex::operator+(const Byte& b) const {
+Complex Complex::operator+(const Byte b) const {
   return *this;
 }
 
@@ -83,7 +83,7 @@ Complex Complex::operator+(const Long l) const {
   return *this;
 }
 
-Complex Complex::operator+(const SByte& s) const {
+Complex Complex::operator+(const SByte s) const {
   return *this;
 }
 
@@ -111,7 +111,7 @@ Complex Complex::operator+(const UShort u) const {
   return *this;
 }
 
-Complex Complex::operator-(const Byte& b) const {
+Complex Complex::operator-(const Byte b) const {
   return *this;
 }
 
@@ -139,7 +139,7 @@ Complex Complex::operator-(const Long l) const {
   return *this;
 }
 
-Complex Complex::operator-(const SByte& s) const {
+Complex Complex::operator-(const SByte s) const {
   return *this;
 }
 
@@ -167,7 +167,7 @@ Complex Complex::operator-(const UShort u) const {
   return *this;
 }
 
-Complex Complex::operator*(const Byte& b) const {
+Complex Complex::operator*(const Byte b) const {
   return *this;
 }
 
@@ -195,7 +195,7 @@ Complex Complex::operator*(const Long l) const {
   return *this;
 }
 
-Complex Complex::operator*(const SByte& s) const {
+Complex Complex::operator*(const SByte s) const {
   return *this;
 }
 
@@ -223,7 +223,7 @@ Complex Complex::operator*(const UShort u) const {
   return *this;
 }
 
-Complex Complex::operator/(const Byte& b) const {
+Complex Complex::operator/(const Byte b) const {
   return *this;
 }
 
@@ -251,7 +251,7 @@ Complex Complex::operator/(const Long l) const {
   return *this;
 }
 
-Complex Complex::operator/(const SByte& s) const {
+Complex Complex::operator/(const SByte s) const {
   return *this;
 }
 
@@ -279,7 +279,7 @@ Complex Complex::operator/(const UShort u) const {
   return *this;
 }
 
-Complex Complex::operator^(const Byte& b) const {
+Complex Complex::operator^(const Byte b) const {
   return *this;
 }
 
@@ -307,7 +307,7 @@ Complex Complex::operator^(const Long l) const {
   return *this;
 }
 
-Complex Complex::operator^(const SByte& s) const {
+Complex Complex::operator^(const SByte s) const {
   return *this;
 }
 
@@ -335,7 +335,7 @@ Complex Complex::operator^(const UShort u) const {
   return *this;
 }
 
-Complex& Complex::operator+=(const Byte& b) {
+Complex& Complex::operator+=(const Byte b) {
   return *this;
 }
 
@@ -363,7 +363,7 @@ Complex& Complex::operator+=(const Long l) {
   return *this;
 }
 
-Complex& Complex::operator+=(const SByte& s) {
+Complex& Complex::operator+=(const SByte s) {
   return *this;
 }
 
@@ -391,7 +391,7 @@ Complex& Complex::operator+=(const UShort u) {
   return *this;
 }
 
-Complex& Complex::operator-=(const Byte& b) {
+Complex& Complex::operator-=(const Byte b) {
   return *this;
 }
 
@@ -419,7 +419,7 @@ Complex& Complex::operator-=(const Long l) {
   return *this;
 }
 
-Complex& Complex::operator-=(const SByte& s) {
+Complex& Complex::operator-=(const SByte s) {
   return *this;
 }
 
@@ -447,7 +447,7 @@ Complex& Complex::operator-=(const UShort u) {
   return *this;
 }
 
-Complex& Complex::operator*=(const Byte& b) {
+Complex& Complex::operator*=(const Byte b) {
   return *this;
 }
 
@@ -475,7 +475,7 @@ Complex& Complex::operator*=(const Long l) {
   return *this;
 }
 
-Complex& Complex::operator*=(const SByte& s) {
+Complex& Complex::operator*=(const SByte s) {
   return *this;
 }
 
@@ -503,7 +503,7 @@ Complex& Complex::operator*=(const UShort u) {
   return *this;
 }
 
-Complex& Complex::operator/=(const Byte& b) {
+Complex& Complex::operator/=(const Byte b) {
   return *this;
 }
 
@@ -531,7 +531,7 @@ Complex& Complex::operator/=(const Long l) {
   return *this;
 }
 
-Complex& Complex::operator/=(const SByte& s) {
+Complex& Complex::operator/=(const SByte s) {
   return *this;
 }
 
@@ -559,7 +559,7 @@ Complex& Complex::operator/=(const UShort u) {
   return *this;
 }
 
-Complex& Complex::operator^=(const Byte& b) {
+Complex& Complex::operator^=(const Byte b) {
   return *this;
 }
 
@@ -587,7 +587,7 @@ Complex& Complex::operator^=(const Long l) {
   return *this;
 }
 
-Complex& Complex::operator^=(const SByte& s) {
+Complex& Complex::operator^=(const SByte s) {
   return *this;
 }
 
@@ -621,6 +621,10 @@ bool Complex::operator==(const Complex& other) const {
 
 bool Complex::operator!=(const Complex& other) const {
   return !(*this == other);
+}
+
+Complex operator""_j(const char* s, const std::size_t len) {
+  return Complex(0, 0);
 }
 
 }  // namespace mamba::builtins::details

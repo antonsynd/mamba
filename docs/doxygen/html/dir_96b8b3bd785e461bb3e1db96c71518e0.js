@@ -2,6 +2,7 @@ var dir_96b8b3bd785e461bb3e1db96c71518e0 =
 [
     [ "bool.hpp", "bool_8hpp_source.html", null ],
     [ "byte.hpp", "byte_8hpp_source.html", null ],
+    [ "byte_array.hpp", "byte__array_8hpp_source.html", null ],
     [ "bytes.hpp", "bytes_8hpp_source.html", null ],
     [ "complex.hpp", "complex_8hpp_source.html", null ],
     [ "decimal.hpp", "decimal_8hpp_source.html", null ],
