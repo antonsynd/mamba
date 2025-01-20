@@ -26,21 +26,22 @@ bool Is(const T& lhs, const T& rhs) {
 }
 
 /// @overload
-/// @brief Specialization for None type, only None is identical to None.
-template <details::Optional T>
+/// @brief Specialization for an optional type with `None`.
+template <details::IsOptional T>
 bool Is(const T& lhs, details::None) {
-  return !Unwrap(lhs);
+  return !Unwrap(lhs).has_value();
 }
 
 /// @overload
-/// @brief Specialization for None type, only None is identical to None.
-template <details::Optional T>
+/// @brief Specialization for an optional type with `None`, but with reverse
+/// argument order.
+template <details::IsOptional T>
 bool Is(details::None, const T& rhs) {
-  return !Unwrap(rhs);
+  return !Unwrap(rhs).has_value();
 }
 
 /// @overload
-/// @brief Specialization for None type, only None is identical to None.
+/// @brief Specialization for `None` type, only `None` is identical to `None`.
 bool Is(details::None, details::None) {
   return true;
 }

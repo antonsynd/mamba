@@ -137,49 +137,138 @@ Collaboration diagram for mamba::builtins::Iterator&lt; T &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a4b56e45146292fc739d70397006b0eb5" id="r_a4b56e45146292fc739d70397006b0eb5"><td class="memItemLeft" align="right" valign="top"><a id="a4b56e45146292fc739d70397006b0eb5" name="a4b56e45146292fc739d70397006b0eb5"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = details::Managed&lt;T&gt;</td></tr>
+<tr class="memitem:a4b56e45146292fc739d70397006b0eb5" id="r_a4b56e45146292fc739d70397006b0eb5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a> = details::Managed&lt;T&gt;</td></tr>
 <tr class="separator:a4b56e45146292fc739d70397006b0eb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22690e3b0e5afd0ea92b56d7fdc8e4c3" id="r_a22690e3b0e5afd0ea92b56d7fdc8e4c3"><td class="memItemLeft" align="right" valign="top"><a id="a22690e3b0e5afd0ea92b56d7fdc8e4c3" name="a22690e3b0e5afd0ea92b56d7fdc8e4c3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = <a class="el" href="classmamba_1_1builtins_1_1details_1_1_iterator_facade.html">details::IteratorFacade</a>&lt;details::Raw&lt;value_type&gt;&gt;</td></tr>
+<tr class="memitem:a22690e3b0e5afd0ea92b56d7fdc8e4c3" id="r_a22690e3b0e5afd0ea92b56d7fdc8e4c3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22690e3b0e5afd0ea92b56d7fdc8e4c3">iterator</a> = <a class="el" href="classmamba_1_1builtins_1_1details_1_1_iterator_facade.html">details::IteratorFacade</a>&lt;details::Raw&lt;<a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a>&gt;&gt;</td></tr>
 <tr class="separator:a22690e3b0e5afd0ea92b56d7fdc8e4c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83a55e77655ebc590fc8089f97d25717" id="r_a83a55e77655ebc590fc8089f97d25717"><td class="memItemLeft" align="right" valign="top"><a id="a83a55e77655ebc590fc8089f97d25717" name="a83a55e77655ebc590fc8089f97d25717"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>self</b> = <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">Iterator</a>&lt;value_type&gt;</td></tr>
-<tr class="memdesc:a83a55e77655ebc590fc8089f97d25717"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mamba-specific. <br /></td></tr>
+<tr class="memitem:a83a55e77655ebc590fc8089f97d25717" id="r_a83a55e77655ebc590fc8089f97d25717"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83a55e77655ebc590fc8089f97d25717">self</a> = <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">Iterator</a>&lt;<a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a>&gt;</td></tr>
+<tr class="memdesc:a83a55e77655ebc590fc8089f97d25717"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mamba-specific.  <br /></td></tr>
 <tr class="separator:a83a55e77655ebc590fc8089f97d25717"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a243af681ad50c12e22e1586389a1b2e0" id="r_a243af681ad50c12e22e1586389a1b2e0"><td class="memItemLeft" align="right" valign="top"><a id="a243af681ad50c12e22e1586389a1b2e0" name="a243af681ad50c12e22e1586389a1b2e0"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>next_function_t</b> = std::function&lt;value_type()&gt;</td></tr>
+<tr class="memitem:a243af681ad50c12e22e1586389a1b2e0" id="r_a243af681ad50c12e22e1586389a1b2e0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a243af681ad50c12e22e1586389a1b2e0">next_function_t</a> = std::function&lt;<a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a>()&gt;</td></tr>
 <tr class="separator:a243af681ad50c12e22e1586389a1b2e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa5d2a2074a60c335efe1d6b51192833e" id="r_aa5d2a2074a60c335efe1d6b51192833e"><td class="memItemLeft" align="right" valign="top"><a id="aa5d2a2074a60c335efe1d6b51192833e" name="aa5d2a2074a60c335efe1d6b51192833e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Iterator</b> (next_function_t next_func)</td></tr>
-<tr class="memdesc:aa5d2a2074a60c335efe1d6b51192833e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs this iterator with a custom lambda that should be equivalent to a <b>Next</b>() invocation. <br /></td></tr>
+<tr class="memitem:aa5d2a2074a60c335efe1d6b51192833e" id="r_aa5d2a2074a60c335efe1d6b51192833e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5d2a2074a60c335efe1d6b51192833e">Iterator</a> (<a class="el" href="#a243af681ad50c12e22e1586389a1b2e0">next_function_t</a> next_func)</td></tr>
+<tr class="memdesc:aa5d2a2074a60c335efe1d6b51192833e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs this iterator with a custom lambda that should be equivalent to a <b>Next</b>() invocation.  <br /></td></tr>
 <tr class="separator:aa5d2a2074a60c335efe1d6b51192833e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c12f93fd9801b2ff18d014c1166a041" id="r_a0c12f93fd9801b2ff18d014c1166a041"><td class="memTemplParams" colspan="2">template&lt;std::forward_iterator It&gt; </td></tr>
-<tr class="memitem:a0c12f93fd9801b2ff18d014c1166a041"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a0c12f93fd9801b2ff18d014c1166a041">Iterator</a> (It begin, It end)</td></tr>
+<tr class="memitem:a0c12f93fd9801b2ff18d014c1166a041"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a0c12f93fd9801b2ff18d014c1166a041">Iterator</a> (It <a class="el" href="#ac9ff75c0c2ca68d00959025f666cfdcb">begin</a>, It <a class="el" href="#a2702c7ed4013d5c7bf96480f48776797">end</a>)</td></tr>
 <tr class="memdesc:a0c12f93fd9801b2ff18d014c1166a041"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs this iterator over standard C++ forward iterators which must be have a lifetime at least as long as this iterator, which is enforced by the std::shared_ptr parameters.  <br /></td></tr>
 <tr class="separator:a0c12f93fd9801b2ff18d014c1166a041"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38518ca384225501fe976b3c0c25c0ef" id="r_a38518ca384225501fe976b3c0c25c0ef"><td class="memItemLeft" align="right" valign="top"><a id="a38518ca384225501fe976b3c0c25c0ef" name="a38518ca384225501fe976b3c0c25c0ef"></a>
-virtual <a class="el" href="#a83a55e77655ebc590fc8089f97d25717">self</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Iter</b> () const</td></tr>
+<tr class="memitem:aedaf0bad5db5cf5d764be9c7e5de942f" id="r_aedaf0bad5db5cf5d764be9c7e5de942f"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedaf0bad5db5cf5d764be9c7e5de942f">~Iterator</a> ()=default</td></tr>
+<tr class="separator:aedaf0bad5db5cf5d764be9c7e5de942f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38518ca384225501fe976b3c0c25c0ef" id="r_a38518ca384225501fe976b3c0c25c0ef"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a83a55e77655ebc590fc8089f97d25717">self</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38518ca384225501fe976b3c0c25c0ef">Iter</a> () const</td></tr>
 <tr class="separator:a38518ca384225501fe976b3c0c25c0ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb6145ad39f7ddaf38f1dcd5e675583e" id="r_adb6145ad39f7ddaf38f1dcd5e675583e"><td class="memItemLeft" align="right" valign="top"><a id="adb6145ad39f7ddaf38f1dcd5e675583e" name="adb6145ad39f7ddaf38f1dcd5e675583e"></a>
-virtual value_type&#160;</td><td class="memItemRight" valign="bottom"><b>Next</b> ()</td></tr>
+<tr class="memitem:adb6145ad39f7ddaf38f1dcd5e675583e" id="r_adb6145ad39f7ddaf38f1dcd5e675583e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb6145ad39f7ddaf38f1dcd5e675583e">Next</a> ()</td></tr>
 <tr class="separator:adb6145ad39f7ddaf38f1dcd5e675583e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9ff75c0c2ca68d00959025f666cfdcb" id="r_ac9ff75c0c2ca68d00959025f666cfdcb"><td class="memItemLeft" align="right" valign="top"><a id="ac9ff75c0c2ca68d00959025f666cfdcb" name="ac9ff75c0c2ca68d00959025f666cfdcb"></a>
-<a class="el" href="classmamba_1_1builtins_1_1details_1_1_iterator_facade.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const</td></tr>
+<tr class="memitem:ac9ff75c0c2ca68d00959025f666cfdcb" id="r_ac9ff75c0c2ca68d00959025f666cfdcb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a22690e3b0e5afd0ea92b56d7fdc8e4c3">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9ff75c0c2ca68d00959025f666cfdcb">begin</a> () const</td></tr>
 <tr class="separator:ac9ff75c0c2ca68d00959025f666cfdcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2702c7ed4013d5c7bf96480f48776797" id="r_a2702c7ed4013d5c7bf96480f48776797"><td class="memItemLeft" align="right" valign="top"><a id="a2702c7ed4013d5c7bf96480f48776797" name="a2702c7ed4013d5c7bf96480f48776797"></a>
-<a class="el" href="classmamba_1_1builtins_1_1details_1_1_iterator_facade.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const</td></tr>
+<tr class="memitem:a2702c7ed4013d5c7bf96480f48776797" id="r_a2702c7ed4013d5c7bf96480f48776797"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a22690e3b0e5afd0ea92b56d7fdc8e4c3">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2702c7ed4013d5c7bf96480f48776797">end</a> () const</td></tr>
 <tr class="separator:a2702c7ed4013d5c7bf96480f48776797"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
 class mamba::builtins::Iterator&lt; T &gt;</div><p>Base class for all iterators. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a22690e3b0e5afd0ea92b56d7fdc8e4c3" name="a22690e3b0e5afd0ea92b56d7fdc8e4c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22690e3b0e5afd0ea92b56d7fdc8e4c3">&#9670;&#160;</a></span>iterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::iterator = <a class="el" href="classmamba_1_1builtins_1_1details_1_1_iterator_facade.html">details::IteratorFacade</a>&lt;details::Raw&lt;<a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a>&gt;&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a243af681ad50c12e22e1586389a1b2e0" name="a243af681ad50c12e22e1586389a1b2e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a243af681ad50c12e22e1586389a1b2e0">&#9670;&#160;</a></span>next_function_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::next_function_t = std::function&lt;<a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a>()&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a83a55e77655ebc590fc8089f97d25717" name="a83a55e77655ebc590fc8089f97d25717"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83a55e77655ebc590fc8089f97d25717">&#9670;&#160;</a></span>self</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::self = <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">Iterator</a>&lt;<a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a>&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Mamba-specific. </p>
+
+</div>
+</div>
+<a id="a4b56e45146292fc739d70397006b0eb5" name="a4b56e45146292fc739d70397006b0eb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b56e45146292fc739d70397006b0eb5">&#9670;&#160;</a></span>value_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::value_type = details::Managed&lt;T&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa5d2a2074a60c335efe1d6b51192833e" name="aa5d2a2074a60c335efe1d6b51192833e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5d2a2074a60c335efe1d6b51192833e">&#9670;&#160;</a></span>Iterator() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::Iterator </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a243af681ad50c12e22e1586389a1b2e0">next_function_t</a></td>          <td class="paramname"><span class="paramname"><em>next_func</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel explicit">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs this iterator with a custom lambda that should be equivalent to a <b>Next</b>() invocation. </p>
+
+</div>
+</div>
 <a id="a0c12f93fd9801b2ff18d014c1166a041" name="a0c12f93fd9801b2ff18d014c1166a041"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c12f93fd9801b2ff18d014c1166a041">&#9670;&#160;</a></span>Iterator()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c12f93fd9801b2ff18d014c1166a041">&#9670;&#160;</a></span>Iterator() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -214,6 +303,142 @@ template&lt;std::forward_iterator It&gt; </div>
 
 </div>
 </div>
+<a id="aedaf0bad5db5cf5d764be9c7e5de942f" name="aedaf0bad5db5cf5d764be9c7e5de942f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedaf0bad5db5cf5d764be9c7e5de942f">&#9670;&#160;</a></span>~Iterator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::~<a class="el" href="classmamba_1_1builtins_1_1_iterator.html">Iterator</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac9ff75c0c2ca68d00959025f666cfdcb" name="ac9ff75c0c2ca68d00959025f666cfdcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9ff75c0c2ca68d00959025f666cfdcb">&#9670;&#160;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a22690e3b0e5afd0ea92b56d7fdc8e4c3">iterator</a> <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::begin </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2702c7ed4013d5c7bf96480f48776797" name="a2702c7ed4013d5c7bf96480f48776797"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2702c7ed4013d5c7bf96480f48776797">&#9670;&#160;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a22690e3b0e5afd0ea92b56d7fdc8e4c3">iterator</a> <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::end </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a38518ca384225501fe976b3c0c25c0ef" name="a38518ca384225501fe976b3c0c25c0ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38518ca384225501fe976b3c0c25c0ef">&#9670;&#160;</a></span>Iter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="#a83a55e77655ebc590fc8089f97d25717">self</a> <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::Iter </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adb6145ad39f7ddaf38f1dcd5e675583e" name="adb6145ad39f7ddaf38f1dcd5e675583e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb6145ad39f7ddaf38f1dcd5e675583e">&#9670;&#160;</a></span>Next()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="#a4b56e45146292fc739d70397006b0eb5">value_type</a> <a class="el" href="classmamba_1_1builtins_1_1_iterator.html">mamba::builtins::Iterator</a>&lt; T &gt;::Next </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/mamba/builtins/<a class="el" href="iteration_8hpp_source.html">iteration.hpp</a></li>
 </ul>
@@ -222,7 +447,7 @@ template&lt;std::forward_iterator It&gt; </div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>mamba</b></li><li class="navelem"><b>builtins</b></li><li class="navelem"><a class="el" href="classmamba_1_1builtins_1_1_iterator.html">Iterator</a></li>
+    <li class="navelem"><a class="el" href="namespacemamba.html">mamba</a></li><li class="navelem"><a class="el" href="namespacemamba_1_1builtins.html">builtins</a></li><li class="navelem"><a class="el" href="classmamba_1_1builtins_1_1_iterator.html">Iterator</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

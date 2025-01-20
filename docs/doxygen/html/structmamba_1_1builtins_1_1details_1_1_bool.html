@@ -109,124 +109,675 @@ $(function(){initNavTree('structmamba_1_1builtins_1_1details_1_1_bool.html','');
 </div><!--header-->
 <div class="contents">
 
-<p>A proxy for the Pythonic <code>bool</code> type. In general, all Mamba APIs that interact with bools should return the C++ <code>bool</code> type. This proxy is meant to provide both an implicit conversion target via <code>operator Bool()</code> on implementing classes, and the builtin conversion function <code>Bool()</code>. The implicit conversion target is to avoid having implicit conversion <code>operator bool()</code> be performed when trying to equate differing types, which would yield incorrect results if there is an overload for <code>operator==()</code>.  
+<p>A proxy for the Pythonic <code>bool</code> type. In general, all Mamba APIs that interact with bools should return the C++ <code>bool</code> type. This proxy is meant to provide both an implicit conversion target via <code>operator <a class="el" href="#abd02702cca364d607bcfc84c797e9f4f">Bool()</a></code> on implementing classes, and the builtin conversion function <code><a class="el" href="#abd02702cca364d607bcfc84c797e9f4f">Bool()</a></code>. The implicit conversion target is to avoid having implicit conversion <code>operator bool()</code> be performed when trying to equate differing types, which would yield incorrect results if there is an overload for <code><a class="el" href="#a1d01b4a2c9a2581a07b5743a51bef55a">operator==()</a></code>.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="bool_8hpp_source.html">bool.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a613a4749a90a279ad7132325695fad20" id="r_a613a4749a90a279ad7132325695fad20"><td class="memItemLeft" align="right" valign="top"><a id="a613a4749a90a279ad7132325695fad20" name="a613a4749a90a279ad7132325695fad20"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const bool b)</td></tr>
+<tr class="memitem:abd02702cca364d607bcfc84c797e9f4f" id="r_abd02702cca364d607bcfc84c797e9f4f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd02702cca364d607bcfc84c797e9f4f">Bool</a> ()</td></tr>
+<tr class="separator:abd02702cca364d607bcfc84c797e9f4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a613a4749a90a279ad7132325695fad20" id="r_a613a4749a90a279ad7132325695fad20"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a613a4749a90a279ad7132325695fad20">Bool</a> (const bool b)</td></tr>
 <tr class="separator:a613a4749a90a279ad7132325695fad20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfdaf378736a354d57b0119bede31496" id="r_abfdaf378736a354d57b0119bede31496"><td class="memItemLeft" align="right" valign="top"><a id="abfdaf378736a354d57b0119bede31496" name="abfdaf378736a354d57b0119bede31496"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const Byte b)</td></tr>
+<tr class="memitem:abfdaf378736a354d57b0119bede31496" id="r_abfdaf378736a354d57b0119bede31496"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfdaf378736a354d57b0119bede31496">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#af0f2bef23d73dc767a25bcacdbb0eb99">Byte</a> b)</td></tr>
 <tr class="separator:abfdaf378736a354d57b0119bede31496"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65f2187d7f0bb2cb861ca2f77b57064f" id="r_a65f2187d7f0bb2cb861ca2f77b57064f"><td class="memItemLeft" align="right" valign="top"><a id="a65f2187d7f0bb2cb861ca2f77b57064f" name="a65f2187d7f0bb2cb861ca2f77b57064f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const Decimal d)</td></tr>
+<tr class="memitem:a65f2187d7f0bb2cb861ca2f77b57064f" id="r_a65f2187d7f0bb2cb861ca2f77b57064f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65f2187d7f0bb2cb861ca2f77b57064f">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a9a9734b199224ab0d1c1b7fff5cacf37">Decimal</a> d)</td></tr>
 <tr class="separator:a65f2187d7f0bb2cb861ca2f77b57064f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9613ad7d6c2e02ef8105901601559e8e" id="r_a9613ad7d6c2e02ef8105901601559e8e"><td class="memItemLeft" align="right" valign="top"><a id="a9613ad7d6c2e02ef8105901601559e8e" name="a9613ad7d6c2e02ef8105901601559e8e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const Double d)</td></tr>
+<tr class="memitem:a9613ad7d6c2e02ef8105901601559e8e" id="r_a9613ad7d6c2e02ef8105901601559e8e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9613ad7d6c2e02ef8105901601559e8e">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#af1802fd65857972c880a141b23916fcb">Double</a> d)</td></tr>
 <tr class="separator:a9613ad7d6c2e02ef8105901601559e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd06570f25dd42ee203b90a233709f2e" id="r_afd06570f25dd42ee203b90a233709f2e"><td class="memItemLeft" align="right" valign="top"><a id="afd06570f25dd42ee203b90a233709f2e" name="afd06570f25dd42ee203b90a233709f2e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const Float f)</td></tr>
+<tr class="memitem:afd06570f25dd42ee203b90a233709f2e" id="r_afd06570f25dd42ee203b90a233709f2e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd06570f25dd42ee203b90a233709f2e">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a29c26ddfdcd3e4ec4b40cec3a45d9b05">Float</a> f)</td></tr>
 <tr class="separator:afd06570f25dd42ee203b90a233709f2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0ff2ef010d4b85431c6c530dd7e2cd8" id="r_af0ff2ef010d4b85431c6c530dd7e2cd8"><td class="memItemLeft" align="right" valign="top"><a id="af0ff2ef010d4b85431c6c530dd7e2cd8" name="af0ff2ef010d4b85431c6c530dd7e2cd8"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const Int i)</td></tr>
+<tr class="memitem:af0ff2ef010d4b85431c6c530dd7e2cd8" id="r_af0ff2ef010d4b85431c6c530dd7e2cd8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0ff2ef010d4b85431c6c530dd7e2cd8">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a19e313482c183c204a510406577ecd39">Int</a> i)</td></tr>
 <tr class="separator:af0ff2ef010d4b85431c6c530dd7e2cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1e84b666628293b92aaf10beafe4b4d" id="r_af1e84b666628293b92aaf10beafe4b4d"><td class="memItemLeft" align="right" valign="top"><a id="af1e84b666628293b92aaf10beafe4b4d" name="af1e84b666628293b92aaf10beafe4b4d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const Long l)</td></tr>
+<tr class="memitem:af1e84b666628293b92aaf10beafe4b4d" id="r_af1e84b666628293b92aaf10beafe4b4d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1e84b666628293b92aaf10beafe4b4d">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a568c6c8af3fb0b0f9896c22078156afc">Long</a> l)</td></tr>
 <tr class="separator:af1e84b666628293b92aaf10beafe4b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e288b5388de49869b60d433d5d1f320" id="r_a5e288b5388de49869b60d433d5d1f320"><td class="memItemLeft" align="right" valign="top"><a id="a5e288b5388de49869b60d433d5d1f320" name="a5e288b5388de49869b60d433d5d1f320"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const None)</td></tr>
+<tr class="memitem:a5e288b5388de49869b60d433d5d1f320" id="r_a5e288b5388de49869b60d433d5d1f320"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e288b5388de49869b60d433d5d1f320">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#addaf311278fc56491c7439caf0ba3b2c">None</a>)</td></tr>
 <tr class="separator:a5e288b5388de49869b60d433d5d1f320"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b552fca6e01dfe957bba917ce28df70" id="r_a4b552fca6e01dfe957bba917ce28df70"><td class="memItemLeft" align="right" valign="top"><a id="a4b552fca6e01dfe957bba917ce28df70" name="a4b552fca6e01dfe957bba917ce28df70"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const SByte s)</td></tr>
+<tr class="memitem:a4b552fca6e01dfe957bba917ce28df70" id="r_a4b552fca6e01dfe957bba917ce28df70"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b552fca6e01dfe957bba917ce28df70">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a6c790a21f23e175d62e716bc2668e63f">SByte</a> s)</td></tr>
 <tr class="separator:a4b552fca6e01dfe957bba917ce28df70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ef069f9eb108ef7056999b7e6d93825" id="r_a3ef069f9eb108ef7056999b7e6d93825"><td class="memItemLeft" align="right" valign="top"><a id="a3ef069f9eb108ef7056999b7e6d93825" name="a3ef069f9eb108ef7056999b7e6d93825"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const Short s)</td></tr>
+<tr class="memitem:a3ef069f9eb108ef7056999b7e6d93825" id="r_a3ef069f9eb108ef7056999b7e6d93825"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ef069f9eb108ef7056999b7e6d93825">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#aa654cffd9e5c51b238b77b28d023f684">Short</a> s)</td></tr>
 <tr class="separator:a3ef069f9eb108ef7056999b7e6d93825"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a989ba20ac93aa7265965c6ad46778b06" id="r_a989ba20ac93aa7265965c6ad46778b06"><td class="memItemLeft" align="right" valign="top"><a id="a989ba20ac93aa7265965c6ad46778b06" name="a989ba20ac93aa7265965c6ad46778b06"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const Size s)</td></tr>
+<tr class="memitem:a989ba20ac93aa7265965c6ad46778b06" id="r_a989ba20ac93aa7265965c6ad46778b06"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a989ba20ac93aa7265965c6ad46778b06">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a1d2f46d2a53d392ae4a1ef2ec85e2c82">Size</a> s)</td></tr>
 <tr class="separator:a989ba20ac93aa7265965c6ad46778b06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c7807106a580484ec5508e7db950b25" id="r_a1c7807106a580484ec5508e7db950b25"><td class="memItemLeft" align="right" valign="top"><a id="a1c7807106a580484ec5508e7db950b25" name="a1c7807106a580484ec5508e7db950b25"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const SSize s)</td></tr>
+<tr class="memitem:a1c7807106a580484ec5508e7db950b25" id="r_a1c7807106a580484ec5508e7db950b25"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c7807106a580484ec5508e7db950b25">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a2c9d5c5cec945523e78cbccfb7b36a82">SSize</a> s)</td></tr>
 <tr class="separator:a1c7807106a580484ec5508e7db950b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6edba77307471288e2be00a62cc779c" id="r_ad6edba77307471288e2be00a62cc779c"><td class="memItemLeft" align="right" valign="top"><a id="ad6edba77307471288e2be00a62cc779c" name="ad6edba77307471288e2be00a62cc779c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const UInt u)</td></tr>
+<tr class="memitem:ad6edba77307471288e2be00a62cc779c" id="r_ad6edba77307471288e2be00a62cc779c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6edba77307471288e2be00a62cc779c">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a13278b9cc1799fcbd149839b3669a987">UInt</a> u)</td></tr>
 <tr class="separator:ad6edba77307471288e2be00a62cc779c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e9fcfe0878d7ee175469a2e3bffb306" id="r_a5e9fcfe0878d7ee175469a2e3bffb306"><td class="memItemLeft" align="right" valign="top"><a id="a5e9fcfe0878d7ee175469a2e3bffb306" name="a5e9fcfe0878d7ee175469a2e3bffb306"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const ULong u)</td></tr>
+<tr class="memitem:a5e9fcfe0878d7ee175469a2e3bffb306" id="r_a5e9fcfe0878d7ee175469a2e3bffb306"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e9fcfe0878d7ee175469a2e3bffb306">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a2772d12447466530c03bfcd666a5dc43">ULong</a> u)</td></tr>
 <tr class="separator:a5e9fcfe0878d7ee175469a2e3bffb306"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a691bfc6f8bf8d5bff790140163c8a5d0" id="r_a691bfc6f8bf8d5bff790140163c8a5d0"><td class="memItemLeft" align="right" valign="top"><a id="a691bfc6f8bf8d5bff790140163c8a5d0" name="a691bfc6f8bf8d5bff790140163c8a5d0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Bool</b> (const UShort u)</td></tr>
+<tr class="memitem:a691bfc6f8bf8d5bff790140163c8a5d0" id="r_a691bfc6f8bf8d5bff790140163c8a5d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a691bfc6f8bf8d5bff790140163c8a5d0">Bool</a> (const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#ab8a99e64c201c4ca3de223430f9af807">UShort</a> u)</td></tr>
 <tr class="separator:a691bfc6f8bf8d5bff790140163c8a5d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00e04ff96bc9120990a9bdbd6d557d07" id="r_a00e04ff96bc9120990a9bdbd6d557d07"><td class="memTemplParams" colspan="2"><a id="a00e04ff96bc9120990a9bdbd6d557d07" name="a00e04ff96bc9120990a9bdbd6d557d07"></a>
-template&lt;Optional T&gt; </td></tr>
-<tr class="memitem:a00e04ff96bc9120990a9bdbd6d557d07"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Bool</b> (const T &amp;o)</td></tr>
+<tr class="memitem:a00e04ff96bc9120990a9bdbd6d557d07" id="r_a00e04ff96bc9120990a9bdbd6d557d07"><td class="memTemplParams" colspan="2">template&lt;Optional T&gt; </td></tr>
+<tr class="memitem:a00e04ff96bc9120990a9bdbd6d557d07"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="#a00e04ff96bc9120990a9bdbd6d557d07">Bool</a> (const T &amp;o)</td></tr>
 <tr class="separator:a00e04ff96bc9120990a9bdbd6d557d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d01b4a2c9a2581a07b5743a51bef55a" id="r_a1d01b4a2c9a2581a07b5743a51bef55a"><td class="memItemLeft" align="right" valign="top"><a id="a1d01b4a2c9a2581a07b5743a51bef55a" name="a1d01b4a2c9a2581a07b5743a51bef55a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a> &amp;other) const</td></tr>
+<tr class="memitem:a1d01b4a2c9a2581a07b5743a51bef55a" id="r_a1d01b4a2c9a2581a07b5743a51bef55a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d01b4a2c9a2581a07b5743a51bef55a">operator==</a> (const <a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a> &amp;other) const</td></tr>
 <tr class="separator:a1d01b4a2c9a2581a07b5743a51bef55a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba1ecc253c37beebf0473c4b751b1776" id="r_aba1ecc253c37beebf0473c4b751b1776"><td class="memItemLeft" align="right" valign="top"><a id="aba1ecc253c37beebf0473c4b751b1776" name="aba1ecc253c37beebf0473c4b751b1776"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a> &amp;other) const</td></tr>
+<tr class="memitem:aba1ecc253c37beebf0473c4b751b1776" id="r_aba1ecc253c37beebf0473c4b751b1776"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba1ecc253c37beebf0473c4b751b1776">operator!=</a> (const <a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a> &amp;other) const</td></tr>
 <tr class="separator:aba1ecc253c37beebf0473c4b751b1776"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a223683f51775e6d9972d82c3b78f4651" id="r_a223683f51775e6d9972d82c3b78f4651"><td class="memItemLeft" align="right" valign="top"><a id="a223683f51775e6d9972d82c3b78f4651" name="a223683f51775e6d9972d82c3b78f4651"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const</td></tr>
+<tr class="memitem:a223683f51775e6d9972d82c3b78f4651" id="r_a223683f51775e6d9972d82c3b78f4651"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a223683f51775e6d9972d82c3b78f4651">operator bool</a> () const</td></tr>
 <tr class="separator:a223683f51775e6d9972d82c3b78f4651"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a405547f9973a8681ef4728010b70457c" id="r_a405547f9973a8681ef4728010b70457c"><td class="memItemLeft" align="right" valign="top"><a id="a405547f9973a8681ef4728010b70457c" name="a405547f9973a8681ef4728010b70457c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Byte</b> () const</td></tr>
+<tr class="memitem:a405547f9973a8681ef4728010b70457c" id="r_a405547f9973a8681ef4728010b70457c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a405547f9973a8681ef4728010b70457c">operator Byte</a> () const</td></tr>
 <tr class="separator:a405547f9973a8681ef4728010b70457c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae92ac3e6fcee74de6dd7c16c8776521e" id="r_ae92ac3e6fcee74de6dd7c16c8776521e"><td class="memItemLeft" align="right" valign="top"><a id="ae92ac3e6fcee74de6dd7c16c8776521e" name="ae92ac3e6fcee74de6dd7c16c8776521e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Decimal</b> () const</td></tr>
+<tr class="memitem:ae92ac3e6fcee74de6dd7c16c8776521e" id="r_ae92ac3e6fcee74de6dd7c16c8776521e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae92ac3e6fcee74de6dd7c16c8776521e">operator Decimal</a> () const</td></tr>
 <tr class="separator:ae92ac3e6fcee74de6dd7c16c8776521e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6a0c7ad60a701e80b912d8302556146" id="r_af6a0c7ad60a701e80b912d8302556146"><td class="memItemLeft" align="right" valign="top"><a id="af6a0c7ad60a701e80b912d8302556146" name="af6a0c7ad60a701e80b912d8302556146"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Double</b> () const</td></tr>
+<tr class="memitem:af6a0c7ad60a701e80b912d8302556146" id="r_af6a0c7ad60a701e80b912d8302556146"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6a0c7ad60a701e80b912d8302556146">operator Double</a> () const</td></tr>
 <tr class="separator:af6a0c7ad60a701e80b912d8302556146"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a43be2af98093f6fd50f6bcb1ba7e32" id="r_a9a43be2af98093f6fd50f6bcb1ba7e32"><td class="memItemLeft" align="right" valign="top"><a id="a9a43be2af98093f6fd50f6bcb1ba7e32" name="a9a43be2af98093f6fd50f6bcb1ba7e32"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Float</b> () const</td></tr>
+<tr class="memitem:a9a43be2af98093f6fd50f6bcb1ba7e32" id="r_a9a43be2af98093f6fd50f6bcb1ba7e32"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a43be2af98093f6fd50f6bcb1ba7e32">operator Float</a> () const</td></tr>
 <tr class="separator:a9a43be2af98093f6fd50f6bcb1ba7e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac93347dc46d24a733bfe069b21b0d4e" id="r_aac93347dc46d24a733bfe069b21b0d4e"><td class="memItemLeft" align="right" valign="top"><a id="aac93347dc46d24a733bfe069b21b0d4e" name="aac93347dc46d24a733bfe069b21b0d4e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Int</b> () const</td></tr>
+<tr class="memitem:aac93347dc46d24a733bfe069b21b0d4e" id="r_aac93347dc46d24a733bfe069b21b0d4e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac93347dc46d24a733bfe069b21b0d4e">operator Int</a> () const</td></tr>
 <tr class="separator:aac93347dc46d24a733bfe069b21b0d4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e1f52a95d8cfb59e4f2ae4121c48ba5" id="r_a5e1f52a95d8cfb59e4f2ae4121c48ba5"><td class="memItemLeft" align="right" valign="top"><a id="a5e1f52a95d8cfb59e4f2ae4121c48ba5" name="a5e1f52a95d8cfb59e4f2ae4121c48ba5"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Long</b> () const</td></tr>
+<tr class="memitem:a5e1f52a95d8cfb59e4f2ae4121c48ba5" id="r_a5e1f52a95d8cfb59e4f2ae4121c48ba5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e1f52a95d8cfb59e4f2ae4121c48ba5">operator Long</a> () const</td></tr>
 <tr class="separator:a5e1f52a95d8cfb59e4f2ae4121c48ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f86f430a1f6addd2170b41f41b67f3c" id="r_a6f86f430a1f6addd2170b41f41b67f3c"><td class="memItemLeft" align="right" valign="top"><a id="a6f86f430a1f6addd2170b41f41b67f3c" name="a6f86f430a1f6addd2170b41f41b67f3c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator SByte</b> () const</td></tr>
+<tr class="memitem:a6f86f430a1f6addd2170b41f41b67f3c" id="r_a6f86f430a1f6addd2170b41f41b67f3c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f86f430a1f6addd2170b41f41b67f3c">operator SByte</a> () const</td></tr>
 <tr class="separator:a6f86f430a1f6addd2170b41f41b67f3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68935a47cf969b6bfe4f3f198a7f98ca" id="r_a68935a47cf969b6bfe4f3f198a7f98ca"><td class="memItemLeft" align="right" valign="top"><a id="a68935a47cf969b6bfe4f3f198a7f98ca" name="a68935a47cf969b6bfe4f3f198a7f98ca"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Short</b> () const</td></tr>
+<tr class="memitem:a68935a47cf969b6bfe4f3f198a7f98ca" id="r_a68935a47cf969b6bfe4f3f198a7f98ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68935a47cf969b6bfe4f3f198a7f98ca">operator Short</a> () const</td></tr>
 <tr class="separator:a68935a47cf969b6bfe4f3f198a7f98ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a001f8cc2c7eb2985a5eb7a867c120491" id="r_a001f8cc2c7eb2985a5eb7a867c120491"><td class="memItemLeft" align="right" valign="top"><a id="a001f8cc2c7eb2985a5eb7a867c120491" name="a001f8cc2c7eb2985a5eb7a867c120491"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator Size</b> () const</td></tr>
+<tr class="memitem:a001f8cc2c7eb2985a5eb7a867c120491" id="r_a001f8cc2c7eb2985a5eb7a867c120491"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a001f8cc2c7eb2985a5eb7a867c120491">operator Size</a> () const</td></tr>
 <tr class="separator:a001f8cc2c7eb2985a5eb7a867c120491"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8138279004a2779adba33e7de3f2b9e9" id="r_a8138279004a2779adba33e7de3f2b9e9"><td class="memItemLeft" align="right" valign="top"><a id="a8138279004a2779adba33e7de3f2b9e9" name="a8138279004a2779adba33e7de3f2b9e9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator SSize</b> () const</td></tr>
+<tr class="memitem:a8138279004a2779adba33e7de3f2b9e9" id="r_a8138279004a2779adba33e7de3f2b9e9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8138279004a2779adba33e7de3f2b9e9">operator SSize</a> () const</td></tr>
 <tr class="separator:a8138279004a2779adba33e7de3f2b9e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a721ad2185ae8d55dca9446ed1d65aded" id="r_a721ad2185ae8d55dca9446ed1d65aded"><td class="memItemLeft" align="right" valign="top"><a id="a721ad2185ae8d55dca9446ed1d65aded" name="a721ad2185ae8d55dca9446ed1d65aded"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator UInt</b> () const</td></tr>
+<tr class="memitem:a721ad2185ae8d55dca9446ed1d65aded" id="r_a721ad2185ae8d55dca9446ed1d65aded"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a721ad2185ae8d55dca9446ed1d65aded">operator UInt</a> () const</td></tr>
 <tr class="separator:a721ad2185ae8d55dca9446ed1d65aded"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c54a253c8e3864e6c0c69fc91e752a0" id="r_a2c54a253c8e3864e6c0c69fc91e752a0"><td class="memItemLeft" align="right" valign="top"><a id="a2c54a253c8e3864e6c0c69fc91e752a0" name="a2c54a253c8e3864e6c0c69fc91e752a0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator ULong</b> () const</td></tr>
+<tr class="memitem:a2c54a253c8e3864e6c0c69fc91e752a0" id="r_a2c54a253c8e3864e6c0c69fc91e752a0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c54a253c8e3864e6c0c69fc91e752a0">operator ULong</a> () const</td></tr>
 <tr class="separator:a2c54a253c8e3864e6c0c69fc91e752a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b925605abc62fa1a4a07b5cfefde5af" id="r_a0b925605abc62fa1a4a07b5cfefde5af"><td class="memItemLeft" align="right" valign="top"><a id="a0b925605abc62fa1a4a07b5cfefde5af" name="a0b925605abc62fa1a4a07b5cfefde5af"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator UShort</b> () const</td></tr>
+<tr class="memitem:a0b925605abc62fa1a4a07b5cfefde5af" id="r_a0b925605abc62fa1a4a07b5cfefde5af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b925605abc62fa1a4a07b5cfefde5af">operator UShort</a> () const</td></tr>
 <tr class="separator:a0b925605abc62fa1a4a07b5cfefde5af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A proxy for the Pythonic <code>bool</code> type. In general, all Mamba APIs that interact with bools should return the C++ <code>bool</code> type. This proxy is meant to provide both an implicit conversion target via <code>operator Bool()</code> on implementing classes, and the builtin conversion function <code>Bool()</code>. The implicit conversion target is to avoid having implicit conversion <code>operator bool()</code> be performed when trying to equate differing types, which would yield incorrect results if there is an overload for <code>operator==()</code>. </p>
-<dl class="section note"><dt>Note</dt><dd>This goes against the Python specification which says bool is an integer. This is to ensure we can write overload built-in functions for both Int and <a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html" title="A proxy for the Pythonic bool type. In general, all Mamba APIs that interact with bools should return...">Bool</a>. </dd></dl>
-</div><hr/>The documentation for this struct was generated from the following files:<ul>
+<div class="textblock"><p>A proxy for the Pythonic <code>bool</code> type. In general, all Mamba APIs that interact with bools should return the C++ <code>bool</code> type. This proxy is meant to provide both an implicit conversion target via <code>operator <a class="el" href="#abd02702cca364d607bcfc84c797e9f4f">Bool()</a></code> on implementing classes, and the builtin conversion function <code><a class="el" href="#abd02702cca364d607bcfc84c797e9f4f">Bool()</a></code>. The implicit conversion target is to avoid having implicit conversion <code>operator bool()</code> be performed when trying to equate differing types, which would yield incorrect results if there is an overload for <code><a class="el" href="#a1d01b4a2c9a2581a07b5743a51bef55a">operator==()</a></code>. </p>
+<dl class="section note"><dt>Note</dt><dd>This goes against the Python specification which says bool is an integer. This is to ensure we can write overload built-in functions for both <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a19e313482c183c204a510406577ecd39">Int</a> and <a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html" title="A proxy for the Pythonic bool type. In general, all Mamba APIs that interact with bools should return...">Bool</a>. </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="abd02702cca364d607bcfc84c797e9f4f" name="abd02702cca364d607bcfc84c797e9f4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd02702cca364d607bcfc84c797e9f4f">&#9670;&#160;</a></span>Bool() <span class="overload">[1/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a613a4749a90a279ad7132325695fad20" name="a613a4749a90a279ad7132325695fad20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a613a4749a90a279ad7132325695fad20">&#9670;&#160;</a></span>Bool() <span class="overload">[2/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const bool</td>          <td class="paramname"><span class="paramname"><em>b</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abfdaf378736a354d57b0119bede31496" name="abfdaf378736a354d57b0119bede31496"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfdaf378736a354d57b0119bede31496">&#9670;&#160;</a></span>Bool() <span class="overload">[3/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#af0f2bef23d73dc767a25bcacdbb0eb99">Byte</a></td>          <td class="paramname"><span class="paramname"><em>b</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a65f2187d7f0bb2cb861ca2f77b57064f" name="a65f2187d7f0bb2cb861ca2f77b57064f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65f2187d7f0bb2cb861ca2f77b57064f">&#9670;&#160;</a></span>Bool() <span class="overload">[4/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a9a9734b199224ab0d1c1b7fff5cacf37">Decimal</a></td>          <td class="paramname"><span class="paramname"><em>d</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9613ad7d6c2e02ef8105901601559e8e" name="a9613ad7d6c2e02ef8105901601559e8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9613ad7d6c2e02ef8105901601559e8e">&#9670;&#160;</a></span>Bool() <span class="overload">[5/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#af1802fd65857972c880a141b23916fcb">Double</a></td>          <td class="paramname"><span class="paramname"><em>d</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afd06570f25dd42ee203b90a233709f2e" name="afd06570f25dd42ee203b90a233709f2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd06570f25dd42ee203b90a233709f2e">&#9670;&#160;</a></span>Bool() <span class="overload">[6/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a29c26ddfdcd3e4ec4b40cec3a45d9b05">Float</a></td>          <td class="paramname"><span class="paramname"><em>f</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af0ff2ef010d4b85431c6c530dd7e2cd8" name="af0ff2ef010d4b85431c6c530dd7e2cd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0ff2ef010d4b85431c6c530dd7e2cd8">&#9670;&#160;</a></span>Bool() <span class="overload">[7/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a19e313482c183c204a510406577ecd39">Int</a></td>          <td class="paramname"><span class="paramname"><em>i</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af1e84b666628293b92aaf10beafe4b4d" name="af1e84b666628293b92aaf10beafe4b4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1e84b666628293b92aaf10beafe4b4d">&#9670;&#160;</a></span>Bool() <span class="overload">[8/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a568c6c8af3fb0b0f9896c22078156afc">Long</a></td>          <td class="paramname"><span class="paramname"><em>l</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e288b5388de49869b60d433d5d1f320" name="a5e288b5388de49869b60d433d5d1f320"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e288b5388de49869b60d433d5d1f320">&#9670;&#160;</a></span>Bool() <span class="overload">[9/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#addaf311278fc56491c7439caf0ba3b2c">None</a></td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4b552fca6e01dfe957bba917ce28df70" name="a4b552fca6e01dfe957bba917ce28df70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b552fca6e01dfe957bba917ce28df70">&#9670;&#160;</a></span>Bool() <span class="overload">[10/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a6c790a21f23e175d62e716bc2668e63f">SByte</a></td>          <td class="paramname"><span class="paramname"><em>s</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3ef069f9eb108ef7056999b7e6d93825" name="a3ef069f9eb108ef7056999b7e6d93825"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ef069f9eb108ef7056999b7e6d93825">&#9670;&#160;</a></span>Bool() <span class="overload">[11/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#aa654cffd9e5c51b238b77b28d023f684">Short</a></td>          <td class="paramname"><span class="paramname"><em>s</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a989ba20ac93aa7265965c6ad46778b06" name="a989ba20ac93aa7265965c6ad46778b06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a989ba20ac93aa7265965c6ad46778b06">&#9670;&#160;</a></span>Bool() <span class="overload">[12/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a1d2f46d2a53d392ae4a1ef2ec85e2c82">Size</a></td>          <td class="paramname"><span class="paramname"><em>s</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c7807106a580484ec5508e7db950b25" name="a1c7807106a580484ec5508e7db950b25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c7807106a580484ec5508e7db950b25">&#9670;&#160;</a></span>Bool() <span class="overload">[13/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a2c9d5c5cec945523e78cbccfb7b36a82">SSize</a></td>          <td class="paramname"><span class="paramname"><em>s</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad6edba77307471288e2be00a62cc779c" name="ad6edba77307471288e2be00a62cc779c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6edba77307471288e2be00a62cc779c">&#9670;&#160;</a></span>Bool() <span class="overload">[14/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a13278b9cc1799fcbd149839b3669a987">UInt</a></td>          <td class="paramname"><span class="paramname"><em>u</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e9fcfe0878d7ee175469a2e3bffb306" name="a5e9fcfe0878d7ee175469a2e3bffb306"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e9fcfe0878d7ee175469a2e3bffb306">&#9670;&#160;</a></span>Bool() <span class="overload">[15/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a2772d12447466530c03bfcd666a5dc43">ULong</a></td>          <td class="paramname"><span class="paramname"><em>u</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a691bfc6f8bf8d5bff790140163c8a5d0" name="a691bfc6f8bf8d5bff790140163c8a5d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a691bfc6f8bf8d5bff790140163c8a5d0">&#9670;&#160;</a></span>Bool() <span class="overload">[16/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacemamba_1_1builtins_1_1details.html#ab8a99e64c201c4ca3de223430f9af807">UShort</a></td>          <td class="paramname"><span class="paramname"><em>u</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a00e04ff96bc9120990a9bdbd6d557d07" name="a00e04ff96bc9120990a9bdbd6d557d07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00e04ff96bc9120990a9bdbd6d557d07">&#9670;&#160;</a></span>Bool() <span class="overload">[17/17]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;Optional T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::Bool </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;</td>          <td class="paramname"><span class="paramname"><em>o</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a223683f51775e6d9972d82c3b78f4651" name="a223683f51775e6d9972d82c3b78f4651"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a223683f51775e6d9972d82c3b78f4651">&#9670;&#160;</a></span>operator bool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator bool </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a405547f9973a8681ef4728010b70457c" name="a405547f9973a8681ef4728010b70457c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a405547f9973a8681ef4728010b70457c">&#9670;&#160;</a></span>operator Byte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#af0f2bef23d73dc767a25bcacdbb0eb99">Byte</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae92ac3e6fcee74de6dd7c16c8776521e" name="ae92ac3e6fcee74de6dd7c16c8776521e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae92ac3e6fcee74de6dd7c16c8776521e">&#9670;&#160;</a></span>operator Decimal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a9a9734b199224ab0d1c1b7fff5cacf37">Decimal</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af6a0c7ad60a701e80b912d8302556146" name="af6a0c7ad60a701e80b912d8302556146"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6a0c7ad60a701e80b912d8302556146">&#9670;&#160;</a></span>operator Double()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#af1802fd65857972c880a141b23916fcb">Double</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9a43be2af98093f6fd50f6bcb1ba7e32" name="a9a43be2af98093f6fd50f6bcb1ba7e32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a43be2af98093f6fd50f6bcb1ba7e32">&#9670;&#160;</a></span>operator Float()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a29c26ddfdcd3e4ec4b40cec3a45d9b05">Float</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aac93347dc46d24a733bfe069b21b0d4e" name="aac93347dc46d24a733bfe069b21b0d4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac93347dc46d24a733bfe069b21b0d4e">&#9670;&#160;</a></span>operator Int()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a19e313482c183c204a510406577ecd39">Int</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e1f52a95d8cfb59e4f2ae4121c48ba5" name="a5e1f52a95d8cfb59e4f2ae4121c48ba5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e1f52a95d8cfb59e4f2ae4121c48ba5">&#9670;&#160;</a></span>operator Long()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a568c6c8af3fb0b0f9896c22078156afc">Long</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6f86f430a1f6addd2170b41f41b67f3c" name="a6f86f430a1f6addd2170b41f41b67f3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f86f430a1f6addd2170b41f41b67f3c">&#9670;&#160;</a></span>operator SByte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a6c790a21f23e175d62e716bc2668e63f">SByte</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a68935a47cf969b6bfe4f3f198a7f98ca" name="a68935a47cf969b6bfe4f3f198a7f98ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68935a47cf969b6bfe4f3f198a7f98ca">&#9670;&#160;</a></span>operator Short()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#aa654cffd9e5c51b238b77b28d023f684">Short</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a001f8cc2c7eb2985a5eb7a867c120491" name="a001f8cc2c7eb2985a5eb7a867c120491"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a001f8cc2c7eb2985a5eb7a867c120491">&#9670;&#160;</a></span>operator Size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a1d2f46d2a53d392ae4a1ef2ec85e2c82">Size</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8138279004a2779adba33e7de3f2b9e9" name="a8138279004a2779adba33e7de3f2b9e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8138279004a2779adba33e7de3f2b9e9">&#9670;&#160;</a></span>operator SSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a2c9d5c5cec945523e78cbccfb7b36a82">SSize</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a721ad2185ae8d55dca9446ed1d65aded" name="a721ad2185ae8d55dca9446ed1d65aded"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a721ad2185ae8d55dca9446ed1d65aded">&#9670;&#160;</a></span>operator UInt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a13278b9cc1799fcbd149839b3669a987">UInt</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c54a253c8e3864e6c0c69fc91e752a0" name="a2c54a253c8e3864e6c0c69fc91e752a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c54a253c8e3864e6c0c69fc91e752a0">&#9670;&#160;</a></span>operator ULong()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#a2772d12447466530c03bfcd666a5dc43">ULong</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0b925605abc62fa1a4a07b5cfefde5af" name="a0b925605abc62fa1a4a07b5cfefde5af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b925605abc62fa1a4a07b5cfefde5af">&#9670;&#160;</a></span>operator UShort()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mamba::builtins::details::Bool::operator <a class="el" href="namespacemamba_1_1builtins_1_1details.html#ab8a99e64c201c4ca3de223430f9af807">UShort</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba1ecc253c37beebf0473c4b751b1776" name="aba1ecc253c37beebf0473c4b751b1776"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba1ecc253c37beebf0473c4b751b1776">&#9670;&#160;</a></span>operator!=()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mamba::builtins::details::Bool::operator!= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1d01b4a2c9a2581a07b5743a51bef55a" name="a1d01b4a2c9a2581a07b5743a51bef55a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d01b4a2c9a2581a07b5743a51bef55a">&#9670;&#160;</a></span>operator==()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool mamba::builtins::details::Bool::operator== </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following files:<ul>
 <li>include/mamba/builtins/__types/<a class="el" href="bool_8hpp_source.html">bool.hpp</a></li>
-<li>src/mamba/builtins/<b>bool.cpp</b></li>
+<li>src/mamba/builtins/<a class="el" href="bool_8cpp.html">bool.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>mamba</b></li><li class="navelem"><b>builtins</b></li><li class="navelem"><b>details</b></li><li class="navelem"><a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a></li>
+    <li class="navelem"><a class="el" href="namespacemamba.html">mamba</a></li><li class="navelem"><a class="el" href="namespacemamba_1_1builtins.html">builtins</a></li><li class="navelem"><a class="el" href="namespacemamba_1_1builtins_1_1details.html">details</a></li><li class="navelem"><a class="el" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

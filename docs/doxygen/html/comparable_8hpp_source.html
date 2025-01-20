@@ -105,25 +105,25 @@ $(function(){initNavTree('comparable_8hpp_source.html',''); initResizable(true);
   <div class="headertitle"><div class="title">comparable.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<a href="comparable_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;concepts&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;mamba/builtins/__meta/wrapped.hpp&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="wrapped_8hpp.html">mamba/builtins/__meta/wrapped.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span>mamba::builtins::details {</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a> {</div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00010" data-start="{" data-end="}">
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="conceptmamba_1_1builtins_1_1details_1_1_equatable.html">   10</a></span><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_equatable.html">Equatable</a> = <span class="keyword">requires</span>(<span class="keyword">const</span> T lhs, <span class="keyword">const</span> T rhs) {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>  { Unwrap(lhs) == Unwrap(rhs) } -&gt; std::same_as&lt;bool&gt;;</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>  { <a class="code hl_function" href="namespacemamba_1_1builtins_1_1details.html#a4df42b67f0ac62360cb46accf91fbaad">Unwrap</a>(lhs) == <a class="code hl_function" href="namespacemamba_1_1builtins_1_1details.html#a4df42b67f0ac62360cb46accf91fbaad">Unwrap</a>(rhs) } -&gt; std::same_as&lt;bool&gt;;</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>};</div>
 </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00015" data-start="{" data-end="}">
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="conceptmamba_1_1builtins_1_1details_1_1_inequatable.html">   15</a></span><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_inequatable.html">Inequatable</a> = <span class="keyword">requires</span>(<span class="keyword">const</span> T lhs, <span class="keyword">const</span> T rhs) {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  { Unwrap(lhs) != Unwrap(rhs) } -&gt; std::same_as&lt;bool&gt;;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  { <a class="code hl_function" href="namespacemamba_1_1builtins_1_1details.html#a4df42b67f0ac62360cb46accf91fbaad">Unwrap</a>(lhs) != <a class="code hl_function" href="namespacemamba_1_1builtins_1_1details.html#a4df42b67f0ac62360cb46accf91fbaad">Unwrap</a>(rhs) } -&gt; std::same_as&lt;bool&gt;;</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>};</div>
 </div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
@@ -132,12 +132,15 @@ $(function(){initNavTree('comparable_8hpp_source.html',''); initResizable(true);
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">// IWYU pragma: private</span></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_equatable_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_equatable.html">mamba::builtins::details::Equatable</a></div><div class="ttdef"><b>Definition</b> comparable.hpp:10</div></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_inequatable_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_inequatable.html">mamba::builtins::details::Inequatable</a></div><div class="ttdef"><b>Definition</b> comparable.hpp:15</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a></div><div class="ttdef"><b>Definition</b> bool.cpp:10</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a4df42b67f0ac62360cb46accf91fbaad"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a4df42b67f0ac62360cb46accf91fbaad">mamba::builtins::details::Unwrap</a></div><div class="ttdeci">auto Unwrap(T &amp;&amp;t)</div><div class="ttdoc">Unwraps t from std::shared_ptr&lt;T&gt; if it satisfies IsNotValue&lt;T&gt;, otherwise just returns t.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:45</div></div>
+<div class="ttc" id="awrapped_8hpp_html"><div class="ttname"><a href="wrapped_8hpp.html">wrapped.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li><li class="navelem"><b>comparable.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li><li class="navelem"><a class="el" href="comparable_8hpp.html">comparable.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

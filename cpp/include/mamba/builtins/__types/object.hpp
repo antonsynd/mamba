@@ -10,16 +10,18 @@
 
 namespace mamba::builtins::details {
 
-/// @brief Abstract base class for all objects (non-values).
+/// @brief Abstract base class for all objects (non-value types).
 class Object : public std::enable_shared_from_this<Object> {
  public:
+  /// @note Needed to ensure proper destruction of any derived objects.
   virtual ~Object() = default;
 
   /// @brief Returns the id of this object, which is its memory address.
+  /// @code id(object)
   virtual Size Id() const final;
 
   /// @brief Returns the representation of this object. By default, it is
-  /// the evaluation of f"{Name()} object at {Id():#018x}".
+  /// the evaluation of f"{_Repr(...) object at {Id():#018x}".
   /// @code repr(object)
   virtual Str Repr() const;
 
@@ -35,9 +37,12 @@ class Object : public std::enable_shared_from_this<Object> {
   virtual bool operator!=(const Object& other) const;
 
  protected:
-  std::shared_ptr<Object> _GetRef();
+  /// @brief Returns an `std::shared_ptr` to this object.
+  virtual std::shared_ptr<Object> _GetRef() final;
 
-  Str _Repr(std::string name) const;
+  /// @brief Invoked by @ref Repr() to inject the object's current name into
+  /// the default output of @ref Repr().
+  virtual Str _Repr(std::string name) const;
 };
 
 template <>

@@ -105,15 +105,15 @@ $(function(){initNavTree('wrapped_8hpp_source.html',''); initResizable(true); })
   <div class="headertitle"><div class="title">wrapped.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<a href="wrapped_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;utility&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;mamba/builtins/__meta/value.hpp&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="value_8hpp.html">mamba/builtins/__meta/value.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>mamba::builtins::details {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a> {</div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00014" data-start="{" data-end="}">
@@ -126,30 +126,34 @@ $(function(){initNavTree('wrapped_8hpp_source.html',''); initResizable(true); })
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">   19</a></span><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">IsNotWrapped</a> = !<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">IsWrapped&lt;T&gt;</a>;</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">using </span>Wrapped =</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#a34feed4f10d6a082ffce0d285a1511b2">   26</a></span><span class="keyword">using </span><a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a34feed4f10d6a082ffce0d285a1511b2">Wrapped</a> =</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    std::conditional_t&lt;IsValue&lt;T&gt; || <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">IsWrapped&lt;T&gt;</a>, T, std::shared_ptr&lt;T&gt;&gt;;</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">using </span>Unwrapped = std::</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#a513d484c4a096c6225b082f124eec34b">   34</a></span><span class="keyword">using </span><a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a513d484c4a096c6225b082f124eec34b">Unwrapped</a> = std::</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    conditional_t&lt;IsValue&lt;T&gt; || <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">IsNotWrapped&lt;T&gt;</a>, T, <span class="keyword">typename</span> T::element_type&gt;;</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span></div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">auto</span> Unwrap(T&amp;&amp; t) {</div>
+<div class="foldopen" id="foldopen00045" data-start="{" data-end="}">
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#a4df42b67f0ac62360cb46accf91fbaad">   45</a></span><span class="keyword">auto</span> <a class="code hl_function" href="namespacemamba_1_1builtins_1_1details.html#a4df42b67f0ac62360cb46accf91fbaad">Unwrap</a>(T&amp;&amp; t) {</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">IsValue&lt;T&gt;</a> || <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">IsNotWrapped&lt;T&gt;</a>) {</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">return</span> std::forward&lt;T&gt;(t);</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">return</span> std::forward&lt;T::element_type&gt;(*t);</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  }</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>}</div>
+</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span></div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">auto</span> Wrap(T&amp;&amp; t) {</div>
+<div class="foldopen" id="foldopen00056" data-start="{" data-end="}">
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#a95334dfccbc69054c884d2b345366a5a">   56</a></span><span class="keyword">auto</span> <a class="code hl_function" href="namespacemamba_1_1builtins_1_1details.html#a95334dfccbc69054c884d2b345366a5a">Wrap</a>(T&amp;&amp; t) {</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">IsValue&lt;T&gt;</a> || <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">IsWrapped&lt;T&gt;</a>) {</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordflow">return</span> std::forward&lt;T&gt;(t);</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">return</span> std::make_shared&lt;T&gt;(std::move(t));</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  }</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>}</div>
+</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>}  <span class="comment">// namespace mamba::builtins::details</span></div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
@@ -157,12 +161,18 @@ $(function(){initNavTree('wrapped_8hpp_source.html',''); initResizable(true); })
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">mamba::builtins::details::IsNotWrapped</a></div><div class="ttdef"><b>Definition</b> wrapped.hpp:19</div></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_value_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">mamba::builtins::details::IsValue</a></div><div class="ttdoc">All arithmetic types and other types except Object are value types. Value types are generally immutab...</div><div class="ttdef"><b>Definition</b> value.hpp:15</div></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_wrapped_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">mamba::builtins::details::IsWrapped</a></div><div class="ttdoc">All types that should be wrapped in std::shared_ptr&lt;T&gt; are reference types.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:14</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a></div><div class="ttdef"><b>Definition</b> bool.cpp:10</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a34feed4f10d6a082ffce0d285a1511b2"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a34feed4f10d6a082ffce0d285a1511b2">mamba::builtins::details::Wrapped</a></div><div class="ttdeci">std::conditional_t&lt; IsValue&lt; T &gt;||IsWrapped&lt; T &gt;, T, std::shared_ptr&lt; T &gt; &gt; Wrapped</div><div class="ttdoc">Returns the wrapped version of.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:26</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a4df42b67f0ac62360cb46accf91fbaad"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a4df42b67f0ac62360cb46accf91fbaad">mamba::builtins::details::Unwrap</a></div><div class="ttdeci">auto Unwrap(T &amp;&amp;t)</div><div class="ttdoc">Unwraps t from std::shared_ptr&lt;T&gt; if it satisfies IsNotValue&lt;T&gt;, otherwise just returns t.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:45</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a513d484c4a096c6225b082f124eec34b"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a513d484c4a096c6225b082f124eec34b">mamba::builtins::details::Unwrapped</a></div><div class="ttdeci">std:: conditional_t&lt; IsValue&lt; T &gt;||IsNotWrapped&lt; T &gt;, T, typename T::element_type &gt; Unwrapped</div><div class="ttdoc">Returns the unwrapped version of.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:34</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a95334dfccbc69054c884d2b345366a5a"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a95334dfccbc69054c884d2b345366a5a">mamba::builtins::details::Wrap</a></div><div class="ttdeci">auto Wrap(T &amp;&amp;t)</div><div class="ttdoc">Wraps t into std::shared_ptr&lt;T&gt; via std::move() if it satisfies IsNotValue&lt;T&gt;, otherwise just returns...</div><div class="ttdef"><b>Definition</b> wrapped.hpp:56</div></div>
+<div class="ttc" id="avalue_8hpp_html"><div class="ttname"><a href="value_8hpp.html">value.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li><li class="navelem"><b>wrapped.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li><li class="navelem"><a class="el" href="wrapped_8hpp.html">wrapped.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

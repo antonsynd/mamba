@@ -105,38 +105,43 @@ $(function(){initNavTree('ssize_8hpp_source.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">ssize.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<a href="ssize_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;limits&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;mamba/builtins/__types/traits.hpp&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="traits_8hpp.html">mamba/builtins/__types/traits.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>mamba::builtins::details {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a> {</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">using </span>SSize = std::make_signed&lt;std::size_t&gt;::type;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#a2c9d5c5cec945523e78cbccfb7b36a82">   14</a></span><span class="keyword">using </span><a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a2c9d5c5cec945523e78cbccfb7b36a82">SSize</a> = std::make_signed&lt;std::size_t&gt;::type;</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">constexpr</span> SSize kSSizeMax = std::numeric_limits&lt;SSize&gt;::max();</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#a5362eb94a10e788de2408b572fac0ed6">   17</a></span><span class="keyword">constexpr</span> <a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a2c9d5c5cec945523e78cbccfb7b36a82">SSize</a> <a class="code hl_variable" href="namespacemamba_1_1builtins_1_1details.html#a5362eb94a10e788de2408b572fac0ed6">kSSizeMax</a> = std::numeric_limits&lt;SSize&gt;::max();</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">template</span> &lt;&gt;</div>
 <div class="foldopen" id="foldopen00020" data-start="{" data-end="};">
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_size_01_4.html">   20</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_traits.html">Traits</a>&lt;SSize&gt; {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> std::string_view kName = <span class="stringliteral">&quot;ssize&quot;</span>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_size_01_4.html">   20</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_traits.html">Traits</a>&lt;<a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a2c9d5c5cec945523e78cbccfb7b36a82">SSize</a>&gt; {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_size_01_4.html#af2b4fa0f89dfc9294236b57d680a36c5">   21</a></span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> std::string_view <a class="code hl_variable" href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_size_01_4.html#af2b4fa0f89dfc9294236b57d680a36c5">kName</a> = <span class="stringliteral">&quot;ssize&quot;</span>;</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>};</div>
 </div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>}  <span class="comment">// namespace mamba::builtins::details</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">// IWYU pragma: private</span></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a></div><div class="ttdef"><b>Definition</b> bool.cpp:10</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a2c9d5c5cec945523e78cbccfb7b36a82"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a2c9d5c5cec945523e78cbccfb7b36a82">mamba::builtins::details::SSize</a></div><div class="ttdeci">std::make_signed&lt; std::size_t &gt;::type SSize</div><div class="ttdoc">A new type in Mamba corresponding to C++ std::size_t or Rust usize.</div><div class="ttdef"><b>Definition</b> ssize.hpp:14</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a5362eb94a10e788de2408b572fac0ed6"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a5362eb94a10e788de2408b572fac0ed6">mamba::builtins::details::kSSizeMax</a></div><div class="ttdeci">constexpr SSize kSSizeMax</div><div class="ttdoc">The maximum value of Size.</div><div class="ttdef"><b>Definition</b> ssize.hpp:17</div></div>
+<div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_traits_3_01_s_size_01_4_html_af2b4fa0f89dfc9294236b57d680a36c5"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_s_size_01_4.html#af2b4fa0f89dfc9294236b57d680a36c5">mamba::builtins::details::Traits&lt; SSize &gt;::kName</a></div><div class="ttdeci">static constexpr std::string_view kName</div><div class="ttdef"><b>Definition</b> ssize.hpp:21</div></div>
 <div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_traits_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_traits.html">mamba::builtins::details::Traits</a></div><div class="ttdef"><b>Definition</b> traits.hpp:6</div></div>
+<div class="ttc" id="atraits_8hpp_html"><div class="ttname"><a href="traits_8hpp.html">traits.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_96b8b3bd785e461bb3e1db96c71518e0.html">__types</a></li><li class="navelem"><b>ssize.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_96b8b3bd785e461bb3e1db96c71518e0.html">__types</a></li><li class="navelem"><a class="el" href="ssize_8hpp.html">ssize.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

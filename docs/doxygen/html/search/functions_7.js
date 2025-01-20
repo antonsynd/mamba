@@ -1,5 +1,24 @@
 var searchData=
 [
-  ['real_0',['Real',['../structmamba_1_1builtins_1_1details_1_1_complex.html#a1f1a1e64e4d952c56dcc05e1161be337',1,'mamba::builtins::details::Complex']]],
-  ['repr_1',['Repr',['../structmamba_1_1builtins_1_1details_1_1_complex.html#a8282dfc309f695d2b6bb8620a6327a7d',1,'mamba::builtins::details::Complex::Repr()'],['../classmamba_1_1builtins_1_1details_1_1_str.html#a11921933bcf2124af6df4276815df343',1,'mamba::builtins::details::Str::Repr()']]]
+  ['imag_0',['Imag',['../structmamba_1_1builtins_1_1details_1_1_complex.html#ab9c54ee0adc385c91901ae42127b9dac',1,'mamba::builtins::details::Complex']]],
+  ['in_1',['In',['../namespacemamba_1_1builtins.html#a50279fd352b4754b57dce9e927fdbf63',1,'mamba::builtins']]],
+  ['index_2',['Index',['../classmamba_1_1builtins_1_1details_1_1_str.html#aeb2060c6cbcd7267f91258e603a38473',1,'mamba::builtins::details::Str']]],
+  ['indexerror_3',['IndexError',['../classmamba_1_1builtins_1_1_index_error.html#a9d11f4c5c85ddb104abcc5c6d00d15b9',1,'mamba::builtins::IndexError']]],
+  ['info_4',['Info',['../structmamba_1_1____utils_1_1_logger.html#a945a2d311235ddccbc28c28abaaf8c96',1,'mamba::__utils::Logger']]],
+  ['is_5',['Is',['../namespacemamba_1_1builtins.html#a18b3e9c2be842b165f1fa51b91d2188a',1,'mamba::builtins::Is(const T &amp;lhs, const T &amp;rhs)'],['../namespacemamba_1_1builtins.html#a14c2c9e9010342e7181812f48477b3dc',1,'mamba::builtins::Is(const T &amp;lhs, details::None)'],['../namespacemamba_1_1builtins.html#a6db774885bcae077bd6c97d3bcedc145',1,'mamba::builtins::Is(details::None, const T &amp;rhs)'],['../namespacemamba_1_1builtins.html#a609967e28a2de9a48858c5c0b3d5977e',1,'mamba::builtins::Is(details::None, details::None)']]],
+  ['isalnum_6',['IsAlnum',['../classmamba_1_1builtins_1_1details_1_1_str.html#a6f7f14e8c5ef89af6c5be7f742e97ef0',1,'mamba::builtins::details::Str']]],
+  ['isalpha_7',['IsAlpha',['../classmamba_1_1builtins_1_1details_1_1_str.html#ab4dcf848320acad2aeeabc5639aa5cdb',1,'mamba::builtins::details::Str']]],
+  ['isascii_8',['IsAscii',['../classmamba_1_1builtins_1_1details_1_1_str.html#ae2aec0af4102bc4dc654f3dd7e3d71fc',1,'mamba::builtins::details::Str']]],
+  ['isdecimal_9',['IsDecimal',['../classmamba_1_1builtins_1_1details_1_1_str.html#ab93a585dbce00d96c535252044568253',1,'mamba::builtins::details::Str']]],
+  ['isdigit_10',['IsDigit',['../classmamba_1_1builtins_1_1details_1_1_str.html#a063fc88df8265ace1d53cd5cf949fbcc',1,'mamba::builtins::details::Str']]],
+  ['isidentifier_11',['IsIdentifier',['../classmamba_1_1builtins_1_1details_1_1_str.html#adc476402226355043b459b051903c8a1',1,'mamba::builtins::details::Str']]],
+  ['islower_12',['IsLower',['../classmamba_1_1builtins_1_1details_1_1_str.html#a0e8bb8860ff4e389cd0ea03670131159',1,'mamba::builtins::details::Str']]],
+  ['isnumeric_13',['IsNumeric',['../classmamba_1_1builtins_1_1details_1_1_str.html#aafad6b4293d13d43fc2513acc171d053',1,'mamba::builtins::details::Str']]],
+  ['isprintable_14',['IsPrintable',['../classmamba_1_1builtins_1_1details_1_1_str.html#a3a0c86cbf997e2e85d947a0986aa7bf0',1,'mamba::builtins::details::Str']]],
+  ['isspace_15',['IsSpace',['../classmamba_1_1builtins_1_1details_1_1_str.html#a973f88f65396e8ed2ff1657d22e6bf2e',1,'mamba::builtins::details::Str']]],
+  ['istitle_16',['IsTitle',['../classmamba_1_1builtins_1_1details_1_1_str.html#a488dc10f7b0dff15bfc24b9c431e0a37',1,'mamba::builtins::details::Str']]],
+  ['isupper_17',['IsUpper',['../classmamba_1_1builtins_1_1details_1_1_str.html#afbb1fe13a862848dce0fd05f5128f402',1,'mamba::builtins::details::Str']]],
+  ['iter_18',['Iter',['../classmamba_1_1builtins_1_1_iterator.html#a38518ca384225501fe976b3c0c25c0ef',1,'mamba::builtins::Iterator::Iter()'],['../namespacemamba_1_1builtins.html#a020a11f8f325430ba8c6f4b1db1815a6',1,'mamba::builtins::Iter()']]],
+  ['iterator_19',['Iterator',['../classmamba_1_1builtins_1_1_iterator.html#aa5d2a2074a60c335efe1d6b51192833e',1,'mamba::builtins::Iterator::Iterator(next_function_t next_func)'],['../classmamba_1_1builtins_1_1_iterator.html#a0c12f93fd9801b2ff18d014c1166a041',1,'mamba::builtins::Iterator::Iterator(It begin, It end)']]],
+  ['iteratorfacade_20',['IteratorFacade',['../classmamba_1_1builtins_1_1details_1_1_iterator_facade.html#a622b50a9de8c510525f58311164cf829',1,'mamba::builtins::details::IteratorFacade']]]
 ];

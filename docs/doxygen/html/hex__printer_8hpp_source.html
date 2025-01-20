@@ -105,49 +105,61 @@ $(function(){initNavTree('hex__printer_8hpp_source.html',''); initResizable(true
   <div class="headertitle"><div class="title">hex_printer.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<a href="hex__printer_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;iomanip&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;mamba/builtins/__types/size.hpp&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="size_8hpp.html">mamba/builtins/__types/size.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>mamba::__utils {</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>details {</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemamba_1_1____utils.html">mamba::__utils</a> {</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemamba_1_1____utils_1_1details.html">details</a> {</div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
 <div class="foldopen" id="foldopen00011" data-start="{" data-end="};">
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html">   11</a></span><span class="keyword">struct </span>HexPrinter {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html">   11</a></span><span class="keyword">struct </span><a class="code hl_function" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html#aaa7fc8a530aca7b80bc44999193caf0e">HexPrinter</a> {</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>  <span class="keyword">explicit</span> HexPrinter(builtins::details::Size s) : s_(s) {}</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html#aaa7fc8a530aca7b80bc44999193caf0e">   13</a></span>  <span class="keyword">explicit</span> <a class="code hl_function" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html#aaa7fc8a530aca7b80bc44999193caf0e">HexPrinter</a>(<a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a1d2f46d2a53d392ae4a1ef2ec85e2c82">builtins::details::Size</a> s) : s_(s) {}</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  builtins::details::Size Value()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> s_; }</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html#ae11ab92f663d31dcf3f751ef5e0bb0d6">   15</a></span>  <a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a1d2f46d2a53d392ae4a1ef2ec85e2c82">builtins::details::Size</a> <a class="code hl_function" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html#ae11ab92f663d31dcf3f751ef5e0bb0d6">Value</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> s_; }</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  builtins::details::Size s_;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  <a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a1d2f46d2a53d392ae4a1ef2ec85e2c82">builtins::details::Size</a> s_;</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>};</div>
 </div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">inline</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; oss, <span class="keyword">const</span> <a class="code hl_struct" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html">HexPrinter</a>&amp; hp) {</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  oss &lt;&lt; std::hex &lt;&lt; std::setfill(<span class="charliteral">&#39;0&#39;</span>) &lt;&lt; std::setw(16) &lt;&lt; hp.Value()</div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="}">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="namespacemamba_1_1____utils_1_1details.html#a88bc889ec1bd9970af12c3d24c2db07e">   21</a></span><span class="keyword">inline</span> std::ostream&amp; <a class="code hl_function" href="namespacemamba_1_1____utils_1_1details.html#a88bc889ec1bd9970af12c3d24c2db07e">operator&lt;&lt;</a>(std::ostream&amp; oss, <span class="keyword">const</span> <a class="code hl_struct" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html">HexPrinter</a>&amp; hp) {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  oss &lt;&lt; std::hex &lt;&lt; std::setfill(<span class="charliteral">&#39;0&#39;</span>) &lt;&lt; std::setw(16) &lt;&lt; hp.<a class="code hl_function" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html#ae11ab92f663d31dcf3f751ef5e0bb0d6">Value</a>()</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>      &lt;&lt; std::dec;</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  <span class="keywordflow">return</span> oss;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>}</div>
+</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>}  <span class="comment">// namespace details</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">inline</span> details::HexPrinter print_hex(builtins::details::Size s) {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="keywordflow">return</span> details::HexPrinter(s);</div>
+<div class="foldopen" id="foldopen00030" data-start="{" data-end="}">
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="namespacemamba_1_1____utils.html#a1d21db383b34719fa15a74b23b848b50">   30</a></span><span class="keyword">inline</span> <a class="code hl_struct" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html">details::HexPrinter</a> <a class="code hl_function" href="namespacemamba_1_1____utils.html#a1d21db383b34719fa15a74b23b848b50">print_hex</a>(<a class="code hl_typedef" href="namespacemamba_1_1builtins_1_1details.html#a1d2f46d2a53d392ae4a1ef2ec85e2c82">builtins::details::Size</a> s) {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="keywordflow">return</span> <a class="code hl_struct" href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html">details::HexPrinter</a>(s);</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>}</div>
+</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}  <span class="comment">// namespace mamba::__utils</span></div>
+<div class="ttc" id="anamespacemamba_1_1____utils_1_1details_html"><div class="ttname"><a href="namespacemamba_1_1____utils_1_1details.html">mamba::__utils::details</a></div><div class="ttdef"><b>Definition</b> logger.cpp:10</div></div>
+<div class="ttc" id="anamespacemamba_1_1____utils_1_1details_html_a88bc889ec1bd9970af12c3d24c2db07e"><div class="ttname"><a href="namespacemamba_1_1____utils_1_1details.html#a88bc889ec1bd9970af12c3d24c2db07e">mamba::__utils::details::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;oss, const HexPrinter &amp;hp)</div><div class="ttdef"><b>Definition</b> hex_printer.hpp:21</div></div>
+<div class="ttc" id="anamespacemamba_1_1____utils_html"><div class="ttname"><a href="namespacemamba_1_1____utils.html">mamba::__utils</a></div><div class="ttdef"><b>Definition</b> logger.cpp:9</div></div>
+<div class="ttc" id="anamespacemamba_1_1____utils_html_a1d21db383b34719fa15a74b23b848b50"><div class="ttname"><a href="namespacemamba_1_1____utils.html#a1d21db383b34719fa15a74b23b848b50">mamba::__utils::print_hex</a></div><div class="ttdeci">details::HexPrinter print_hex(builtins::details::Size s)</div><div class="ttdef"><b>Definition</b> hex_printer.hpp:30</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a1d2f46d2a53d392ae4a1ef2ec85e2c82"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a1d2f46d2a53d392ae4a1ef2ec85e2c82">mamba::builtins::details::Size</a></div><div class="ttdeci">std::size_t Size</div><div class="ttdoc">A new type in Mamba corresponding to C++ std::size_t or Rust usize.</div><div class="ttdef"><b>Definition</b> size.hpp:13</div></div>
+<div class="ttc" id="asize_8hpp_html"><div class="ttname"><a href="size_8hpp.html">size.hpp</a></div></div>
 <div class="ttc" id="astructmamba_1_1____utils_1_1details_1_1_hex_printer_html"><div class="ttname"><a href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html">mamba::__utils::details::HexPrinter</a></div><div class="ttdef"><b>Definition</b> hex_printer.hpp:11</div></div>
+<div class="ttc" id="astructmamba_1_1____utils_1_1details_1_1_hex_printer_html_aaa7fc8a530aca7b80bc44999193caf0e"><div class="ttname"><a href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html#aaa7fc8a530aca7b80bc44999193caf0e">mamba::__utils::details::HexPrinter::HexPrinter</a></div><div class="ttdeci">HexPrinter(builtins::details::Size s)</div><div class="ttdef"><b>Definition</b> hex_printer.hpp:13</div></div>
+<div class="ttc" id="astructmamba_1_1____utils_1_1details_1_1_hex_printer_html_ae11ab92f663d31dcf3f751ef5e0bb0d6"><div class="ttname"><a href="structmamba_1_1____utils_1_1details_1_1_hex_printer.html#ae11ab92f663d31dcf3f751ef5e0bb0d6">mamba::__utils::details::HexPrinter::Value</a></div><div class="ttdeci">builtins::details::Size Value() const</div><div class="ttdef"><b>Definition</b> hex_printer.hpp:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_9ad15022f4bafad15315a5eeceab053f.html">__utils</a></li><li class="navelem"><b>hex_printer.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_9ad15022f4bafad15315a5eeceab053f.html">__utils</a></li><li class="navelem"><a class="el" href="hex__printer_8hpp.html">hex_printer.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

@@ -1,0 +1,9 @@
+<map id="include/mamba/builtins/__types/short.hpp" name="include/mamba/builtins/__types/short.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="56,5,210,46"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,102,66,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,49,62,93,58,89,109,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="89,102,176,127"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="136,47,136,86,130,86,130,47"/>
+<area shape="rect" id="Node000004" href="$traits_8hpp.html" title=" " alt="" coords="201,94,360,135"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="168,44,236,84,233,88,165,49"/>
+</map>

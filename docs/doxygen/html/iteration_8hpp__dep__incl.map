@@ -1,0 +1,21 @@
+<map id="include/mamba/builtins/iteration.hpp" name="include/mamba/builtins/iteration.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="116,5,271,46"/>
+<area shape="rect" id="Node000002" href="$builtins_8hpp.html" title=" " alt="" coords="5,190,185,216"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,42,55,62,34,77,17,95,12,108,12,120,26,146,50,169,76,187,73,192,47,173,22,149,7,122,7,107,13,93,31,73,52,57,101,37"/>
+<area shape="rect" id="Node000003" href="$list_8hpp.html" title=" " alt="" coords="206,94,360,135"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="227,55,265,92,261,95,223,59"/>
+<area shape="rect" id="Node000005" href="$sequence_8hpp.html" title=" " alt="" coords="27,94,182,135"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="164,59,126,95,123,92,161,55"/>
+<area shape="rect" id="Node000006" href="$abstract__set_8hpp.html" title=" " alt="" coords="385,94,560,135"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="272,48,410,91,408,96,271,54"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="228,144,122,192,120,187,225,139"/>
+<area shape="rect" id="Node000004" href="$__dict_8hpp.html" title=" " alt="" coords="208,183,363,223"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="287,150,288,182,282,182,281,150"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="103,151,99,190,94,190,98,150"/>
+<area shape="rect" id="Node000007" href="$frozen__set_8hpp.html" title=" " alt="" coords="392,183,547,223"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="474,150,473,182,468,182,469,150"/>
+<area shape="rect" id="Node000008" href="$mutable__set_8hpp.html" title=" " alt="" coords="571,183,747,223"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="530,139,618,180,616,185,527,144"/>
+<area shape="rect" id="Node000009" href="$set_8hpp.html" title=" " alt="" coords="582,271,736,312"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="662,239,662,271,656,271,656,239"/>
+</map>

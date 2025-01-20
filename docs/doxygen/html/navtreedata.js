@@ -26,14 +26,24 @@ var NAVTREE =
 [
   [ "Mamba", "index.html", [
     [ "Todo List", "todo.html", null ],
+    [ "Namespaces", "namespaces.html", [
+      [ "Namespace List", "namespaces.html", "namespaces_dup" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ],
+        [ "Typedefs", "namespacemembers_type.html", null ]
+      ] ]
+    ] ],
     [ "Concepts", "concepts.html", "concepts" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
-        [ "Functions", "functions_func.html", null ],
+        [ "All", "functions.html", "functions_dup" ],
+        [ "Functions", "functions_func.html", "functions_func" ],
+        [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ]
       ] ]
     ] ],
@@ -45,7 +55,10 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"__dict_8hpp_source.html"
+"__dict_8hpp.html",
+"classmamba_1_1builtins_1_1details_1_1_str.html#ae2aec0af4102bc4dc654f3dd7e3d71fc",
+"namespacemamba_1_1builtins_1_1details.html#a568c6c8af3fb0b0f9896c22078156afc",
+"structmamba_1_1builtins_1_1details_1_1_complex.html#a5d1bedda5efa92233a1a95889d7a98e0"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronization';

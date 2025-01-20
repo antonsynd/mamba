@@ -1,0 +1,9 @@
+<map id="include/mamba/collections/abc/abstract_set.hpp" name="include/mamba/collections/abc/abstract_set.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="90,5,265,46"/>
+<area shape="rect" id="Node000002" href="$frozen__set_8hpp.html" title=" " alt="" coords="5,94,160,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,59,106,96,102,92,143,55"/>
+<area shape="rect" id="Node000003" href="$mutable__set_8hpp.html" title=" " alt="" coords="184,94,360,135"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="212,55,252,92,249,96,208,59"/>
+<area shape="rect" id="Node000004" href="$set_8hpp.html" title=" " alt="" coords="195,183,349,223"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="274,150,274,182,269,182,269,150"/>
+</map>

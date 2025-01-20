@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['imag_0',['Imag',['../structmamba_1_1builtins_1_1details_1_1_complex.html#ab9c54ee0adc385c91901ae42127b9dac',1,'mamba::builtins::details::Complex']]],
-  ['iterator_1',['Iterator',['../classmamba_1_1builtins_1_1_iterator.html#aa5d2a2074a60c335efe1d6b51192833e',1,'mamba::builtins::Iterator::Iterator(next_function_t next_func)'],['../classmamba_1_1builtins_1_1_iterator.html#a0c12f93fd9801b2ff18d014c1166a041',1,'mamba::builtins::Iterator::Iterator(It begin, It end)']]],
-  ['iteratorfacade_2',['IteratorFacade',['../classmamba_1_1builtins_1_1details_1_1_iterator_facade.html#a622b50a9de8c510525f58311164cf829',1,'mamba::builtins::details::IteratorFacade']]]
+  ['encode_0',['Encode',['../classmamba_1_1builtins_1_1details_1_1_str.html#a35645fe688d7091aa6f04815d2e6536a',1,'mamba::builtins::details::Str']]],
+  ['end_1',['end',['../classmamba_1_1builtins_1_1_iterator.html#a2702c7ed4013d5c7bf96480f48776797',1,'mamba::builtins::Iterator::end()'],['../classmamba_1_1builtins_1_1details_1_1_iterator_facade.html#a7174d0f3b74b9f74642186c6b5485c8d',1,'mamba::builtins::details::IteratorFacade::end()']]],
+  ['endswith_2',['EndsWith',['../classmamba_1_1builtins_1_1details_1_1_str.html#ae3c3682329e478569d61282ea383f752',1,'mamba::builtins::details::Str']]],
+  ['error_3',['Error',['../structmamba_1_1____utils_1_1_logger.html#a5dee2fe23ff605278f64ad359406f1f6',1,'mamba::__utils::Logger']]],
+  ['expandtabs_4',['ExpandTabs',['../classmamba_1_1builtins_1_1details_1_1_str.html#a6173ee7957a19949e6825f85f1288fae',1,'mamba::builtins::details::Str']]]
 ];

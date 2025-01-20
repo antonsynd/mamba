@@ -1,18 +1,18 @@
 var annotated_dup =
 [
-    [ "mamba", null, [
-      [ "__utils", null, [
-        [ "details", null, [
+    [ "mamba", "namespacemamba.html", [
+      [ "__utils", "namespacemamba_1_1____utils.html", [
+        [ "details", "namespacemamba_1_1____utils_1_1details.html", [
           [ "Flush", "structmamba_1_1____utils_1_1details_1_1_flush.html", null ],
-          [ "HexPrinter", "structmamba_1_1____utils_1_1details_1_1_hex_printer.html", null ],
-          [ "StringBuilder", "classmamba_1_1____utils_1_1details_1_1_string_builder.html", null ],
-          [ "StringBuilderWrapper", "classmamba_1_1____utils_1_1details_1_1_string_builder_wrapper.html", null ]
+          [ "HexPrinter", "structmamba_1_1____utils_1_1details_1_1_hex_printer.html", "structmamba_1_1____utils_1_1details_1_1_hex_printer" ],
+          [ "StringBuilder", "classmamba_1_1____utils_1_1details_1_1_string_builder.html", "classmamba_1_1____utils_1_1details_1_1_string_builder" ],
+          [ "StringBuilderWrapper", "classmamba_1_1____utils_1_1details_1_1_string_builder_wrapper.html", "classmamba_1_1____utils_1_1details_1_1_string_builder_wrapper" ]
         ] ],
-        [ "Logger", "structmamba_1_1____utils_1_1_logger.html", null ]
+        [ "Logger", "structmamba_1_1____utils_1_1_logger.html", "structmamba_1_1____utils_1_1_logger" ]
       ] ],
-      [ "builtins", null, [
-        [ "details", null, [
-          [ "Bool", "structmamba_1_1builtins_1_1details_1_1_bool.html", null ],
+      [ "builtins", "namespacemamba_1_1builtins.html", [
+        [ "details", "namespacemamba_1_1builtins_1_1details.html", [
+          [ "Bool", "structmamba_1_1builtins_1_1details_1_1_bool.html", "structmamba_1_1builtins_1_1details_1_1_bool" ],
           [ "ByteArray", "classmamba_1_1builtins_1_1details_1_1_byte_array.html", null ],
           [ "Bytes", "classmamba_1_1builtins_1_1details_1_1_bytes.html", null ],
           [ "Complex", "structmamba_1_1builtins_1_1details_1_1_complex.html", "structmamba_1_1builtins_1_1details_1_1_complex" ],
@@ -39,12 +39,12 @@ var annotated_dup =
           [ "Traits< ULong >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_long_01_4.html", null ],
           [ "Traits< UShort >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_u_short_01_4.html", null ]
         ] ],
-        [ "AttributeError", "classmamba_1_1builtins_1_1_attribute_error.html", null ],
+        [ "AttributeError", "classmamba_1_1builtins_1_1_attribute_error.html", "classmamba_1_1builtins_1_1_attribute_error" ],
         [ "FrozenSet", "classmamba_1_1builtins_1_1_frozen_set.html", null ],
-        [ "IndexError", "classmamba_1_1builtins_1_1_index_error.html", null ],
+        [ "IndexError", "classmamba_1_1builtins_1_1_index_error.html", "classmamba_1_1builtins_1_1_index_error" ],
         [ "Iterator", "classmamba_1_1builtins_1_1_iterator.html", "classmamba_1_1builtins_1_1_iterator" ],
-        [ "StopIteration", "classmamba_1_1builtins_1_1_stop_iteration.html", null ],
-        [ "ValueError", "classmamba_1_1builtins_1_1_value_error.html", null ]
+        [ "StopIteration", "classmamba_1_1builtins_1_1_stop_iteration.html", "classmamba_1_1builtins_1_1_stop_iteration" ],
+        [ "ValueError", "classmamba_1_1builtins_1_1_value_error.html", "classmamba_1_1builtins_1_1_value_error" ]
       ] ]
     ] ]
 ];

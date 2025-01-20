@@ -105,7 +105,7 @@ $(function(){initNavTree('optional_8hpp_source.html',''); initResizable(true); }
   <div class="headertitle"><div class="title">optional.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<a href="optional_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;concepts&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
@@ -113,9 +113,9 @@ $(function(){initNavTree('optional_8hpp_source.html',''); initResizable(true); }
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;utility&gt;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;mamba/builtins/__meta/type_validity.hpp&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="type__validity_8hpp.html">mamba/builtins/__meta/type_validity.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>mamba::builtins::details {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a> {</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="foldopen" id="foldopen00016" data-start="{" data-end="}">
@@ -132,9 +132,11 @@ $(function(){initNavTree('optional_8hpp_source.html',''); initResizable(true); }
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_optional.html">   28</a></span><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_optional.html">IsNotOptional</a> = !<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_optional.html">IsOptional&lt;T&gt;</a>;</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">template</span> &lt;IsVal<span class="keywordtype">id</span> T&gt;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>std::shared_ptr&lt;std::optional&lt;T&gt;&gt; MakeOptional(T&amp;&amp; t) {</div>
+<div class="foldopen" id="foldopen00031" data-start="{" data-end="}">
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#a943270230025a0f874b3cb2345a7786f">   31</a></span>std::shared_ptr&lt;std::optional&lt;T&gt;&gt; <a class="code hl_function" href="namespacemamba_1_1builtins_1_1details.html#a943270230025a0f874b3cb2345a7786f">MakeOptional</a>(T&amp;&amp; t) {</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  <span class="keywordflow">return</span> std::make_shared(std::make_optional(std::forward&lt;T&gt;(t)));</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>}</div>
+</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>}  <span class="comment">// namespace mamba::builtins::details</span></div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
@@ -143,12 +145,15 @@ $(function(){initNavTree('optional_8hpp_source.html',''); initResizable(true); }
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_optional_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_optional.html">mamba::builtins::details::IsOptional</a></div><div class="ttdoc">Pythonic Optional[T] is a std::optional&lt;T&gt; stored within an std::shared_ptr because optional types ar...</div><div class="ttdef"><b>Definition</b> optional.hpp:23</div></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_unwrapped_optional_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_unwrapped_optional.html">mamba::builtins::details::IsUnwrappedOptional</a></div><div class="ttdoc">Concept for determining if a type is an unwrapped optional, e.g. std::optional.</div><div class="ttdef"><b>Definition</b> optional.hpp:16</div></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_wrapped_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">mamba::builtins::details::IsWrapped</a></div><div class="ttdoc">All types that should be wrapped in std::shared_ptr&lt;T&gt; are reference types.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:14</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a></div><div class="ttdef"><b>Definition</b> bool.cpp:10</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a943270230025a0f874b3cb2345a7786f"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a943270230025a0f874b3cb2345a7786f">mamba::builtins::details::MakeOptional</a></div><div class="ttdeci">std::shared_ptr&lt; std::optional&lt; T &gt; &gt; MakeOptional(T &amp;&amp;t)</div><div class="ttdef"><b>Definition</b> optional.hpp:31</div></div>
+<div class="ttc" id="atype__validity_8hpp_html"><div class="ttname"><a href="type__validity_8hpp.html">type_validity.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li><li class="navelem"><b>optional.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li><li class="navelem"><a class="el" href="optional_8hpp.html">optional.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

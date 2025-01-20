@@ -105,28 +105,28 @@ $(function(){initNavTree('byte__array_8hpp_source.html',''); initResizable(true)
   <div class="headertitle"><div class="title">byte_array.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<a href="byte__array_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;string_view&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;mamba/builtins/__types/traits.hpp&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="traits_8hpp.html">mamba/builtins/__types/traits.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>mamba::builtins::details {</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a> {</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">// Forward-declaration</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">class </span><a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">ByteArray</a>;</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>std::ostream&amp; operator&lt;&lt;(std::ostream&amp; oss, <span class="keyword">const</span> <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">ByteArray</a>&amp; s);</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#a81a09bf7e84ebc69c31d3ab6278cce36">   15</a></span>std::ostream&amp; <a class="code hl_function" href="namespacemamba_1_1builtins_1_1details.html#a13d3536394e19a2a7e24c9a2e065a66d">operator&lt;&lt;</a>(std::ostream&amp; oss, <span class="keyword">const</span> <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">ByteArray</a>&amp; s);</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">ByteArray</a> <span class="keyword">operator</span><span class="stringliteral">&quot;&quot;</span>_bytearray(<span class="keyword">const</span> <span class="keywordtype">char</span>* s, std::size_t len);</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="namespacemamba_1_1builtins_1_1details.html#acf0985aedea849bad99309942cbb7cf2">   18</a></span><a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">ByteArray</a> <span class="keyword">operator</span><span class="stringliteral">&quot;&quot;</span>_bytearray(<span class="keyword">const</span> <span class="keywordtype">char</span>* s, std::size_t len);</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">   20</a></span><span class="keyword">class </span><a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">ByteArray</a> final {};</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">template</span> &lt;&gt;</div>
 <div class="foldopen" id="foldopen00023" data-start="{" data-end="};">
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_array_01_4.html">   23</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_traits.html">Traits</a>&lt;<a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">ByteArray</a>&gt; {</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> std::string_view kName = <span class="stringliteral">&quot;bytearray&quot;</span>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_array_01_4.html#adce6880ea31dfc7e192de127f0c54041">   24</a></span>  <span class="keyword">static</span> <span class="keyword">constexpr</span> std::string_view <a class="code hl_variable" href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_array_01_4.html#adce6880ea31dfc7e192de127f0c54041">kName</a> = <span class="stringliteral">&quot;bytearray&quot;</span>;</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>};</div>
 </div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
@@ -134,13 +134,17 @@ $(function(){initNavTree('byte__array_8hpp_source.html',''); initResizable(true)
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// IWYU pragma: private</span></div>
 <div class="ttc" id="aclassmamba_1_1builtins_1_1details_1_1_byte_array_html"><div class="ttname"><a href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">mamba::builtins::details::ByteArray</a></div><div class="ttdef"><b>Definition</b> byte_array.hpp:20</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html">mamba::builtins::details</a></div><div class="ttdef"><b>Definition</b> bool.cpp:10</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_1_1details_html_a13d3536394e19a2a7e24c9a2e065a66d"><div class="ttname"><a href="namespacemamba_1_1builtins_1_1details.html#a13d3536394e19a2a7e24c9a2e065a66d">mamba::builtins::details::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;oss, const Str &amp;s)</div><div class="ttdoc">Convenience overload for outputting to std::cout/std::cerr or std::ostringstream.</div><div class="ttdef"><b>Definition</b> str.cpp:112</div></div>
+<div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_array_01_4_html_adce6880ea31dfc7e192de127f0c54041"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_traits_3_01_byte_array_01_4.html#adce6880ea31dfc7e192de127f0c54041">mamba::builtins::details::Traits&lt; ByteArray &gt;::kName</a></div><div class="ttdeci">static constexpr std::string_view kName</div><div class="ttdef"><b>Definition</b> byte_array.hpp:24</div></div>
 <div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_traits_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_traits.html">mamba::builtins::details::Traits</a></div><div class="ttdef"><b>Definition</b> traits.hpp:6</div></div>
+<div class="ttc" id="atraits_8hpp_html"><div class="ttname"><a href="traits_8hpp.html">traits.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_96b8b3bd785e461bb3e1db96c71518e0.html">__types</a></li><li class="navelem"><b>byte_array.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_96b8b3bd785e461bb3e1db96c71518e0.html">__types</a></li><li class="navelem"><a class="el" href="byte__array_8hpp.html">byte_array.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

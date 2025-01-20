@@ -1,13 +1,13 @@
 var concepts =
 [
-    [ "mamba", null, [
-      [ "__utils", null, [
-        [ "details", null, [
+    [ "mamba", "namespacemamba.html", [
+      [ "__utils", "namespacemamba_1_1____utils.html", [
+        [ "details", "namespacemamba_1_1____utils_1_1details.html", [
           [ "NotFlush", "conceptmamba_1_1____utils_1_1details_1_1_not_flush.html", null ]
         ] ]
       ] ],
-      [ "builtins", null, [
-        [ "details", null, [
+      [ "builtins", "namespacemamba_1_1builtins.html", [
+        [ "details", "namespacemamba_1_1builtins_1_1details.html", [
           [ "Equatable", "conceptmamba_1_1builtins_1_1details_1_1_equatable.html", null ],
           [ "Inequatable", "conceptmamba_1_1builtins_1_1details_1_1_inequatable.html", null ],
           [ "FormattableObject", "conceptmamba_1_1builtins_1_1details_1_1_formattable_object.html", null ],

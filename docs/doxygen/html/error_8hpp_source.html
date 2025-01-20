@@ -105,54 +105,66 @@ $(function(){initNavTree('error_8hpp_source.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">error.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<a href="error_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;stdexcept&gt;</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;utility&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;mamba/builtins/__types/str.hpp&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="str_8hpp.html">mamba/builtins/__types/str.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span>mamba::builtins {</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacemamba_1_1builtins.html">mamba::builtins</a> {</div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="foldopen" id="foldopen00010" data-start="{" data-end="};">
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_value_error.html">   10</a></span><span class="keyword">class </span>ValueError : <span class="keyword">public</span> std::runtime_error {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_value_error.html">   10</a></span><span class="keyword">class </span><a class="code hl_function" href="classmamba_1_1builtins_1_1_value_error.html#ab307f8b19423919e0ab65b39837ba85a">ValueError</a> : <span class="keyword">public</span> std::runtime_error {</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>  <span class="keyword">explicit</span> ValueError(<span class="keyword">const</span> <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_str.html">details::Str</a>&amp; message)</div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="}">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_value_error.html#ab307f8b19423919e0ab65b39837ba85a">   12</a></span>  <span class="keyword">explicit</span> <a class="code hl_function" href="classmamba_1_1builtins_1_1_value_error.html#ab307f8b19423919e0ab65b39837ba85a">ValueError</a>(<span class="keyword">const</span> <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_str.html">details::Str</a>&amp; message)</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>      : std::runtime_error(message) {}</div>
+</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>};</div>
 </div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="foldopen" id="foldopen00016" data-start="{" data-end="};">
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_index_error.html">   16</a></span><span class="keyword">class </span>IndexError : <span class="keyword">public</span> std::runtime_error {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_index_error.html">   16</a></span><span class="keyword">class </span><a class="code hl_function" href="classmamba_1_1builtins_1_1_index_error.html#a9d11f4c5c85ddb104abcc5c6d00d15b9">IndexError</a> : <span class="keyword">public</span> std::runtime_error {</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  <span class="keyword">explicit</span> IndexError(<span class="keyword">const</span> <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_str.html">details::Str</a>&amp; message)</div>
+<div class="foldopen" id="foldopen00018" data-start="{" data-end="}">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_index_error.html#a9d11f4c5c85ddb104abcc5c6d00d15b9">   18</a></span>  <span class="keyword">explicit</span> <a class="code hl_function" href="classmamba_1_1builtins_1_1_index_error.html#a9d11f4c5c85ddb104abcc5c6d00d15b9">IndexError</a>(<span class="keyword">const</span> <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_str.html">details::Str</a>&amp; message)</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>      : std::runtime_error(message) {}</div>
+</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>};</div>
 </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="foldopen" id="foldopen00022" data-start="{" data-end="};">
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_attribute_error.html">   22</a></span><span class="keyword">class </span>AttributeError : <span class="keyword">public</span> std::runtime_error {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_attribute_error.html">   22</a></span><span class="keyword">class </span><a class="code hl_function" href="classmamba_1_1builtins_1_1_attribute_error.html#a225692efd063b4d9582cf55372267305">AttributeError</a> : <span class="keyword">public</span> std::runtime_error {</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  <span class="keyword">explicit</span> AttributeError(<span class="keyword">const</span> <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_str.html">details::Str</a>&amp; message)</div>
+<div class="foldopen" id="foldopen00024" data-start="{" data-end="}">
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_attribute_error.html#a225692efd063b4d9582cf55372267305">   24</a></span>  <span class="keyword">explicit</span> <a class="code hl_function" href="classmamba_1_1builtins_1_1_attribute_error.html#a225692efd063b4d9582cf55372267305">AttributeError</a>(<span class="keyword">const</span> <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_str.html">details::Str</a>&amp; message)</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>      : std::runtime_error(message) {}</div>
+</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>};</div>
 </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
 <div class="foldopen" id="foldopen00028" data-start="{" data-end="};">
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_stop_iteration.html">   28</a></span><span class="keyword">class </span>StopIteration : <span class="keyword">public</span> std::runtime_error {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_stop_iteration.html">   28</a></span><span class="keyword">class </span><a class="code hl_function" href="classmamba_1_1builtins_1_1_stop_iteration.html#a59624f4e70ef984d06c8c18cb31663da">StopIteration</a> : <span class="keyword">public</span> std::runtime_error {</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  <span class="keyword">explicit</span> StopIteration() : std::runtime_error(<span class="stringliteral">&quot;&quot;</span>) {}</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classmamba_1_1builtins_1_1_stop_iteration.html#a59624f4e70ef984d06c8c18cb31663da">   30</a></span>  <span class="keyword">explicit</span> <a class="code hl_function" href="classmamba_1_1builtins_1_1_stop_iteration.html#a59624f4e70ef984d06c8c18cb31663da">StopIteration</a>() : std::runtime_error(<span class="stringliteral">&quot;&quot;</span>) {}</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>};</div>
 </div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>}  <span class="comment">// namespace mamba::builtins</span></div>
+<div class="ttc" id="aclassmamba_1_1builtins_1_1_attribute_error_html_a225692efd063b4d9582cf55372267305"><div class="ttname"><a href="classmamba_1_1builtins_1_1_attribute_error.html#a225692efd063b4d9582cf55372267305">mamba::builtins::AttributeError::AttributeError</a></div><div class="ttdeci">AttributeError(const details::Str &amp;message)</div><div class="ttdef"><b>Definition</b> error.hpp:24</div></div>
+<div class="ttc" id="aclassmamba_1_1builtins_1_1_index_error_html_a9d11f4c5c85ddb104abcc5c6d00d15b9"><div class="ttname"><a href="classmamba_1_1builtins_1_1_index_error.html#a9d11f4c5c85ddb104abcc5c6d00d15b9">mamba::builtins::IndexError::IndexError</a></div><div class="ttdeci">IndexError(const details::Str &amp;message)</div><div class="ttdef"><b>Definition</b> error.hpp:18</div></div>
+<div class="ttc" id="aclassmamba_1_1builtins_1_1_stop_iteration_html_a59624f4e70ef984d06c8c18cb31663da"><div class="ttname"><a href="classmamba_1_1builtins_1_1_stop_iteration.html#a59624f4e70ef984d06c8c18cb31663da">mamba::builtins::StopIteration::StopIteration</a></div><div class="ttdeci">StopIteration()</div><div class="ttdef"><b>Definition</b> error.hpp:30</div></div>
+<div class="ttc" id="aclassmamba_1_1builtins_1_1_value_error_html_ab307f8b19423919e0ab65b39837ba85a"><div class="ttname"><a href="classmamba_1_1builtins_1_1_value_error.html#ab307f8b19423919e0ab65b39837ba85a">mamba::builtins::ValueError::ValueError</a></div><div class="ttdeci">ValueError(const details::Str &amp;message)</div><div class="ttdef"><b>Definition</b> error.hpp:12</div></div>
 <div class="ttc" id="aclassmamba_1_1builtins_1_1details_1_1_str_html"><div class="ttname"><a href="classmamba_1_1builtins_1_1details_1_1_str.html">mamba::builtins::details::Str</a></div><div class="ttdoc">A class representing a Pythonic str type. It is bidi-convertible with std::string....</div><div class="ttdef"><b>Definition</b> str.hpp:51</div></div>
+<div class="ttc" id="anamespacemamba_1_1builtins_html"><div class="ttname"><a href="namespacemamba_1_1builtins.html">mamba::builtins</a></div><div class="ttdef"><b>Definition</b> bool.cpp:10</div></div>
+<div class="ttc" id="astr_8hpp_html"><div class="ttname"><a href="str_8hpp.html">str.hpp</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><b>error.hpp</b></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="error_8hpp.html">error.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>
