@@ -17,7 +17,6 @@ var annotated_dup =
           [ "Bytes", "classmamba_1_1builtins_1_1details_1_1_bytes.html", null ],
           [ "Complex", "structmamba_1_1builtins_1_1details_1_1_complex.html", "structmamba_1_1builtins_1_1details_1_1_complex" ],
           [ "IteratorFacade", "classmamba_1_1builtins_1_1details_1_1_iterator_facade.html", "classmamba_1_1builtins_1_1details_1_1_iterator_facade" ],
-          [ "Ref", "classmamba_1_1builtins_1_1details_1_1_ref.html", "classmamba_1_1builtins_1_1details_1_1_ref" ],
           [ "Str", "classmamba_1_1builtins_1_1details_1_1_str.html", "classmamba_1_1builtins_1_1details_1_1_str" ],
           [ "Traits", "structmamba_1_1builtins_1_1details_1_1_traits.html", null ],
           [ "Traits< Bool >", "structmamba_1_1builtins_1_1details_1_1_traits_3_01_bool_01_4.html", null ],

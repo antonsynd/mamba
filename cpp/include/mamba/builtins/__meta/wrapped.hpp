@@ -36,9 +36,14 @@ using Unwrapped = std::
 
 /// @brief Unwraps @p t from `std::shared_ptr<T>` if it satisfies
 /// @ref IsNotValue<T>, otherwise just returns @p t.
+///
+/// @note This should be used to implement generic algorithms acting on wrapped
+/// reference types or on raw value types. Care should be taken to make sure
+/// that use of a unwrapped reference type does not exceed its lifetime if it
+/// has a reference count of 1.
 template <typename T>
 auto Unwrap(T&& t) {
-  if constexpr (IsNotWrapped<T>) {
+  if constexpr (IsValue<T> || IsNotWrapped<T>) {
     return std::forward<T>(t);
   } else {
     return std::forward<T::element_type>(*t);
@@ -49,7 +54,7 @@ auto Unwrap(T&& t) {
 /// satisfies @ref IsNotValue<T>, otherwise just returns @p t.
 template <typename T>
 auto Wrap(T&& t) {
-  if constexpr (IsNotWrapped<T>) {
+  if constexpr (IsValue<T> || IsWrapped<T>) {
     return std::forward<T>(t);
   } else {
     return std::make_shared<T>(std::move(t));

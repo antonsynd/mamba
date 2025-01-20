@@ -133,28 +133,29 @@ $(function(){initNavTree('wrapped_8hpp_source.html',''); initResizable(true); })
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">using </span>Unwrapped = std::</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    conditional_t&lt;IsValue&lt;T&gt; || <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">IsNotWrapped&lt;T&gt;</a>, T, <span class="keyword">typename</span> T::element_type&gt;;</div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">auto</span> Unwrap(T&amp;&amp; t) {</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">IsNotWrapped&lt;T&gt;</a>) {</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">return</span> std::forward&lt;T&gt;(t);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordflow">return</span> std::forward&lt;T::element_type&gt;(*t);</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  }</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>}</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">auto</span> Wrap(T&amp;&amp; t) {</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">IsNotWrapped&lt;T&gt;</a>) {</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keywordflow">return</span> std::forward&lt;T&gt;(t);</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordflow">return</span> std::make_shared&lt;T&gt;(std::move(t));</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  }</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>}</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>}  <span class="comment">// namespace mamba::builtins::details</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment">// IWYU pragma: private</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">auto</span> Unwrap(T&amp;&amp; t) {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">IsValue&lt;T&gt;</a> || <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">IsNotWrapped&lt;T&gt;</a>) {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordflow">return</span> std::forward&lt;T&gt;(t);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordflow">return</span> std::forward&lt;T::element_type&gt;(*t);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  }</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>}</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">auto</span> Wrap(T&amp;&amp; t) {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="keywordflow">if</span> <span class="keyword">constexpr</span> (<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">IsValue&lt;T&gt;</a> || <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">IsWrapped&lt;T&gt;</a>) {</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordflow">return</span> std::forward&lt;T&gt;(t);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keywordflow">return</span> std::make_shared&lt;T&gt;(std::move(t));</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  }</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>}</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>}  <span class="comment">// namespace mamba::builtins::details</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">// IWYU pragma: private</span></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_not_wrapped.html">mamba::builtins::details::IsNotWrapped</a></div><div class="ttdef"><b>Definition</b> wrapped.hpp:19</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_value_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">mamba::builtins::details::IsValue</a></div><div class="ttdoc">All arithmetic types and other types except Object are value types. Value types are generally immutab...</div><div class="ttdef"><b>Definition</b> value.hpp:15</div></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_wrapped_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">mamba::builtins::details::IsWrapped</a></div><div class="ttdoc">All types that should be wrapped in std::shared_ptr&lt;T&gt; are reference types.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:14</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

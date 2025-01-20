@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Mamba: mamba::builtins::details::IsValue Concept Reference</title>
+<title>Mamba: include/mamba/builtins/__meta/type_validity.hpp Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -76,7 +76,7 @@ $(function() { codefold.init(0); });
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function(){initNavTree('conceptmamba_1_1builtins_1_1details_1_1_is_value.html',''); initResizable(true); });
+$(function(){initNavTree('type__validity_8hpp_source.html',''); initResizable(true); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -102,35 +102,35 @@ $(function(){initNavTree('conceptmamba_1_1builtins_1_1details_1_1_is_value.html'
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">mamba::builtins::details::IsValue Concept Reference</div></div>
+  <div class="headertitle"><div class="title">type_validity.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-
-<p>All arithmetic types and other types except Object are value types. Value types are generally immutable with a few exceptions.  
-<a href="#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="value_8hpp_source.html">value.hpp</a>&gt;</code></p>
-<h2 class="groupheader">Concept definition</h2>
-<div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">mamba::builtins::details::IsValue</a> = </div>
-<div class="line">    std::is_arithmetic_v&lt;T&gt; || std::same_as&lt;std::decay_t&lt;T&gt;, <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">ByteArray</a>&gt; ||</div>
-<div class="line">    std::same_as&lt;std::decay_t&lt;T&gt;, <a class="code hl_class" href="classmamba_1_1builtins_1_1details_1_1_bytes.html">Bytes</a>&gt; ||</div>
-<div class="line">    std::same_as&lt;std::decay_t&lt;T&gt;, <a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_bool.html">Bool</a>&gt; ||</div>
-<div class="line">    std::same_as&lt;std::decay_t&lt;T&gt;, <a class="code hl_struct" href="structmamba_1_1builtins_1_1details_1_1_complex.html">Complex</a>&gt; ||</div>
-<div class="line">    std::same_as&lt;std::decay_t&lt;T&gt;, None&gt;</div>
-<div class="ttc" id="aclassmamba_1_1builtins_1_1details_1_1_byte_array_html"><div class="ttname"><a href="classmamba_1_1builtins_1_1details_1_1_byte_array.html">mamba::builtins::details::ByteArray</a></div><div class="ttdef"><b>Definition</b> byte_array.hpp:20</div></div>
-<div class="ttc" id="aclassmamba_1_1builtins_1_1details_1_1_bytes_html"><div class="ttname"><a href="classmamba_1_1builtins_1_1details_1_1_bytes.html">mamba::builtins::details::Bytes</a></div><div class="ttdef"><b>Definition</b> bytes.hpp:20</div></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;mamba/builtins/__meta/value.hpp&quot;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;mamba/builtins/__meta/wrapped.hpp&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">namespace </span>mamba::builtins::details {</div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="conceptmamba_1_1builtins_1_1details_1_1_is_valid.html">    9</a></span><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_valid.html">IsValid</a> =</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">IsValue&lt;T&gt;</a> || (<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">IsWrapped&lt;T&gt;</a> &amp;&amp; <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_value.html">IsNotValue&lt;typename T::element_type&gt;</a>);</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_valid.html">   13</a></span><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_valid.html">IsNotValid</a> = !<a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_valid.html">IsValid&lt;T&gt;</a>;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>}  <span class="comment">// namespace mamba::builtins::details</span></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_not_valid_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_not_valid.html">mamba::builtins::details::IsNotValid</a></div><div class="ttdef"><b>Definition</b> type_validity.hpp:13</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_not_value_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_not_value.html">mamba::builtins::details::IsNotValue</a></div><div class="ttdef"><b>Definition</b> value.hpp:23</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_valid_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_valid.html">mamba::builtins::details::IsValid</a></div><div class="ttdef"><b>Definition</b> type_validity.hpp:9</div></div>
 <div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_value_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">mamba::builtins::details::IsValue</a></div><div class="ttdoc">All arithmetic types and other types except Object are value types. Value types are generally immutab...</div><div class="ttdef"><b>Definition</b> value.hpp:15</div></div>
-<div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_bool_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_bool.html">mamba::builtins::details::Bool</a></div><div class="ttdoc">A proxy for the Pythonic bool type. In general, all Mamba APIs that interact with bools should return...</div><div class="ttdef"><b>Definition</b> bool.hpp:33</div></div>
-<div class="ttc" id="astructmamba_1_1builtins_1_1details_1_1_complex_html"><div class="ttname"><a href="structmamba_1_1builtins_1_1details_1_1_complex.html">mamba::builtins::details::Complex</a></div><div class="ttdoc">A complex number.</div><div class="ttdef"><b>Definition</b> complex.hpp:27</div></div>
-</div><!-- fragment --><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>All arithmetic types and other types except Object are value types. Value types are generally immutable with a few exceptions. </p>
-</div></div><!-- contents -->
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_wrapped_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">mamba::builtins::details::IsWrapped</a></div><div class="ttdoc">All types that should be wrapped in std::shared_ptr&lt;T&gt; are reference types.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:14</div></div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>mamba</b></li><li class="navelem"><b>builtins</b></li><li class="navelem"><b>details</b></li><li class="navelem"><a class="el" href="conceptmamba_1_1builtins_1_1details_1_1_is_value.html">IsValue</a></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li><li class="navelem"><b>type_validity.hpp</b></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>

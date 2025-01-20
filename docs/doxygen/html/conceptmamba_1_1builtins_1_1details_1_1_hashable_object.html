@@ -107,10 +107,11 @@ $(function(){initNavTree('conceptmamba_1_1builtins_1_1details_1_1_hashable_objec
 <div class="contents">
 <h2 class="groupheader">Concept definition</h2>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_hashable_object.html">mamba::builtins::details::HashableObject</a> =  <span class="keyword">requires</span>(<span class="keyword">const</span> T t) {</div>
+<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_hashable_object.html">mamba::builtins::details::HashableObject</a> =  <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_not_optional.html">IsNotOptional&lt;T&gt;</a> &amp;&amp; <span class="keyword">requires</span>(<span class="keyword">const</span> T t) {</div>
 <div class="line">  { Unwrap(t).Hash() } -&gt; std::same_as&lt;Size&gt;;</div>
 <div class="line">}</div>
-<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_hashable_object_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_hashable_object.html">mamba::builtins::details::HashableObject</a></div><div class="ttdef"><b>Definition</b> hashable.hpp:12</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_hashable_object_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_hashable_object.html">mamba::builtins::details::HashableObject</a></div><div class="ttdef"><b>Definition</b> hashable.hpp:13</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_not_optional_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_not_optional.html">mamba::builtins::details::IsNotOptional</a></div><div class="ttdoc">Convenience concept for the opposite of IsOptional.</div><div class="ttdef"><b>Definition</b> optional.hpp:28</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

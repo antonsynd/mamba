@@ -38,15 +38,7 @@ bool Object::operator==(const Object& other) const {
   return this == &other;
 }
 
-bool Object::operator==(const std::shared_ptr<Object>& other) const {
-  return this == other.get();
-}
-
 bool Object::operator!=(const Object& other) const {
-  return !this->operator==(other);
-}
-
-bool Object::operator!=(const std::shared_ptr<Object>& other) const {
   return !this->operator==(other);
 }
 

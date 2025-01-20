@@ -21,7 +21,6 @@ var hierarchy =
       [ "mamba::builtins::Iterator< Raw< value_type > >", "classmamba_1_1builtins_1_1_iterator.html", null ],
       [ "mamba::builtins::Iterator< T >", "classmamba_1_1builtins_1_1_iterator.html", null ]
     ] ],
-    [ "mamba::builtins::details::Ref< T >", "classmamba_1_1builtins_1_1details_1_1_ref.html", null ],
     [ "std::runtime_error", null, [
       [ "mamba::builtins::AttributeError", "classmamba_1_1builtins_1_1_attribute_error.html", null ],
       [ "mamba::builtins::IndexError", "classmamba_1_1builtins_1_1_index_error.html", null ],

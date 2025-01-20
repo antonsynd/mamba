@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Mamba: include/mamba/builtins/__meta Directory Reference</title>
+<title>Mamba: mamba::builtins::details::IsOptional Concept Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -76,7 +76,7 @@ $(function() { codefold.init(0); });
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
-$(function(){initNavTree('dir_4629fe541d3349899cb9bb39e715ce8e.html',''); initResizable(true); });
+$(function(){initNavTree('conceptmamba_1_1builtins_1_1details_1_1_is_optional.html',''); initResizable(true); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -102,46 +102,29 @@ $(function(){initNavTree('dir_4629fe541d3349899cb9bb39e715ce8e.html',''); initRe
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">__meta Directory Reference</div></div>
+  <div class="headertitle"><div class="title">mamba::builtins::details::IsOptional Concept Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Directory dependency graph for __meta:</div>
-<div class="dyncontent">
-<div class="center"><img src="dir_4629fe541d3349899cb9bb39e715ce8e_dep.png" border="0" usemap="#adir__4629fe541d3349899cb9bb39e715ce8e__dep" alt="include/mamba/builtins/__meta"/></div>
-<map name="adir__4629fe541d3349899cb9bb39e715ce8e__dep" id="adir__4629fe541d3349899cb9bb39e715ce8e__dep">
-<area shape="rect" href="dir_4629fe541d3349899cb9bb39e715ce8e.html" title="__meta" alt="" coords="26,52,91,78"/>
-<area shape="rect" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html" title="builtins" alt="" coords="16,16,101,89"/>
-</map>
-</div>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
-Files</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="comparable_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>comparable.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="formattable_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>formattable.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="hashable_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>hashable.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="optional_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>optional.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="orderable_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>orderable.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="subclass_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>subclass.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="type__validity_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>type_validity.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="value_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>value.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><a href="wrapped_8hpp_source.html"><span class="icondoc"></span></a>&#160;</td><td class="memItemRight" valign="bottom"><b>wrapped.hpp</b></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-</div><!-- contents -->
+
+<p>Pythonic <code>Optional[T]</code> is a <code>std::optional&lt;T&gt;</code> stored within an <code>std::shared_ptr</code> because optional types are not value types.  
+<a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="optional_8hpp_source.html">optional.hpp</a>&gt;</code></p>
+<h2 class="groupheader">Concept definition</h2>
+<div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><span class="keyword">concept </span><a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_optional.html">mamba::builtins::details::IsOptional</a> = </div>
+<div class="line">    <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">IsWrapped&lt;T&gt;</a> &amp;&amp; <a class="code hl_concept" href="conceptmamba_1_1builtins_1_1details_1_1_is_unwrapped_optional.html">IsUnwrappedOptional&lt;typename T::element_type&gt;</a></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_optional_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_optional.html">mamba::builtins::details::IsOptional</a></div><div class="ttdoc">Pythonic Optional[T] is a std::optional&lt;T&gt; stored within an std::shared_ptr because optional types ar...</div><div class="ttdef"><b>Definition</b> optional.hpp:23</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_unwrapped_optional_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_unwrapped_optional.html">mamba::builtins::details::IsUnwrappedOptional</a></div><div class="ttdoc">Concept for determining if a type is an unwrapped optional, e.g. std::optional.</div><div class="ttdef"><b>Definition</b> optional.hpp:16</div></div>
+<div class="ttc" id="aconceptmamba_1_1builtins_1_1details_1_1_is_wrapped_html"><div class="ttname"><a href="conceptmamba_1_1builtins_1_1details_1_1_is_wrapped.html">mamba::builtins::details::IsWrapped</a></div><div class="ttdoc">All types that should be wrapped in std::shared_ptr&lt;T&gt; are reference types.</div><div class="ttdef"><b>Definition</b> wrapped.hpp:14</div></div>
+</div><!-- fragment --><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Pythonic <code>Optional[T]</code> is a <code>std::optional&lt;T&gt;</code> stored within an <code>std::shared_ptr</code> because optional types are not value types. </p>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_89e00a4abb168a1d99f1f9931391395e.html">mamba</a></li><li class="navelem"><a class="el" href="dir_36341a244bcc7fb99cb8d4cb0f61dbb3.html">builtins</a></li><li class="navelem"><a class="el" href="dir_4629fe541d3349899cb9bb39e715ce8e.html">__meta</a></li>
+    <li class="navelem"><b>mamba</b></li><li class="navelem"><b>builtins</b></li><li class="navelem"><b>details</b></li><li class="navelem"><a class="el" href="conceptmamba_1_1builtins_1_1details_1_1_is_optional.html">IsOptional</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.13.2 </li>
   </ul>
 </div>
