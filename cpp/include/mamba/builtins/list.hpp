@@ -41,7 +41,7 @@ concept ListSortKey = requires(const F& key_func, const Wrapped<K>& k) {
 }  // namespace details
 
 template <details::LessThanComparable T>
-class List final : public details::Object {
+class List final : public collections::abc::MutableSequence {
  public:
   using value_type = T;
 

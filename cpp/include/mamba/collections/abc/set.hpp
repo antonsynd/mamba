@@ -35,7 +35,7 @@ class SetIterator;
 
 /// Curiously recurring template
 template <builtins::details::Hashable T>
-class AbstractSet : public details::Object {
+class Set : virtual public Collection<T> {
  public:
   using value_type = T;
 

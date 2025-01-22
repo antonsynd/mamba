@@ -4,13 +4,13 @@
 
 #include "mamba/builtins/__meta/hashable.hpp"
 #include "mamba/builtins/__types/traits.hpp"
-#include "mamba/collections/abc/abstract_set.hpp"
+#include "mamba/collections/abc/set.hpp"
 
 namespace mamba {
 namespace collections::abc {
 
 template <builtins::details::Hashable T>
-class MutableSet : public AbstractSet<T> {
+class MutableSet : public Set<T> {
  public:
   using value_type = T;
 

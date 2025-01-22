@@ -50,7 +50,7 @@ struct Bool final {
   Bool(const ULong u);
   Bool(const UShort u);
 
-  template <Optional T>
+  template <IsOptional T>
   Bool(const T& o) {
     b_ = Unwrap(o).has_value();
   }
