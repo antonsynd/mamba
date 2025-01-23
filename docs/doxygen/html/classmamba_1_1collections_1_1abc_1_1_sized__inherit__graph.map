@@ -1,0 +1,9 @@
+<map id="mamba::collections::abc::Sized" name="mamba::collections::abc::Sized">
+<area shape="rect" id="Node000001" title=" " alt="" coords="12,94,147,135"/>
+<area shape="rect" id="Node000003" href="$classmamba_1_1collections_1_1abc_1_1_collection.html" title=" " alt="" coords="5,183,154,223"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="82,150,82,182,77,182,77,150"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="21,5,138,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,62,82,94,77,94,77,62"/>
+<area shape="rect" id="Node000004" href="$classmamba_1_1collections_1_1abc_1_1_sequence.html" title=" " alt="" coords="5,271,154,312"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="82,239,82,271,77,271,77,239"/>
+</map>

@@ -97,7 +97,7 @@ class IteratorFacade : public std::input_iterator_tag {
 
   /// @note Mamba-specific
   using self = IteratorFacade<value_type>;
-  using iterator_type = Iterator<Raw<value_type>>;
+  using iterator_type = Iterator<value_type>;
 
   /// @brief Constructs a C++ wrapper for a Mamba iterator. The internal state
   /// of @p it is shared with the original by virtue of being a shallow copy.

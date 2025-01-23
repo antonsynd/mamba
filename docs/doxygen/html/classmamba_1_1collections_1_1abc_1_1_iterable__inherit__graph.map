@@ -1,0 +1,16 @@
+<map id="mamba::collections::abc::Iterable&lt; T &gt;" name="mamba::collections::abc::Iterable&lt; T &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="170,118,304,159"/>
+<area shape="rect" id="Node000003" href="$classmamba_1_1collections_1_1abc_1_1_iterator.html" title=" " alt="" coords="357,5,499,61"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="286,108,351,71,372,59,374,64,353,75,288,112"/>
+<area shape="rect" id="Node000004" href="$classmamba_1_1collections_1_1abc_1_1_collection.html" title=" " alt="" coords="354,85,502,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="319,122,353,116,354,121,319,127"/>
+<area shape="rect" id="Node000006" href="$classmamba_1_1collections_1_1abc_1_1_iterator.html" title=" " alt="" coords="361,150,495,191"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="319,150,361,157,360,162,319,155"/>
+<area shape="rect" id="Node000007" href="$classmamba_1_1collections_1_1abc_1_1_reversible.html" title=" " alt="" coords="352,216,504,256"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="288,165,353,200,379,213,377,217,351,205,285,169"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,118,122,159"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,136,169,136,169,141,137,141"/>
+<area shape="rect" id="Node000005" href="$classmamba_1_1collections_1_1abc_1_1_sequence.html" title=" " alt="" coords="552,150,701,191"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="507,128,563,147,561,152,506,133"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="506,208,561,189,563,194,507,213"/>
+</map>

@@ -1,5 +1,24 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,142,31"/>
-<area shape="rect" id="Node000001" href="$classmamba_1_1builtins_1_1_frozen_set.html" title=" " alt="" coords="190,5,403,31"/>
-<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="157,16,189,16,189,21,157,21"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,118,122,159"/>
+<area shape="rect" id="Node000001" href="$classmamba_1_1collections_1_1abc_1_1_iterable.html" title=" " alt="" coords="171,5,315,61"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="109,107,168,71,189,59,191,64,171,75,111,112"/>
+<area shape="rect" id="Node000002" href="$classmamba_1_1collections_1_1abc_1_1_container.html" title=" " alt="" coords="170,85,316,126"/>
+<area shape="poly" id="edge2_Node000000_Node000002" title=" " alt="" coords="137,122,169,116,170,121,138,127"/>
+<area shape="rect" id="Node000006" href="$classmamba_1_1collections_1_1abc_1_1_iterable.html" title=" " alt="" coords="176,216,310,256"/>
+<area shape="poly" id="edge5_Node000000_Node000006" title=" " alt="" coords="111,165,171,200,196,213,193,217,168,205,108,170"/>
+<area shape="rect" id="Node000009" href="$classmamba_1_1collections_1_1abc_1_1_sized.html" title=" " alt="" coords="176,150,310,191"/>
+<area shape="poly" id="edge11_Node000000_Node000009" title=" " alt="" coords="138,149,176,156,175,161,137,154"/>
+<area shape="rect" id="Node000003" href="$classmamba_1_1collections_1_1abc_1_1_collection.html" title=" " alt="" coords="366,114,514,155"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="332,116,366,121,365,126,331,121"/>
+<area shape="rect" id="Node000004" href="$classmamba_1_1collections_1_1abc_1_1_sequence.html" title=" " alt="" coords="564,220,713,260"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="508,159,518,164,607,217,604,221,515,169,506,164"/>
+<area shape="poly" id="edge7_Node000006_Node000003" title=" " alt="" coords="305,206,315,200,338,182,363,164,385,153,387,158,365,169,342,187,317,205,308,210"/>
+<area shape="rect" id="Node000007" href="$classmamba_1_1collections_1_1abc_1_1_iterator.html" title=" " alt="" coords="369,179,511,234"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="325,221,368,214,369,220,326,226"/>
+<area shape="rect" id="Node000008" href="$classmamba_1_1collections_1_1abc_1_1_iterator.html" title=" " alt="" coords="373,258,507,299"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="326,251,373,261,372,267,325,256"/>
+<area shape="rect" id="Node000005" href="$classmamba_1_1collections_1_1abc_1_1_reversible.html" title=" " alt="" coords="364,324,516,364"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="289,263,365,308,390,321,388,325,363,313,286,267"/>
+<area shape="poly" id="edge10_Node000005_Node000004" title=" " alt="" coords="503,314,515,308,603,258,605,263,518,313,506,319"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="325,153,365,145,366,151,326,158"/>
 </map>

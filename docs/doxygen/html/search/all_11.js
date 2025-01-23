@@ -9,10 +9,13 @@ var searchData=
   ['repr_2ehpp_6',['repr.hpp',['../repr_8hpp.html',1,'']]],
   ['reversable_7',['Reversable',['../conceptmamba_1_1builtins_1_1details_1_1_reversable.html',1,'mamba::builtins::details']]],
   ['reverse_8',['Reverse',['../namespacemamba_1_1builtins.html#a9578ef1615432451aaface9110b0169e',1,'mamba::builtins']]],
-  ['rfind_9',['RFind',['../classmamba_1_1builtins_1_1details_1_1_str.html#a0461df2b5124fa271fb4d0564fff95c8',1,'mamba::builtins::details::Str']]],
-  ['rindex_10',['RIndex',['../classmamba_1_1builtins_1_1details_1_1_str.html#a3dfc9934317a503da2d8b33d1765886d',1,'mamba::builtins::details::Str']]],
-  ['rjust_11',['RJust',['../classmamba_1_1builtins_1_1details_1_1_str.html#a4409c4d7a02b1734451599893be3b800',1,'mamba::builtins::details::Str']]],
-  ['rpartition_12',['RPartition',['../classmamba_1_1builtins_1_1details_1_1_str.html#a6fad3b1bb7a18b872afc336a81496672',1,'mamba::builtins::details::Str']]],
-  ['rsplit_13',['RSplit',['../classmamba_1_1builtins_1_1details_1_1_str.html#abf7b5a5571cc9320448510546efad4cc',1,'mamba::builtins::details::Str']]],
-  ['rstrip_14',['RStrip',['../classmamba_1_1builtins_1_1details_1_1_str.html#a120583e18a8fe1410c990f23b7334bd0',1,'mamba::builtins::details::Str']]]
+  ['reversed_9',['Reversed',['../classmamba_1_1collections_1_1abc_1_1_reversible.html#a1e67acf64c9caec41c43170ccdf4b84f',1,'mamba::collections::abc::Reversible']]],
+  ['reversible_10',['Reversible',['../classmamba_1_1collections_1_1abc_1_1_reversible.html',1,'mamba::collections::abc']]],
+  ['reversible_2ehpp_11',['reversible.hpp',['../reversible_8hpp.html',1,'']]],
+  ['rfind_12',['RFind',['../classmamba_1_1builtins_1_1details_1_1_str.html#a0461df2b5124fa271fb4d0564fff95c8',1,'mamba::builtins::details::Str']]],
+  ['rindex_13',['RIndex',['../classmamba_1_1builtins_1_1details_1_1_str.html#a3dfc9934317a503da2d8b33d1765886d',1,'mamba::builtins::details::Str']]],
+  ['rjust_14',['RJust',['../classmamba_1_1builtins_1_1details_1_1_str.html#a4409c4d7a02b1734451599893be3b800',1,'mamba::builtins::details::Str']]],
+  ['rpartition_15',['RPartition',['../classmamba_1_1builtins_1_1details_1_1_str.html#a6fad3b1bb7a18b872afc336a81496672',1,'mamba::builtins::details::Str']]],
+  ['rsplit_16',['RSplit',['../classmamba_1_1builtins_1_1details_1_1_str.html#abf7b5a5571cc9320448510546efad4cc',1,'mamba::builtins::details::Str']]],
+  ['rstrip_17',['RStrip',['../classmamba_1_1builtins_1_1details_1_1_str.html#a120583e18a8fe1410c990f23b7334bd0',1,'mamba::builtins::details::Str']]]
 ];

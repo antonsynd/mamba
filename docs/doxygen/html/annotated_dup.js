@@ -45,6 +45,20 @@ var annotated_dup =
         [ "Iterator", "classmamba_1_1builtins_1_1_iterator.html", "classmamba_1_1builtins_1_1_iterator" ],
         [ "StopIteration", "classmamba_1_1builtins_1_1_stop_iteration.html", "classmamba_1_1builtins_1_1_stop_iteration" ],
         [ "ValueError", "classmamba_1_1builtins_1_1_value_error.html", "classmamba_1_1builtins_1_1_value_error" ]
+      ] ],
+      [ "collections", "namespacemamba_1_1collections.html", [
+        [ "abc", "namespacemamba_1_1collections_1_1abc.html", [
+          [ "details", "namespacemamba_1_1collections_1_1abc_1_1details.html", [
+            [ "IteratorFacade", "classmamba_1_1collections_1_1abc_1_1details_1_1_iterator_facade.html", "classmamba_1_1collections_1_1abc_1_1details_1_1_iterator_facade" ]
+          ] ],
+          [ "Collection", "classmamba_1_1collections_1_1abc_1_1_collection.html", null ],
+          [ "Container", "classmamba_1_1collections_1_1abc_1_1_container.html", null ],
+          [ "Iterable", "classmamba_1_1collections_1_1abc_1_1_iterable.html", "classmamba_1_1collections_1_1abc_1_1_iterable" ],
+          [ "Iterator", "classmamba_1_1collections_1_1abc_1_1_iterator.html", "classmamba_1_1collections_1_1abc_1_1_iterator" ],
+          [ "Reversible", "classmamba_1_1collections_1_1abc_1_1_reversible.html", "classmamba_1_1collections_1_1abc_1_1_reversible" ],
+          [ "Sequence", "classmamba_1_1collections_1_1abc_1_1_sequence.html", "classmamba_1_1collections_1_1abc_1_1_sequence" ],
+          [ "Sized", "classmamba_1_1collections_1_1abc_1_1_sized.html", null ]
+        ] ]
       ] ]
     ] ]
 ];

@@ -1,0 +1,18 @@
+<map id="include/mamba/collections/abc/iteration.hpp" name="include/mamba/collections/abc/iteration.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="205,5,381,46"/>
+<area shape="rect" id="Node000002" href="$collection_8hpp.html" title=" " alt="" coords="5,94,181,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,55,140,96,137,91,233,50"/>
+<area shape="rect" id="Node000003" href="$reversible_8hpp.html" title=" " alt="" coords="205,94,381,135"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="296,62,296,94,290,94,290,62"/>
+<area shape="rect" id="Node000004" href="$collections_2abc_2sequence_8hpp.html" title=" " alt="" coords="268,183,443,223"/>
+<area shape="poly" id="edge8_Node000001_Node000004" title=" " alt="" coords="356,52,378,70,395,93,401,117,397,142,386,164,374,184,369,181,382,162,392,140,396,117,391,95,374,74,352,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="318,146,344,181,339,184,314,149"/>
+<area shape="rect" id="Node000005" href="$mutable__sequence_8hpp.html" title=" " alt="" coords="264,271,448,312"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="358,239,358,271,353,271,353,239"/>
+<area shape="rect" id="Node000006" href="$list_8hpp.html" title=" " alt="" coords="278,360,433,401"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="358,328,358,360,353,360,353,328"/>
+<area shape="rect" id="Node000007" href="$builtins_8hpp.html" title=" " alt="" coords="171,456,351,482"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="325,413,276,458,272,454,321,409"/>
+<area shape="rect" id="Node000008" href="$__dict_8hpp.html" title=" " alt="" coords="374,449,529,489"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="391,409,432,446,428,450,387,413"/>
+</map>

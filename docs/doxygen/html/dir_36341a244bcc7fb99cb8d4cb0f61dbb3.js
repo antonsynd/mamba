@@ -6,11 +6,11 @@ var dir_36341a244bcc7fb99cb8d4cb0f61dbb3 =
     [ "_dict.hpp", "__dict_8hpp.html", null ],
     [ "error.hpp", "error_8hpp.html", "error_8hpp" ],
     [ "frozen_set.hpp", "frozen__set_8hpp.html", "frozen__set_8hpp" ],
-    [ "iteration.hpp", "iteration_8hpp.html", "iteration_8hpp" ],
+    [ "iteration.hpp", "builtins_2iteration_8hpp.html", "builtins_2iteration_8hpp" ],
     [ "list.hpp", "list_8hpp.html", null ],
     [ "operators.hpp", "operators_8hpp.html", null ],
     [ "repr.hpp", "repr_8hpp.html", "repr_8hpp" ],
-    [ "sequence.hpp", "sequence_8hpp.html", "sequence_8hpp" ],
-    [ "set.hpp", "set_8hpp.html", null ],
+    [ "sequence.hpp", "builtins_2sequence_8hpp.html", "builtins_2sequence_8hpp" ],
+    [ "set.hpp", "builtins_2set_8hpp.html", null ],
     [ "types.hpp", "types_8hpp.html", "types_8hpp" ]
 ];

@@ -1,0 +1,19 @@
+<map id="include/mamba/builtins/iteration.hpp" name="include/mamba/builtins/iteration.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="119,5,274,46"/>
+<area shape="rect" id="Node000002" href="$builtins_8hpp.html" title=" " alt="" coords="5,190,185,216"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,42,57,62,37,77,20,95,15,108,15,120,28,146,52,169,77,188,74,192,48,173,24,149,10,122,9,107,15,93,33,73,55,57,103,37"/>
+<area shape="rect" id="Node000003" href="$list_8hpp.html" title=" " alt="" coords="208,94,363,135"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,55,267,92,264,95,226,59"/>
+<area shape="rect" id="Node000005" href="$builtins_2sequence_8hpp.html" title=" " alt="" coords="30,94,184,135"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="167,59,129,95,125,92,163,55"/>
+<area shape="rect" id="Node000006" href="$collections_2abc_2set_8hpp.html" title=" " alt="" coords="387,94,563,135"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="275,48,412,91,411,96,273,54"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="230,144,123,192,121,187,228,139"/>
+<area shape="rect" id="Node000004" href="$__dict_8hpp.html" title=" " alt="" coords="208,183,363,223"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="288,150,288,182,283,182,283,150"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="105,151,99,190,94,190,100,150"/>
+<area shape="rect" id="Node000007" href="$mutable__set_8hpp.html" title=" " alt="" coords="387,183,563,223"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="478,150,478,182,472,182,472,150"/>
+<area shape="rect" id="Node000008" href="$builtins_2set_8hpp.html" title=" " alt="" coords="398,271,552,312"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="478,239,478,271,472,271,472,239"/>
+</map>

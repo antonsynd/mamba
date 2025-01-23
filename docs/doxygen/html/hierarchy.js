@@ -12,9 +12,30 @@ var hierarchy =
     [ "std::input_iterator_tag", null, [
       [ "mamba::builtins::details::IteratorFacade< details::Raw< value_type > >", "classmamba_1_1builtins_1_1details_1_1_iterator_facade.html", null ],
       [ "mamba::builtins::details::IteratorFacade< value_type >", "classmamba_1_1builtins_1_1details_1_1_iterator_facade.html", null ],
-      [ "mamba::builtins::details::IteratorFacade< T >", "classmamba_1_1builtins_1_1details_1_1_iterator_facade.html", null ]
+      [ "mamba::collections::abc::details::IteratorFacade< value_type >", "classmamba_1_1collections_1_1abc_1_1details_1_1_iterator_facade.html", null ],
+      [ "mamba::builtins::details::IteratorFacade< T >", "classmamba_1_1builtins_1_1details_1_1_iterator_facade.html", null ],
+      [ "mamba::collections::abc::details::IteratorFacade< T >", "classmamba_1_1collections_1_1abc_1_1details_1_1_iterator_facade.html", null ]
     ] ],
     [ "mamba::__utils::Logger", "structmamba_1_1____utils_1_1_logger.html", null ],
+    [ "builtins::details::Object", null, [
+      [ "mamba::collections::abc::Iterable< value_type >", "classmamba_1_1collections_1_1abc_1_1_iterable.html", null ],
+      [ "mamba::collections::abc::Container< T >", "classmamba_1_1collections_1_1abc_1_1_container.html", [
+        [ "mamba::collections::abc::Collection< T >", "classmamba_1_1collections_1_1abc_1_1_collection.html", [
+          [ "mamba::collections::abc::Sequence< T >", "classmamba_1_1collections_1_1abc_1_1_sequence.html", null ]
+        ] ]
+      ] ],
+      [ "mamba::collections::abc::Iterable< T >", "classmamba_1_1collections_1_1abc_1_1_iterable.html", [
+        [ "mamba::collections::abc::Iterator< value_type >", "classmamba_1_1collections_1_1abc_1_1_iterator.html", null ],
+        [ "mamba::collections::abc::Collection< T >", "classmamba_1_1collections_1_1abc_1_1_collection.html", null ],
+        [ "mamba::collections::abc::Iterator< T >", "classmamba_1_1collections_1_1abc_1_1_iterator.html", null ],
+        [ "mamba::collections::abc::Reversible< T >", "classmamba_1_1collections_1_1abc_1_1_reversible.html", [
+          [ "mamba::collections::abc::Sequence< T >", "classmamba_1_1collections_1_1abc_1_1_sequence.html", null ]
+        ] ]
+      ] ],
+      [ "mamba::collections::abc::Sized", "classmamba_1_1collections_1_1abc_1_1_sized.html", [
+        [ "mamba::collections::abc::Collection< T >", "classmamba_1_1collections_1_1abc_1_1_collection.html", null ]
+      ] ]
+    ] ],
     [ "details::Object", null, [
       [ "mamba::builtins::Iterator< value_type >", "classmamba_1_1builtins_1_1_iterator.html", null ],
       [ "mamba::builtins::Iterator< IterableValueType< T > >", "classmamba_1_1builtins_1_1_iterator.html", null ],

@@ -23,7 +23,7 @@ template <typename T>
 concept IsOptional =
     IsWrapped<T> && IsUnwrappedOptional<typename T::element_type>;
 
-/// @brief Convenience concept for the opposite of @ref IsOptional.
+/// @brief Convenience concept for the opposite of @ref IsOptional<T>.
 template <typename T>
 concept IsNotOptional = !IsOptional<T>;
 

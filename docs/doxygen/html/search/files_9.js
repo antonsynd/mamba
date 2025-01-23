@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['list_2ehpp_0',['list.hpp',['../list_8hpp.html',1,'']]],
-  ['logger_2ecpp_1',['logger.cpp',['../logger_8cpp.html',1,'']]],
-  ['logger_2ehpp_2',['logger.hpp',['../logger_8hpp.html',1,'']]],
-  ['long_2ehpp_3',['long.hpp',['../long_8hpp.html',1,'']]]
+  ['mutable_5fsequence_2ehpp_0',['mutable_sequence.hpp',['../mutable__sequence_8hpp.html',1,'']]],
+  ['mutable_5fset_2ehpp_1',['mutable_set.hpp',['../mutable__set_8hpp.html',1,'']]]
 ];

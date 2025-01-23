@@ -5,5 +5,5 @@ var searchData=
   ['center_2',['Center',['../classmamba_1_1builtins_1_1details_1_1_str.html#af5487e708742c0f8e9b38aeb97fa45ce',1,'mamba::builtins::details::Str']]],
   ['complex_3',['Complex',['../structmamba_1_1builtins_1_1details_1_1_complex.html#a3c845415a8b0d4a73cc5ba7679d3bd1f',1,'mamba::builtins::details::Complex']]],
   ['contains_4',['Contains',['../namespacemamba_1_1builtins.html#ad8b9b373888e3d1720efb5d191683d88',1,'mamba::builtins']]],
-  ['count_5',['Count',['../classmamba_1_1builtins_1_1details_1_1_str.html#aa6ff29b2175d4e9c32c9a9cb847f0a6b',1,'mamba::builtins::details::Str']]]
+  ['count_5',['Count',['../classmamba_1_1builtins_1_1details_1_1_str.html#aa6ff29b2175d4e9c32c9a9cb847f0a6b',1,'mamba::builtins::details::Str::Count()'],['../classmamba_1_1collections_1_1abc_1_1_sequence.html#a78a824b7d8d002797c03fa286386b470',1,'mamba::collections::abc::Sequence::Count()']]]
 ];

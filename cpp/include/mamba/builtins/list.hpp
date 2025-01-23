@@ -16,6 +16,7 @@
 #include "mamba/__utils/hex_printer.hpp"
 #include "mamba/__utils/string_builder.hpp"
 #include "mamba/builtins/__meta/orderable.hpp"
+#include "mamba/builtins/__meta/type_validity.hpp"
 #include "mamba/builtins/__meta/value.hpp"
 #include "mamba/builtins/__meta/wrapped.hpp"
 #include "mamba/builtins/__types/int.hpp"
@@ -25,6 +26,7 @@
 #include "mamba/builtins/iteration.hpp"
 #include "mamba/builtins/operators.hpp"
 #include "mamba/builtins/repr.hpp"
+#include "mamba/collections/abc/mutable_sequence.hpp"
 
 namespace mamba::builtins {
 namespace details {
@@ -40,15 +42,14 @@ concept ListSortKey = requires(const F& key_func, const Wrapped<K>& k) {
 
 }  // namespace details
 
-template <details::LessThanComparable T>
-class List final : public collections::abc::MutableSequence {
+template <typename T>
+  requires(details::IsValid<T> && details::LessThanComparable<T>)
+class List final : public collections::abc::MutableSequence<T> {
  public:
   using value_type = T;
 
   /// @note Mamba-specific
   using self = List<value_type>;
-  using shared = std::shared_ptr<self>;
-  using const_shared = std::shared_ptr<const self>;
   using storage = std::vector<value_type>;
 
   using reference = value_type&;
@@ -70,11 +71,9 @@ class List final : public collections::abc::MutableSequence {
   /// @code list(list)
   /// @note This is also the C++ copy constructor.
   List(const self& other) { Extend(other); }
-  List(const const_shared& other) { Extend(other); }
 
   /// @note Rule of 5
   List(self&& other) {};
-  List(shared&& other) {};
   ~List() = default;
   self& operator=(const self& other) { data_ = other.data_; }
   self& operator=(self&& other) { data_ = std::move(other.data_); }
@@ -140,7 +139,6 @@ class List final : public collections::abc::MutableSequence {
   /// @code list.copy()
   self Copy() const { return self(*this); }
 
-  /// @overload
   /// @brief Extends this list with the elements of @p other.
   /// @code list.extend(list)
   void Extend(const self& other) {
@@ -150,10 +148,6 @@ class List final : public collections::abc::MutableSequence {
               std::back_inserter(data_.v_));
   }
 
-  /// @overload
-  void Extend(const const_shared& other) { Extend(*other); }
-
-  /// @overload
   /// @brief Extends this list with the elements of @p other.
   /// @code list += other
   void operator+=(const self& other) { Extend(other); }

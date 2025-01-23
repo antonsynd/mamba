@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structmamba_1_1____utils_1_1details_1_1_flush.html" title=" " alt="" coords="5,5,162,46"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,112,111,137"/>
+<area shape="rect" id="Node000001" href="$classmamba_1_1builtins_1_1_iterator.html" title=" " alt="" coords="175,5,337,46"/>
+<area shape="poly" id="edge14_Node000000_Node000001" title=" " alt="" coords="88,100,157,57,187,44,189,49,160,61,90,104"/>
+<area shape="rect" id="Node000002" href="$classmamba_1_1builtins_1_1_iterator.html" title=" " alt="" coords="166,71,346,111"/>
+<area shape="poly" id="edge15_Node000000_Node000002" title=" " alt="" coords="126,110,165,104,166,109,126,116"/>
+<area shape="rect" id="Node000003" href="$classmamba_1_1builtins_1_1_iterator.html" title=" " alt="" coords="175,136,337,177"/>
+<area shape="poly" id="edge16_Node000000_Node000003" title=" " alt="" coords="127,133,175,141,174,146,126,138"/>
+<area shape="rect" id="Node000004" href="$classmamba_1_1builtins_1_1_iterator.html" title="Base class for all iterators." alt="" coords="159,201,353,226"/>
+<area shape="poly" id="edge17_Node000000_Node000004" title=" " alt="" coords="90,144,123,166,160,186,193,198,191,203,158,191,120,171,87,149"/>
 </map>
