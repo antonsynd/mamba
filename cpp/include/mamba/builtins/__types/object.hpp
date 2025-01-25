@@ -42,7 +42,7 @@ class Object : public std::enable_shared_from_this<Object> {
 
   /// @brief Invoked by @ref Repr() to inject the object's current name into
   /// the default output of @ref Repr().
-  virtual Str _Repr(const std::string_view name) const;
+  virtual std::string _Repr(const std::string_view name) const;
 };
 
 template <>

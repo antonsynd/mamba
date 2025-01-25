@@ -13,7 +13,7 @@ Size Object::Id() const {
   return reinterpret_cast<Size>(this);
 }
 
-Str Object::_Repr(const std::string_view name) const {
+std::string Object::_Repr(const std::string_view name) const {
   std::ostringstream oss;
 
   oss << "<" << name << " object at "

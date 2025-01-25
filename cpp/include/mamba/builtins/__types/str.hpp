@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <ostream>      // for ostream
 #include <sstream>      // for ostream
 #include <string>       // for basic_string, string
@@ -7,35 +8,35 @@
 #include <utility>      // for move
 
 #include "mamba/builtins/__meta/optional.hpp"  // for Optional
+#include "mamba/builtins/__meta/wrapped.hpp"
 #include "mamba/builtins/__types/bool.hpp"     // for Bool
 #include "mamba/builtins/__types/byte.hpp"     // for Byte
 #include "mamba/builtins/__types/decimal.hpp"  // for Decimal
 #include "mamba/builtins/__types/double.hpp"   // for Double
 #include "mamba/builtins/__types/float.hpp"    // for Float
-#include "mamba/builtins/__types/int.hpp"      // for Int
-#include "mamba/builtins/__types/long.hpp"     // for Long
-#include "mamba/builtins/__types/none.hpp"     // for None
-#include "mamba/builtins/__types/object.hpp"   // for Object
-#include "mamba/builtins/__types/sbyte.hpp"    // for SByte
-#include "mamba/builtins/__types/short.hpp"    // for Short
-#include "mamba/builtins/__types/size.hpp"     // for Size
-#include "mamba/builtins/__types/ssize.hpp"    // for SSize
+#include "mamba/builtins/__types/forward_declarations.hpp"
+#include "mamba/builtins/__types/int.hpp"     // for Int
+#include "mamba/builtins/__types/long.hpp"    // for Long
+#include "mamba/builtins/__types/none.hpp"    // for None
+#include "mamba/builtins/__types/object.hpp"  // for Object
+#include "mamba/builtins/__types/sbyte.hpp"   // for SByte
+#include "mamba/builtins/__types/short.hpp"   // for Short
+#include "mamba/builtins/__types/size.hpp"    // for Size
+#include "mamba/builtins/__types/ssize.hpp"   // for SSize
 #include "mamba/builtins/__types/traits.hpp"
 #include "mamba/builtins/__types/uint.hpp"    // for UInt
 #include "mamba/builtins/__types/ulong.hpp"   // for ULong
 #include "mamba/builtins/__types/ushort.hpp"  // for UShort
+#include "mamba/collections/abc/sequence.hpp"
 
 namespace mamba::builtins::details {
-
-// Forward-declaration
-class Str;
 
 /// @brief Convenience overload for outputting to `std::cout`/`std::cerr` or
 /// `std::ostringstream`.
 std::ostream& operator<<(std::ostream& oss, const Str& s);
 
 /// @brief Constructs a `str` via a literal.
-Str operator""_str(const char* s, std::size_t len);
+std::shared_ptr<Str> operator""_str(const char* s, std::size_t len);
 
 /// @brief A class representing a Pythonic `str` type. It is bidi-convertible
 /// with `std::string`. It is generally immutable unless if mutated through
@@ -48,8 +49,17 @@ Str operator""_str(const char* s, std::size_t len);
 ///
 /// The constructors for this class provide the Pythonic `str()` conversion
 /// function from various builtin types, mainly other numeric value types.
-class Str final {
+/// @note Str holds its data via shared_ptr, because it is copy-on-write
+/// but otherwise read-only. it should be cheap to pass strings around without
+/// copying overhead, and using std::shared_ptr<Str> is not easy to do if
+/// the string itself mutates somewhere.
+class Str final : public collections::abc::Sequence<Str> {
  public:
+  using value_type = Str;
+
+  /// @note Mamba-specific
+  using self = Str;
+
   /// @brief Constructs an empty `str`.
   Str();
 
@@ -79,13 +89,18 @@ class Str final {
   Str(const ULong u);
 
   /// @overload
-  /// @brief Optional<T> returns the string representation of the payload or
-  /// "None".
-  template <Optional T>
+  /// @brief An IsOptional<T> returns the string representation of the payload
+  /// or "None".
+  template <IsOptional T>
   Str(const T o) {
-    if (o.has_value()) {
+    if (o.get() == nullptr) {
+      throw std::logic_error(
+          "std::shared_ptr<std::optional<T>> cannot be nullptr");
+    }
+
+    if (o->has_value()) {
       std::ostringstream oss;
-      oss << "Optional[" << Str(o) << "]";
+      oss << "Optional[" << Str(Unwrap(o.value())) << "]";
       data_.s_ = oss.str();
     } else {
       data_.s_ = "None";
@@ -207,9 +222,67 @@ class Str final {
   /// @brief Returns a copy of the `str` itself.
   Str Repr() const;
 
+  // Sized methods
   /// @brief Returns the length of the `str` in terms of Unicode codepoints.
   /// @todo Actually return codepoint count, not the byte count.
-  Int Len() const;
+  virtual Size Len() const override;
+
+  // Sequence methods
+  virtual Size Count(const value_type& elem) const override { return 0; }
+  virtual Size Count(const std::string_view elem) const { return 0; }
+
+  virtual Size Index(const value_type& elem,
+                     const Size start = 0) const override {
+    return 0;
+  }
+
+  virtual Size Index(const std::string_view elem, const Size start = 0) const {
+    return 0;
+  }
+
+  virtual Size Index(const value_type& elem,
+                     const Size start,
+                     const Size end) const override {
+    return 0;
+  }
+  virtual Size Index(const std::string_view elem,
+                     const Size start,
+                     const Size end) const {
+    return 0;
+  }
+
+  virtual const value_type& operator[](const builtins::details::Size) const {
+    return nullptr;
+  }
+
+#if __cplusplus >= 202302L
+  virtual std::shared_ptr<collections::abc::Sequence<value_type>> operator[](
+      SSize start = 0,
+      SSize end = kSSizeMax,
+      SSize step = 1) const override {
+    return Slice(start, end, step);
+  }
+#endif  // __cplusplus >= 202302L
+
+  virtual std::shared_ptr<collections::abc::Sequence<value_type>>
+  Slice(SSize start = 0, SSize end = kSSizeMax, SSize step = 1) const {
+    return nullptr;
+  }
+
+  // Container
+  bool Contains(const value_type& elem) const { return false; }
+
+  // Iterable and Reversible
+  /// @note Mamba-specific
+  using iterator_type = collections::abc::Iterator<value_type>;
+
+  virtual std::shared_ptr<iterator_type> Iter() const override {
+    return nullptr;
+  }
+
+  virtual std::shared_ptr<iterable_type> Reversed() const override {
+    return nullptr;
+  }
 
   /// @overload
   /// @brief Compares this `str` with @p other. They are equal if they have
@@ -243,7 +316,7 @@ class Str final {
     std::string s_;
   };
 
-  mutable Data data_;
+  mutable std::shared_ptr<Data> data_;
 };
 
 template <>

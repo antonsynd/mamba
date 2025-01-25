@@ -35,12 +35,14 @@ class Sequence : virtual public Collection<T>, virtual public Reversible<T> {
       builtins::details::SSize end = builtins::details::kSSizeMax,
       builtins::details::SSize step = 1) const = 0;
 
+#if __cplusplus >= 202302L
   virtual std::shared_ptr<self> operator[](
       builtins::details::SSize start = 0,
-      builtins::details::SSize end = kEndIndex,
+      builtins::details::SSize end = builtins::details::kSSizeMax,
       builtins::details::SSize step = 1) const {
     return Slice(start, end, step);
   }
+#endif  // __cplusplus >= 202302L
 };
 
 }  // namespace mamba::collections::abc

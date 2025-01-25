@@ -23,52 +23,53 @@ namespace mamba::builtins::details {
 
 Str::Str() = default;
 
-Str::Str(const char* s) : data_(s) {}
+Str::Str(const char* s) : data_(std::make_shared<Data>(s)) {}
 
-Str::Str(const char* s, std::size_t len) : data_(s, len) {}
+Str::Str(const char* s, std::size_t len)
+    : data_(std::make_shared<Data>(s, len)) {}
 
-Str::Str(std::string s) : data_(std::move(s)) {}
+Str::Str(std::string s) : data_(std::make_shared<Data>(std::move(s))) {}
 
-Str::Str(const std::string_view s) : data_(s) {}
+Str::Str(const std::string_view s) : data_(std::make_shared<Data>(s)) {}
 
-Str::Str(const bool b) : data_(b ? "True" : "False") {}
+Str::Str(const bool b) : data_(std::make_shared<Data>(b ? "True" : "False")) {}
 
-Str::Str(const Bool b) : data_(b ? "True" : "False") {}
+Str::Str(const Bool b) : data_(std::make_shared<Data>(b ? "True" : "False")) {}
 
-Str::Str(const Byte b) : data_(std::to_string(b)) {}
+Str::Str(const Byte b) : data_(std::make_shared<Data>(std::to_string(b))) {}
 
-Str::Str(const Decimal d) : data_(std::to_string(d)) {}
+Str::Str(const Decimal d) : data_(std::make_shared<Data>(std::to_string(d))) {}
 
-Str::Str(const Double d) : data_(std::to_string(d)) {}
+Str::Str(const Double d) : data_(std::make_shared<Data>(std::to_string(d))) {}
 
-Str::Str(const Float f) : data_(std::to_string(f)) {}
+Str::Str(const Float f) : data_(std::make_shared<Data>(std::to_string(f))) {}
 
-Str::Str(const Int i) : data_(std::to_string(i)) {}
+Str::Str(const Int i) : data_(std::make_shared<Data>(std::to_string(i))) {}
 
-Str::Str(const None) : data_("None") {}
+Str::Str(const None) : data_(std::make_shared<Data>("None")) {}
 
-Str::Str(const Long l) : data_(std::to_string(l)) {}
+Str::Str(const Long l) : data_(std::make_shared<Data>(std::to_string(l))) {}
 
-Str::Str(const SByte s) : data_(std::to_string(s)) {}
+Str::Str(const SByte s) : data_(std::make_shared<Data>(std::to_string(s))) {}
 
-Str::Str(const Short s) : data_(std::to_string(s)) {}
+Str::Str(const Short s) : data_(std::make_shared<Data>(std::to_string(s))) {}
 
-Str::Str(const Size s) : data_(std::to_string(s)) {}
+Str::Str(const Size s) : data_(std::make_shared<Data>(std::to_string(s))) {}
 
-Str::Str(const SSize s) : data_(std::to_string(s)) {}
+Str::Str(const SSize s) : data_(std::make_shared<Data>(std::to_string(s))) {}
 
-Str::Str(const UInt u) : data_(std::to_string(u)) {}
+Str::Str(const UInt u) : data_(std::make_shared<Data>(std::to_string(u))) {}
 
-Str::Str(const ULong u) : data_(std::to_string(u)) {}
+Str::Str(const ULong u) : data_(std::make_shared<Data>(std::to_string(u))) {}
 
-Str::Str(const UShort u) : data_(std::to_string(u)) {}
+Str::Str(const UShort u) : data_(std::make_shared<Data>(std::to_string(u))) {}
 
 Str::operator std::string() const {
-  return data_.s_;
+  return data_->s_;
 }
 
 Str::operator std::string_view() const {
-  return data_.s_;
+  return data_->s_;
 }
 
 Str::operator Bool() const {
@@ -77,7 +78,7 @@ Str::operator Bool() const {
 }
 
 Str::operator bool() const {
-  return !data_.s_.empty();
+  return !data_->s_.empty();
 }
 
 Str Str::Repr() const {
@@ -85,8 +86,8 @@ Str Str::Repr() const {
   return *this;
 }
 
-Int Str::Len() const {
-  return data_.s_.size();
+Size Str::Len() const {
+  return data_->s_.size();
 }
 
 bool Str::operator==(const Str& other) const {
@@ -99,7 +100,7 @@ bool Str::operator!=(const Str& other) const {
 
 /// @note For easy C++ comparison to strings.
 bool Str::operator==(const std::string_view sv) const {
-  return data_.s_ == sv;
+  return data_->s_ == sv;
 }
 bool Str::operator!=(const std::string_view sv) const {
   return !(*this == sv);

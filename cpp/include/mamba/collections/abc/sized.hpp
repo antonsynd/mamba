@@ -5,7 +5,8 @@
 
 namespace mamba::collections::abc {
 
-class Sized : virtual public builtins::details::Object {
+class Sized {
+ public:
   virtual builtins::details::Size Len() const = 0;
 };
 

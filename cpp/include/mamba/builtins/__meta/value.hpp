@@ -17,7 +17,7 @@ concept IsValue =
     std::same_as<std::decay_t<T>, Bytes> ||
     std::same_as<std::decay_t<T>, Bool> ||
     std::same_as<std::decay_t<T>, Complex> ||
-    std::same_as<std::decay_t<T>, None>;
+    std::same_as<std::decay_t<T>, None> || std::same_as<std::decay_t<T>, Str>;
 
 template <typename T>
 concept IsNotValue = !IsValue<T>;

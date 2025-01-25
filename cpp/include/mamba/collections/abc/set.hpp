@@ -10,11 +10,10 @@
 #include <unordered_set>
 #include <utility>
 
-#include "mamba/builtins/__meta/args.hpp"
 #include "mamba/builtins/__meta/hashable.hpp"
 #include "mamba/builtins/__meta/value.hpp"
-#include "mamba/builtins/__types/big_int.hpp"
 #include "mamba/builtins/__types/int.hpp"
+#include "mamba/builtins/__types/long.hpp"
 #include "mamba/builtins/__types/object.hpp"
 #include "mamba/builtins/__types/str.hpp"
 #include "mamba/builtins/__types/traits.hpp"
@@ -310,8 +309,8 @@ class Set : virtual public Collection<T> {
 
   explicit operator bool() const override { return __Len__() != 0; }
 
-  builtins::details::BigInt __Id__() const override {
-    return reinterpret_cast<builtins::details::BigInt>(data_.get());
+  builtins::details::Size __Id__() const override {
+    return reinterpret_cast<builtins::details::Size>(data_.get());
   }
 
   /// @brief Returns the string representation of the set.

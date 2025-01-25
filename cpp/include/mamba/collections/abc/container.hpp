@@ -6,10 +6,11 @@
 namespace mamba::collections::abc {
 
 template <builtins::details::IsValid T>
-class Container : virtual public builtins::details::Object {
+class Container {
+ public:
   using value_type = T;
 
-  virtual bool Contains(const value_type& elem) = 0;
+  virtual bool Contains(const value_type& elem) const = 0;
 };
 
 }  // namespace mamba::collections::abc
